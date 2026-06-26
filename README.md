@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.0-000000?style=for-the-badge&logoColor=lime&labelColor=000000" alt="CREW v1.0">
-  <img src="https://img.shields.io/badge/skills-93-lime?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMzJDRjMyIi8+PC9zdmc+" alt="93 Skills">
-  <img src="https://img.shields.io/badge/packs-14-lime?style=for-the-badge" alt="14 Packs">
-  <img src="https://img.shields.io/badge/QA-PASS-lime?style=for-the-badge" alt="QA PASS">
-  <img src="https://img.shields.io/badge/license-MIT-lime?style=for-the-badge" alt="License MIT">
+  <img src="https://img.shields.io/badge/CREW-v1.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.0">
+  <img src="https://img.shields.io/badge/SKILLS-93-333333?style=for-the-badge&labelColor=lime&color=333333" alt="93 Skills">
+  <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
+  <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
+  <img src="https://img.shields.io/badge/LICENSE-MIT-333333?style=for-the-badge&labelColor=lime&color=333333" alt="License MIT">
 </p>
 
 <p align="center">
