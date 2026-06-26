@@ -1,0 +1,26 @@
+{
+  "model": "google/nano-banana",
+  "aspect_ratio": "16:9",
+  "frames": [
+    {
+      "id": "A",
+      "file": "A.png",
+      "prompt": "Ultra realistic cinematic view of planet Earth seen from far out in deep black space, the curved blue limb of the planet glowing against a field of stars, thin atmospheric rim light along the horizon, a vast dense white cloud system far below, photoreal, volumetric, 8k, high luxury aesthetic, no text, no watermark"
+    },
+    {
+      "id": "B",
+      "file": "B.png",
+      "prompt": "Ultra realistic cinematic aerial view descending toward the very top of a thick dense layer of brilliant white volumetric clouds, soft atmospheric haze, faint blue sky gradient above, subtle god rays breaking through, photoreal, 8k, high luxury aesthetic, no text, no watermark"
+    },
+    {
+      "id": "C",
+      "file": "C.png",
+      "prompt": "Ultra realistic cinematic view just below a parting cloud layer revealing the upper floors of a sleek glass and steel ultra luxury skyscraper, mirror glass facade catching golden light, a vast futuristic city far below blanketed in cloud, golden hour, photoreal, 8k, high luxury aesthetic, no text, no watermark"
+    },
+    {
+      "id": "D",
+      "file": "D.png",
+      "prompt": "Ultra realistic cinematic interior of a minimalist ultra luxury high altitude penthouse living room, dark marble floors, bespoke low designer furniture, warm ambient lighting, massive floor to ceiling panoramic windows looking out over an endless sea of clouds at golden hour, photoreal, 8k, high luxury aesthetic, no text, no watermark"
+    }
+  ]
+}

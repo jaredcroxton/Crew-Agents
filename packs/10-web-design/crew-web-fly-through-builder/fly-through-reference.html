@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DESCENT · Beyond Elevation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050505;
+    --ink:#f5f4f1;
+    --platinum:#b9c4d0;
+    --champagne:#e3c79a;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:auto;overflow-x:hidden}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+  }
+  body.locked{overflow:hidden;height:100vh}
+  /* transparent scroll runway that drives the cinematic descent */
+  #cine{height:500vh;position:relative;z-index:5;pointer-events:none}
+  /* once the listing arrives, retire the cinematic layers */
+  .past-cine #scroller-canvas,.past-cine .glow,.past-cine .scrim,
+  .past-cine #enter,.past-cine .hint{opacity:0!important;visibility:hidden;transition:opacity .6s ease}
+
+  /* ---------- fixed cinematic layers ---------- */
+  #scroller-canvas{
+    position:fixed;inset:0;width:100vw;height:100vh;
+    z-index:1;display:block;background:#000;
+  }
+  /* warm champagne glow that blooms in for the Sanctuary stage */
+  .glow{
+    position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;
+    background:radial-gradient(120% 80% at 50% 100%,
+      rgba(227,199,154,.22) 0%, rgba(227,199,154,.06) 35%, transparent 65%);
+    transition:opacity .2s linear;
+  }
+  /* readability scrim + vignette */
+  .scrim{
+    position:fixed;inset:0;z-index:3;pointer-events:none;
+    background:
+      linear-gradient(180deg, rgba(5,5,5,.55) 0%, transparent 22%, transparent 62%, rgba(5,5,5,.72) 100%),
+      radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(5,5,5,.55) 100%);
+  }
+  .grain{
+    position:fixed;inset:0;z-index:4;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed;top:0;left:0;width:100%;z-index:60;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:34px clamp(24px,5vw,56px);
+    transition:background .5s ease, backdrop-filter .5s ease, padding .5s ease;
+  }
+  header.scrolled{
+    padding:20px clamp(24px,5vw,56px);
+    background:linear-gradient(180deg, rgba(5,5,5,.55), transparent);
+    backdrop-filter:blur(6px);
+  }
+  header .logo,header nav a,header .indicator{text-shadow:0 1px 26px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.4)}
+  .hleft{display:flex;align-items:center;gap:16px}
+  .logo{font-size:1.05rem;font-weight:200;letter-spacing:.62em;text-transform:uppercase;cursor:pointer}
+  #home{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+    border:1px solid rgba(245,244,241,.28);background:rgba(255,255,255,.05);color:var(--ink);cursor:pointer;
+    pointer-events:auto;transition:all .3s ease;backdrop-filter:blur(4px)}
+  #home:hover{background:var(--ink);color:#07080c}
+  #home svg{display:block}
+  body.entered #home{display:flex}
+  .logo b{font-weight:300}
+  nav{display:flex;gap:clamp(20px,3vw,42px)}
+  nav a{
+    color:rgba(245,244,241,.66);text-decoration:none;
+    font-size:.68rem;font-weight:300;letter-spacing:.26em;text-transform:uppercase;
+    transition:color .35s ease;position:relative;
+  }
+  nav a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--platinum);transition:width .35s ease}
+  nav a:hover{color:var(--ink)}
+  nav a:hover::after{width:100%}
+  .indicator{
+    font-size:.66rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--platinum);min-width:170px;text-align:right;
+  }
+  @media(max-width:760px){
+    nav{display:none}
+    .indicator{min-width:auto}
+  }
+
+  /* ---------- stage overlays ---------- */
+  .stage{
+    position:fixed;inset:0;z-index:30;pointer-events:none;
+    display:flex;align-items:center;
+    padding-left:clamp(28px,10vw,160px);
+    opacity:0;will-change:opacity,transform;
+  }
+  .stage.right{justify-content:flex-end;padding-right:clamp(28px,10vw,160px);padding-left:0;text-align:right}
+  .stage>div{position:relative}
+  .stage>div::before{content:"";position:absolute;inset:-50px -90px;z-index:-1;
+    background:radial-gradient(ellipse 72% 92% at center, rgba(4,5,9,.52), rgba(4,5,9,.2) 55%, transparent 78%);}
+  .stage .meta{
+    font-size:.74rem;font-weight:300;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--platinum);display:block;margin-bottom:18px;
+  }
+  .stage h1{
+    font-size:clamp(2.4rem,6vw,4.4rem);font-weight:100;line-height:1.12;
+    letter-spacing:.04em;text-transform:uppercase;
+    text-shadow:0 2px 40px rgba(0,0,0,.5);
+  }
+  .stage .meta,#enter .kicker{text-shadow:0 1px 24px rgba(0,0,0,.5)}
+  .stage h1 em{font-style:normal;font-weight:200;color:var(--champagne)}
+
+  /* ---------- ENTER endpoint ---------- */
+  #enter{
+    position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:30px;
+  }
+  #enter::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(ellipse 46% 42% at center, rgba(4,5,9,.55), rgba(4,5,9,.15) 60%, transparent 78%);}
+  #enter .kicker{font-size:.72rem;font-weight:300;letter-spacing:.5em;text-transform:uppercase;color:var(--platinum)}
+  #enter h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:100;letter-spacing:.06em;line-height:1.2}
+  #enter .ghost{
+    pointer-events:auto;cursor:pointer;
+    border:1px solid rgba(245,244,241,.5);background:rgba(255,255,255,.04);color:var(--ink);
+    font-family:var(--font);font-size:.86rem;font-weight:300;letter-spacing:.34em;text-transform:uppercase;
+    padding:22px 64px;transition:all .4s ease;backdrop-filter:blur(4px);
+  }
+  #enter .ghost:hover{background:var(--ink);color:var(--bg);letter-spacing:.42em}
+
+  /* scroll hint */
+  .hint{
+    position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:50;
+    font-size:.9rem;font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:rgba(245,244,241,.75);
+    display:flex;flex-direction:column;align-items:center;gap:14px;transition:opacity .5s ease;
+  }
+  .hint .bar{
+    width:2px;height:63px;
+    background:linear-gradient(180deg,#fff 0%,rgba(185,196,208,.7) 55%,transparent 100%);
+    animation:drop 2s ease-in-out infinite;
+    box-shadow:0 0 8px 2px rgba(255,255,255,.45),0 0 20px 4px rgba(185,196,208,.22);
+  }
+  @keyframes drop{
+    0%{transform:scaleY(0);transform-origin:top;opacity:.3}
+    40%{transform:scaleY(1);transform-origin:top;opacity:1}
+    55%{transform:scaleY(1);transform-origin:bottom;opacity:1}
+    100%{transform:scaleY(0);transform-origin:bottom;opacity:.3}
+  }
+
+  /* ---------- loader ---------- */
+  #loader{
+    position:fixed;inset:0;z-index:200;background:var(--bg);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+    transition:opacity .9s ease;
+  }
+  #loader.done{opacity:0;pointer-events:none}
+  #loader .word{font-size:1.1rem;font-weight:200;letter-spacing:.72em;text-transform:uppercase;padding-left:.72em}
+  #loader .track{width:min(260px,52vw);height:1px;background:rgba(245,244,241,.16);overflow:hidden}
+  #loader .fill{height:100%;width:100%;background:var(--platinum);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+  #loader .pct{font-size:.62rem;font-weight:300;letter-spacing:.34em;color:rgba(245,244,241,.5)}
+
+  @media(prefers-reduced-motion:reduce){
+    .hint .bar{animation:none}
+    .reveal{opacity:1!important;transform:none!important}
+  }
+
+  /* ---------- listing walkthrough ---------- */
+  /* hidden until ENTER: this hard-stops the page scroll at the arrival frame */
+  #listing{position:relative;z-index:20;background:#07080c;color:var(--ink);display:none}
+  body.entered #listing{display:block}
+  #listing .kick{display:block;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--platinum);margin-bottom:22px}
+  #listing .lead{position:relative;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:flex-end;padding:0 clamp(28px,8vw,140px) clamp(48px,8vh,96px)}
+  #listing .lead .bg{position:absolute;inset:0;z-index:0}
+  #listing .lead .bg img{width:100%;height:100%;object-fit:cover;display:block;
+    transform:scale(1.06);transition:transform 2s cubic-bezier(.16,1,.3,1)}
+  #listing .lead.in .bg img{transform:scale(1)}
+  #listing .lead .bg::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(7,8,12,.62) 0%,rgba(7,8,12,.12) 38%,rgba(7,8,12,.55) 72%,#07080c 100%)}
+  #listing .lead>*:not(.bg){position:relative;z-index:1}
+  #listing .lead h2{font-size:clamp(2.2rem,5.5vw,4rem);font-weight:100;line-height:1.14;letter-spacing:.02em;max-width:15ch;
+    text-shadow:0 2px 40px rgba(0,0,0,.5)}
+  #listing .lead h2 em,.row h3 em{font-style:normal;color:var(--champagne)}
+  .stats{display:flex;flex-wrap:wrap;gap:clamp(26px,5vw,72px);margin-top:56px}
+  .stats>div{display:flex;flex-direction:column;gap:9px}
+  .stats b{font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:200;letter-spacing:.01em}
+  .stats span{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(245,244,241,.5)}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(28px,5vw,90px);
+    padding:clamp(56px,9vh,128px) clamp(28px,8vw,140px)}
+  .row.flip .ph{order:2}
+  .row .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:#0d0f15}
+  .row .ph img{width:100%;height:100%;object-fit:cover;display:block;
+    transform:scale(1.07);transition:transform 1.5s cubic-bezier(.16,1,.3,1)}
+  .row.in .ph img{transform:scale(1)}
+  .row .rk{display:block;font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--platinum);margin-bottom:18px}
+  .row h3{font-size:clamp(1.7rem,3.4vw,2.7rem);font-weight:100;letter-spacing:.02em;line-height:1.16;margin-bottom:22px}
+  .row p{font-size:1.02rem;line-height:1.78;color:rgba(245,244,241,.74);max-width:46ch;font-weight:300}
+  .row .feat{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .row .feat li{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,244,241,.66);
+    border:1px solid rgba(245,244,241,.16);padding:8px 15px;border-radius:40px}
+
+  .reveal{opacity:0;transform:translateY(36px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity 1s ease,transform 1.1s cubic-bezier(.16,1,.3,1)}
+
+  .enquire{text-align:center;padding:18vh clamp(28px,8vw,140px) 13vh;border-top:1px solid rgba(245,244,241,.08)}
+  .enquire h2{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:100;letter-spacing:.05em;margin:12px 0 26px;text-transform:uppercase}
+  .enquire p{max-width:48ch;margin:0 auto 42px;color:rgba(245,244,241,.7);line-height:1.75;font-weight:300}
+  #listing .ghost{pointer-events:auto;cursor:pointer;border:1px solid rgba(245,244,241,.4);background:transparent;color:var(--ink);
+    font-family:var(--font);font-size:.72rem;font-weight:300;letter-spacing:.32em;text-transform:uppercase;padding:18px 46px;transition:all .4s ease}
+  #listing .ghost:hover{background:var(--ink);color:#07080c;letter-spacing:.4em}
+  .foot{margin-top:92px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,244,241,.38)}
+
+  @media(max-width:820px){
+    .row{grid-template-columns:1fr;gap:24px}
+    .row.flip .ph{order:0}
+  }
+</style>
+</head>
+<body class="locked">
+
+  <div id="loader">
+    <div class="word">Descent</div>
+    <div class="track"><div class="fill" id="loadFill"></div></div>
+    <div class="pct" id="loadPct">0%</div>
+  </div>
+
+  <header id="header">
+    <div class="hleft">
+      <button id="home" aria-label="Restart the descent" title="Restart">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+      </button>
+      <div class="logo"><b>Descent</b></div>
+    </div>
+    <nav>
+      <a href="#">Overview</a>
+      <a href="#">The Descent</a>
+      <a href="#">The View</a>
+      <a href="#" id="navEnter">Enter</a>
+    </nav>
+    <div class="indicator" id="indicator">01 // Orbit</div>
+  </header>
+
+  <canvas id="scroller-canvas"></canvas>
+  <div class="glow" id="glow"></div>
+  <div class="scrim"></div>
+  <div class="grain"></div>
+
+  <div id="cine"></div>
+
+  <section class="stage" id="stage1">
+    <div>
+      <span class="meta">Stage I</span>
+      <h1>Top of<br>the <em>World</em></h1>
+    </div>
+  </section>
+
+  <section class="stage" id="stage2">
+    <div>
+      <span class="meta">Stage II</span>
+      <h1>Breaking<br>The <em>Clouds</em></h1>
+    </div>
+  </section>
+
+  <section class="stage right" id="stage3">
+    <div>
+      <span class="meta">Stage III</span>
+      <h1>The <em>Sanctuary</em><br>In the Sky</h1>
+    </div>
+  </section>
+
+  <div id="enter">
+    <div class="kicker">The Descent Complete</div>
+    <h2>Arrival</h2>
+    <button class="ghost">Enter</button>
+  </div>
+
+  <div class="hint" id="hint"><span>Scroll to descend</span><span class="bar"></span></div>
+
+  <main id="listing">
+    <section class="lead reveal">
+      <div class="bg"><img src="listing/tower.webp" alt=""></div>
+      <span class="kick">The Descent Residence</span>
+      <h2>A single <em>penthouse</em> at the summit of the world</h2>
+      <div class="stats">
+        <div><b>1,402 m</b><span>Elevation</span></div>
+        <div><b>940 m²</b><span>Internal</span></div>
+        <div><b>Four</b><span>Private suites</span></div>
+        <div><b>360°</b><span>Panorama</span></div>
+        <div><b>On application</b><span>Price</span></div>
+      </div>
+    </section>
+
+    <section class="row reveal">
+      <div class="ph"><img src="listing/great-room.webp" alt="The Great Room"></div>
+      <div class="tx">
+        <span class="rk">01 / The Great Room</span>
+        <h3>Living above<br>the <em>weather</em></h3>
+        <p>Forty metres of uninterrupted glass wrap the principal living space, suspended in open sky. The cloud deck drifts below while the room holds perfectly still, warm and silent, lit by the hour rather than by lamps.</p>
+        <ul class="feat"><li>4m ceilings</li><li>Curved glass</li><li>Cove lighting</li><li>Book-matched stone</li></ul>
+      </div>
+    </section>
+
+    <section class="row flip reveal">
+      <div class="ph"><img src="listing/kitchen.webp" alt="The Kitchen"></div>
+      <div class="tx">
+        <span class="rk">02 / The Kitchen</span>
+        <h3>A <em>monolith</em><br>in pale stone</h3>
+        <p>A single block of honed stone anchors the kitchen, flanked by bespoke pale-oak joinery and fully concealed appliances. Built for a private chef, it disappears entirely when the evening calls for stillness.</p>
+        <ul class="feat"><li>Stone island</li><li>Pale-oak joinery</li><li>Concealed suite</li><li>Wine wall</li></ul>
+      </div>
+    </section>
+
+    <section class="row reveal">
+      <div class="ph"><img src="listing/master.webp" alt="The Master Suite"></div>
+      <div class="tx">
+        <span class="rk">03 / The Master Suite</span>
+        <h3>Waking <em>at altitude</em></h3>
+        <p>The principal suite faces the dawn. You rise level with the first light striking the cloud sea, a private floor with dressing gallery and study, sealed away from the rest of the residence.</p>
+        <ul class="feat"><li>Private floor</li><li>Dressing gallery</li><li>Study</li><li>Dawn aspect</li></ul>
+      </div>
+    </section>
+
+    <section class="row flip reveal">
+      <div class="ph"><img src="listing/bath.webp" alt="The Spa"></div>
+      <div class="tx">
+        <span class="rk">04 / The Spa</span>
+        <h3>Bathing <em>in the sky</em></h3>
+        <p>A sculpted stone bath sits against full-height glass, marble underfoot, the city hidden far beneath the cloud. Steam, warmth, and the longest horizon you will ever own.</p>
+        <ul class="feat"><li>Carved stone bath</li><li>Heated marble</li><li>Steam room</li><li>Panoramic glass</li></ul>
+      </div>
+    </section>
+
+    <section class="row reveal">
+      <div class="ph"><img src="listing/terrace.webp" alt="The Terrace"></div>
+      <div class="tx">
+        <span class="rk">05 / The Terrace</span>
+        <h3>Open air,<br><em>impossibly high</em></h3>
+        <p>An infinity-edge terrace pushes out into open atmosphere, sheltered, warmed, and entirely private. There is no railing in your eyeline, only the curve of the world and the fire at your feet.</p>
+        <ul class="feat"><li>Infinity edge</li><li>Fire feature</li><li>Wind-shielded</li><li>Sunset aspect</li></ul>
+      </div>
+    </section>
+
+    <section class="row flip reveal">
+      <div class="ph"><img src="listing/tower.webp" alt="The Address"></div>
+      <div class="tx">
+        <span class="rk">06 / The Address</span>
+        <h3>One tower,<br>one <em>summit</em></h3>
+        <p>DESCENT crowns the tallest residential structure ever built, a single private lift rising direct from a gated motor court. The city, the coast, and the airfield sit minutes below the clouds you live above.</p>
+        <ul class="feat"><li>Private lift</li><li>Gated motor court</li><li>24h concierge</li><li>Helipad access</li></ul>
+      </div>
+    </section>
+
+    <section class="enquire reveal">
+      <span class="kick">Private Showing</span>
+      <h2>Enquire</h2>
+      <p>The Descent Residence is offered by private appointment only. Arrange a confidential viewing with our director of sales.</p>
+      <button class="ghost" id="enquireBtn">Request a private showing</button>
+      <div class="foot">DESCENT · Residences in the Stratosphere</div>
+    </section>
+  </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ===================== DESCENT engine ===================== */
+gsap.registerPlugin(ScrollTrigger);
+
+/* --- config: FRAME_COUNT is set by the asset pipeline (to_webp.py prints it) --- */
+const FRAME_COUNT = 406;          // <-- updated after frame extraction
+const GATE = 48;                  // paint after this many frames; background-load rest
+const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const MOBILE = innerWidth < 768;
+const DIR = MOBILE ? 'frames/m/' : 'frames/d/';
+const framePath = i => DIR + 'f' + String(i + 1).padStart(4, '0') + '.webp';
+
+const canvas = document.getElementById('scroller-canvas');
+const ctx = canvas.getContext('2d', { alpha: false });
+const imgs = new Array(FRAME_COUNT);
+let loaded = 0, anyLoaded = false, lastDrawn = -1;
+const state = { frame: 0 };
+
+/* --- canvas sizing with DPR cap --- */
+function size(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = Math.round(innerWidth * dpr);
+  canvas.height = Math.round(innerHeight * dpr);
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
+}
+size();
+
+/* --- frame loading --- */
+function loadFrame(i){
+  return new Promise(res => {
+    if (imgs[i]) return res();
+    const im = new Image();
+    im.onload = () => { imgs[i] = im; loaded++; anyLoaded = true; res(); };
+    im.onerror = () => { loaded++; res(); };   // tolerate gaps, never block
+    im.src = framePath(i);
+  });
+}
+function loadBatch(indices, concurrency, onProgress){
+  return new Promise(done => {
+    let idx = 0, active = 0, finished = 0;
+    const total = indices.length;
+    if (!total) return done();
+    const next = () => {
+      while (active < concurrency && idx < total){
+        const i = indices[idx++]; active++;
+        loadFrame(i).then(() => {
+          active--; finished++;
+          if (onProgress) onProgress(finished, total);
+          (finished === total) ? done() : next();
+        });
+      }
+    };
+    next();
+  });
+}
+function nearestLoaded(i){
+  if (imgs[i]) return imgs[i];
+  for (let r = 1; r < FRAME_COUNT; r++){
+    if (imgs[i - r]) return imgs[i - r];
+    if (imgs[i + r]) return imgs[i + r];
+  }
+  return null;
+}
+
+/* --- draw (cover-fit, never stretch/blank) --- */
+function drawCover(im, alpha){
+  const cw = canvas.width, ch = canvas.height;
+  const ir = im.width / im.height, cr = cw / ch;
+  let w, h, x, y;
+  if (ir > cr){ h = ch; w = h * ir; x = (cw - w) / 2; y = 0; }
+  else { w = cw; h = w / ir; x = 0; y = (ch - h) / 2; }
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(im, x, y, w, h);
+}
+function starfield(){          // graceful pre-frame backdrop, deterministic
+  const cw = canvas.width, ch = canvas.height;
+  ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, cw, ch);
+  ctx.fillStyle = 'rgba(245,244,241,.7)';
+  let s = 9301;
+  for (let i = 0; i < 220; i++){
+    s = (s * 233280 + 49297) % 233281;            // LCG, no Math.random
+    const rx = (s / 233281), ry = ((s * 7) % 233281) / 233281;
+    const r = rx * 1.4;
+    ctx.globalAlpha = .25 + ry * .6;
+    ctx.fillRect(rx * cw, ry * ch, r, r);
+  }
+  ctx.globalAlpha = 1;
+}
+function render(){
+  const f = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(state.frame)));
+  if (!anyLoaded){ starfield(); return; }
+  const im = nearestLoaded(f);
+  if (!im) { starfield(); return; }
+  if (f === lastDrawn) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawCover(im, 1);
+  const nx = nearestLoaded(Math.min(FRAME_COUNT - 1, f + 1));
+  if (nx && nx !== im) drawCover(nx, (state.frame - f + 1) % 1 * 0); // hook for sub-frame blend
+  ctx.globalAlpha = 1;
+  lastDrawn = f;
+}
+
+/* --- overlay timing --- */
+function win(p, a, b, c, d){      // 0 -> rise(a..b) -> 1 -> fall(c..d) -> 0
+  if (p <= a || p >= d) return 0;
+  if (p < b) return (p - a) / (b - a);
+  if (p > c) return (d - p) / (d - c);
+  return 1;
+}
+const s1 = document.getElementById('stage1'), s2 = document.getElementById('stage2'),
+      s3 = document.getElementById('stage3'), enter = document.getElementById('enter'),
+      glow = document.getElementById('glow'), indicator = document.getElementById('indicator'),
+      header = document.getElementById('header'), hint = document.getElementById('hint');
+
+function setStage(el, o){
+  el.style.opacity = o;
+  el.style.transform = 'translateY(' + (1 - Math.min(1, o)) * 26 + 'px)';
+}
+function overlays(p){
+  setStage(s1, win(p, .02, .07, .22, .30));
+  setStage(s2, win(p, .34, .40, .56, .64));
+  setStage(s3, win(p, .68, .74, .85, .91));
+  enter.style.opacity = p > .90 ? Math.min(1, (p - .90) / .06) : 0;
+  glow.style.opacity = Math.max(0, Math.min(1, (p - .58) / .27));
+  if (!document.body.classList.contains('past-cine'))
+    indicator.textContent = p < .33 ? '01 // Orbit' : p < .68 ? '02 // Stratosphere' : '03 // Sanctuary';
+  header.classList.toggle('scrolled', p > .015);
+  hint.style.opacity = p > .05 ? 0 : 1;
+}
+
+/* --- scroll driver --- */
+function startScroll(){
+  gsap.to(state, {
+    frame: FRAME_COUNT - 1,
+    ease: 'none',
+    scrollTrigger: { trigger: '#cine', start: 'top top', end: 'bottom bottom', scrub: RM ? true : 0.6 },
+    onUpdate: render
+  });
+  ScrollTrigger.create({
+    trigger: '#cine', start: 'top top', end: 'bottom bottom',
+    onUpdate: self => overlays(self.progress)
+  });
+  overlays(0);
+  wireListing();
+  // Lenis intentionally not used: its cached scroll-limit fought the lock/unlock
+  // transitions. Native scroll + ScrollTrigger scrub (0.6) gives the smoothing.
+}
+
+/* --- boot --- */
+const fill = document.getElementById('loadFill'), pct = document.getElementById('loadPct');
+history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+starfield();
+
+loadFrame(0).then(render);
+loadBatch(Array.from({ length: Math.min(GATE, FRAME_COUNT) }, (_, i) => i), 8, (done, total) => {
+  const p = done / total;
+  fill.style.transform = 'scaleX(' + p + ')';
+  pct.textContent = Math.round(p * 100) + '%';
+}).then(() => {
+  render();
+  document.getElementById('loader').classList.add('done');
+  document.body.classList.remove('locked');
+  startScroll();
+  ScrollTrigger.refresh();
+  // background: stride pass, then fill the gaps
+  const rest = [];
+  for (let i = GATE; i < FRAME_COUNT; i += 4) rest.push(i);
+  loadBatch(rest, 6, null).then(() => {
+    const gaps = [];
+    for (let i = GATE; i < FRAME_COUNT; i++) if (!imgs[i]) gaps.push(i);
+    loadBatch(gaps, 6, render);
+  });
+});
+
+/* --- listing: reveals + retire cinematic when it arrives + navigation --- */
+function wireListing(){
+  const body = document.body, listing = document.getElementById('listing');
+  // retire the fixed cinematic layers once the listing scrolls in
+  const ind = document.getElementById('indicator');
+  ScrollTrigger.create({
+    trigger: listing, start: 'top 92%',
+    onEnter: () => { body.classList.add('past-cine'); ind.textContent = 'The Residence'; },
+    onLeaveBack: () => { body.classList.remove('past-cine'); ind.textContent = '03 // Sanctuary'; }
+  });
+  // reveal rows / lead as they enter (with failsafe: anything already at/above viewport reveals now)
+  const els = document.querySelectorAll('.reveal, .row');
+  const io = new IntersectionObserver(ex => {
+    ex.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.01, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => {
+    if (el.getBoundingClientRect().top < innerHeight * 0.92) el.classList.add('in');
+    else io.observe(el);
+  });
+}
+// ENTER: unlock the listing (display:none until now, which hard-stops scroll
+// at the arrival frame) then glide into it. (named to avoid the id="enter" global)
+// Reliable scroll-to: a freshly un-hidden listing needs a renderer-dependent moment
+// before its scroll range is usable, and continuous rAF scrolling starves that layout.
+// So we retry on a spaced timer until the position sticks, then run `done`. Snap, not
+// glide, but works in every renderer (the cinematic cross-fade covers the cut).
+function jumpTo(target, done){
+  let tries = 0;
+  const go = () => {
+    window.scrollTo(0, target);
+    if (Math.abs(window.scrollY - target) < 8 || tries++ > 60){ if (done) done(); }
+    else setTimeout(go, 100);
+  };
+  setTimeout(go, 50);
+}
+function enterResidence(e){
+  if (e) e.preventDefault();
+  const L = document.getElementById('listing');
+  if (document.body.classList.contains('entered')){ jumpTo(L.offsetTop); return; }
+  document.body.classList.add('entered');
+  jumpTo(L.offsetTop, () => ScrollTrigger.refresh());
+}
+// HOME / reset: return to the top, re-lock the listing, restart the descent.
+function resetLoop(e){
+  if (e) e.preventDefault();
+  document.body.classList.remove('past-cine');
+  jumpTo(0, () => {
+    document.body.classList.remove('entered', 'past-cine');
+    ScrollTrigger.refresh(); lastDrawn = -1; render();
+  });
+}
+const mailTo = () => location.href = 'mailto:enquiries@example.com?subject=DESCENT%20Private%20Showing';
+
+window.__FLYTHROUGH = { state, overlays, set f(v){ state.frame = v; lastDrawn = -1; render(); } };  // debug hook
+addEventListener('resize', () => { size(); lastDrawn = -1; render(); ScrollTrigger.refresh(); }, { passive: true });
+document.querySelector('#enter .ghost').addEventListener('click', enterResidence);
+document.getElementById('enquireBtn').addEventListener('click', mailTo);
+document.getElementById('navEnter').addEventListener('click', enterResidence);
+document.getElementById('home').addEventListener('click', resetLoop);
+document.querySelector('.hleft .logo').addEventListener('click', resetLoop);
+const navlinks = document.querySelectorAll('header nav a');
+navlinks[0].addEventListener('click', resetLoop);             // Overview
+navlinks[1].addEventListener('click', resetLoop);             // The Descent
+navlinks[2].addEventListener('click', enterResidence);        // The View
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "model": "bytedance/v1-lite-image-to-video",
+  "resolution": "1080p",
+  "duration": 5,
+  "clips": [
+    {
+      "id": "clip1",
+      "first": "A",
+      "last": "B",
+      "prompt": "Continuous slow downward camera zoom. Starting far out in space showing planet Earth, smoothly dropping toward a dense layer of white clouds, highly detailed atmosphere, luxury aesthetic, 8k resolution."
+    },
+    {
+      "id": "clip2",
+      "first": "B",
+      "last": "C",
+      "prompt": "Continuous cinematic camera plunge straight down through a thick layer of parting volumetric clouds, transitioning into the upper atmosphere, revealing a sleek luxury skyscraper below, luxury aesthetic, 8k resolution."
+    },
+    {
+      "id": "clip3",
+      "first": "C",
+      "last": "D",
+      "prompt": "Seamless cinematic tracking shot zooming through the glass window of a high altitude luxury skyscraper room. The camera passes smoothly inside to reveal a beautifully lit, ultra premium minimalist interior living room with dark floors and massive panoramic windows looking out over a city above the clouds."
+    }
+  ]
+}

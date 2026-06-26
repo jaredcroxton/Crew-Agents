@@ -1,0 +1,26 @@
+{
+  "model": "google/nano-banana",
+  "aspect_ratio": "16:9",
+  "images": [
+    {
+      "file": "kitchen.png",
+      "prompt": "Ultra luxury minimalist penthouse kitchen, full height pale stone island, bespoke pale oak cabinetry, integrated warm lighting, floor to ceiling windows looking out over an endless sea of clouds at golden hour, photoreal, cinematic, 8k, no text, no watermark"
+    },
+    {
+      "file": "master.png",
+      "prompt": "Ultra luxury minimalist penthouse master bedroom, low platform bed with warm linen, soft textiles, dark timber floor, floor to ceiling glass overlooking a sea of clouds at dawn, serene, photoreal, cinematic, 8k, no text, no watermark"
+    },
+    {
+      "file": "bath.png",
+      "prompt": "Empty unoccupied ultra luxury penthouse spa interior, no people, a sculptural stone basin and book matched marble walls, warm ambient light, full height panoramic window above the clouds at golden hour, architectural interior photography, photoreal, cinematic, 8k, no text, no watermark"
+    },
+    {
+      "file": "terrace.png",
+      "prompt": "Ultra luxury penthouse open air terrace at extreme altitude, infinity edge, minimalist designer lounge furniture, fire feature, above an endless sea of clouds at sunset, photoreal, cinematic, 8k, no text, no watermark"
+    },
+    {
+      "file": "tower.png",
+      "prompt": "Aerial hero shot of a single sleek neo futuristic supertall skyscraper piercing a sea of clouds at golden hour, mirror glass facade, a vast futuristic megacity far below blanketed in cloud, photoreal, cinematic, 8k, no text, no watermark"
+    }
+  ]
+}
