@@ -18,6 +18,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 Brand:
@@ -57,18 +62,18 @@ Do not run this skill when the user wants an editable PowerPoint or Google Slide
 ## Slide types (each its own CSS class)
 
 - Title: full-bleed gradient, centered heading 3.5rem or larger, subtitle, optional floating shapes.
-- Content: top heading, 2 to 4 cards in a grid, each card an icon plus title plus one or two sentences, hover lift with shadow and slight scale.
+- Content: top heading, 2 to 4 cards in a grid, each card an icon plus title plus one or two sentences, hover lift with shadow, slight scale, and animated conic-gradient border.
 - Code: heading, dark block, inline highlighting (below).
 - Image: a supplied image full or partial bleed with a contrast overlay, or an inline SVG illustration if none supplied.
 - CTA: strong headline, styled button (no external link unless supplied), optional contact or social.
 
 ## Brand variables
 
-Every colour, gradient, font, and spacing value is a `:root` custom property. Nothing is hardcoded in a selector. Put a comment above the block naming the source, for example `/* Preset: Slate + Ink + Lime */` or `/* Custom brand from user */`. Declare at least `--color-primary`, `--color-secondary`, `--color-accent`, `--color-text-light`, `--color-text-dark`, per-slide background gradients, `--font-heading`, `--font-body`, `--font-code`.
+Every colour, gradient, font, and spacing value is a `:root` custom property. Nothing is hardcoded in a selector. Put a comment above the block naming the source, for example `/* Preset: Slate + Ink + Lime */` or `/* Custom brand from user */`. Declare at least `--color-primary`, `--color-secondary`, `--color-accent`, `--color-text-light`, `--color-text-dark`, per-slide background gradients, `--font-heading`, `--font-body`, `--font-code`, and the motion easing tokens `--ease: cubic-bezier(0.4, 0, 0.2, 1)` and `--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)`.
 
 ## Navigation (all five, always)
 
-1. Arrow buttons, visible on hover, reachable by keyboard.
+1. Arrow buttons visible by default (opacity 0.6, rising to 1 on hover with an accent-colour glow ring and a spring scale). First slide hides the left arrow, last slide hides the right. A `:focus-visible` outline keeps them keyboard-reachable.
 2. Dot indicators, one per slide, with an active state.
 3. A slide counter in a corner, for example "3 / 8".
 4. Keyboard handlers: left arrow, right arrow, spacebar.
@@ -78,9 +83,17 @@ The `.dot` class is reserved for nav dot indicators only. Never reuse it for bul
 
 ## Animation
 
-- Easing: `cubic-bezier(0.4, 0, 0.2, 1)` on every transition.
+- Easing: `cubic-bezier(0.4, 0, 0.2, 1)` (the `--ease` token) on every transition.
+- Spring easing: `--ease-spring` for card and content reveals (a springy settle, not linear).
 - Staggered content: `.slide-content > *:nth-child(1){animation-delay:.1s}`, then `.25s`, then `.4s`.
-- Intensity levels: Minimal (opacity transitions, single fade, static background); Standard (slide plus fade, staggered fade, subtle gradient); Dramatic (3D transform, staggered plus blur, particles or shapes). Default Standard.
+- Animated conic-gradient card borders on hover: define `@property --angle` (syntax `<angle>`, inherits false, initial `0deg`). On `.stat-card:hover`, `.failure-type:hover`, and any feature card, set the card border to transparent and apply a `::before` (or `::after`) pseudo-element with `conic-gradient(from var(--angle), accent, transparent 40%, transparent 60%, accent)`, masked to the border, that runs a 4s linear infinite spin. Failure-type cards use their own semantic ring colour (red for preventable, amber for complex, accent for intelligent).
+- Pulse glow on the active nav dot: `@keyframes dotPulse`, a soft box-shadow pulse (1.8s ease-in-out infinite) in the accent colour.
+- Hover lift + box-shadow glow: every card, button, and clickable surface gets `translateY(-2px)` plus a soft box-shadow glow in the accent colour on hover. Transition on the relevant properties, with spring easing.
+- Ambient gradient float: each slide background drifts slowly via `@keyframes bg-float` (30s ease-in-out infinite, `220%` background-size). Subtle, not distracting.
+- Big-number hover: stat values (multipliers, percentages) scale to `1.05` and gain a text-shadow glow in the accent colour on hover.
+- Button glow ring: nav arrows, CTA buttons, and dot indicators get a glow ring or colour shift on hover.
+- `prefers-reduced-motion`: drop `bg-float` and `dotPulse` when the user has reduced-motion enabled. Keep the layout functional.
+- Intensity levels: Minimal (opacity transitions, single fade, static background); Standard (slide plus fade, staggered fade, subtle gradient, hover lift, pulse dot, bg-float); Dramatic (3D transform, staggered plus blur, particles or shapes, conic borders, all Standard effects). Default Standard.
 
 ## Code highlighting (no library)
 
@@ -104,8 +117,9 @@ Inline `<span>` with classes `.kw` (keywords), `.str` (strings), `.fn` (function
 2. **Gather the slide brief.** Ask the remaining required and optional inputs above. List only missing items. Do not repeat the branding question.
 3. **Plan the slide structure.** Output a numbered plan, one line per slide, naming the type and a brief description, for example `Slide 2 [Content], three feature cards with hover lift`. Confirm with the user. If they approve, proceed immediately. (Fast mode skips the confirmation when the brief is already complete.)
 4. **Build the HTML file.** One file only, built to the File architecture below and the build rules in this skill (Slide types, Brand variables, Navigation, Animation, Code highlighting, Logo and responsive).
-5. **Quality check.** Run the full checklist below before output.
-6. **Deliver.** Output the complete HTML file in a single fenced code block. After it, one sentence on how to open it, for example "Save as `deck.html` and open in any browser." Add no warnings, disclaimers, or extra notes after that line.
+5. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+6. **Quality check.** Run the full checklist below before output.
+7. **Deliver.** Output the complete HTML file in a single fenced code block. After it, one sentence on how to open it, for example "Save as `deck.html` and open in any browser." Add no warnings, disclaimers, or extra notes after that line.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md` with: the deck produced (filename, slide count, brand used, preset or custom), decisions made (animation intensity, background, layout, auto-advance), unfinished work (slides the user will fill later, open branding questions), what the next skill needs (if a matching landing page is wanted, pass the `:root` brand block to `crew-web-landing-page-builder`), and a "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -148,6 +162,18 @@ Dot indicators bottom-center, arrow buttons appear on hover, counter reads "1 / 
 wordmark logo bottom-right at 24px. Arrow keys and swipe advance. Content fades in staggered
 over 0.4s with cubic-bezier(0.4, 0, 0.2, 1) easing. One file, no external requests.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 
