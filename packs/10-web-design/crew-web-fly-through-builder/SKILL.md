@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 You need:
@@ -75,6 +80,8 @@ The descent is a sequence of still frames painted on a `<canvas>`, with scroll p
 **The load gate (never wait for all frames).** `GATE=48`: paint after the first 48 frames plus a thin progress bar, release scroll, then background-load the rest in two passes (stride-4 for a fast skeleton, then a gap-fill). First paint stays under 2s. `render()` uses a `nearestLoaded()` fallback and `drawCover` cover-fit so the canvas is never blank or stretched, and a deterministic `starfield()` backdrop (LCG, no `Math.random`) covers the moment before frame one.
 
 **Stage structure.** Three stages is the sweet spot. The indicator (`01 // ...`, `02 // ...`, `03 // ...`) and the stage overlays swap at progress thresholds tied to the scrub. The warm accent blooms in for the final stage only, so the arrival reads as a destination. The arrival itself is a hard-stop frame (the arrival lock, in Step 6) so the viewer cannot scroll past the descent into blank.
+
+**Stage panels must crossfade with the background layers.** The `.active` class controls visibility, not just pointer-events: `.stage-panel { opacity: 0; transition: opacity 0.5s ease; }` and `.stage-panel.active { opacity: 1; }`. Never gate visibility on `pointer-events` alone. If you do, every panel stays painted at full opacity stacked on top of each other, so the first stage's copy stays stuck over every later stage while only the background swaps underneath, and the page reads as a black void below the hero. The panel fade and the background-layer crossfade (opacity 0 to 1) run together so content and image arrive as one.
 
 ## Brand carrier
 
@@ -190,18 +197,20 @@ Clone `fly-through-reference.html` (in this skill folder) as `index.html` and re
 
 Copy rules: no em dashes anywhere (commas, periods, parentheses). Quiet-luxury tone. Never invent specs for a real product or property. If the arrival is a real listing, carry a "Concept demonstration only" footer until the owner signs off.
 
-**Step 7: Verify.**
+**Step 7: Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+
+**Step 8: Verify.**
 
 - Serve from a `/tmp` copy. TCC blocks preview servers reading Desktop. `rsync` the project to `/tmp/<name>` excluding `pipeline`, `assets`, `.tmp`, then serve with a tiny `http.server` script that `chdir`s in (the `--directory` flag triggers a getcwd permission error under TCC).
 - Reload, then check: loader completes and releases scroll, first paint under 2s (gate works, not waiting for all frames), scroll scrubs the descent, the three stage overlays fire and swap, the accent glow blooms on the final stage, the descent hard-stops at the arrival frame with no black below, ENTER unlocks and lands on the arrival section, the home button returns to top and re-locks, console clean.
 - Preview-harness quirks carried over from the reference build: rAF throttles in the preview tab so the scrub lags evals (not a site bug), and screenshots at manually overridden viewports can show a black canvas while the page is fine. Force `state.frame` via the `window.__FLYTHROUGH.f = N` debug hook to verify a specific frame, or read center-pixel luminance via `getImageData` in preview_eval.
 - The reference build leaves a `window.__FLYTHROUGH` debug hook in place. Harmless, but strip it for a clean production ship if asked.
 
-**Step 8: Review gate.**
+**Step 9: Review gate.**
 
 Run `crew-design-quality` on the built file plus the live local URL before deploy, loaded alongside `crew-design-composition` and `crew-design-patterns` for the dimensional sweep. Brief it with the brand intent and the no-em-dash rule. Fix all Criticals and Majors.
 
-**Step 9: Deploy.**
+**Step 10: Deploy.**
 
 Ship and verify per the Deploy pathway section. Then note the new build and its alias in the handoff.
 
@@ -246,6 +255,18 @@ Deploy checks: index 200, frames/d and frames/m 200, listing images 200, assets/
 
 Open / handed off: __FLYTHROUGH debug hook left in (harmless). OG tags patched to final alias.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 
