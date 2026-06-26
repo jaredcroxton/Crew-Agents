@@ -55,20 +55,60 @@ claw skills import ./packs/               # OpenClaw
 ## Architecture
 
 ```
-ONBOARDING → brand-context.md (11 questions, one file, all skills read)
-    ↓
-SKILL INVOKED → Discovery (fresh / continuing / existing brand)
-    ↓
-BUILD → DESIGN REVIEW GATE → OUTPUT
+                    ┌──────────────────────────┐
+                    │   BUSINESS ONBOARDING     │
+                    │   11 questions, one file  │
+                    │   brand-context.md        │
+                    └──────────┬───────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────────┐
+                    │   SKILL INVOKED           │
+                    │   93 skills, 14 packs     │
+                    └──────────┬───────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────────┐
+                    │   BRAND CONTEXT LOADED    │
+                    │   Every skill reads it    │
+                    └──────────┬───────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────────┐
+                    │   DISCOVERY               │
+                    │   fresh / continuing /    │
+                    │   existing brand          │
+                    └──────────┬───────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────────┐
+                    │   BUILD → GATE → OUTPUT   │
+                    │   Design review cross-    │
+                    │   references packs 12-14  │
+                    └──────────────────────────┘
 ```
 
 ### Design system: Bedrock / Fuel / Engine
 
-| Layer | Pack | Role |
-|-------|------|------|
-| **Bedrock** | 12: Design Standards (7 skills) | The eye. Quality, composition, patterns. Embedded in every build gate. |
-| **Fuel** | 13-14: Styles + Animation (17 skills) | The look and the motion. Never invoked directly. |
-| **Engine** | 10: Web Design (9 skills) | The output. The only skills a business invokes. One call, one output. |
+The design packs use a three-layer architecture. Only the Engine is customer-facing:
+
+```
+BEDROCK (Pack 12 — Design Standards, 7 skills)
+The eye. Quality, composition, patterns, language, reference.
+Embedded into every build skill's gate. Never invoked directly.
+
+        ↓
+
+FUEL (Packs 13-14 — Design Styles + Animation, 17 skills)
+The look and the motion. Visual languages + animation engines.
+Embedded into build skills. Never invoked directly.
+
+        ↓
+
+ENGINE (Pack 10 — Web Design, 9 skills)
+The output. Slide decks, cinematic sites, dashboards, scroll journeys.
+The only skills a business invokes. One call, one output.
+```
 
 ---
 
