@@ -12,25 +12,25 @@
 
 ---
 
-# CREW — World-Class AI Agent Skills
+# CREW: World-Class AI Agent Skills
 
-> **The only agent skill pack with a built-in brand context system.** 93 gold-standard skills. 14 packs. Every business function covered. Onboard your business once — every skill knows your brand, your voice, and your audience.
+> **The only agent skill pack with a built-in brand context system.** 93 gold-standard skills. 14 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
 
 ---
 
 ## What CREW is
 
-CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge — 93 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
+CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge: 93 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
 
 **What makes CREW different:**
 
 | CREW | Standard AI Skills |
 |------|-------------------|
-| 11-question business onboarding — every skill knows your brand | Generic prompts — no business context |
-| Design review gates cross-reference 3 packs before output ships | No quality gates — output is whatever the model produces |
-| 3-lens adversarial review on every skill | No adversarial review — bugs ship to production |
-| Brand context persists across all 93 skills | Each skill is an island — no shared knowledge |
-| Evidence/Inference discipline — nothing fabricated | No fabrication guardrails |
+| 11-question business onboarding, every skill knows your brand | Generic prompts, no business context |
+| Design review gates cross-reference 3 packs before output ships | No quality gates, output is whatever the model produces |
+| 3-lens adversarial review on every skill | No adversarial review, bugs ship to production |
+| Brand context persists across all 93 skills | Each skill is an island, no shared knowledge |
+| Evidence/Inference discipline, nothing fabricated | No fabrication guardrails |
 
 ---
 
@@ -62,13 +62,13 @@ SKILL INVOKED → Discovery (fresh / continuing / existing brand)
 BUILD → DESIGN REVIEW GATE → OUTPUT
 ```
 
-### Design system — Bedrock / Fuel / Engine
+### Design system: Bedrock / Fuel / Engine
 
 | Layer | Pack | Role |
 |-------|------|------|
-| **Bedrock** | 12 — Design Standards (7 skills) | The eye. Quality, composition, patterns. Embedded in every build gate. |
-| **Fuel** | 13-14 — Styles + Animation (17 skills) | The look and the motion. Never invoked directly. |
-| **Engine** | 10 — Web Design (9 skills) | The output. The only skills a business invokes. One call, one output. |
+| **Bedrock** | 12: Design Standards (7 skills) | The eye. Quality, composition, patterns. Embedded in every build gate. |
+| **Fuel** | 13-14: Styles + Animation (17 skills) | The look and the motion. Never invoked directly. |
+| **Engine** | 10: Web Design (9 skills) | The output. The only skills a business invokes. One call, one output. |
 
 ---
 
@@ -100,9 +100,9 @@ Every skill is gold-standard. Here is what that means:
 | Standard | What it does |
 |----------|-------------|
 | **15+ sections** | Every skill has Discovery, Modes, domain reference sections, Decision briefs, Verification, Completion |
-| **3-lens adversarial review** | Harness check + white-label scan + senior domain expert — before QA |
+| **3-lens adversarial review** | Harness check + white-label scan + senior domain expert before QA |
 | **Design review gates** | Build skills cross-reference packs 12-14, block output on failure |
-| **Fixtures** | Cases A, B, C per skill — clean, messy, and missing-input scenarios |
+| **Fixtures** | Cases A, B, C per skill: clean, messy, and missing-input scenarios |
 | **0 em dashes** | Strict white-label discipline across all 93 skills |
 | **0 banned terms** | No leaked internal names, no placeholder names |
 | **Evidence/Inference discipline** | Every claim labelled. Nothing fabricated. |
@@ -114,9 +114,9 @@ Every skill is gold-standard. Here is what that means:
 
 | Platform | Support |
 |----------|---------|
-| Claude Code | Native — install via plugins or source |
-| Hermes Agent (Nous Research) | Compatible — copy packs to `~/.hermes/skills/` |
-| OpenClaw | Compatible — `claw skills import` |
+| Claude Code | Native, install via plugins or source |
+| Hermes Agent (Nous Research) | Compatible, copy packs to `~/.hermes/skills/` |
+| OpenClaw | Compatible, `claw skills import` |
 | Any agentskills.io platform | Standard SKILL.md format |
 
 ---
@@ -135,6 +135,6 @@ Every skill is gold-standard. Here is what that means:
 
 ## License
 
-MIT — use freely, modify freely, credit appreciated.
+MIT. Use freely, modify freely, credit appreciated.
 
 Built by [PerformOS](https://performos.com.au).
