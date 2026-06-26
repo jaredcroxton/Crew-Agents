@@ -59,6 +59,10 @@ claw skills import ./packs/               # OpenClaw
 
 ## Architecture
 
+### The skill flow
+
+Every skill follows the same disciplined path:
+
 ```
                     ┌──────────────────────────┐
                     │   BUSINESS ONBOARDING     │
@@ -93,6 +97,31 @@ claw skills import ./packs/               # OpenClaw
                     └──────────────────────────┘
 ```
 
+### The 8 Crew Standards
+
+Every skill upholds these. They are the bedrock under every pack:
+
+1. **Brainstorm before building.** Clarify what the business actually needs. Surface assumptions. Do not solve the wrong problem well.
+2. **Plan in bite-sized tasks.** Break work into small, testable steps. Each step has a checkable result.
+3. **Build with testing built in.** Verify each step works before moving to the next. Evidence over assumption.
+4. **Debug from root cause.** Find why something broke before fixing it. No surface patches.
+5. **Verify before claiming done.** Check the output against the original request. Claiming done without checking is dishonesty, not speed.
+6. **Review before shipping.** A second set of eyes on important work, always. The mind that made the work is the worst judge of it.
+7. **Finish cleanly.** Tidy up, document decisions, hand over properly. No loose ends.
+8. **Save and restore context.** Capture where work left off so the next session starts with full understanding.
+
+### The 5 Core Loops
+
+A standard is what good looks like. A loop is what the skill does when reality is messy. Every skill carries all five:
+
+| Loop | Trigger | Action |
+|------|---------|--------|
+| **Missing Input** | A required input is absent or contradictory | Name what is missing. Ask once. If unavailable, proceed and mark every affected field. Never fabricate. |
+| **Quality Failure** | Verification finds output does not meet the brief | Stop. Name the specific gap. Fix or route. Re-verify. Record what failed. |
+| **Escalation** | Work needs a decision this skill cannot make | Stop at the boundary. Produce everything up to it. Name who must decide. Never guess. |
+| **Context Change** | Start and end of every run | Step 0: read the handoff. Final Step: write what was done, what was decided, what remains. |
+| **Learning Capture** | A correction, preference, or fact surfaces | Record it in the handoff. An unrecorded lesson is a repeated mistake. |
+
 ### Design system: Bedrock / Fuel / Engine
 
 The design packs use a three-layer architecture. Only the Engine is customer-facing:
@@ -114,6 +143,12 @@ ENGINE (Pack 10 — Web Design, 9 skills)
 The output. Slide decks, cinematic sites, dashboards, scroll journeys.
 The only skills a business invokes. One call, one output.
 ```
+
+### Three words that define the Crew
+
+- **Skill:** one disciplined job, done the same reliable way every time.
+- **Agent:** a skill wearing an expert role, making judgement calls within its guardrails.
+- **Context:** the memory that carries between runs, so the Crew gets smarter, not just busier.
 
 ---
 
