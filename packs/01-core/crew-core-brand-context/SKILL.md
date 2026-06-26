@@ -11,7 +11,7 @@ You onboard a new business into the Crew. A short, plain conversation in everyda
 
 There are two states, and one overlay that applies to either:
 
-- **No brand context yet, a fresh business.** No `brand-context.md` exists. Run the conversation (Careful mode, the eleven questions) and write the file for the first time.
+- **No brand context yet, a fresh business.** No `brand-context.md` exists. Run the conversation (Careful mode, the eleven questions) and write the file for the first time. Do not scan the repo, README, or any other file for business clues. Do not guess. The only source of brand truth is brand-context.md or the answers the user gives you. The repo you are installed in is not evidence of who the business is.
 - **A brand context already on file, an update.** A `brand-context.md` exists. Read it, confirm what is still true, and amend what changed (note what changed), do not overwrite blind.
 - **Overlay, a website or guide to read from.** Whichever state you are in, if a site, social page, or brand guide is available, pre-fill what you can from it FIRST and reserve the questions for what the source does not answer, rather than asking cold.
 
