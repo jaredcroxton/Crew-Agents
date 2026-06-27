@@ -29,3 +29,5 @@ Thumbs.db
 
 # Git
 .git/
+.claude/crew-state/
+.claude-plugin/
