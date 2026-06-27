@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 You need two answers before any code. These two are BLOCKING, never skip them, and never invent answers the user did not give. Ask in one short message and wait.
@@ -570,7 +575,9 @@ These make the wiring repeatable instead of improvised. Follow them exactly.
 
    Then run the Design review gate before any deploy. A fail blocks the ship.
 
-7. **Deploy.** Ship per the Deploy pathway. Then note the build and its URL in the handoff.
+7. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+
+8. **Deploy.** Ship per the Deploy pathway. Then note the build and its URL in the handoff.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-spotlight-hero-handoff.md` with: the build report produced, decisions made (the brand, the look and theme, the before-and-after transformation, the two matched prompts, the spotlight radius and softness, the accent, the deploy target and URL), unfinished work (the image pair owed by the user if pending, a design fix not yet applied, the OG patch), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -613,6 +620,18 @@ Design review gate: crew-design-quality pass (Revise then fixed), crew-design-co
 
 Open / handed off: pair wired, mobile and reduced-motion paths real. Reviewer has the built file and the live local URL.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 

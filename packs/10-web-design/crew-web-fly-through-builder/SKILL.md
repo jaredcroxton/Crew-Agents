@@ -46,6 +46,8 @@ If the asset route is unresolved, ask for it once, because it decides the entire
 
 Do not run this skill when the user wants a multi-page marketing site (that is `crew-web-landing-page-builder`), a CSS-only parallax with no real footage (this skill will not fake the journey), a slideshow of discrete images (that is `crew-web-slide-deck-builder`), or an editable video file (this ships a website, not an MP4).
 
+Do not run this skill expecting a canvas frame-scrub descent when the user only has still images. Clarify in discovery: still images produce Route D (a cinematic stage-switcher), not a frame-scrub descent. The distinction matters; a client shown a stage-switcher who expected continuous camera motion will notice.
+
 ## How the fly-through builder thinks
 
 1. **The descent is a frame sequence on a canvas, never a `<video>` element.** Frame scrubbing is the only technique that lets scroll position drive the camera frame-for-frame, forward and backward, with no buffering, no play/pause jank, and a perfect hold on any frame. Every engineering decision in this skill exists to make that one effect flawless.
@@ -54,6 +56,23 @@ Do not run this skill when the user wants a multi-page marketing site (that is `
 4. **The locked engineering is scar tissue, not preference.** The load gate, the arrival lock, the no-smooth-scroll-library rule, the spaced-retry `jumpTo`, each one fixed a real production bug (see Failure modes). Ripping one out to "simplify" re-breaks it. Change a locked block only with a reason that survives the failure-modes table.
 5. **Truth over spectacle.** Never present AI imagery of a real property as filmed, never invent a spec or a price. A "Concept demonstration only" footer rides until the owner signs off. The effect is the sell; the facts stay honest.
 6. **Never wait for all frames.** Paint after the gate (48 frames) plus a progress bar, release scroll, and background-load the rest. A descent that blocks on a full preload feels broken before it begins.
+
+## Canonical pin and crossfade reference (read before touching the scroll engine)
+
+The world-class build is already solved. Two Claude skills are the authoritative reference for scroll-pinning, crossfade, the load gate, and real-frame verification: the `scroll-journey` skill (CSS-sticky frame-scrub journey) and the `cinematic-website-build` skill (fixed-canvas, scroll-scrubbed GSAP timeline). When the pin, the crossfade, the preloader, or the verify step is in question, defer to those two, do not reinvent them.
+
+Non-negotiable invariants, by technique (not by tool):
+
+- **Pin survives its ancestors.** The pinned scene must hold at the top of the viewport for the whole scroll with no scroll-listener or rAF race that can drop it. Whether the pin is CSS sticky (one `position:sticky; top:0; height:100vh; overflow:hidden` child of the normally scrolling document) or a `position:fixed` full-screen canvas scrubbed by a single scroll-tied timeline, the holding element must NOT sit under a transformed, `overflow:hidden`, or `overflow:clip` ancestor unless you have scrolled the real page and confirmed the pin actually stays put. A sticky element silently unpins under such an ancestor and scrolls away into a black void.
+- **Crossfade by a computed weight or opacity, never by stacking.** Every stage's visibility is driven by a per-stage value in [0,1] (recomputed each scroll/resize frame) that binds BOTH opacity AND visibility, or by explicitly fading the active layer to 1 and every other layer to 0 on scene enter. Background and content swap as one. Never gate a stage's visibility on `pointer-events` or `z-index` alone: the earlier panel then stays painted at full opacity on top, every stage stacks, and the page reads as a black void below the hero.
+- **Keep a safety floor lit.** Clamp so at least one stage is always painted (force the last reachable stage on past its end, and if all weights fall to about 0 force the first stage to 1). Every weight reaching 0 at a boundary is a black frame.
+- **Gate first paint with a real preloader.** Block scroll until a real progress value (decoded-frame count or `LoadingManager.onProgress`, never faked) clears the gate, then release. First paint opens through the preloader, not a black flash. Count both load and error so one missing or 404 frame cannot hang the gate forever.
+- **Verify on a real painted frame.** Confirm a real rendered frame is on the canvas (via the debug `__render` or `__goScene` frame hook), not a placeholder, and account for rAF being throttled or suspended in a background or preview tab (a black capture there is a harness artifact, not a site bug). If automation cannot paint a live frame, open it in a real foreground browser and scroll.
+
+Forbidden reinventions (both shipped real bugs):
+
+- `position:sticky` on a scene under an `overflow:hidden` or `overflow:clip` (or transformed) ancestor without scrolling the real page to prove the pin holds.
+- Gating stage-panel visibility on `pointer-events` (or `z-index`) alone instead of binding opacity and visibility to the computed weight.
 
 ## Route architecture
 
@@ -64,8 +83,9 @@ All work converges on one canvas frame sequence; the only real choice is how the
 | **A, KIE auto-generate** | hands-off, no footage on hand, a key is available | a working `KIE_API_KEY` | 4 nano-banana keyframes to 3 Seedance clips to a crossfade master | under about a dollar of credits | the look is model-decided, and it spends real credits |
 | **B, own footage** | a specific look, a real place, or footage already exists | one or more MP4s in descent order | a normalised, crossfaded `assets/video/master.mp4` | none | quality is bound by the source footage |
 | **C, hand off prompts** | no key and no footage yet | nothing yet, the build pauses | paste-ready stage prompts for a third-party app | none | a round trip, the build waits on the user, then resumes as route B |
+| **D, still images in hand** | the user already has AI-generated stills (Higgsfield, Midjourney, Firefly, Ideogram) and wants no video step | 3 to 4 finished still images in descent order | a cinematic stage-switcher, full-bleed image backdrops, GSAP-driven stage swaps, NO canvas | none | not a true frame-scrub descent (no continuous camera motion between frames); it is a stage-based image experience |
 
-Route C is not a dead end, it is route B with a wait: hand over the prompts, pause, and resume when the MP4s land. The procedural commands for each route are in Workflow Step 2.
+Routes A, B, and C converge on one canvas frame sequence; Route D is the still-image exception (no canvas, no frame pipeline, see Route D below). Route C is not a dead end, it is route B with a wait: hand over the prompts, pause, and resume when the MP4s land. The procedural commands for each route are in Workflow Step 2.
 
 ## Frame pipeline
 
@@ -114,6 +134,7 @@ Ask these with AskUserQuestion, then confirm the plan in one line before startin
    - **(a) Auto-generate via attached KIE API key.** The skill runs `pipeline/generate_assets.py`: nano-banana paints the stage keyframes, Seedance 1.0 Lite turns each into motion, the clips crossfade into one descent. Needs a working `KIE_API_KEY`.
    - **(b) Bring your own footage from a third-party app.** The user generates the fly-through themselves in Runway, Kling, Sora, Pika, Veo, Luma, or films a real drone or FPV clip, and hands over one or more MP4s. The skill ingests, joins, and scrubs them.
    - **(c) No key and no footage yet.** The skill cannot invent the journey. Hand the user the stage prompts (from Step 2) to paste into a third-party generator, tell them to export 1080p MP4s, and pause until they return. Then continue as route (b).
+   - **(d) AI-generated still images already in hand** (Higgsfield, Midjourney, Firefly, Ideogram, etc.). The skill builds a cinematic stage-switcher fly-through using these images as full-bleed backdrops. This is a stage-based image experience, not a frame-scrub descent. Call it "cinematic stage fly-through" not "scroll-descent." See Route D for the architecture, and confirm with the user that a stage-switcher (not continuous camera motion) is what they expect.
 
 4. **Brand carrier.** Minimal-luxe / extract a brand from a URL first / the user's own kit (see Brand carrier). Design DNA is locked per build once chosen.
 
@@ -142,6 +163,22 @@ Branch on the Step 1 answer (see Route architecture for the trade-offs). All thr
 1. Still edit `pipeline/keyframes.json` and `clips.json` so the prompts exist.
 2. Hand the user the four keyframe prompts and three clip prompts as paste-ready text, with the instruction: generate each stage in your chosen app, export 1080p MP4 in descent order, send them back. Name the apps (Runway Gen-3, Kling 1.6, Sora, Pika, Veo 3, Luma Dream Machine).
 3. Pause. When the MP4s arrive, switch to route B.
+
+### Route D: still-image stage-switcher
+
+When the user provides AI-generated still images, do NOT run the canvas frame pipeline. Build a cinematic stage-switcher from `fly-through-route-d-reference.html` instead. Architecture:
+
+- N images (3 to 4) equals N stages, full-bleed backdrops.
+- CSS `position:sticky` scene, `100vh`, inside a `500vh` runway. The sticky scene and its ancestors use `overflow-x: clip` (never `overflow:hidden` or `overflow:clip` on a direct ancestor of the sticky element, and never a transform on one) so the pin actually holds; a sticky scene under an `overflow:hidden` ancestor silently unpins into a black void (see Failure modes and the Canonical pin reference).
+- Image crossfade: `opacity` transition 1.2s on the `.active` class, and bind BOTH opacity AND visibility to active so no two backgrounds stack.
+- Stage switching: GSAP ScrollTrigger on each stage's start threshold, `onEnter` / `onLeave` toggling `.active`. NO raw scroll math, no `scrollY / maxScroll` fraction thresholds.
+- Content reveals: a ScrollTrigger per sub-element, `once: true`, `start: "top 80%"`. Never a calculated scroll fraction.
+- No canvas, no `FRAME_COUNT`, no frame pipeline.
+- No arrival lock (there is no scrollable section to guard against; the runway height IS the scroll budget).
+- Load: `<img>` with `fetchpriority="high"` and `loading="eager"` on image 1 so the first backdrop paints immediately.
+- `prefers-reduced-motion`: stage swaps and reveals become instant, no scrub.
+
+The bundled `fly-through-route-d-reference.html` is the locked Route D template. Clone it, swap the image slots and stage copy, do not rebuild the scroll engine from scratch.
 
 **Step 3: Generate and stitch (route A only).**
 
@@ -180,6 +217,7 @@ Clone `fly-through-reference.html` (in this skill folder) as `index.html` and re
 - `render()` uses `nearestLoaded()` fallback plus `drawCover` cover-fit, never a blank or stretched canvas. Deterministic `starfield()` backdrop before the first frame loads (LCG, no `Math.random`).
 - DPR cap `min(devicePixelRatio, 2)` on canvas sizing, re-render on resize.
 - GSAP ScrollTrigger scrub 0.6 tied to a `#cine` runway div (500vh), NOT to `body`. Scoping the trigger to body breaks the lock/unlock.
+- **No raw scroll math for content reveals or stage switching.** `window.scrollY / maxScroll` with hardcoded fraction thresholds breaks on fast scroll (it skips thresholds), on viewport-height variance, and on mobile. Use ScrollTrigger with `once: true` and a `start` tied to the element (`start: "top 80%"`), not a calculated fraction. This applies to Route D (the image stage-switcher) as well as the canvas build.
 - `prefers-reduced-motion`: scrub snaps, reveals are instant.
 - Mobile loads `frames/m/` when `innerWidth < 768`.
 - `history.scrollRestoration='manual'` plus `scrollTo(0,0)` so reload never lands mid-scrub.
@@ -402,10 +440,13 @@ RECOMMENDATION: [what should happen next]
 | `Unknown encoder 'libwebp'` | Homebrew ffmpeg build | Pillow WebP (`to_webp.py`) |
 | Mobile scrub a blurry sliver | landscape frames cover-fit portrait | Portrait 720x1080 center-crop set |
 | Preview screenshot all black, page fine | viewport-override capture artifact | Pixel readback via getImageData, or the `__FLYTHROUGH.f` hook |
+| Sub-elements never reveal, or all reveal at once | raw scroll fractions (`scrollY / maxScroll > 0.xx`) with no scrub buffer, skipped on fast scroll or broken by viewport-height variance | a ScrollTrigger per element, `once: true`, `start: "top 80%"` |
+| Two stage backgrounds visible at once during the crossfade | a 1.5s CSS opacity transition plus an immediate `.active` class swap leaves two panels semi-opaque together | ScrollTrigger `onEnter` / `onLeave` to add and remove `.active` (and bind both opacity and visibility), or a GSAP `.to(opacity)` timeline |
 
 ## Bundled files
 
-- `fly-through-reference.html` : the locked reference build. Clone, do not rebuild from scratch.
+- `fly-through-reference.html` : the locked reference build (Routes A, B, C, canvas frame-scrub). Clone, do not rebuild from scratch.
+- `fly-through-route-d-reference.html` : the locked Route D template (still-image stage-switcher, GSAP ScrollTrigger, CSS sticky scene, no canvas). Clone for any still-images build, do not rebuild the scroll engine from scratch.
 - `pipeline/generate_assets.py` : KIE REST, nano-banana keyframes plus Seedance clips (route A). `--handshake` / `--keyframes` / `--clips` / `--listing` / `--all`.
 - `pipeline/keyframes.json`, `clips.json`, `listing.json` : editable prompt templates.
 - `pipeline/stitch_frames.sh` : route A clip join plus frame extract.

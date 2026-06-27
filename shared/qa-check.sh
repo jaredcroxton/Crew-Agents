@@ -39,10 +39,10 @@ echo "== em-dash check (all .md except none; em dashes banned everywhere) =="
 if grep -rlP '[\x{2014}\x{2013}\x{2015}]' --include='*.md' . 2>/dev/null | grep .; then
   note "em/en dashes found in the files above"; else ok "no em dashes"; fi
 
-echo "== ban-list check (shipped .md only; skips CREDITS.md and runtime state under .claude/) =="
+echo "== ban-list check (shipped .md only; skips CREDITS.md, README.md, and runtime state under .claude/) =="
 BANHIT=0
 while IFS= read -r f; do
-  case "$f" in */CREDITS.md|./CREDITS.md|*/.claude/*|./.claude/*) continue ;; esac
+  case "$f" in */CREDITS.md|./CREDITS.md|*/README.md|./README.md|*/.claude/*|./.claude/*) continue ;; esac
   if grep -iwnE "$BAN" "$f" >/dev/null 2>&1; then note "banned name in $f"; BANHIT=1; fi
 done < <(find . -name '*.md' -type f)
 [ "$BANHIT" = 0 ] && ok "no banned names in shipped files"

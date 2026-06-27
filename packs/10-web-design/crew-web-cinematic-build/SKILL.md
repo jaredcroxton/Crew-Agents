@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 You need the purpose-first brief before any code. Ask in one short message, lead with purpose, because the site's job decides the theme, the scene flow, the hero objects, and ultimately the image prompts. If the user says "just build it", use smart defaults and state your assumptions in one line.
@@ -328,7 +333,9 @@ const fog = scene.fog // capture it so the scroll-flow tween has a bound target
 
 6. **Add the preloader, then cut the mobile mode.** A fixed full-screen panel driven by a real `THREE.LoadingManager.onProgress` value (with `manager` passed into every loader), gating scroll with `lenis.stop()` on mount and `lenis.start()` in the fade-out completion callback (see Preloader). Then cut the mobile mode as its own film: portrait backdrops, hero upper third, type lower third, scroll-velocity parallax, DOF dropped, particles cut (see Mobile cinematic mode). Optionally the ambient audio layer, the custom cursor, and the scroll cues.
 
-7. **Verify the render (including the rAF-suspended-in-background-tab check).** When you drive the site through browser automation to screenshot it, the tab is usually backgrounded, and browsers suspend `requestAnimationFrame` there. The symptom is `gsap.ticker.frame` stuck at 0, the preloader never fades, ScrollTrigger never fires, the canvas stays black. This is NOT a bug in the site, it is the hidden tab.
+7. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+
+8. **Verify the render (including the rAF-suspended-in-background-tab check).** When you drive the site through browser automation to screenshot it, the tab is usually backgrounded, and browsers suspend `requestAnimationFrame` there. The symptom is `gsap.ticker.frame` stuck at 0, the preloader never fades, ScrollTrigger never fires, the canvas stays black. This is NOT a bug in the site, it is the hidden tab.
 
    - Confirm logic without rendering: load, then `gsap.globalTimeline.totalTime(gsap.globalTimeline.totalTime() + 8)` to fast forward past the preloader delay, then check `ScrollTrigger.getAll().length` is non-zero and the preloader display is `none`.
    - To screenshot a real frame, expose two debug hooks in the build (`window.__render = () => { renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); camera.position.set(0,0,camera.position.z); camera.lookAt(0,0,-4); composer.render(); }` and `window.__goScene = (i) => enter(i)`). To shoot scene i: `document.querySelectorAll('.scene')[i].scrollIntoView({behavior:'instant'})`, then `__goScene(i)`, then fast-forward gsap time, then `__render()`, then screenshot.
@@ -379,6 +386,18 @@ Reduced-motion path: confirmed, scrubbed camera moves disabled, scenes hold stat
 
 Open / handed off: all nine assets wired, mobile cut shipped, ambient drone layered. Reviewer has the built file and the live local URL.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 

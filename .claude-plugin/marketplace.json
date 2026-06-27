@@ -1,0 +1,25 @@
+{
+  "name": "crew-packs",
+  "owner": { "name": "Crew" },
+  "metadata": {
+    "description": "Crew business skill packs. 9 packs, 58 skills. Install a pack and Claude gains a focused specialist for that part of the business.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "crew-installer",
+      "source": "./plugins/crew-installer",
+      "description": "Project-local installer. Adds /crew:install which copies packs into this project's .claude/skills the same way install.sh does: no global, no hooks, no CLAUDE.md edits, idempotent, never clobbering, with a report."
+    },
+    { "name": "crew-core", "source": "./plugins/crew-core", "description": "Core (7 skills): the safe way every job starts, runs, and ships." },
+    { "name": "crew-sales", "source": "./plugins/crew-sales", "description": "Sales (7 skills): find the right people and start better conversations." },
+    { "name": "crew-marketing", "source": "./plugins/crew-marketing", "description": "Marketing (7 skills): turn one idea into content that travels." },
+    { "name": "crew-ops", "source": "./plugins/crew-ops", "description": "Operations (5 skills): make repeatable work faster and more reliable." },
+    { "name": "crew-hr", "source": "./plugins/crew-hr", "description": "HR and People (5 skills): hire and support your team with less guesswork." },
+    { "name": "crew-finance", "source": "./plugins/crew-finance", "description": "Finance and Admin (6 skills): keep the money side clear, current and calm." },
+    { "name": "crew-support", "source": "./plugins/crew-support", "description": "Customer Support (6 skills): answer customers faster, in one consistent voice." },
+    { "name": "crew-docs", "source": "./plugins/crew-docs", "description": "Documentation (7 skills): capture how the business works, clearly." },
+    { "name": "crew-training", "source": "./plugins/crew-training", "description": "Training and L&D (8 skills): build capability that sticks." },
+    { "name": "crew-full", "source": "./plugins/crew-full", "description": "The full library: all 9 packs, 58 skills." }
+  ]
+}

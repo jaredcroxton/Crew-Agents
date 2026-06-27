@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 Collect the full discovery brief before any tool call, any scrape, any frame extraction. Ask these seven questions in a single numbered message, one line each, plus the deploy target and the mode. If the user answers only some, fill the rest with sensible defaults from the property and the register, and confirm before building. Never invent the listing, the footage, or the photos.
@@ -398,9 +403,10 @@ The assembly contract, condensed into a checklist every build must satisfy:
 3. **Source and cut the tour video.** Source the REAL walkthrough (the listing video or the YouTube tour), scene-detect it, map every scene to a room, and re-cut into a tour arc with one chapter per room and a forward-and-back scrub. Drop agency title cards. If there is no real video, fall back to a Ken Burns pan over the REAL stills; never generate footage.
 4. **Extract the frames.** Run the frame pipeline: extract every Nth frame to a high-quality WebP set, a desktop landscape set and a portrait mobile set, named in sequence. Compute `N` and the per-chapter frame ranges from the cut durations.
 5. **Assemble the single-file site.** Build `index.html` inline per Site assembly: the hero with the estate name or address and the real stats, the sticky scroll-scrub canvas, the per-room chapter overlays with oversized serif type and legibility scrim, the real photo gallery, the real floorplan, the listing facts, and the agent CTA. Wire the `img.decode()` preload, the devicePixelRatio sizing, and the `matchMedia('(prefers-reduced-motion: reduce)')` static-frame path.
-6. **Verify everything verifiable.** Walk the Verification checklist: frames extracted and named, scrub maps the full range forward and back, chapters land per room, listing data matches the source, gallery and floorplan render, the reduced-motion path holds a static frame, the real-footage rule was honored. Serve from a `/tmp` copy if a preview server cannot read the project folder.
-7. **Run the design review gate.** Per the Design review gate section, hand the built file and the live local URL to the reviewers. Fix all Criticals and Majors. A fail blocks the ship.
-8. **Deploy only after the user approves a live test.** Per the Deploy pathway section, show a local preview, let the user approve it, then deploy to Vercel. Patch the OG alias if it differs from the guess, and verify the live site serves the frames, the photos, and the floorplan while the source video stays private.
+6. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+7. **Verify everything verifiable.** Walk the Verification checklist: frames extracted and named, scrub maps the full range forward and back, chapters land per room, listing data matches the source, gallery and floorplan render, the reduced-motion path holds a static frame, the real-footage rule was honored. Serve from a `/tmp` copy if a preview server cannot read the project folder.
+8. **Run the design review gate.** Per the Design review gate section, hand the built file and the live local URL to the reviewers. Fix all Criticals and Majors. A fail blocks the ship.
+9. **Deploy only after the user approves a live test.** Per the Deploy pathway section, show a local preview, let the user approve it, then deploy to Vercel. Patch the OG alias if it differs from the guess, and verify the live site serves the frames, the photos, and the floorplan while the source video stays private.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` with: the build report produced, decisions made (the property and address, the title choice, the number of room chapters, the frame count `N`, the brand assets generated or pending, the deploy target and URL), unfinished work (footage owed by the user, photos not yet supplied, the OG patch, a design fix not yet applied, the agency sign-off on attribution), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (an agency register, a buyer feeling, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -448,6 +454,18 @@ Design review gate: crew-design-quality pass (Revise then fixed) + crew-design-c
 
 What the reviewer needs next: the built file and the live local URL. Agency attribution sign-off still pending; footer carries the concept-demonstration note.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 

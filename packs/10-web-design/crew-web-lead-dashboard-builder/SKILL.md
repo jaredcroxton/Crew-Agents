@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 You need:
@@ -139,9 +144,10 @@ README.md:
 7. **Draft the LinkedIn DM** (alongside the email) per Outreach drafting. Save as linkedin_dm.
 8. **Draft the follow-up sequence** (3 touches, day 3, 7, 14) per Outreach drafting. Save as follow_up_sequence.
 9. **Build the dashboard** per Dashboard anatomy. One self-contained HTML file, the three filters, one card per lead with every field, fit badge, clickable LinkedIn link. Save as dashboard.html.
-10. **Design review gate.** Run the Design review gate checklist. Emit DESIGN REVIEW PASS or DESIGN REVIEW FAIL with a fix list. If a check fails, fix it (Loop 2, Quality Failure) and re-run.
-11. **Output assembly.** Create one output folder: dashboard.html, scrape.json, leads.json, and a one-page README.md (see Data schema). The LinkedIn and website links open in a new tab, so tell the user to open dashboard.html in a browser, or serve it locally, to click through; an inline preview pane may block the links.
-12. **Calendar offer (ask, never create).** After the build, ask the user if they want calendar focus-blocks for the outreach (for example 30 minutes a day to send the top leads). Never auto-create an event. If they say yes, confirm each block explicitly before any calendar tool creates it. (Skipped in Fast mode.)
+10. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+11. **Design review gate.** Run the Design review gate checklist. Emit DESIGN REVIEW PASS or DESIGN REVIEW FAIL with a fix list. If a check fails, fix it (Loop 2, Quality Failure) and re-run.
+12. **Output assembly.** Create one output folder: dashboard.html, scrape.json, leads.json, and a one-page README.md (see Data schema). The LinkedIn and website links open in a new tab, so tell the user to open dashboard.html in a browser, or serve it locally, to click through; an inline preview pane may block the links.
+13. **Calendar offer (ask, never create).** After the build, ask the user if they want calendar focus-blocks for the outreach (for example 30 minutes a day to send the top leads). Never auto-create an event. If they say yes, confirm each block explicitly before any calendar tool creates it. (Skipped in Fast mode.)
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md` with: output produced (dashboard path, lead count, Hot/Warm/Cool, emails and DMs); decisions (theme, scoring weights, calendar answer); unfinished work (Derived contacts and emails to verify, thin insights escalated, brand to confirm); what the next skill needs; and a Learned note. Always write it, even with no output. (Loop 4 and Loop 5.)
 
@@ -191,6 +197,18 @@ Per-lead records (every dashboard field):
   Decision-maker: Priya Nair, COO (Confirmed) | Insight: certification paperwork is heavy and manual, a direct automation target (Inferred)
   Signal: posted two engineering roles this month (Confirmed) | Channels: email + LinkedIn DM | Outreach: not contacted | Flags: none
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Decision briefs
 

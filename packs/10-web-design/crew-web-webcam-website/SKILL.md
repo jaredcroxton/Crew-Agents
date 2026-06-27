@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 Collect the discovery brief before any code. Ask these six in one short message, numbered, one line each. If the user answers only some, fill the rest with sensible defaults from the theme and confirm before building. The uploaded image and the transformation are BLOCKING: never invent them.
@@ -906,11 +911,13 @@ These make the wiring repeatable instead of improvised. Follow them exactly.
 
 4. **Build the single-file site from the locked template.** Copy The site template to `index.html`. Substitute only the marked slots: `{{TITLE}}`, `{{MODE}}` (kiosk or card/band/breakout), `{{HINT}}`, `{{FRAME_COUNT}}` (48), `{{OBJECT_FRAC}}` (0.55 default), `{{OBJECT_MAX}}` (720), `{{POSTER_IMAGE}}` (a clean stylized still, `subject-green.png` is fine), the poster copy, the brand tokens, and for embedded the page chrome (`{{EYEBROW}}`, `{{HEADLINE}}`, ... `{{FOOTER}}`). Do NOT touch the camera lifecycle, the `stopCamera` teardown, the gesture math, the no-camera fallback, the reduced-motion branch, or the green keyer. For embedded builds replace the sample `header.site` / `section.copy` / `footer.site` blocks with the real brand sections and keep the `#stage` block exactly where it sits in the flow.
 
-5. **Verify everything verifiable (camera is headless-blocked).** Serve from a `/tmp/<slug>` copy (a preview server cannot read Desktop). The preview denies `getUserMedia`, which is expected, so verify camera-free: call `window.__pf.preload()`, await `frames.length === FRAME_COUNT`, then render frames 0 / 16 / 32 / 47 to offscreen canvases, `toDataURL`, inject as a persistent `<img>` grid, and screenshot. Check the grid: the background is fully transparent, no green fringe, the subject interior is intact at every stage, and the final frame is the fully transformed state. Also call `window.__pf.fallback()` and screenshot to confirm the no-camera fallback renders the scrub, screenshot the un-activated poster and the marketing chrome for the chosen mode, and confirm `window.__pf.reduceMotion` reflects the media query. Then run the verification checklist. The live hand test (the camera, the gesture) is the one manual leg.
+5. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
 
-6. **Run the Design review gate.** Run the gate per the Design review gate section before any deploy: `crew-design-quality` (binding) plus the pack-12/13/14 skills it enumerates. A fail blocks the ship. Fix all Criticals and Majors, then re-review.
+6. **Verify everything verifiable (camera is headless-blocked).** Serve from a `/tmp/<slug>` copy (a preview server cannot read Desktop). The preview denies `getUserMedia`, which is expected, so verify camera-free: call `window.__pf.preload()`, await `frames.length === FRAME_COUNT`, then render frames 0 / 16 / 32 / 47 to offscreen canvases, `toDataURL`, inject as a persistent `<img>` grid, and screenshot. Check the grid: the background is fully transparent, no green fringe, the subject interior is intact at every stage, and the final frame is the fully transformed state. Also call `window.__pf.fallback()` and screenshot to confirm the no-camera fallback renders the scrub, screenshot the un-activated poster and the marketing chrome for the chosen mode, and confirm `window.__pf.reduceMotion` reflects the media query. Then run the verification checklist. The live hand test (the camera, the gesture) is the one manual leg.
 
-7. **Deploy only after the user approves a live test.** Hand the localhost URL to the user for the live hand test and tune `OPEN_RATIO` / `CLOSED_RATIO` (fist sensitivity) and the lerp factors on feedback. Only after the user approves the live test, ship per the Deploy pathway. Then note the build and its URL in the handoff.
+7. **Run the Design review gate.** Run the gate per the Design review gate section before any deploy: `crew-design-quality` (binding) plus the pack-12/13/14 skills it enumerates. A fail blocks the ship. Fix all Criticals and Majors, then re-review.
+
+8. **Deploy only after the user approves a live test.** Hand the localhost URL to the user for the live hand test and tune `OPEN_RATIO` / `CLOSED_RATIO` (fist sensitivity) and the lerp factors on feedback. Only after the user approves the live test, ship per the Deploy pathway. Then note the build and its URL in the handoff.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-webcam-website-handoff.md` with: the build report produced, decisions made (the subject and theme, the transformation verb, the layout mode, the asset pipeline run with the nano banana subject prompt and the Veo3 transformation prompt and the frame count, the fist sensitivity and lerp values, the deploy target and URL), unfinished work (the live hand test owed if pending, a design fix not yet applied, the OG patch), what the Design review gate skills (`crew-design-quality` and the pack-12/13/14 skills it enumerates) need next (the built file and the live local URL), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -958,6 +965,18 @@ Design review gate: crew-design-quality pass (Revise then fixed), crew-design-co
 
 Open / handed off: the live hand test is owed (camera is headless-blocked in preview). Reviewer has the built file and the live local URL.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 

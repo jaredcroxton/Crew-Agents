@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 Collect the full discovery brief before any code. Ask these ten questions in a single message, numbered, one line each. If the user answers only some, fill the rest with sensible defaults from the theme and confirm before building.
@@ -1262,9 +1267,11 @@ Open `http://localhost:5173/`. Walk this checklist:
 
 If any check fails, the bug is almost always: doc height not bound to `unlockedStageCount`, storage keys colliding with another project, or the scroll-handoff `useLayoutEffect` not firing.
 
-15. **Design review gate.** Run the gate per the Design review gate section before any deploy. Fix all Criticals and Majors. A fail blocks the ship.
+15. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
 
-16. **Deploy.** Ship per the Deploy pathway section. Then note the new build and its URL in the handoff.
+16. **Design review gate.** Run the gate per the Design review gate section before any deploy. Fix all Criticals and Majors. A fail blocks the ship.
+
+17. **Deploy.** Ship per the Deploy pathway section. Then note the new build and its URL in the handoff.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-scroll-journey-handoff.md` with: the build report produced, decisions made (the theme, the stage names, the persistent-UI motif, the palette, FRAME_COUNT per stage, the deploy target and URL), unfinished work (any stage missing real content, footage owed by the user, the OG patch, a design fix not yet applied), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -1320,6 +1327,18 @@ Reduced-motion path: confirmed, scrub snaps to the arrival frame, reveals instan
 Open / handed off: stage 4 ships with the honest "Content coming" stub, awaiting real copy.
 OG tags patched to the final alias. Reviewer has the built file and the live local URL.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 

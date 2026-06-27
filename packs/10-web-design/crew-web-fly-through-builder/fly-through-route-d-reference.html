@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fly Through Route D Reference</title>
+
+<!--
+  ROUTE D REFERENCE TEMPLATE: still-image cinematic stage-switcher fly-through.
+  LOCKED architecture. Brand neutral. Swap the placeholder slots, do not change the wiring.
+
+  ARCHITECTURE SUMMARY:
+  - One pinned .scene (position: sticky, 100vh) inside a 500vh .runway.
+  - 4 stages, each a full bleed .bg-layer backdrop plus a .stage-panel of copy.
+  - Backdrop crossfade is GSAP-scrubbed: each backdrop animates opacity 0→1→0
+    continuously across the runway scroll. No hard cuts. No CSS transitions.
+  - Panel switching: clean binary swap at stage markers, sits above the crossfade.
+  - Per element reveals use their own ScrollTrigger (once: true, start: top 80%).
+
+  HOW TO USE THIS FILE:
+  1. Drop four still images into images/stage-1.jpg through images/stage-4.jpg.
+  2. Replace the placeholder copy inside each .stage-panel.
+  3. Adjust the :root brand tokens if a different palette is required.
+  Everything else stays as is.
+-->
+
+<!-- Inter, weights 100 to 400, for the minimal luxe label and headline DNA. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet" />
+
+<style>
+  /* ----- LOCKED BRAND DNA: minimal luxe ----- */
+  :root {
+    --ink: #050505;            /* base black, never shows raw because gradients sit behind images */
+    --ivory: #f5f4f1;          /* primary type */
+    --platinum: #b9c4d0;       /* cold support tone */
+    --champagne: #e3c79a;      /* warm accent, blooms in for the final stage only */
+    --label-track: 0.42em;     /* letter spacing on labels, lives in the 0.2 to 0.6em band */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /*
+    PIN SAFETY (do not change):
+    html and body use overflow-x: clip, NOT overflow-x: hidden and NOT overflow: hidden.
+    overflow-x: hidden silently forces overflow-y: auto, which turns html or body into a
+    scroll container and breaks position: sticky on the scene (it unpins into a black void).
+    clip suppresses horizontal overflow without creating a scroll container, so the pin holds.
+    Also: no transform on any ancestor of .scene, because a transformed ancestor creates a
+    containing block that also kills sticky positioning.
+  */
+  html, body {
+    overflow-x: clip;
+    background: var(--ink);
+    color: var(--ivory);
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 200;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ----- PROGRESS BAR (thin, top) ----- */
+  .progress-track {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: rgba(185, 196, 208, 0.16);
+    z-index: 60;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--platinum);
+    transition: background 1.2s var(--ease);
+  }
+
+  /* ----- RUNWAY AND PINNED SCENE ----- */
+  /*
+    The .runway is 500vh tall. The .scene is sticky inside it, so the scene stays fixed
+    on screen (pinned) while the runway scrolls past underneath. That scroll distance is
+    what the stage markers live in.
+  */
+  .runway {
+    position: relative;
+    height: 500vh;
+  }
+  .scene {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ----- BACKDROP LAYERS (full bleed images) ----- */
+  /*
+    Opacity and visibility are now driven by GSAP ScrollTrigger scrub,
+    not by a CSS transition and .active class. Do not add an opacity
+    or visibility transition here: it fights the scrub.
+  */
+  .bg-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /*
+    Each backdrop carries a distinct dark gradient BEHIND its image, so the template
+    renders and is testable before any real image is dropped in, and never flashes black.
+    Each goes ink to a different deep hue.
+  */
+  .bg-fill {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .bg-fill.stage-1 { background: radial-gradient(120% 90% at 50% 18%, #14181f 0%, var(--ink) 70%); }
+  .bg-fill.stage-2 { background: radial-gradient(120% 90% at 28% 30%, #1c1623 0%, var(--ink) 72%); }
+  .bg-fill.stage-3 { background: radial-gradient(120% 90% at 72% 24%, #101d1c 0%, var(--ink) 72%); }
+  .bg-fill.stage-4 { background: radial-gradient(120% 100% at 50% 40%, #221a10 0%, var(--ink) 74%); }
+
+  .bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  /* Cinematic atmosphere: a soft vignette plus a top scrim so type always sits clean. */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, rgba(5, 5, 5, 0.62) 0%, rgba(5, 5, 5, 0.12) 32%, rgba(5, 5, 5, 0.12) 60%, rgba(5, 5, 5, 0.78) 100%),
+      radial-gradient(130% 130% at 50% 50%, rgba(5, 5, 5, 0) 52%, rgba(5, 5, 5, 0.65) 100%);
+  }
+  /* Optional grain, tasteful and faint. */
+  .grain {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ----- STAGE PANELS (the copy) ----- */
+  /*
+    Same dual binding as the backdrops: opacity AND visibility, so panels never stack.
+  */
+  .stage-deck {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .stage-panel {
+    position: absolute;
+    width: min(92vw, 880px);
+    padding: 0 6vw;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .stage-panel.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .stage-tag {
+    display: inline-block;
+    font-size: clamp(10px, 1.1vw, 13px);
+    font-weight: 400;
+    letter-spacing: var(--label-track);
+    text-transform: uppercase;
+    color: var(--platinum);
+    margin-bottom: 1.6rem;
+  }
+  .stage-headline {
+    font-size: clamp(2.4rem, 6.4vw, 5.4rem);
+    font-weight: 100;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    color: var(--ivory);
+  }
+  .stage-headline em {
+    font-style: normal;
+    font-weight: 300;
+    color: var(--champagne);
+  }
+  .stage-sub {
+    margin-top: 1.8rem;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-weight: 200;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    color: var(--platinum);
+  }
+
+  /* Per element reveal initial state (GSAP animates these in). */
+  .reveal { opacity: 0; will-change: transform, opacity; }
+
+  /* ----- FIXED STAGE INDICATOR (bottom left) ----- */
+  .indicator {
+    position: fixed;
+    left: clamp(1.4rem, 3vw, 3rem);
+    bottom: clamp(1.4rem, 3vw, 2.4rem);
+    z-index: 50;
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    font-size: clamp(10px, 1vw, 12px);
+    letter-spacing: var(--label-track);
+    text-transform: uppercase;
+    color: var(--platinum);
+  }
+  .indicator .num {
+    font-weight: 400;
+    color: var(--ivory);
+    font-variant-numeric: tabular-nums;
+  }
+  .indicator .sep { opacity: 0.5; }
+  .indicator .name { font-weight: 300; }
+
+  /* ----- DOT NAV (right side) ----- */
+  .dots {
+    position: fixed;
+    right: clamp(1.2rem, 2.6vw, 2.4rem);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--platinum);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.5s var(--ease), transform 0.5s var(--ease), border-color 0.5s var(--ease);
+  }
+  .dot:hover { transform: scale(1.25); }
+  .dot.active {
+    background: var(--ivory);
+    border-color: var(--ivory);
+    transform: scale(1.18);
+  }
+
+  /* ----- REDUCED MOTION ----- */
+  /*
+    Reveals and stage swaps become instant. ScrollTrigger still toggles .active, but the
+    transitions drop to zero so nothing animates and nothing scrubs.
+  */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-layer,
+    .stage-panel,
+    .progress-fill,
+    .dot,
+    .reveal {
+      transition: none !important;
+    }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- thin progress bar, top -->
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- fixed stage indicator, bottom left -->
+  <div class="indicator" aria-hidden="true">
+    <span class="num" id="indNum">01</span>
+    <span class="sep">//</span>
+    <span class="name" id="indName">Stage One</span>
+  </div>
+
+  <!-- dot nav, right side -->
+  <nav class="dots" aria-label="Stage navigation">
+    <button class="dot active" data-dot="0" aria-label="Go to stage one"></button>
+    <button class="dot" data-dot="1" aria-label="Go to stage two"></button>
+    <button class="dot" data-dot="2" aria-label="Go to stage three"></button>
+    <button class="dot" data-dot="3" aria-label="Go to stage four"></button>
+  </nav>
+
+  <!--
+    THE RUNWAY: 500vh tall. The .scene pins inside it.
+    The four .stage-marker elements are invisible scroll positions. ScrollTrigger watches
+    each marker and switches the active stage when it crosses the viewport center. They are
+    the ONLY thing that drives stage switching. There is no scroll math anywhere.
+  -->
+  <main class="runway" id="runway">
+
+    <div class="scene">
+
+      <!-- ===== BACKDROP LAYERS ===== -->
+
+      <!-- STAGE 1 backdrop -->
+      <div class="bg-layer active" data-bg="0">
+        <div class="bg-fill stage-1"></div>
+        <!-- REPLACE src WITH YOUR STILL IMAGE -->
+        <img class="bg-img" src="images/stage-1.jpg" alt="Stage one backdrop" fetchpriority="high" loading="eager" onerror="this.style.display='none'" />
+      </div>
+
+      <!-- STAGE 2 backdrop -->
+      <div class="bg-layer" data-bg="1">
+        <div class="bg-fill stage-2"></div>
+        <!-- REPLACE src WITH YOUR STILL IMAGE -->
+        <img class="bg-img" src="images/stage-2.jpg" alt="Stage two backdrop" loading="eager" onerror="this.style.display='none'" />
+      </div>
+
+      <!-- STAGE 3 backdrop -->
+      <div class="bg-layer" data-bg="2">
+        <div class="bg-fill stage-3"></div>
+        <!-- REPLACE src WITH YOUR STILL IMAGE -->
+        <img class="bg-img" src="images/stage-3.jpg" alt="Stage three backdrop" loading="eager" onerror="this.style.display='none'" />
+      </div>
+
+      <!-- STAGE 4 backdrop -->
+      <div class="bg-layer" data-bg="3">
+        <div class="bg-fill stage-4"></div>
+        <!-- REPLACE src WITH YOUR STILL IMAGE -->
+        <img class="bg-img" src="images/stage-4.jpg" alt="Stage four backdrop" loading="eager" onerror="this.style.display='none'" />
+      </div>
+
+      <!-- shared atmosphere over every backdrop -->
+      <div class="scrim"></div>
+      <div class="grain"></div>
+
+      <!-- ===== STAGE PANELS (copy) ===== -->
+      <div class="stage-deck">
+
+        <!-- STAGE 1 panel -->
+        <div class="stage-panel active" data-panel="0">
+          <span class="stage-tag reveal">Stage One</span>
+          <h2 class="stage-headline reveal">A quiet <em>beginning</em></h2>
+          <p class="stage-sub reveal">Swap this sub line for your own. One calm sentence that opens the descent.</p>
+        </div>
+
+        <!-- STAGE 2 panel -->
+        <div class="stage-panel" data-panel="1">
+          <span class="stage-tag reveal">Stage Two</span>
+          <h2 class="stage-headline reveal">The world <em>widens</em></h2>
+          <p class="stage-sub reveal">Swap this sub line for your own. The second beat earns a little more weight.</p>
+        </div>
+
+        <!-- STAGE 3 panel -->
+        <div class="stage-panel" data-panel="2">
+          <span class="stage-tag reveal">Stage Three</span>
+          <h2 class="stage-headline reveal">Closer to the <em>detail</em></h2>
+          <p class="stage-sub reveal">Swap this sub line for your own. Tension tightens as the camera settles.</p>
+        </div>
+
+        <!-- STAGE 4 panel (the accent blooms here) -->
+        <div class="stage-panel" data-panel="3">
+          <span class="stage-tag reveal">Stage Four</span>
+          <h2 class="stage-headline reveal">The <em>arrival</em></h2>
+          <p class="stage-sub reveal">Swap this sub line for your own. The final stage where the warm accent blooms in.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===== INVISIBLE STAGE MARKERS ===== -->
+    <!-- Direct children of .runway (position: relative, 500vh) so top percentages -->
+    <!-- resolve against the full runway, not the 100vh sticky .scene. ScrollTrigger uses each as a trigger. -->
+    <div class="stage-marker" data-marker="0" style="position:absolute; top:0%;   height:1px; width:1px;"></div>
+    <div class="stage-marker" data-marker="1" style="position:absolute; top:25%;  height:1px; width:1px;"></div>
+    <div class="stage-marker" data-marker="2" style="position:absolute; top:50%;  height:1px; width:1px;"></div>
+    <div class="stage-marker" data-marker="3" style="position:absolute; top:75%;  height:1px; width:1px;"></div>
+
+  </main>
+
+  <!-- GSAP 3 core and ScrollTrigger from cdnjs. These are the only external scripts. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var bgLayers = document.querySelectorAll(".bg-layer");
+    var panels  = document.querySelectorAll(".stage-panel");
+    var dots    = document.querySelectorAll(".dot");
+
+    var indNum      = document.getElementById("indNum");
+    var indName     = document.getElementById("indName");
+    var progressFill = document.getElementById("progressFill");
+
+    var stageNames = ["Stage One", "Stage Two", "Stage Three", "Stage Four"];
+    var stageNums  = ["01", "02", "03", "04"];
+
+    /* ----- STAGE SWITCHING: scrubbed crossfade -----
+       Each backdrop gets a ScrollTrigger that animates its opacity from 0→1→0
+       across the runway. The old backdrop fades out while the new fades in,
+       and the crossfade is tied to scroll position (scrub: true), so it is never
+       a hard cut. Panels and dots still use setStage for a clean binary switch
+       at the marker, because they sit on top of the crossfaded backdrop.
+    */
+    var totalStages = bgLayers.length;
+    var segment     = 1 / totalStages;    // e.g. 0.25 for 4 stages
+
+    bgLayers.forEach(function (layer, i) {
+      var fadeInStart  = i * segment;              // start fading in at this fraction
+      var fadeInEnd    = fadeInStart + segment * 0.6; // fully visible by 60% into its segment
+      var fadeOutStart = (i + 1) * segment - segment * 0.4; // start fading out 40% before next segment
+      var fadeOutEnd   = (i + 1) * segment;
+
+      // Build an opacity keyframe array tied to runway progress
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#runway",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.8
+        }
+      });
+
+      // 0 → fadeInStart: opacity 0
+      if (fadeInStart > 0) {
+        tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeInStart, ease: "none" }, 0);
+      }
+      // fadeInStart → fadeInEnd: opacity 0 → 1
+      tl.to(layer, { opacity: 1, visibility: "visible", duration: fadeInEnd - fadeInStart, ease: "power2.inOut" }, fadeInStart);
+      // fadeInEnd → fadeOutStart: hold at opacity 1
+      tl.to(layer, { opacity: 1, duration: fadeOutStart - fadeInEnd, ease: "none" }, fadeInEnd);
+      // fadeOutStart → fadeOutEnd: opacity 1 → 0
+      tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeOutEnd - fadeOutStart, ease: "power2.inOut" }, fadeOutStart);
+      // fadeOutEnd → 1: hold at opacity 0
+      if (fadeOutEnd < 1) {
+        tl.to(layer, { opacity: 0, duration: 1 - fadeOutEnd, ease: "none" }, fadeOutEnd);
+      }
+    });
+
+    /* Panel and dot switching: still a clean binary switch at each marker.
+       Panels sit above the crossfaded backdrop so a crisp swap is the right call. */
+    function setStage(i) {
+      for (var p = 0; p < panels.length; p++) {
+        panels[p].classList.toggle("active", p === i);
+      }
+      for (var d = 0; d < dots.length; d++) {
+        dots[d].classList.toggle("active", d === i);
+      }
+      indNum.textContent  = stageNums[i];
+      indName.textContent = stageNames[i];
+    }
+
+    // Stage markers: one per segment, placed at each segment boundary
+    var runway = document.getElementById("runway");
+    // Generate markers dynamically
+    var existingMarkers = document.querySelectorAll(".stage-marker");
+    existingMarkers.forEach(function (m) { m.remove(); });
+    for (var s = 0; s < totalStages; s++) {
+      var mk = document.createElement("div");
+      mk.className = "stage-marker";
+      mk.setAttribute("data-marker", s);
+      mk.style.cssText = "position:absolute; top:" + (s * segment * 100) + "%; height:1px; width:1px;";
+      runway.appendChild(mk);
+    }
+    var markers = document.querySelectorAll(".stage-marker");
+
+    markers.forEach(function (marker, i) {
+      ScrollTrigger.create({
+        trigger: marker,
+        start: "top center",
+        onEnter:     function () { setStage(i); },
+        onEnterBack: function () { setStage(i); }
+      });
+    });
+
+    /*
+      PROGRESS BAR: driven by ScrollTrigger's own progress on the runway, not by scroll math.
+      ScrollTrigger reports a 0 to 1 progress for the pinned span. We map it to a width.
+      The accent blooms into the bar near the end to echo the final stage.
+    */
+    ScrollTrigger.create({
+      trigger: "#runway",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: function (self) {
+        var pct = Math.round(self.progress * 100);
+        progressFill.style.width = pct + "%";
+        progressFill.style.background = self.progress > 0.78 ? "var(--champagne)" : "var(--platinum)";
+      }
+    });
+
+    /*
+      CONTENT REVEALS: each .reveal element gets its OWN ScrollTrigger, once: true,
+      start tied to the element (top 80%), not a fraction. Each animates opacity and a small
+      translateY in, one time. Under reduced motion the elements are simply shown.
+    */
+    var reveals = document.querySelectorAll(".reveal");
+    reveals.forEach(function (el) {
+      if (reduceMotion) {
+        gsap.set(el, { opacity: 1, y: 0 });
+        return;
+      }
+      gsap.set(el, { opacity: 0, y: 26 });
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 80%",
+        once: true,
+        onEnter: function () {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" });
+        }
+      });
+    });
+
+    /*
+      DOT NAV: clicking a dot scrolls to that stage's marker using gsap.to with the ScrollTo
+      behaviour via scrollIntoView. No smooth scroll library is used. Reduced motion jumps
+      instantly, otherwise the browser's own smooth behaviour carries it.
+    */
+    dots.forEach(function (dot) {
+      dot.addEventListener("click", function () {
+        var i = parseInt(dot.getAttribute("data-dot"), 10);
+        markers[i].scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "center"
+        });
+      });
+    });
+
+    /* Make sure stage one is correct on first paint. */
+    setStage(0);
+    ScrollTrigger.refresh();
+  </script>
+
+</body>
+</html>

@@ -20,6 +20,11 @@ Before I build anything:
 
 If you are not sure, say "fresh start" and we will run the questions.
 
+2. How should this be delivered?
+   - **HTML:** best for screen, animations, interactivity
+   - **PDF:** clean print, no animations, embedded fonts
+   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+
 ## Inputs
 
 Collect the brief before any DESIGN.md is drafted. Ask in one short message, numbered, one line each. If the user answers only some, fill the rest with sensible defaults from the reference and confirm before drafting.
@@ -289,7 +294,9 @@ The condensed, embeddable checklist that makes the contract repeatable instead o
 
 5. **Assemble the DESIGN.md.** Stitch the seven sections into the single `DESIGN.md` body, with the project title at the top. Keep terminology consistent across sections (the same color name, the same font name everywhere). Confirm every descriptive rule has its precise value attached and every section reads in the descriptive-plus-value format Stitch expects.
 
-6. **Sanity-check it reads as a Stitch contract.** Read the assembled file as Stitch's agent would: would it know the exact background hex, the display and mono fonts, the accent and its saturation cap, the rounding on cards, the spring physics constants, and the banned patterns? Confirm the file is opinionated, not a neutral template, and short enough for the agent to honor end to end. Then walk the Verification done-gate, and run the Design review gate before the contract is handed to Stitch. A fail blocks the handover.
+6. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+
+7. **Sanity-check it reads as a Stitch contract.** Read the assembled file as Stitch's agent would: would it know the exact background hex, the display and mono fonts, the accent and its saturation cap, the rounding on cards, the spring physics constants, and the banned patterns? Confirm the file is opinionated, not a neutral template, and short enough for the agent to honor end to end. Then walk the Verification done-gate, and run the Design review gate before the contract is handed to Stitch. A fail blocks the handover.
 
 **Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-stitch-handoff.md` with: the contract report produced, decisions made (the reference, the dials Variance/Motion/Density, the palette and accent, the display/body/mono fonts, the seven sections drafted, the design-review-gate result), unfinished work (a dimension still descriptive-only, a section a fix is owed on, a value the user must confirm), what Stitch and the reviewer need next (the generated DESIGN.md content and how to paste it into Stitch), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
 
@@ -344,6 +351,18 @@ Generated DESIGN.md: full seven-part contract below, ready to paste into Stitch.
 
 Open / handed off: accent hex confirmed with the user; nothing pending. Reviewer and Stitch have the DESIGN.md content.
 ```
+
+## Print and PDF
+
+When PDF delivery is chosen, add a `@media print` block to the output:
+
+- Page breaks at slide or section boundaries (`page-break-after: always`)
+- Animations disabled (`animation: none`, `transition: none`)
+- Background colours preserved for print (`print-color-adjust: exact`)
+- Fonts embedded or fall back to system serif
+- Margins: 0.5in on all sides
+- No navigation elements, no interactive UI
+- The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
 
