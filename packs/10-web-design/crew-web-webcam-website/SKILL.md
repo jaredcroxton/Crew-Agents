@@ -641,13 +641,12 @@ async function startCamera() {
     return;
   }
   stream = s;
-  // Attach the metadata handler BEFORE assigning srcObject, and short-circuit if
-  // the element is already ready, so a synchronously-ready path still resolves.
+  cam.srcObject = stream;
+  // Await ready state after assigning srcObject so onloadedmetadata fires.
   await new Promise(res => {
     if (cam.readyState >= 1) return res();
     cam.onloadedmetadata = res;
   });
-  cam.srcObject = stream;
 }
 
 // Privacy teardown: stop every track so the camera light goes off and no frame
