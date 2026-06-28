@@ -18,7 +18,7 @@ EXPECT:
 - A proposed rename shown as a "from -> to" before and after, not applied: company "Northwind Inc" -> "Northwind" on Row 3.
 - The prioritised checkbox checklist opens with item 1: export a timestamped snapshot of the affected records as the rollback point before any fix is applied, ahead of the Critical fixes. The remaining items are ordered Critical gaps and the High-confidence duplicate first and cosmetic standardisation last, each line a checkbox with the row, the action, and the reason it matters.
 - Each action names an owner; an ownerless record is flagged to a named triage role (for example sales ops) to assign an owner, not just dropped in an unassigned queue. A short baseline summary gives counts (gaps by severity, duplicate pairs flagged, renames proposed) that a re-run audit measures the delta against after the fixes are applied.
-- No record is deleted or merged. The handoff file `.claude/crew-state/sales/crew-sales-crm-cleanup-handoff.md` was written.
+- No record is deleted or merged. The handoff file `~/.claude/crew-state/sales/crew-sales-crm-cleanup-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

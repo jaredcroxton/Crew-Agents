@@ -3,7 +3,7 @@
 ## Case A: clean
 INPUT:
 Restore work for pack `sales`, skill `crew-sales-lead-research`. The handoff file
-`.claude/crew-state/sales/crew-sales-lead-research-handoff.md` exists, saved 2026-06-10, and reads:
+`~/.claude/crew-state/sales/crew-sales-lead-research-handoff.md` exists, saved 2026-06-10, and reads:
 "Output: lead research brief for Northwind Logistics. Decisions: angle locked on the unfilled
 ops-manager role. Unfinished: COO email not found, outreach not yet drafted. Next skill needs:
 crew-sales-outreach-draft to write first touch. Status: In progress." The working directory still
@@ -17,7 +17,7 @@ EXPECT:
 - Remaining work names the specific action (confirm COO email) tied to the "not found" field.
 - `Drift check: No drift detected against saved note.`
 - A single Current position line and two or three ordered Next actions, offered not started, one pointing to `crew-sales-outreach-draft`.
-- The handoff file `.claude/crew-state/core/crew-core-context-restore-handoff.md` was written.
+- The handoff file `~/.claude/crew-state/core/crew-core-context-restore-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -39,7 +39,7 @@ EXPECT:
 ## Case C: missing-input
 INPUT:
 "Restore where I left off." No pack id, no skill name, and no obvious single recent handoff (several
-`*-handoff.md` files exist under `.claude/crew-state/` across different packs).
+`*-handoff.md` files exist under `~/.claude/crew-state/` across different packs).
 
 EXPECT:
 - Loop 1 behaviour: names the gap (no pack or skill named, multiple candidate handoffs exist).

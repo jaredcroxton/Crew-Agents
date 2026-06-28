@@ -12,7 +12,7 @@ EXPECT:
 - Each off-brand span flagged with the exact span ("robust", "seamless", "solutions", "leverage", "best in class"), the axis it breaks (Banned word / Jargon / Formality), and a specific-mechanism reason, not "too formal", each with an on-brand Fix.
 - A full Clean version that preserves the same promise (bookkeeping, a call to action) using signature words like "sorted" or "no surprises" naturally, not stuffed into every line, no em dashes.
 - No invented claim, number, price, guarantee, or service that was not in the draft.
-- Handoff written to `.claude/crew-state/marketing/crew-marketing-brand-voice-check-handoff.md` noting the clean copy and the voice profile used.
+- Handoff written to `~/.claude/crew-state/marketing/crew-marketing-brand-voice-check-handoff.md` noting the clean copy and the voice profile used.
 
 ## Case B: messy
 INPUT:
@@ -37,7 +37,7 @@ EXPECT:
 - Loop 1 (Missing Input) fires: names the gap plainly ("off-brand cannot be judged without a voice source"), and asks once for `brand-context.md`, a tone guide, or two or three past pieces the business is proud of.
 - Does not run the check or rewrite blind. Marks the voice profile fields "Not provided" and emits no Clean version, holding for the input.
 - Invents no voice profile, no banned words, no signature words, no rewrite. A blank profile beats a fabricated one.
-- Handoff still written to `.claude/crew-state/marketing/crew-marketing-brand-voice-check-handoff.md` recording the gap (no voice source supplied) and what the next run needs.
+- Handoff still written to `~/.claude/crew-state/marketing/crew-marketing-brand-voice-check-handoff.md` recording the gap (no voice source supplied) and what the next run needs.
 
 ## Case D: on-brand
 INPUT:

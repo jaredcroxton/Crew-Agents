@@ -31,7 +31,7 @@ If no artifact is supplied, or it is unclear what the content is, ask once for t
 
 - **Fast mode:** a quick minimalist check. Name the worst clutter or the worst barren spot and the single move that fixes it (a cut, or a piece of substance to add). Skip the full sweep.
 - **Careful mode (default):** the full review across typography, colour, layout, and imagery, plus the reduction discipline and the barren check, with the fix for each. Use before a minimalist design ships.
-- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `.claude/crew-state/design-styles/` so the restraint holds across pages, the brand playbook enforced, a stricter minimal-versus-barren judgment, and a content-density check (does the content actually suit reduction, or is density the real need). Use for a multi-page minimalist build.
+- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the restraint holds across pages, the brand playbook enforced, a stricter minimal-versus-barren judgment, and a content-density check (does the content actually suit reduction, or is density the real need). Use for a multi-page minimalist build.
 
 Do not run this skill for a content-dense product that needs information density (a dashboard, a data tool, a marketplace), where reduction starves the content (use `crew-design-quality` or a density-led review), for a brand that should read warm, playful, or energetic, or to score broad visual quality regardless of style. Minimalism is a narrow register; name the mismatch rather than forcing reduction onto a page that needs substance.
 
@@ -135,7 +135,7 @@ The checklist a build embeds when the goal is minimalist. The reduction is the c
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-styles/crew-design-minimalist-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review, the hero was barren, awaiting a focal photograph"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the restraint holds across pages. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-styles/crew-design-minimalist-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review, the hero was barren, awaiting a focal photograph"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the restraint holds across pages. (Loop 4, Context Change.)
 
 1. **Confirm minimalist is the right call, and the content can carry it.** State the register goal and what the content actually is. If the content needs density (a data product) or the brand needs warmth and energy, say so now, route it, and do not force reduction. If the page has little to say, name that the real fix is substance, not whitespace. Only proceed when minimalism fits.
 2. **Read the typography.** Check for one or two considered faces (an editorial serif against a clean sans, not Inter or Roboto), hierarchy by weight and scale, off-black not pure black, and a generous body line-height. Flag any third face, any generic default, any size-only hierarchy.
@@ -145,7 +145,7 @@ The checklist a build embeds when the goal is minimalist. The reduction is the c
 6. **Run the reduction discipline and write the verdict.** Apply the one-purpose test and the element budget, flag both the clutter to cut and the barren spots to fill, and set a verdict (Minimal, Cluttered, or Barren) with the single highest-impact move.
 7. **Verify before emitting.** Confirm every flagged element is present, every fix is concrete (cut this element, restore the content width, add a focal photograph, raise the gray to a readable contrast), and the minimal-versus-barren call is honest. Mark a deliberate brand exception kept (the playbook wins), and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-styles`, then write `.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` with: the review produced, decisions made (the clutter cut and the substance added, whether minimalism was confirmed as the right call), unfinished work (fixes not applied, barren spots, accessibility-contrast defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a register choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-styles`, then write `~/.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` with: the review produced, decisions made (the clutter cut and the substance added, whether minimalism was confirmed as the right call), unfinished work (fixes not applied, barren spots, accessibility-contrast defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a register choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -244,7 +244,7 @@ Typical calls that warrant a brief: how far to reduce before minimal tips into b
 
 ## Plan mode
 
-In plan mode this skill can read the design and the prior handoff, and produce a draft minimalist read (whether minimalism is the right call, the clutter it would cut, the barren spots it would fill, a provisional Minimal, Cluttered, or Barren) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full review, the reduction discipline, the fixes, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the design and the prior handoff, and produce a draft minimalist read (whether minimalism is the right call, the clutter it would cut, the barren spots it would fill, a provisional Minimal, Cluttered, or Barren) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full review, the reduction discipline, the fixes, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -262,7 +262,7 @@ Before the run is marked done, confirm:
 [ ] Both lists are concrete: clutter to cut and barren spots to fill, each with a specific move
 [ ] A Minimal / Cluttered / Barren verdict with the single highest-impact move
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-styles/
+[ ] The handoff was written to ~/.claude/crew-state/design-styles/
 ```
 
 ## Completion

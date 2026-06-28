@@ -21,7 +21,7 @@ EXPECT:
 - No section is padded: a clean section reads "No issues found".
 - The plan is not edited or rewritten, only reviewed.
 - No invented skill names in any handoff phrasing: the build is handed to "whoever sequences the build", not to a named writer or breakdown skill that does not exist.
-- Handoff file written to .claude/crew-state/core/crew-core-plan-reviewer-handoff.md listing the open decisions the builder must resolve.
+- Handoff file written to ~/.claude/crew-state/core/crew-core-plan-reviewer-handoff.md listing the open decisions the builder must resolve.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -53,5 +53,5 @@ EXPECT:
 - Does NOT invent a plan, a deadline, a budget, scope items, or findings.
 - Produces no PLAN REVIEW body of fabricated findings. If anything is emitted, affected fields read "Not provided".
 - Run-level STATUS is NEEDS_CONTEXT or BLOCKED, never DONE (an empty scaffold is not a real review).
-- Handoff file still written to .claude/crew-state/core/crew-core-plan-reviewer-handoff.md noting the gap (plan not supplied, awaiting input) so the next run knows.
+- Handoff file still written to ~/.claude/crew-state/core/crew-core-plan-reviewer-handoff.md noting the gap (plan not supplied, awaiting input) so the next run knows.
 - No em dashes anywhere.

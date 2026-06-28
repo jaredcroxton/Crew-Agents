@@ -31,7 +31,7 @@ If the brief is too vague to spec, or it is unclear whether the cinematic feel i
 
 - **Fast mode:** a quick smooth-scroll spec. The container, the init (smooth, lerp), and one parallax effect. Skip the GSAP sync and the full lifecycle.
 - **Careful mode (default):** the full spec, the container and data attributes, the parallax, the scroll events, the lifecycle, the GSAP integration if needed, and the disable path. Use before building a smooth-scroll experience.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the scroll behaviour stays consistent, the brand playbook enforced, a stricter performance audit (sections, parallax limit, mobile disable), and the accessibility floor (a reduced-motion fallback to native scroll, mandatory). Use for a production smooth-scroll site.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the scroll behaviour stays consistent, the brand playbook enforced, a stricter performance audit (sections, parallax limit, mobile disable), and the accessibility floor (a reduced-motion fallback to native scroll, mandatory). Use for a production smooth-scroll site.
 
 Do not run this skill for a standard content or documentation site where native scroll is better (smooth scroll hijacks it for no gain), for a React-state or gesture animation (that is `crew-animation-motion`), for a scroll-scrubbed timeline that does not need smooth scroll (GSAP ScrollTrigger on native scroll is often the better and lighter choice), or when accessibility and scannability are paramount. Smooth scroll is the wrong call when the cost outweighs the cinematic gain; say so.
 
@@ -189,7 +189,7 @@ The checklist a build embeds when it uses Locomotive smooth scroll.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-locomotive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the container and parallax were set, the GSAP sync still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the scroll behaviour stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-locomotive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the container and parallax were set, the GSAP sync still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the scroll behaviour stays consistent. (Loop 4, Context Change.)
 
 1. **Confirm smooth scroll is the right call.** State what is being built. If it is a content or docs site, or accessibility and scannability are paramount, say so now, recommend native scroll (and `crew-design-engineering` for restrained motion polish), and do not hijack scroll for no gain. Only proceed when the cinematic feel is worth the trade.
 2. **Spec the HTML structure.** Define the `data-scroll-container`, the `data-scroll-section` segments, and the `data-scroll` tracked elements with their attributes (id, call, sticky, target).
@@ -199,7 +199,7 @@ The checklist a build embeds when it uses Locomotive smooth scroll.
 6. **Write the spec and run the anti-pattern check.** Assemble the Locomotive animation spec, and confirm none of the anti-patterns are present (no disable path, fixed inside the container, no destroy, no update, smooth on mobile, a trigger without the scroller).
 7. **Verify before emitting.** Confirm the container and sections are set, parallax is restrained and z-indexed, the reduced-motion and mobile fallbacks exist, the lifecycle is handled, any GSAP trigger uses the proxy, and native scroll is preserved. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-locomotive-handoff.md` with: the spec produced, decisions made (the init config, the parallax, the GSAP sync), unfinished work (effects not yet specced, the reduced-motion or mobile path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a scroll-feel preference or a performance constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-locomotive-handoff.md` with: the spec produced, decisions made (the init config, the parallax, the GSAP sync), unfinished work (effects not yet specced, the reduced-motion or mobile path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a scroll-feel preference or a performance constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -287,7 +287,7 @@ Typical calls that warrant a brief: smooth scroll versus native scroll for the s
 
 ## Plan mode
 
-In plan mode this skill can read the brief and the prior handoff, and produce a draft spec (whether smooth scroll is the right call, the container structure, the parallax, a provisional init) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the GSAP integration, the lifecycle and accessibility, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brief and the prior handoff, and produce a draft spec (whether smooth scroll is the right call, the container structure, the parallax, a provisional init) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the GSAP integration, the lifecycle and accessibility, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -303,7 +303,7 @@ Before the run is marked done, confirm:
 [ ] Any GSAP ScrollTrigger uses the scrollerProxy and the scroller option, with refresh wired to update
 [ ] Native scroll behaviour is preserved; nothing forces a step or blocks scrolling
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

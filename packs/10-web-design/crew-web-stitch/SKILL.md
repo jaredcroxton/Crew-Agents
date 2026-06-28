@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -55,9 +55,9 @@ After the user answers, confirm a one-paragraph summary back to them. Only then 
 
 - **Fast mode:** the user already has the reference, the audience, and the dials in hand, and accepts the default register. Skip the full discovery ceremony, confirm the brief in one line, analyze the reference across the nine dimensions, draft the seven-part DESIGN.md, run the anti-pattern check, hand it over. Use when the reference is decided and the dials are set.
 - **Careful mode (default):** the full brief, the nine-dimension analysis, every one of the seven DESIGN.md sections drafted with descriptive rules plus precise values, and the Design review gate before the DESIGN.md is handed to Stitch. Use for any real taste contract.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one brand's taste carries across contracts, the Design review gate mandatory with nothing waived, and a stricter check that every dimension carries precise values (no descriptive-only rule that Stitch cannot interpret) before the contract reaches Stitch. Use for a contract that drives screens shipped to a real audience where a generic or unenforceable rule is a brand risk.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand's taste carries across contracts, the Design review gate mandatory with nothing waived, and a stricter check that every dimension carries precise values (no descriptive-only rule that Stitch cannot interpret) before the contract reaches Stitch. Use for a contract that drives screens shipped to a real audience where a generic or unenforceable rule is a brand risk.
 
-This skill produces a Google Stitch DESIGN.md taste contract. It does NOT build a site. Route a real build to `crew-web-cinematic-build` (a single-file immersive Three.js scroll site), to `crew-web-scroll-journey` (a multi-stage gated narrative), or to `crew-web-fly-through-builder` (a pure camera fly-through). And it is not a generic token extraction from a live URL: that is `crew-design-language`, which decodes any production site into a fill-in design kit. Use `crew-web-stitch` specifically when the target generator is Google Stitch and the deliverable is a DESIGN.md taste contract that Stitch's agent will interpret to generate premium, non-generic screens.
+This skill produces a Google Stitch DESIGN.md taste contract. It does NOT build a site. Route a real build to `crew-web-cinematic-build` (a single-file immersive Three.js scroll site), to `crew-web-immersive-narrative` (a multi-stage gated narrative), or to `crew-web-fly-through-builder` (a pure camera fly-through). And it is not a generic token extraction from a live URL: that is `crew-design-language`, which decodes any production site into a fill-in design kit. Use `crew-web-stitch` specifically when the target generator is Google Stitch and the deliverable is a DESIGN.md taste contract that Stitch's agent will interpret to generate premium, non-generic screens.
 
 ## How the stitch taste writer thinks
 
@@ -282,7 +282,7 @@ The condensed, embeddable checklist that makes the contract repeatable instead o
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-stitch-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior contract, fintech-dashboard reference, dials Variance 6 / Motion 5 / Density 7, six of seven DESIGN.md sections drafted, anti-pattern check pending"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-stitch-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior contract, fintech-dashboard reference, dials Variance 6 / Motion 5 / Density 7, six of seven DESIGN.md sections drafted, anti-pattern check pending"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Take the brief (ALWAYS first, before drafting).** Ask the five-question brief from Inputs in a single numbered message. Confirm a one-paragraph summary back to the user: the reference, the audience and product type, the dials, the target screens, the mode. Do not invent a brand the user did not name. If the brand or reference, the audience, or the design intent are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
 
@@ -298,7 +298,7 @@ The condensed, embeddable checklist that makes the contract repeatable instead o
 
 7. **Sanity-check it reads as a Stitch contract.** Read the assembled file as Stitch's agent would: would it know the exact background hex, the display and mono fonts, the accent and its saturation cap, the rounding on cards, the spring physics constants, and the banned patterns? Confirm the file is opinionated, not a neutral template, and short enough for the agent to honor end to end. Then walk the Verification done-gate, and run the Design review gate before the contract is handed to Stitch. A fail blocks the handover.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-stitch-handoff.md` with: the contract report produced, decisions made (the reference, the dials Variance/Motion/Density, the palette and accent, the display/body/mono fonts, the seven sections drafted, the design-review-gate result), unfinished work (a dimension still descriptive-only, a section a fix is owed on, a value the user must confirm), what Stitch and the reviewer need next (the generated DESIGN.md content and how to paste it into Stitch), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-stitch-handoff.md` with: the contract report produced, decisions made (the reference, the dials Variance/Motion/Density, the palette and accent, the display/body/mono fonts, the seven sections drafted, the design-review-gate result), unfinished work (a dimension still descriptive-only, a section a fix is owed on, a value the user must confirm), what Stitch and the reviewer need next (the generated DESIGN.md content and how to paste it into Stitch), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -437,7 +437,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can take the brief, read the prior handoff, and produce a DESIGN.md outline marked "DRAFT, plan mode" at the top: the reference and the dials, the nine-dimension analysis notes, and a skeleton of the seven sections with the palette, fonts, and accent proposed. It cannot write the final assembled DESIGN.md as a delivered artifact, write to `.claude/crew-state/`, run the Design review gate, or hand the contract to Stitch. The full draft, the gate, the handover to Stitch, and the handoff save run only after plan mode is exited.
+In plan mode this skill can take the brief, read the prior handoff, and produce a DESIGN.md outline marked "DRAFT, plan mode" at the top: the reference and the dials, the nine-dimension analysis notes, and a skeleton of the seven sections with the palette, fonts, and accent proposed. It cannot write the final assembled DESIGN.md as a delivered artifact, write to `~/.claude/crew-state/`, run the Design review gate, or hand the contract to Stitch. The full draft, the gate, the handover to Stitch, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -458,7 +458,7 @@ Before the run is marked done, confirm:
 [ ] Design review gate run: crew-design-quality (binding motion verdict via its Motion and Interactive-states dimensions), crew-design-composition, crew-design-patterns, and the register-conditional style lens (crew-design-soft (warm), crew-design-minimalist (serious, composed) for serious/B2B/fintech, or crew-design-brutalist (raw/technical)); each judged the contract's encoded rules, not a render; Criticals and Majors fixed
 [ ] Section 6 was authored using crew-animation-motion and crew-animation-css as pack-14 cross-references (spring constants stiffness 100 / damping 20, transform-and-opacity-only); they are authoring references, not gate reviewers
 [ ] No em dashes anywhere (text, the DESIGN.md body, code comments)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

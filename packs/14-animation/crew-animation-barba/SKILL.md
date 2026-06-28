@@ -31,7 +31,7 @@ If the brief is too vague to spec, or it is unclear whether the site is a multi-
 
 - **Fast mode:** a quick transition spec. The wrapper, container, and namespace structure, one transition (a fade), and the promise return. Skip the conditional rules and the router.
 - **Careful mode (default):** the full spec, the DOM structure, the hooks, the sync-or-async choice, the transition rules, the GSAP integration, the script re-init, and the accessibility fallback. Use before building a transition site.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the transition language stays consistent, the brand playbook enforced, a stricter audit (promise returns, no-JS fallback, meta and title update, focus management, scroll reset), and the accessibility floor (graceful degradation and a route-change announcement, mandatory). Use for a production transition site.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the transition language stays consistent, the brand playbook enforced, a stricter audit (promise returns, no-JS fallback, meta and title update, focus management, scroll reset), and the accessibility floor (graceful degradation and a route-change announcement, mandatory). Use for a production transition site.
 
 Do not run this skill for a React or Vue single-page app whose router already owns transitions (use the framework's route transitions, or `crew-animation-motion` with AnimatePresence), for in-page element animation (that is `crew-animation-gsap`, `crew-animation-motion`, or `crew-animation-anime`), for scroll motion (GSAP or `crew-animation-locomotive`), or for a single-page site with no navigation to transition. Barba is for multi-page-site page transitions specifically; name the better tool when the site is a SPA.
 
@@ -176,7 +176,7 @@ The checklist a multi-page build embeds when it uses Barba.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-barba-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the DOM structure and the fade were set, the meta update still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the transition language stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-barba-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the DOM structure and the fade were set, the meta update still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the transition language stays consistent. (Loop 4, Context Change.)
 
 1. **Confirm Barba is the right tool.** State what is being built. If it is a React or Vue SPA whose router owns transitions, say so now, route it (the framework router or `crew-animation-motion`), and do not fight the framework's render. Only proceed for a multi-page site.
 2. **Spec the DOM structure.** Define the `data-barba="wrapper"`, the `data-barba="container"` present on every page, the persistent elements outside the container, and the `data-barba-namespace` per page type.
@@ -186,7 +186,7 @@ The checklist a multi-page build embeds when it uses Barba.
 6. **Write the spec and run the anti-pattern check.** Assemble the Barba transition spec, and confirm none of the anti-patterns are present (a promise not returned, no fallback, a flash, no meta update, a sync layout shift, no scroll reset, no re-init, hijacked external links).
 7. **Verify before emitting.** Confirm every transition returns its promise, a default fallback exists, the enter state prevents a flash, sync containers are positioned, the head and analytics update, the site degrades without JS, and focus moves. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-barba-handoff.md` with: the spec produced, decisions made (the DOM structure, the transitions, sync or async), unfinished work (transitions not yet specced, the accessibility or meta path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a transition preference or a constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-barba-handoff.md` with: the spec produced, decisions made (the DOM structure, the transitions, sync or async), unfinished work (transitions not yet specced, the accessibility or meta path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a transition preference or a constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -275,7 +275,7 @@ Typical calls that warrant a brief: an async sequential transition versus a sync
 
 ## Plan mode
 
-In plan mode this skill can read the transition brief and the prior handoff, and produce a draft spec (whether Barba fits, the DOM structure, the transitions it would choose) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the hooks, the integration, the accessibility fallback, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the transition brief and the prior handoff, and produce a draft spec (whether Barba fits, the DOM structure, the transitions it would choose) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the hooks, the integration, the accessibility fallback, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -291,7 +291,7 @@ Before the run is marked done, confirm:
 [ ] The site degrades without JS (links navigate normally); external links pass through
 [ ] Focus moves to the new page and the route change is announced for accessibility
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

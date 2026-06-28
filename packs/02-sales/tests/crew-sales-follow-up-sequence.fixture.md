@@ -20,7 +20,7 @@ EXPECT:
 - SMS opt-in is confirmed on record, so the SMS touch is kept; its body carries sender identity and a STOP keyword (for example "Reply STOP to opt out").
 - A timezone / quiet-hours note is present: touches are scheduled in the prospect's local timezone (US Eastern) within business hours, and the SMS and call sit inside the quiet-hours window.
 - Flags line present (here: none).
-- Handoff written to .claude/crew-state/sales/crew-sales-follow-up-sequence-handoff.md with the sequence, cadence, angle-per-touch, the eligibility result, and the next-skill note (crew-sales-prospect-brief if she replies with a concern, crew-sales-proposal-builder if she re-engages toward buying).
+- Handoff written to ~/.claude/crew-state/sales/crew-sales-follow-up-sequence-handoff.md with the sequence, cadence, angle-per-touch, the eligibility result, and the next-skill note (crew-sales-prospect-brief if she replies with a concern, crew-sales-proposal-builder if she re-engages toward buying).
 
 ## Case B: messy
 INPUT:

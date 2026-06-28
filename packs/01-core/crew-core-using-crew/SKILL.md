@@ -12,8 +12,8 @@ You are the dispatcher for a team of expert business skills, and the guide that 
 Before you route, know where you are starting from, because a route picked blind is a route that ignores what the session already learned. There are three ways in.
 
 - **Starting fresh.** A new session with no prior context. Run Step 0 (Context Recovery) to load the brand, then confirm the pre-work below.
-- **Continuing via this skill's own handoff.** A session already underway, where skills were dispatched earlier and the chain may continue. Read this skill's own handoff at `.claude/crew-state/core/crew-core-using-crew-handoff.md`, state what you recovered (the last skills dispatched this session), and pick up from there.
-- **An existing brand via brand-context.md.** The business is already onboarded. Read `.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and route in the terms that business uses.
+- **Continuing via this skill's own handoff.** A session already underway, where skills were dispatched earlier and the chain may continue. Read this skill's own handoff at `~/.claude/crew-state/core/crew-core-using-crew-handoff.md`, state what you recovered (the last skills dispatched this session), and pick up from there.
+- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and route in the terms that business uses.
 
 Then confirm the pre-work, one line each, so the route is decided against the real picture.
 
@@ -33,7 +33,7 @@ If no Crew skills are installed, say so and proceed normally with the standards 
 
 - **Fast mode:** a quick route for one clear task to one obvious skill, with a light verify. Read the intent, name the single skill that owns it, announce "Using crew-<name> to <purpose>", and let that skill run. The match-strength call and the full chain walk are skipped, and the verify pass is lighter. The integrity checks survive Fast mode and are never lighter: still name the job not the words, still never force a skill onto a task it does not fit, still never invent a skill or claim one ran when it did not, and still let the business playbook win over any default. Abandon Fast and finish in Careful if the request is unclear, spans more than one pack, or no single skill obviously owns it.
 - **Careful mode (default):** the full route. Recover context, read the intent, match to a skill using the pack as a first filter, decide the match strength (Strong, Partial, or None), dispatch or proceed, chain when the work continues, verify the routing, then write the handoff. Use for any real dispatch.
-- **Governed mode:** the full route, plus a cross-reference against prior core handoffs in `.claude/crew-state/core/` for what was already dispatched this session, so the chain stays consistent and a skill is not run twice without reason. Enforce the project playbook's named processes and preferred skills as the authority over this routing. Be stricter on chaining and on confirming the fit before the dispatched skill runs. Use where the routing becomes a decision others rely on.
+- **Governed mode:** the full route, plus a cross-reference against prior core handoffs in `~/.claude/crew-state/core/` for what was already dispatched this session, so the chain stays consistent and a skill is not run twice without reason. Enforce the project playbook's named processes and preferred skills as the authority over this routing. Be stricter on chaining and on confirming the fit before the dispatched skill runs. Use where the routing becomes a decision others rely on.
 
 This skill ROUTES, it does not do the work itself. It is not a skill that produces a deliverable, it points at the skill that does. The business's own playbook wins over any default this skill would otherwise pick. It never invents a skill that is not installed and never claims a skill ran when it did not.
 
@@ -52,7 +52,7 @@ The mental model, so a route is a decision against a real system, not a guess.
 
 - **PACKS.** The Crew is organised into packs, each a family of related skills. The business packs are: core, sales, marketing, ops (operations), hr, finance, support, docs (documentation), and training. Additional packs may also be installed (for example web design, infrastructure, design, and animation), so these nine are NOT a closed list: always scan the `crew-*` skills actually installed in this workspace and route any of them by the job they own, never assuming a request has no skill just because it falls outside the nine business packs. The pack is your first filter: it narrows the menu before you pick the single skill.
 - **SKILLS.** Each skill is a disciplined process with a named role and a defined Output format. You route to the skills in each pack by the job they own, not by a shared keyword.
-- **HOW THEY WORK.** Every Crew skill runs the same shape. It opens with a Step 0 Context Recovery that reads `.claude/crew-state/brand-context.md` and the skill's own handoff, then it does its work, then it closes with a Final Step Handoff Save that writes a per-skill handoff under `.claude/crew-state/<pack>/`. The shared standards and the five loops (Loop 1 Missing Input, Loop 2 Quality Failure, Loop 3 Escalation, Loop 4 Context Change, Loop 5 Learning Capture) live in `crew-method.md`.
+- **HOW THEY WORK.** Every Crew skill runs the same shape. It opens with a Step 0 Context Recovery that reads `~/.claude/crew-state/brand-context.md` and the skill's own handoff, then it does its work, then it closes with a Final Step Handoff Save that writes a per-skill handoff under `~/.claude/crew-state/<pack>/`. The shared standards and the five loops (Loop 1 Missing Input, Loop 2 Quality Failure, Loop 3 Escalation, Loop 4 Context Change, Loop 5 Learning Capture) live in `crew-method.md`.
 
 `crew-core` is the safe-start basics: `crew-core-brand-context`, this `crew-core-using-crew` dispatcher, the context save and restore pair (`crew-core-context-save` and `crew-core-context-restore`), the guard, and the reviewers. Start here when a request is a basic that any pack would lean on.
 
@@ -69,8 +69,8 @@ Which skill for which job.
 
 How context flows between skills, so a later skill picks up without re-asking what an earlier one already learned.
 
-- **brand-context.md** is the shared business identity. Every skill reads `.claude/crew-state/brand-context.md` at its Step 0, so each one already knows the brand, product, audience, and voice before it starts.
-- **Per-skill handoffs** carry a skill's own state forward. Each skill writes a handoff under `.claude/crew-state/<pack>/` at its Final Step, which the next run of that skill (or a sibling in the pack) reads at its Step 0 to resume cold.
+- **brand-context.md** is the shared business identity. Every skill reads `~/.claude/crew-state/brand-context.md` at its Step 0, so each one already knows the brand, product, audience, and voice before it starts.
+- **Per-skill handoffs** carry a skill's own state forward. Each skill writes a handoff under `~/.claude/crew-state/<pack>/` at its Final Step, which the next run of that skill (or a sibling in the pack) reads at its Step 0 to resume cold.
 - **Skills chain.** A skill names the next skill in its Handoffs, and the output of one seeds the next (research, then brief, then outreach). When the current skill names a next skill, the chain is how the work continues rather than stopping at the first step.
 - **Session memory** across a whole work session is carried by the pair `crew-core-context-save` (the writer) and `crew-core-context-restore` (the reader), which is the broader memory that complements every skill's per-run handoff.
 
@@ -87,7 +87,7 @@ How context flows between skills, so a later skill picks up without re-asking wh
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/core/crew-core-using-crew-handoff.md`. If it exists, load it and state what was recovered (the last skills dispatched this session). If not, state "No prior context, first run."
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/core/crew-core-using-crew-handoff.md`. If it exists, load it and state what was recovered (the last skills dispatched this session). If not, state "No prior context, first run."
 
 1. **Read the intent.** Name what the user is actually trying to do in one line, the job not the words. "Write me an email to this lead" is an outreach job, not a writing job. (See How the dispatcher thinks.)
 
@@ -101,7 +101,7 @@ How context flows between skills, so a later skill picks up without re-asking wh
 
 6. **Verify the routing.** Re-read the intent and confirm the chosen skill genuinely fits, not just shares a keyword. If a project playbook names a preferred skill or process, that overrides this routing (Loop 2 if you picked wrong, Loop 3 if the task needs a human decision first). (See Verification.)
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/core`, then write `.claude/crew-state/core/crew-core-using-crew-handoff.md` with: which skill was dispatched and why (or that no skill was dispatched, where the match was None), the match strength, any chain offered, and a Learned note (a routing correction the user made). Always write, even if nothing was dispatched ("No output, run completed [date]").
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/core`, then write `~/.claude/crew-state/core/crew-core-using-crew-handoff.md` with: which skill was dispatched and why (or that no skill was dispatched, where the match was None), the match strength, any chain offered, and a Learned note (a routing correction the user made). Always write, even if nothing was dispatched ("No output, run completed [date]").
 
 ## Output format
 
@@ -152,7 +152,7 @@ When a route is genuinely ambiguous, make the call below rather than guessing or
 
 ## Plan mode
 
-In plan mode this skill reads the brand context and the prior handoff and produces the routing recommendation, marked "(DRAFT, plan mode)". It does NOT write to `.claude/crew-state/` and does NOT actually run the dispatched skill. It recommends the route, and the operator confirms before the dispatched skill runs. The handoff save runs only after plan mode is exited.
+In plan mode this skill reads the brand context and the prior handoff and produces the routing recommendation, marked "(DRAFT, plan mode)". It does NOT write to `~/.claude/crew-state/` and does NOT actually run the dispatched skill. It recommends the route, and the operator confirms before the dispatched skill runs. The handoff save runs only after plan mode is exited.
 
 ## Verification
 
@@ -165,7 +165,7 @@ Before the run is marked done, confirm:
 [ ] A chain is offered where the chosen skill names a next skill
 [ ] The playbook was checked and overrides the routing where it names a process or a preferred skill
 [ ] No skill name is invented, and no skill is claimed to have run when it did not
-[ ] The handoff was written to .claude/crew-state/core/crew-core-using-crew-handoff.md
+[ ] The handoff was written to ~/.claude/crew-state/core/crew-core-using-crew-handoff.md
 [ ] No em dashes anywhere in the output
 ```
 

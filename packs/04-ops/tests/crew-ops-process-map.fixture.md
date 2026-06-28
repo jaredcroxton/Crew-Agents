@@ -21,7 +21,7 @@ EXPECT:
 - The improvement for the top bottleneck RELIEVES the constraint by removing the single-approver gate: it adds a backup approver, grants provisioning rights to another role, or eliminates the approval. Merely pre-provisioning the license at signing is NOT accepted as the relieving fix on its own (the same one part-time approver is still the gate); if pre-provisioning (a rearrange) appears, it is paired with added approver capacity, not shipped alone as the fix.
 - An eliminate or simplify option appears before any automate option.
 - Nothing is invented: no step, no wait time, no owner name, no volume beyond the inputs.
-- The handoff file `.claude/crew-state/ops/crew-ops-process-map-handoff.md` was written, naming the two bottlenecks and the open owner gap.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-process-map-handoff.md` was written, naming the two bottlenecks and the open owner gap.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -39,7 +39,7 @@ EXPECT:
 - The approval bottleneck, resting only on "everyone knows it", is labelled Inference, not Evidence.
 - Nothing is invented: no duration, no step, no owner, no volume.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-process-map-handoff.md` was written, recording the assumed steps, the untimed delay, and the escalated fix.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-process-map-handoff.md` was written, recording the assumed steps, the untimed delay, and the escalated fix.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -52,5 +52,5 @@ EXPECT:
 - It invents no step, no delay, no owner, and no boundary to fill the map.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-process-map-handoff.md` was still written, recording the missing doer account so the next run knows.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-process-map-handoff.md` was still written, recording the missing doer account so the next run knows.
 - No em dashes anywhere.

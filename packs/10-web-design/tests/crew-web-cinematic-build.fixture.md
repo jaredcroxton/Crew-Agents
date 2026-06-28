@@ -10,7 +10,7 @@ Three cases that exercise the skill: a clean cinematic build, a wrong-tool routi
 
 **Expect.**
 
-- Step 0 reads `.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` and states what was recovered (or "No prior context, first run").
+- Step 0 reads `~/.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` and states what was recovered (or "No prior context, first run").
 - The purpose is captured first: a fragrance pre-order launch, museum-drift aesthetic, the glowing black bottle as the recurring hero, smoky-black + violet + silver palette, high-end buyers as audience.
 - The nine-photo manifest is handed over (or confirmed already satisfied), with 2 to 3 cohesion anchors locked and "pure black background" on every hero object slot (s1_hero, s2_hero, s4_hero, s5_hero).
 - Assets are wired one scene at a time, hero objects as additive planes on pure black floated with a vertical sine float (never a full spin), backdrops as crossfaded planes, s2_cards keyed before wiring.
@@ -23,7 +23,7 @@ Three cases that exercise the skill: a clean cinematic build, a wrong-tool routi
 - The Design review gate is run against `crew-design-quality`, `crew-design-composition`, `crew-design-patterns`, `crew-design-soft`, `crew-animation-gsap`, `crew-animation-locomotive`, and `crew-animation-scroll-reveal`, Criticals and Majors fixed, a fail blocking the ship.
 - A real reduced-motion path is confirmed: scrubbed camera moves disabled, scenes hold static, copy and CTA read.
 - No em dashes anywhere.
-- The handoff is written to `.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md`.
+- The handoff is written to `~/.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md`.
 
 ## Case B: wrong-tool
 
@@ -34,7 +34,7 @@ Three cases that exercise the skill: a clean cinematic build, a wrong-tool routi
 **Expect.**
 
 - The skill recognises this is a multi-stage L&D narrative where each stage teaches a lesson and a gate paces the story, not a single-file cinematic museum-drift site.
-- It routes to `crew-web-scroll-journey` and explains the boundary: Cinematic Build is for an immersive Three.js drift where floating objects morph on scroll like a fashion film, while a gated, stage-by-stage onboarding that teaches values is exactly what Scroll Journey is for (a two-state gate, an arrival hero per stage, a persistent themed motif).
+- It routes to `crew-web-immersive-narrative` and explains the boundary: Cinematic Build is for an immersive Three.js drift where floating objects morph on scroll like a fashion film, while a gated, stage-by-stage onboarding that teaches values is exactly what the immersive-narrative builder is for (a two-state gate, an arrival hero per stage, a persistent themed motif).
 - It does NOT scaffold a cinematic single-file site, hand over the nine-photo manifest, or start writing the Three.js HTML.
 - No em dashes anywhere.
 
@@ -49,5 +49,5 @@ Three cases that exercise the skill: a clean cinematic build, a wrong-tool routi
 - Loop 1, Missing Input. The skill asks once for the purpose-first brief (what the site is for, the outcome, the audience, the world/theme, the hero object, the palette, the content source, the deploy target).
 - It notes that the user must generate the nine assets in nano banana first (the nine-photo manifest), with the cohesion anchors locked and pure black on every hero object, before any HTML is wired.
 - It invents no theme, no hero object, and no palette; it does not start writing the single-file site on a guess.
-- It records the blocker in the handoff at `.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` and pauses rather than fabricating a brief.
+- It records the blocker in the handoff at `~/.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` and pauses rather than fabricating a brief.
 - No em dashes anywhere.

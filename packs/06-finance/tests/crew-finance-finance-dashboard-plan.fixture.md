@@ -14,7 +14,7 @@ EXPECT:
 - Update frequency per metric tied to the source (bank feed daily, manually keyed weekly or monthly).
 - Access notes owner sees all, single owner, with sensitive fields restricted if a wider reader ever appears.
 - Targets (runway floor, acceptable days to pay) left "Open for the owner to set" / Escalated, the slot named but the value never invented.
-- The handoff file `.claude/crew-state/finance/crew-finance-finance-dashboard-plan-handoff.md` was written.
+- The handoff file `~/.claude/crew-state/finance/crew-finance-finance-dashboard-plan-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -37,6 +37,6 @@ EXPECT:
 - Asks the single forcing question once ("What is the one money question you ask yourself most weeks?"), plainly, not a batched survey.
 - Does NOT emit a finished outline of invented metrics, targets, or data sources.
 - If it proceeds at all, it proceeds only on clearly labelled "Assumed: [common owner questions]" placeholders and marks every source and figure as Not provided / "No source, capture needed", inventing no actual numbers, no tool names, no access levels.
-- The handoff file `.claude/crew-state/finance/crew-finance-finance-dashboard-plan-handoff.md` was still written, recording that decisions and sources were Not provided and the forcing question is outstanding.
+- The handoff file `~/.claude/crew-state/finance/crew-finance-finance-dashboard-plan-handoff.md` was still written, recording that decisions and sources were Not provided and the forcing question is outstanding.
 - STATUS is NEEDS_CONTEXT or BLOCKED, not DONE, so an empty scaffold is not mistaken for a real plan.
 - No em dashes anywhere.

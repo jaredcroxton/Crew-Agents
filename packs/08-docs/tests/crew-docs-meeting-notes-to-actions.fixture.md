@@ -16,7 +16,7 @@ EXPECT:
 - A Follow-up block names what to revisit (the QA condition before the July date), when, and who.
 - Nothing is invented: no owner, decision, or deadline appears that the notes do not support.
 - Step 0 states first run or recovered context.
-- Handoff written to `.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`.
+- Handoff written to `~/.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`.
 
 ## Case B: messy
 INPUT:
@@ -31,7 +31,7 @@ EXPECT:
 - "revenue was up like a lot" appears as a Key point flagged "to confirm", never sharpened into a precise figure.
 - No invented owner, decision, or deadline anywhere.
 - STATUS is DONE_WITH_GAPS (escalations open, owners and deadlines to confirm), not DONE.
-- Handoff written to `.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`, recording the unowned actions, the relative deadline, the open trial question, and the escalated budget and contract commitments.
+- Handoff written to `~/.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`, recording the unowned actions, the relative deadline, the open trial question, and the escalated budget and contract commitments.
 
 ## Case C: missing-input
 INPUT:
@@ -41,4 +41,4 @@ EXPECT:
 - It does not invent a meeting, a decision, an owner, an action, or a deadline, and does not produce a fabricated summary.
 - If it must show structure, it returns an empty MEETING NOTES TO ACTIONS scaffold with every field marked "Not provided" or "to confirm", never filled with invented content.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a finished summary.
-- Handoff written at `.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`, recording that the run was blocked on the missing notes, what was asked for, and "No output, run completed [date]".
+- Handoff written at `~/.claude/crew-state/docs/crew-docs-meeting-notes-to-actions-handoff.md`, recording that the run was blocked on the missing notes, what was asked for, and "No output, run completed [date]".

@@ -14,7 +14,7 @@ EXPECT:
 - A cold email AND a LinkedIn DM per lead, plus a 3-touch follow-up sequence (day 3, 7, 14, email 3 the breakup). Subjects 2 to 4 words lowercase, no banned openings or jargon, no 30-minute call ask.
 - The per-lead records in the report carry every field the dashboard renders: company, website, region, industry, size, fit, decision-maker, insight, signal, channels, outreach status, evidence tags. (The dashboard step needs nothing the report does not already contain.)
 - dashboard.html has filter controls for region, quality score, and outreach status, and a fit badge per card.
-- Handoff file `.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

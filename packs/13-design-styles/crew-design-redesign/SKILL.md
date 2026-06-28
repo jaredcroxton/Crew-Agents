@@ -31,7 +31,7 @@ If there is no existing design or codebase to audit, ask once for it (Loop 1, Mi
 
 - **Fast mode:** a quick redesign triage. Name the top three lifts (usually the font, the AI gradient, and the missing states) and the single one that moves it most. Skip the full audit.
 - **Careful mode (default):** the full audit across typography, colour, layout, states, content, and components, plus the keep, cut, elevate triage and the quick-wins order. Use before a real redesign.
-- **Governed mode:** the full audit, plus a cross-reference against prior handoffs in `.claude/crew-state/design-styles/` so the lift is consistent across pages, the brand playbook enforced, the accessibility and strategic-omissions floor checked (focus, alt text, legal links, validation, skip-to-content), and the rebuild-versus-polish call made explicitly. Use for a production redesign.
+- **Governed mode:** the full audit, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the lift is consistent across pages, the brand playbook enforced, the accessibility and strategic-omissions floor checked (focus, alt text, legal links, validation, skip-to-content), and the rebuild-versus-polish call made explicitly. Use for a production redesign.
 
 Do not run this skill to build a design from scratch (there is nothing to lift; use a style skill for a fresh aesthetic), to score a single dimension of a finished design (that is `crew-design-quality`), or to choose a brand-new visual language from nothing. This skill lifts something that already exists.
 
@@ -132,7 +132,7 @@ The checklist a redesign embeds. The lift is the contract.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-styles/crew-design-redesign-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior audit, the font and palette were lifted, the missing states still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the lift stays consistent across pages. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-styles/crew-design-redesign-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior audit, the font and palette were lifted, the missing states still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the lift stays consistent across pages. (Loop 4, Context Change.)
 
 1. **Scan.** Identify the stack and the styling method, and what is actually there: the structure, the patterns, the content. If there is no existing design to audit, ask for it now.
 2. **Diagnose.** Run the keep, cut, elevate triage across typography, colour, layout, states, content, and components. State all three lists, and flag every AI-fingerprint tell to cut.
@@ -142,7 +142,7 @@ The checklist a redesign embeds. The lift is the contract.
 6. **Write the redesign brief and the verdict.** Assemble the keep, cut, elevate lists, the ordered quick wins, the elevation moves, and the rebuild call, and set a verdict (Lift, Rebuild, or Start over) with the single highest-impact move.
 7. **Verify before emitting.** Confirm every cut is a real tell (not a working element), every elevation is a concrete move, the quick wins are in impact-over-risk order, the strategic omissions are checked, and nothing recommended would break functionality or require a rewrite that was not called for. Mark a deliberate brand exception kept (the playbook wins), and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-styles`, then write `.claude/crew-state/design-styles/crew-design-redesign-handoff.md` with: the brief produced, decisions made (the keep, cut, elevate triage, the ordered lifts, the rebuild-versus-polish call), unfinished work (lifts not applied, the deeper rebuild if deferred, accessibility or strategic-omission gaps, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a stack constraint or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-styles`, then write `~/.claude/crew-state/design-styles/crew-design-redesign-handoff.md` with: the brief produced, decisions made (the keep, cut, elevate triage, the ordered lifts, the rebuild-versus-polish call), unfinished work (lifts not applied, the deeper rebuild if deferred, accessibility or strategic-omission gaps, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a stack constraint or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -239,7 +239,7 @@ Typical calls that warrant a brief: a surface lift versus a deeper rebuild, a re
 
 ## Plan mode
 
-In plan mode this skill can read the existing design and the prior handoff, and produce a draft redesign read (the keep, cut, elevate triage, the quick-wins it would order, a provisional Lift, Rebuild, or Start over) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source design. The full audit, the ordered lifts, the rebuild call, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the existing design and the prior handoff, and produce a draft redesign read (the keep, cut, elevate triage, the quick-wins it would order, a provisional Lift, Rebuild, or Start over) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source design. The full audit, the ordered lifts, the rebuild call, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -257,7 +257,7 @@ Before the run is marked done, confirm:
 [ ] A Lift / Rebuild / Start over verdict with the single highest-impact move
 [ ] A deliberate brand exception is marked kept; the playbook won over the defaults
 [ ] No AI-slop, no emoji, no em dashes in the brief
-[ ] The handoff was written to .claude/crew-state/design-styles/
+[ ] The handoff was written to ~/.claude/crew-state/design-styles/
 ```
 
 ## Completion

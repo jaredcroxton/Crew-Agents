@@ -15,7 +15,7 @@ EXPECT:
 - A "What this means for you / next steps" section with concrete actions and a dated deadline.
 - A "Questions" line naming Priya Anand and the email or session.
 - No invented dates or names beyond those provided.
-- Handoff written at `.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md` recording audience, format, tone and reason, and delivery channel.
+- Handoff written at `~/.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md` recording audience, format, tone and reason, and delivery channel.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -32,7 +32,7 @@ EXPECT:
 - Date is uncertain, so shows "[Not provided: effective date]" rather than guessing "late this month".
 - Sender unspecified shows as "From: [Not provided]". No fabricated count beyond the stated "four roles or so", flagged as needing confirmation.
 - No "exciting new chapter" slop in the body. No em dashes.
-- Handoff written at `.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md`, recording the tone override, the euphemism corrections, the manager-led channel, and the escalation.
+- Handoff written at `~/.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md`, recording the tone override, the euphemism corrections, the manager-led channel, and the escalation.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -45,5 +45,5 @@ EXPECT:
 - Does not draft a message around an invented restructure, invents no roles, dates, reasons, or names.
 - If forced to proceed, returns a skeleton with the message line and every fact marked "[Not provided]" and "Open items" listing what the sender must supply.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, because no honest draft could be built from a missing decision.
-- Handoff written at `.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md` even with no shippable draft, recording the run, the missing decision, and the single question asked.
+- Handoff written at `~/.claude/crew-state/hr/crew-hr-employee-communication-draft-handoff.md` even with no shippable draft, recording the run, the missing decision, and the single question asked.
 - No em dashes anywhere.

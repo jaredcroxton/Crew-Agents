@@ -31,7 +31,7 @@ If you have a product but no real questions, ask once for the question source, b
 
 - **Fast mode:** a clean question source with confirmed answers already in hand. Group, write, order, and emit. Skip the deep near-duplicate merge analysis and the cut-list rationale. Use for a small known set with a live source doc.
 - **Careful mode (default):** the full sourcing, intent grouping with near-duplicate merge, sourced answers or Needs-answer flags, the order-and-trim pass, and the approval flags. Use for any FAQ that will be published.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/support/` so a confirmed answer carries forward and a Needs-answer is not re-asked, every price or policy entry flagged for owner sign-off, and a stricter no-fabrication audit. Use for a pricing, legal, or compliance FAQ.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/support/` so a confirmed answer carries forward and a Needs-answer is not re-asked, every price or policy entry flagged for owner sign-off, and a stricter no-fabrication audit. Use for a pricing, legal, or compliance FAQ.
 
 Do not run this skill to write a full help article (that is `crew-support-help-document-generator`), to produce marketing copy, to set a policy or a price (those are Escalated to an owner), or to build an FAQ with no real question source (ask for one, do not invent questions).
 
@@ -101,7 +101,7 @@ The FAQ reads like a calm person answering fast, not a brochure.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/support/crew-support-faq-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a draft FAQ for the returns page, 3 entries still marked Needs answer"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for a confirmed answer or a still-open Needs-answer. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/support/crew-support-faq-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a draft FAQ for the returns page, 3 entries still marked Needs answer"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for a confirmed answer or a still-open Needs-answer. (Loop 4, Context Change.)
 
 1. **Confirm scope and audience in one line each.** State the product or page this FAQ covers and who reads it (new customer, paying customer, prospect). Restate so the user can correct you before you write. A returns FAQ and a billing FAQ are different jobs; do not merge them.
 2. **Gather the real questions** per Question sourcing. Capture exact phrasing and tally frequency.
@@ -111,7 +111,7 @@ The FAQ reads like a calm person answering fast, not a brochure.
 6. **Order and trim.** Put the most-asked first (the tally from step 2). Cut any entry that is marketing dressed as a question or that no real customer asked, and name the cut. Flag entries that carry a price, a legal claim, a guarantee, or a policy the business must set; these need human approval.
 7. **Verify before emitting.** Re-read steps 4 to 6. Confirm every answer has a named source or a "Needs answer" flag, every link is real or marked missing, no number or policy is invented, and intents are tagged correctly. If any check fails, fix it before continuing (Loop 2, Quality Failure). For any answer that is a price, a legal or compliance call, a guarantee, or a policy the business has not formally set, mark it "Escalated: needs owner sign-off" and route it; never set the policy yourself (Loop 3, Escalation). Only then emit the FAQ.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/support`, then write `.claude/crew-state/support/crew-support-faq-builder-handoff.md` with: the FAQ produced, decisions made (scope, ordering, what was cut), unfinished work (every "Needs answer", "Link missing", and "Escalated" entry), what `crew-support-help-document-generator` needs next, and any "Learned" note (a correction, a confirmed answer, a preferred phrasing). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/support`, then write `~/.claude/crew-state/support/crew-support-faq-builder-handoff.md` with: the FAQ produced, decisions made (scope, ordering, what was cut), unfinished work (every "Needs answer", "Link missing", and "Escalated" entry), what `crew-support-help-document-generator` needs next, and any "Learned" note (a correction, a confirmed answer, a preferred phrasing). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -185,7 +185,7 @@ Typical calls that warrant a brief: a short FAQ entry versus a full help article
 
 ## Plan mode
 
-In plan mode this skill can ask for the question source and the scope, read the prior handoff, and produce a draft FAQ plan (the scope, the audience, the intent groups, and one preview entry) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, publish the FAQ, or confirm an unconfirmed price or policy. The full sourcing, grouping, drafting, approval flags, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask for the question source and the scope, read the prior handoff, and produce a draft FAQ plan (the scope, the audience, the intent groups, and one preview entry) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, publish the FAQ, or confirm an unconfirmed price or policy. The full sourcing, grouping, drafting, approval flags, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -201,7 +201,7 @@ Before the run is marked done, confirm:
 [ ] No invented price, window, policy, guarantee, number, or feature; cuts named
 [ ] Price, legal, guarantee, or policy entries marked "Escalated: needs owner sign-off"
 [ ] No marketing copy kept as a question; no AI-slop; no em dashes
-[ ] The handoff was written to .claude/crew-state/support/
+[ ] The handoff was written to ~/.claude/crew-state/support/
 ```
 
 ## Completion

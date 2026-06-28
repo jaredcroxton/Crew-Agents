@@ -20,7 +20,7 @@ EXPECT:
 - "Weakest CTA rewrite" block replaces "Submit" with value-stating button text in the page's voice, with a one-line why.
 - Issues ranked by conversion impact, each citing a location or line and each carrying a fix tier (Quick win / Moderate / Rebuild).
 - Names the cheapest change that moves the score most first.
-- Handoff file `.claude/crew-state/marketing/crew-marketing-landing-page-review-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/marketing/crew-marketing-landing-page-review-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

@@ -9,11 +9,11 @@ EXPECT:
 - Output begins with "BRAND CONTEXT FILE" and fills the practical fields: Brand, Product (with both prices), Customer (Mara as payer, partner as influencer), Why they pick us / Why they leave (both sides), Voice (warm host, never corporate) with Always say ("roasted to order") and Never say ("premium", "gourmet"), Always get right (freshness), Where we fall short (unverified origin stories), Never claim ("best coffee in the world"), Goals (500 subscribers in six months), Found online (driftwoodroasters.com, Instagram, Google reviews), Must know (24-hour ship, free shipping over 50).
 - NO colour, font, or visual-style question was asked anywhere in the conversation; the flow stayed jargon-free.
 - No em dashes anywhere in the output.
-- The deliverable `.claude/crew-state/brand-context.md` was written, and the handoff `.claude/crew-state/core/crew-core-brand-context-handoff.md` was written.
+- The deliverable `~/.claude/crew-state/brand-context.md` was written, and the handoff `~/.claude/crew-state/core/crew-core-brand-context-handoff.md` was written.
 
 ## Case B: update-existing
 INPUT:
-A `.claude/crew-state/brand-context.md` already exists for Driftwood Coffee Roasters. The owner says: "Two changes. We have dropped the gift subscription, and we want to sound a bit more playful. Everything else is the same." Run in Governed mode.
+A `~/.claude/crew-state/brand-context.md` already exists for Driftwood Coffee Roasters. The owner says: "Two changes. We have dropped the gift subscription, and we want to sound a bit more playful. Everything else is the same." Run in Governed mode.
 EXPECT:
 - Step 0 detects the existing brand context, loads it, and states "Working with Driftwood Coffee Roasters" rather than asking the eleven cold.
 - It amends the file (removes the gift subscription, shifts the voice toward playful) and notes what changed, rather than overwriting the unchanged fields.
@@ -29,4 +29,4 @@ EXPECT:
 - It does not fabricate a name, a voice, a customer, a price, or any claim.
 - If it emits any partial output, every unanswered field is marked "Not provided" rather than filled.
 - It does not reach for colour, font, or visual-style questions to fill the gap; those are not part of this conversation.
-- The handoff `.claude/crew-state/core/crew-core-brand-context-handoff.md` is written, recording the missing source as the blocker the next run needs.
+- The handoff `~/.claude/crew-state/core/crew-core-brand-context-handoff.md` is written, recording the missing source as the blocker the next run needs.

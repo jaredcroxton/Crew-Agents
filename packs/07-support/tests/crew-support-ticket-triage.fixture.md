@@ -15,7 +15,7 @@ EXPECT:
 - Recommended owner is a finance or billing queue, marked "Suggested, confirm routing" since no routing map was given.
 - Next action is one concrete step that does not promise a refund amount; the refund value is marked Escalated (who decides).
 - The repeated contact is noted as a priority or pattern signal, not auto-escalated by volume alone.
-- Handoff file `.claude/crew-state/support/crew-support-ticket-triage-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/support/crew-support-ticket-triage-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

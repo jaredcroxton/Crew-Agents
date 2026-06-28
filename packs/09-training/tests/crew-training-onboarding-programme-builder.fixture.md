@@ -17,7 +17,7 @@ EXPECT:
 - The 4 Cs are covered (Compliance, Clarification, Culture, Connection), not all task and no belonging.
 - A programme-measures line is present (time-to-productivity against day 90, plus a 90-day retention or new-starter experience check), distinct from the readiness gates.
 - Nothing is invented beyond the inputs: no system, no person, no policy, no date the inputs did not supply, and role labels like "the Sales Lead" and "the buddy AM" are used rather than invented proper names.
-- Handoff file `.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -31,7 +31,7 @@ EXPECT:
 - Because the hire is remote for the first two weeks, equipment shipping is sequenced into PRE-START with lead time and the buddy is made deliberate (a virtual buddy, scheduled contact), not assumed to be a corridor chat or a physical desk.
 - Reasonable adjustments are asked about and, if any are needed, sequenced into PRE-START with lead time and Escalated to the business to confirm and arrange, never invented (a duty the employer owns under local law, the jurisdiction set in brand-context.md).
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- Handoff file `.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was written, recording the unnamed system, the assumed ramp target, and the escalated compliance induction and probation decisions.
+- Handoff file `~/.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was written, recording the unnamed system, the assumed ramp target, and the escalated compliance induction and probation decisions.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -43,5 +43,5 @@ EXPECT:
 - It invents no role, no system, no person, no ramp target, and no phase content.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- Handoff file `.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was still written, recording the missing role profile so the next run knows.
+- Handoff file `~/.claude/crew-state/training/crew-training-onboarding-programme-builder-handoff.md` was still written, recording the missing role profile so the next run knows.
 - No em dashes anywhere.

@@ -15,7 +15,7 @@ EXPECT:
 - The fixes are concrete compositional moves, not "make it pop".
 - No invented element or eye path; only what is described is judged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-composition-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-composition-handoff.md` was written.
 
 ## Case B: composition decision
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the layout to review (a screenshot, a wireframe, or a description of where the elements sit), because composition cannot be judged without seeing the arrangement.
 - It does not invent a layout, trace an eye path on nothing, or run the composition sins against an unknown design.
 - If it emits any partial output, the Artifact and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-composition-handoff.md` written, recording the missing artifact as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-composition-handoff.md` written, recording the missing artifact as the blocker the next run needs.

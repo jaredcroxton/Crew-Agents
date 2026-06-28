@@ -17,7 +17,7 @@ EXPECT:
 - A Cadence line and a Trigger line are present.
 - A "Compliance:" line names the required unsubscribe link, sender postal address, and sender identity on every send.
 - No invented number, deadline, or testimonial appears; any unverifiable result is a bracketed slot.
-- Handoff file `.claude/crew-state/marketing/crew-marketing-email-campaign-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/marketing/crew-marketing-email-campaign-builder-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

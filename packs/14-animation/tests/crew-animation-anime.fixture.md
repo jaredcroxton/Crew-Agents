@@ -15,7 +15,7 @@ EXPECT:
 - An "Integration and accessibility:" block with a reduced-motion path that applies the final state instantly, and cleanup (pause on teardown).
 - No transform string and no layout properties (left, top, width, height); individual transforms and opacity only.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-anime-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-anime-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should animate, why it should move, and on what trigger (load, interaction, or in-view), because a spec needs a motion brief.
 - It does not invent a motion, fabricate a timeline, or spec SVG or stagger against nothing.
 - If it emits any partial output, the Brief, Trigger, and Motion fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-anime-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-anime-handoff.md` written, recording the missing brief as the blocker the next run needs.

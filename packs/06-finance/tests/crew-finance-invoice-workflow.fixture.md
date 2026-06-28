@@ -14,7 +14,7 @@ EXPECT:
 - Segregation of duties assessed: Priya checks, pays, and reconciles, owner approves by exception; one-person risk flagged with a compensating control (owner reviews the payment run).
 - Improvements ordered risk first, each tied to a named step and a named mechanism.
 - A run-it-yourself approval checklist with checkboxes ending in "Recorded in [tool] with approver name and date".
-- Handoff file written at .claude/crew-state/finance/crew-finance-invoice-workflow-handoff.md naming crew-finance-admin-automation as next.
+- Handoff file written at ~/.claude/crew-state/finance/crew-finance-invoice-workflow-handoff.md naming crew-finance-admin-automation as next.
 - No em dashes anywhere.
 
 ## Case B: receivable chaos

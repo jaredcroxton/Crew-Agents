@@ -20,7 +20,7 @@ EXPECT:
 - An "Approval checkpoints:" line and an "Exceptions:" block are present, the Exceptions block naming the credit-fail destination (its own held step owned by the Finance Manager, with a max hold then escalation) and the approval-rejection destination (a numbered step, held with a max hold).
 - Document owner, version (for example v1.0), an effective date, and a next review (for example 2027 annual) are captured, not left blank.
 - Nothing is invented: no role, deadline, threshold, or system appears that the input did not state.
-- Handoff file `.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, naming the granularity chosen and what crew-docs-training-guide-creator needs next.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, naming the granularity chosen and what crew-docs-training-guide-creator needs next.
 
 ## Case B: messy
 INPUT:
@@ -32,7 +32,7 @@ EXPECT:
 - The financial-compliance control question ("probably some compliance controls but I do not know which ones") is flagged and routed to crew-docs-compliance-review-check, with no invented regulatory reference, control number, or safety step.
 - "Do it fast" does not become a deadline: steps with no stated timing have a blank Timing field, not a fabricated "within X hours".
 - Any owner never named is written "Owner: not provided" rather than guessed, and no system name is invented (no "CRM" unless the input gave one).
-- Handoff file `.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, noting the unconfirmed approval point, the unset threshold, and the routed compliance question as unfinished work.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, noting the unconfirmed approval point, the unset threshold, and the routed compliance question as unfinished work.
 
 ## Case C: missing-input
 INPUT:
@@ -43,4 +43,4 @@ EXPECT:
 - It asks once, not a batched survey, and does not fabricate a generic onboarding process, invent role titles, or invent step timings to fill the page.
 - If it proceeds at all, it produces only the spine it can confirm (the process name) and marks the body "Process undocumented from here", inventing nothing.
 - Every field it cannot fill is marked "not provided" or "Not set", and no version history or past review date is fabricated.
-- Handoff file `.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, recording the missing process description as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-sop-builder-handoff.md` was written, recording the missing process description as the blocker the next run needs.

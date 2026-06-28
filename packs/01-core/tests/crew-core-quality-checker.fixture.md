@@ -13,7 +13,7 @@ EXPECT:
 - Links section confirms the /upgrade link tested Working.
 - Verdict line reads "Ship" with Blockers: 0.
 - No invented requirements beyond the brief.
-- Handoff written to `.claude/crew-state/core/crew-core-quality-checker-handoff.md` recording the Ship verdict.
+- Handoff written to `~/.claude/crew-state/core/crew-core-quality-checker-handoff.md` recording the Ship verdict.
 - No em dashes anywhere.
 
 ## Case B: polished-but-misses

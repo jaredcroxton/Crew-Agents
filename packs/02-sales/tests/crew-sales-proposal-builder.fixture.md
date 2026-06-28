@@ -17,7 +17,7 @@ EXPECT:
 - Price line reads "to be set by the business" with the basis noted (fixed Project fee, pending owner approval), no invented figure (per Pricing and packaging).
 - A Terms block appears under the price, with validity and payment terms each marked "to be set by the business" (consistent with the unset price), an acceptance mechanism, and the line that this proposal is not a binding contract (per the Terms section and Output format).
 - A next-step email with one clear ask, with real urgency only (the client's stated financial-year deadline, not manufactured pressure), per Close design.
-- Handoff written to .claude/crew-state/sales/crew-sales-proposal-builder-handoff.md noting scope agreed and price pending.
+- Handoff written to ~/.claude/crew-state/sales/crew-sales-proposal-builder-handoff.md noting scope agreed and price pending.
 
 ## Case B: messy
 INPUT:

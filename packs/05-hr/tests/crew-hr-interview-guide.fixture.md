@@ -23,7 +23,7 @@ EXPECT:
 - The records discipline is named: the scorecards and evidence notes are kept factual and evidence-anchored as the hiring record, the same for every candidate, with the retention period left to the business (Escalated).
 - The pass bar and how the non-must-have scores combine are Escalated to the hiring manager, not invented.
 - Nothing is fabricated: no made-up responsibility, no invented capability, no candidate detail, no asserted threshold.
-- The handoff file `.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was written, recording the guide, the scale, the capabilities tested, the question order, the must-have, and the escalated pass bar.
+- The handoff file `~/.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was written, recording the guide, the scale, the capabilities tested, the question order, the must-have, and the escalated pass bar.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -38,7 +38,7 @@ EXPECT:
 - The law reference stays jurisdiction-neutral ("protected characteristics under local law", "the regime the business operates under"), with no named national statute.
 - After refusing and reframing, the skill still delivers a usable minimal structured starting point for the lawful core (the genuine late-shift availability requirement plus at least one role-relevant capability question and the anchored-scoring / independent-scoring mechanics), or asks once for the real capabilities, rather than returning only refusals.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was written, recording the refused and reframed questions (the family question, the salary-history question, the gut culture-fit ask) and the escalated pass bar.
+- The handoff file `~/.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was written, recording the refused and reframed questions (the family question, the salary-history question, the gut culture-fit ask) and the escalated pass bar.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -51,5 +51,5 @@ EXPECT:
 - It invents no capability, no question, and no rubric to fill the guide.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was still written, recording the missing profile so the next run does not repeat the ask.
+- The handoff file `~/.claude/crew-state/hr/crew-hr-interview-guide-handoff.md` was still written, recording the missing profile so the next run does not repeat the ask.
 - No em dashes anywhere.

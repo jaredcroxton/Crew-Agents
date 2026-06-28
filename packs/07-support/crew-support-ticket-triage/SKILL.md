@@ -29,7 +29,7 @@ If the ticket text is missing or unreadable, you cannot triage. Ask once for the
 
 - **Fast mode:** severity, owner, and next action only. Skip the detailed topic trigger, the missing-information list, and pattern detection. Use when more than twenty tickets are queued and speed is the priority.
 - **Careful mode (default):** the full triage card, every field, including pattern detection across this session. Use for normal daily operation.
-- **Governed mode:** the full card, plus a cross-reference against prior triage handoffs in `.claude/crew-state/support/`, plus automatic escalation for any ticket matching a legal, safety, fraud, or discrimination pattern. Use for high-risk queues or regulated work.
+- **Governed mode:** the full card, plus a cross-reference against prior triage handoffs in `~/.claude/crew-state/support/`, plus automatic escalation for any ticket matching a legal, safety, fraud, or discrimination pattern. Use for high-risk queues or regulated work.
 
 Do not run this skill when there is a single ticket whose severity is obvious (a clear "your product charged my card twice" is P2 with no ceremony), when the queue was already triaged this session, or when the request is to draft a reply (that is `crew-support-reply-builder`) or to check one ticket's factual accuracy.
 
@@ -121,7 +121,7 @@ Before the card is final, answer these:
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/support/crew-support-ticket-triage-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: the routing map for billing, and a recurring outage pattern flagged last run"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for prior patterns. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/support/crew-support-ticket-triage-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: the routing map for billing, and a recurring outage pattern flagged last run"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for prior patterns. (Loop 4, Context Change.)
 
 1. **Read the ticket end to end before deciding anything.** Restate in one line what the customer actually asked for or reported. Separate the symptom (what broke) from the request (what they want). Note the emotional register (angry, disappointed, confused, neutral, satisfied) as a signal, not a verdict. If the ticket bundles several issues, name each, because one card cannot honestly carry two unrelated problems.
 2. **Classify the topic.** Pick exactly one primary topic from the taxonomy, using the customer's own language. Name the specific trigger, not the bucket: not "Billing", write "Billing: charged twice for the May subscription". If two topics fit, choose the one driving the customer's urgency and note the second.
@@ -132,7 +132,7 @@ Before the card is final, answer these:
 7. **Detect patterns.** Compare this ticket's topic, severity, and core complaint against tickets triaged this session (and, in Governed mode, prior handoffs). If two or more share the same complaint, flag the pattern with a short description ("repeated double-charge on May renewals", "login failures since the last release"). A pattern is a signal to investigate, not an escalation. (Skip in Fast mode.)
 8. **Verify before emitting.** Re-read the ticket against the card. Confirm the topic matches what the customer reported, the severity is not softened, no field is invented, every missing fact is marked rather than filled, and the forcing questions are answered. If a requirement is unmet (severity guessed without basis, topic forced), follow Loop 2 (Quality Failure): stop, name the gap, fix it, re-check. If the card needs a call you cannot make (a refund value, a policy exception, a legal or compliance response), mark it "Escalated: [the exact question and who decides]" per Loop 3 (Escalation). Only then emit the card.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/support`, then write `.claude/crew-state/support/crew-support-ticket-triage-handoff.md` with: the card produced (or the batch summary, counts by severity), decisions made (chosen topic and severity and why), unfinished work (fields marked Missing or Not provided, anything escalated), what `crew-support-reply-builder` needs next (severity, the Missing list to request), any pattern flagged for `crew-support-feedback-summary`, and a "Learned" note (a routing correction, a recurring topic, a tier rule the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/support`, then write `~/.claude/crew-state/support/crew-support-ticket-triage-handoff.md` with: the card produced (or the batch summary, counts by severity), decisions made (chosen topic and severity and why), unfinished work (fields marked Missing or Not provided, anything escalated), what `crew-support-reply-builder` needs next (severity, the Missing list to request), any pattern flagged for `crew-support-feedback-summary`, and a "Learned" note (a routing correction, a recurring topic, a tier rule the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -208,7 +208,7 @@ This skill produces triage cards. It does not send replies, post publicly, or co
 
 ## Plan mode
 
-In plan mode this skill can read the ticket and the specification, and can produce a draft card marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, run file operations, or reach external systems. The full triage, the handoff save, and any pattern persistence run only after plan mode is exited.
+In plan mode this skill can read the ticket and the specification, and can produce a draft card marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, run file operations, or reach external systems. The full triage, the handoff save, and any pattern persistence run only after plan mode is exited.
 
 ## Verification
 
@@ -223,7 +223,7 @@ Before the run is marked done, confirm:
 [ ] Every card matches the output format and every justification is specific
 [ ] No invented customer, number, SLA, or quote; every gap marked Missing
 [ ] No em dashes, no internal names, no business jargon in any card
-[ ] The handoff was written to .claude/crew-state/support/
+[ ] The handoff was written to ~/.claude/crew-state/support/
 [ ] Escalated tickets flagged for human handling, the rest routed to crew-support-reply-builder
 [ ] Any pattern preserved for crew-support-feedback-summary
 ```

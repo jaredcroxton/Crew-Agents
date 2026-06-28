@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -47,9 +47,9 @@ Do not write any HTML until purpose is settled and the assets have landed, or th
 
 - **Fast mode:** the user already has the nine assets in hand, a settled purpose, and accepts the cinematic default. Skip the long brief, confirm the theme in one line, wire the assets scene by scene, layer atmosphere, verify. Use when the assets exist and the theme is decided.
 - **Careful mode (default):** the full purpose-first brief, the nine-photo manifest handed over and generated, the assets wired one scene at a time, and the design review gate before any deploy. Use for any real build.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one brand carries across builds, the design review gate mandatory with nothing waived, and a stricter check that the reduced-motion floor is real and the type survives the fog and bloom before a single visitor sees it. Use for a launch that ships to a real audience where a stuttering or unreadable site is a reputational risk.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across builds, the design review gate mandatory with nothing waived, and a stricter check that the reduced-motion floor is real and the type survives the fog and bloom before a single visitor sees it. Use for a launch that ships to a real audience where a stuttering or unreadable site is a reputational risk.
 
-Do not run this skill when the user wants a pure camera fly-through, where scrolling just plays one continuous descent forward and backward under stage typography: that is `crew-web-fly-through-builder`. Do not run it for a multi-stage L&D narrative, where each themed stage teaches a lesson and a gate paces the story: that is `crew-web-scroll-journey`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Cinematic Build is specifically for a single-file immersive Three.js site where floating objects sit in themed environments and the scenes morph on scroll like a fashion film, a museum drift, not a brochure and not a guided lesson.
+Do not run this skill when the user wants a pure camera fly-through, where scrolling just plays one continuous descent forward and backward under stage typography: that is `crew-web-fly-through-builder`. Do not run it for a multi-stage L&D narrative, where each themed stage teaches a lesson and a gate paces the story: that is `crew-web-immersive-narrative`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Cinematic Build is specifically for a single-file immersive Three.js site where floating objects sit in themed environments and the scenes morph on scroll like a fashion film, a museum drift, not a brochure and not a guided lesson.
 
 ## How the cinematic builder thinks
 
@@ -283,7 +283,7 @@ These are the rules that make the wiring repeatable instead of improvised. They 
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, fragrance launch, museum-drift theme, six of nine assets wired, preloader pending"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, fragrance launch, museum-drift theme, six of nine assets wired, preloader pending"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Take the brief (purpose first, before any code).** Ask the purpose-first brief from Inputs in one short message. Lead with purpose, push for the noun not the vibe, confirm a one-line summary back. Do not propose a theme, scene list, or prompts before the user has answered what the site is for. If the user will not supply a purpose or theme, ask once, record the blocker in the handoff, and pause (Loop 1).
 
@@ -343,7 +343,7 @@ const fog = scene.fog // capture it so the scroll-flow tween has a bound target
 
    Then walk the Verification done-gate, and run the Design review gate before any deploy. A fail blocks the ship.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` with: the build report produced, decisions made (the theme, the hero object, the cohesion anchors, which of the nine assets landed and which are pending, the scroll and scene-morph plan, the deploy target and URL), unfinished work (assets owed by the user, the mobile cut, the audio layer, a design fix not yet applied, the OG patch), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-cinematic-build-handoff.md` with: the build report produced, decisions made (the theme, the hero object, the cohesion anchors, which of the nine assets landed and which are pending, the scroll and scene-morph plan, the deploy target and URL), unfinished work (assets owed by the user, the mobile cut, the audio layer, a design fix not yet applied, the OG patch), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -461,7 +461,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can ask the purpose-first brief, read the prior handoff, and produce a build plan: the theme, the scene flow, the hero object, the cohesion anchors, the nine-photo manifest filled in for the theme, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot write the HTML file, copy assets into the build, write to `.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask the purpose-first brief, read the prior handoff, and produce a build plan: the theme, the scene flow, the hero object, the cohesion anchors, the nine-photo manifest filled in for the theme, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot write the HTML file, copy assets into the build, write to `~/.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -486,7 +486,7 @@ Before the run is marked done, confirm:
 [ ] rAF-suspended-in-background-tab check done; logic confirmed even when automation cannot paint a live frame
 [ ] Design review gate run: crew-design-quality, crew-design-composition, crew-design-patterns, crew-design-soft, crew-animation-gsap, crew-animation-locomotive, crew-animation-scroll-reveal; Criticals and Majors fixed
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

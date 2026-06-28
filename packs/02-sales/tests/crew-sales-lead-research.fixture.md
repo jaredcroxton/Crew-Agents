@@ -14,7 +14,7 @@ EXPECT:
 - An eligibility pass before the contact map: no do-not-contact, existing-customer, or jurisdictional block surfaced, so the brief proceeds.
 - A decision-maker line with a "Type:" of Economic buyer, Champion, or Blocker, and an "Email:" that is an address or "not found".
 - A "Sources:" line, with dates on any time-sensitive fact (for example the live careers page).
-- Handoff file `.claude/crew-state/sales/crew-sales-lead-research-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/sales/crew-sales-lead-research-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

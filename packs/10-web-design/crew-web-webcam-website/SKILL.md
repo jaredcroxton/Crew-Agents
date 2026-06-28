@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -63,9 +63,9 @@ After the user answers, confirm a one-paragraph summary back. Only then start bu
 
 - **Fast mode:** the user already has the subject image, the theme, and the transformation verb settled, accepts the papercraft default look, and wants a kiosk. Skip the long confirm, run the pipeline, wire the template, verify the frames, the scrub, the fallback, and the reduced-motion path. Use when the brief is decided and the one image is in hand.
 - **Careful mode (default):** the full discovery, the locked pipeline run with the nano banana subject and the Veo3 transformation generated and visually confirmed, the single-file site built with the camera lifecycle and the gesture mechanic, the verification walked, and the Design review gate before any deploy. Use for any real build.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one brand carries across builds, the Design review gate mandatory with nothing waived, and a stricter check that camera consent (click-to-start, stop tracks on teardown, no recording or upload), the no-camera fallback, and the reduced-motion floor are real code (verifiable by grep) before a single visitor sees it. Use for a public booth or a client launch where a privacy slip or a dead black box is a reputational risk.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across builds, the Design review gate mandatory with nothing waived, and a stricter check that camera consent (click-to-start, stop tracks on teardown, no recording or upload), the no-camera fallback, and the reduced-motion floor are real code (verifiable by grep) before a single visitor sees it. Use for a public booth or a client launch where a privacy slip or a dead black box is a reputational risk.
 
-Do not run this skill when the user wants a full immersive, multi-scene cinematic site where floating objects morph through themed environments as you scroll: that is `crew-web-cinematic-build`. Do not run it for a multi-stage narrative where each themed stage teaches a lesson and a gate paces the story as the visitor scrolls: that is `crew-web-scroll-journey`. Do not run it for a dark, full-screen hero where the cursor drags a spotlight that reveals a second image through a mask: that is `crew-web-spotlight-hero`. Webcam Website is specifically a camera hand-tracking gesture-scrub experience, where the visitor's open palm moves an AI-generated subject and closing the fist scrubs a generated transformation frame by frame, shipped as a kiosk or an embedded module.
+Do not run this skill when the user wants a full immersive, multi-scene cinematic site where floating objects morph through themed environments as you scroll: that is `crew-web-cinematic-build`. Do not run it for a multi-stage narrative where each themed stage teaches a lesson and a gate paces the story as the visitor scrolls: that is `crew-web-immersive-narrative`. Do not run it for a dark, full-screen hero where the cursor drags a spotlight that reveals a second image through a mask: that is `crew-web-spotlight-hero`. Webcam Website is specifically a camera hand-tracking gesture-scrub experience, where the visitor's open palm moves an AI-generated subject and closing the fist scrubs a generated transformation frame by frame, shipped as a kiosk or an embedded module.
 
 ## How the webcam builder thinks
 
@@ -86,6 +86,8 @@ The same engine renders into a configurable "map rect", the box the canvas cover
 | `embedded` | A gesture module placed inside a real marketing site (a framed card mid-page, a full-width band, or a breakout where the keyed subject floats over the page) | stage box, or viewport for breakout | Dropping the effect into an existing landing page, where the surrounding brand copy carries the rest of the story |
 
 The embedded mode has three placements that share one codebase: `card` (a framed 4:3 module mid-page, the safest and most reusable), `band` (a full-width fixed-height strip with the site flowing below), and `breakout` (the webcam shrinks to a corner circle and the keyed subject floats over the real page on a fixed full-screen canvas, so the subject crumples over your actual headline). All placements share one codebase. The mode only changes the CSS layout (`body[data-mode]`) and which rect the canvas maps to (`mapRect()`). For kiosk the page chrome (header, copy sections, footer) is hidden by CSS, so leave the defaults or strip those sections. For embedded, replace the sample chrome with the real brand sections and keep the `#stage` block exactly where it sits in the document: its position in the flow IS the layout.
+
+Breakout stacking trap: in breakout the page chrome stays static (no `z-index` of its own) so the fixed full-screen overlay floats above it. Never add `position:relative` with a `z-index` to `section.copy` or other chrome elements. Doing so creates a new stacking context that traps the keyed subject behind the page, and the breakout effect dies.
 
 ## The transformation library
 
@@ -136,7 +138,7 @@ The render takes 2 to 4 minutes. Poll with `get_task_status` after a background 
    `ffmpeg -ss <t0> -to <t1> -i video.mp4 -vf "fps=<48/(t1-t0)>,crop=ih:ih,scale=720:720" -start_number 0 -q:v 3 -frames:v 48 frames/frame_%03d.jpg`
    (about 1.5MB total, loads fast). Frame naming is `frame_000.jpg` through `frame_047.jpg`, zero-padded to 3 digits, which is the `FRAME_PATH` the template expects.
 
-The greenness key, the edge feather, and the despill run client-side in the template at load time (`KEY_FULL 44`, `KEY_EDGE 8`), so the extracted frames keep their green background and the browser keys them transparent on the activate click. Never key white-on-white: it is ambiguous against white subjects (shirts, paper), and shadows survive as gray blobs. Green only.
+The greenness key, the edge feather, and the despill run client-side in the template at load time (`KEY_FULL 44`, `KEY_EDGE 8`), so the extracted frames keep their green background and the browser keys them transparent on the activate click. Never key white-on-white: it is ambiguous against white subjects (shirts, paper), and shadows survive as gray blobs. Green only. No green on the subject itself, and watch teal and cyan specifically: a greenness in the 8 to 44 range (between `KEY_EDGE` and `KEY_FULL`) sits inside the keyer feather band, so a teal prop or a cyan trim partly keys out and tears a hole in the subject.
 
 ## Camera lifecycle
 
@@ -170,6 +172,8 @@ function stopCamera() {
 window.addEventListener("pagehide", stopCamera);
 window.addEventListener("beforeunload", stopCamera);
 ```
+
+Deactivate toggle (privacy and UX): the activate button doubles as a stop control. Once the camera is live, it flips its label from Activate to Deactivate. Clicking Deactivate calls `stopCamera()`, clears the keyed-subject overlay (blank the canvas), hides the corner cam circle, and pauses the detection loop, returning the page to its pre-activate state. The visitor must be able to turn the camera off without leaving the page, and the button label always reflects the current state.
 
 The activate click loads the model, loads and keys the frames, then calls `startCamera()`. The catch handles the two realities: `NotAllowedError` (permission denied) and any other failure (no camera, unsupported), and in both cases it routes to the no-camera fallback below rather than leaving a black box. For verification, the camera is headless-blocked: a preview browser denies `getUserMedia`, which is expected. That one check is manual (a real device, a real hand); everything else is verified camera-free.
 
@@ -803,6 +807,9 @@ function setStatus(text) {
   statusEl.classList.toggle("show", !!text);
 }
 
+const activateLabel = activateBtn.textContent;   // captured for the Activate/Deactivate toggle
+let camActive = false;
+
 async function activate() {
   activateBtn.disabled = true; breakoutBtn.disabled = true;
   tornDown = false;   // fresh activation: clear any sentinel from a prior teardown
@@ -814,6 +821,9 @@ async function activate() {
     setStatus("");
     poster.classList.add("hidden");
     running = true;
+    camActive = true;
+    activateBtn.disabled = false;
+    activateBtn.textContent = "Deactivate";   // the button is now a stop control
     requestAnimationFrame(loop);
   } catch (err) {
     console.error(err);
@@ -831,7 +841,21 @@ async function activate() {
     await showFallback(msg);
   }
 }
-activateBtn.addEventListener("click", activate);
+
+// Privacy and UX: the activate button doubles as a stop control. Deactivate stops the
+// camera, blanks the keyed-subject overlay, hides the corner cam circle, pauses the
+// loop, and returns the page to its pre-activate state.
+function deactivate() {
+  stopCamera();
+  running = false;
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  if (cam) cam.classList.add("idle");
+  poster.classList.remove("hidden");
+  camActive = false;
+  activateBtn.textContent = activateLabel;
+}
+
+activateBtn.addEventListener("click", () => { camActive ? deactivate() : activate(); });
 breakoutBtn.addEventListener("click", () => { breakoutBtn.style.display = "none"; activate(); });
 
 // Pause detection when the interactive area scrolls out of view (kiosk is always in view).
@@ -900,7 +924,7 @@ These make the wiring repeatable instead of improvised. Follow them exactly.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-webcam-website-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, a portrait crumple kiosk, the nano banana subject and the Veo3 crumple generated, 48 frames extracted, the camera lifecycle and gesture mechanic wired, awaiting a live test"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-webcam-website-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, a portrait crumple kiosk, the nano banana subject and the Veo3 crumple generated, 48 frames extracted, the camera lifecycle and gesture mechanic wired, awaiting a live test"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Run discovery (ALWAYS first, before any code).** Ask the six-question brief from Inputs in one short message: the uploaded image, the theme or style, the transformation verb, the layout mode (kiosk or embedded), the copy, and the deploy target. Confirm a one-paragraph summary back. Do not invent a subject or a verb the user did not give. If the uploaded image or the transformation is missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
 
@@ -918,7 +942,7 @@ These make the wiring repeatable instead of improvised. Follow them exactly.
 
 8. **Deploy only after the user approves a live test.** Hand the localhost URL to the user for the live hand test and tune `OPEN_RATIO` / `CLOSED_RATIO` (fist sensitivity) and the lerp factors on feedback. Only after the user approves the live test, ship per the Deploy pathway. Then note the build and its URL in the handoff.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-webcam-website-handoff.md` with: the build report produced, decisions made (the subject and theme, the transformation verb, the layout mode, the asset pipeline run with the nano banana subject prompt and the Veo3 transformation prompt and the frame count, the fist sensitivity and lerp values, the deploy target and URL), unfinished work (the live hand test owed if pending, a design fix not yet applied, the OG patch), what the Design review gate skills (`crew-design-quality` and the pack-12/13/14 skills it enumerates) need next (the built file and the live local URL), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-webcam-website-handoff.md` with: the build report produced, decisions made (the subject and theme, the transformation verb, the layout mode, the asset pipeline run with the nano banana subject prompt and the Veo3 transformation prompt and the frame count, the fist sensitivity and lerp values, the deploy target and URL), unfinished work (the live hand test owed if pending, a design fix not yet applied, the OG patch), what the Design review gate skills (`crew-design-quality` and the pack-12/13/14 skills it enumerates) need next (the built file and the live local URL), and any "Learned" note (a brand rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -1065,7 +1089,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can ask the six discovery questions, read the prior handoff, and produce a build plan: the subject and theme, the transformation verb, the layout mode, the nano banana subject prompt and the Veo3 transformation prompt drafted, the fist-sensitivity and lerp recommendation, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot scaffold the project, run the generation pipeline, access the camera, write to `.claude/crew-state/`, run the design review gate, or deploy. The build, the assets, the gate, the deploy, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask the six discovery questions, read the prior handoff, and produce a build plan: the subject and theme, the transformation verb, the layout mode, the nano banana subject prompt and the Veo3 transformation prompt drafted, the fist-sensitivity and lerp recommendation, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot scaffold the project, run the generation pipeline, access the camera, write to `~/.claude/crew-state/`, run the design review gate, or deploy. The build, the assets, the gate, the deploy, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -1085,7 +1109,7 @@ Before the run is marked done, confirm:
 [ ] Camera is headless-blocked, so the live hand test is the one manual leg; everything else verified camera-free via window.__pf
 [ ] Design review gate run: crew-design-quality (binding), crew-design-composition, crew-design-patterns, the register-conditional pack-13 style lens, with crew-animation-gsap and crew-animation-motion as authoring refs; Criticals and Majors fixed
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

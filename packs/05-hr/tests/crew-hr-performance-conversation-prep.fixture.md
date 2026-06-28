@@ -13,7 +13,7 @@ EXPECT:
 - Coaching questions include one open question, one that tests the manager's read, and one handing the fix to Jordan.
 - Follow-up action plan has owner, by-date, and a check-in date, and names the support offered (matched to can't-do versus won't-do, here a can't-do: the pricing step was easy to skip, not a refusal).
 - A consistency check is considered (is the pricing-block standard applied to the rest of the team, not just Jordan, no single-out).
-- The handoff file `.claude/crew-state/hr/crew-hr-performance-conversation-prep-handoff.md` was written with the issue tag, examples used, and follow-up date.
+- The handoff file `~/.claude/crew-state/hr/crew-hr-performance-conversation-prep-handoff.md` was written with the issue tag, examples used, and follow-up date.
 - No em dashes anywhere.
 
 ## Case B: messy

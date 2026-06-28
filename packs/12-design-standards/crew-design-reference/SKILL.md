@@ -31,7 +31,7 @@ If the problem is too vague to match (no category, no goal, no artifact), ask on
 
 - **Fast mode:** search by category or principle and return the top three references with a one-line reason each. Use for a quick "what should I look at" mid-build.
 - **Careful mode (default):** the full match, three to five references each with the principle, the why-premium, and the what-AI-gets-wrong lesson, plus a short reference brief on what to emulate and what to avoid. Use before a real build.
-- **Governed mode:** the full match, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the references stay consistent across a project, and the project's own brand playbook enforced over the library (the playbook wins). Use when the references feed a client deliverable.
+- **Governed mode:** the full match, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the references stay consistent across a project, and the project's own brand playbook enforced over the library (the playbook wins). Use when the references feed a client deliverable.
 
 Do not run this skill to score an existing design (that is `crew-design-quality`), to do pixel and motion polish (that is `crew-design-engineering`), to write copy, or to fetch and reproduce a brand's exact design tokens (a separate brand-extraction job). This skill points at references and names the lesson; it does not build.
 
@@ -169,7 +169,7 @@ A build skill should pull the matching reference and its anti-slop lesson into i
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-reference-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior brief for the billing dashboard, Stripe and Sentry were the chosen references"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the references stay consistent across the project. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior brief for the billing dashboard, Stripe and Sentry were the chosen references"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the references stay consistent across the project. (Loop 4, Context Change.)
 
 1. **Identify the category and the principle needed.** Restate what is being built and the aesthetic goal in one line, and name the category and the design principle the problem turns on (density, restraint, motion, whitespace). If the problem is too vague to match, ask now.
 2. **Search the library.** Find the references whose principle matches, using Reference lookup. Prefer a precise match over a famous name; a less famous site that nails the exact problem beats a famous one that does not.
@@ -178,7 +178,7 @@ A build skill should pull the matching reference and its anti-slop lesson into i
 5. **Write the reference brief.** A short, copyable summary: what to emulate (the transferable principles), what to avoid (the slop), and which one reference to treat as the primary north star.
 6. **Verify before emitting.** Confirm every site named is real with a correct URL, every claim is specific and true to the site, no reference was invented, and the brief actually answers the problem asked. If the library has no strong match, say so rather than naming a weak one (Loop 2, Quality Failure). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-reference-handoff.md` with: the brief produced, decisions made (the chosen references and the primary north star), unfinished work (any aesthetic the library did not cover well), what the building skill needs next, and any "Learned" note (a new reference the user gave, a preference). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md` with: the brief produced, decisions made (the chosen references and the primary north star), unfinished work (any aesthetic the library did not cover well), what the building skill needs next, and any "Learned" note (a new reference the user gave, a preference). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -257,7 +257,7 @@ Typical calls that warrant a brief: bold and expressive versus quiet and restrai
 
 ## Plan mode
 
-In plan mode this skill can read the problem and the prior handoff, and produce a draft reference shortlist (the categories and the candidate sites) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/` or commit a final brief. The full match, the anti-slop lens, the brief, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the problem and the prior handoff, and produce a draft reference shortlist (the categories and the candidate sites) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/` or commit a final brief. The full match, the anti-slop lens, the brief, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -273,7 +273,7 @@ Before the run is marked done, confirm:
 [ ] Where the library had no strong match, that was stated plainly, not papered over
 [ ] The project playbook, if any, won over the library
 [ ] No filler praise, no emoji, no em dashes in the brief
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

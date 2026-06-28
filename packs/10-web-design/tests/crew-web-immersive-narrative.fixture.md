@@ -1,4 +1,4 @@
-# Fixture: crew-web-scroll-journey
+# Fixture: crew-web-immersive-narrative
 
 Three cases. The smoke test feeds each INPUT to the skill and asserts the EXPECT markers appear in the behaviour and output, and that the handoff file was written.
 
@@ -19,7 +19,7 @@ EXPECT:
 - The Design review gate is run against crew-design-quality, crew-design-composition, crew-design-patterns, crew-animation-gsap, and crew-animation-locomotive, with Criticals and Majors fixed before deploy.
 - A reduced-motion path is present and confirmed: the scrub snaps to the arrival frame and reveals are instant, and the story still reads.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/web-design/crew-web-scroll-journey-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/web-design/crew-web-immersive-narrative-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -27,7 +27,7 @@ INPUT:
 no story copy, no learning, just one continuous descent that scrubs as I scroll and lands on the room."
 EXPECT:
 - Skill recognises the brief is a pure camera fly-through with no narrative stages and no story copy.
-- It routes to crew-web-fly-through-builder and explains the boundary: Scroll Journey is for a multi-stage narrative told through a metaphor, where each stage is completed and advanced past, gated as a story; a single continuous descent with no stages belongs in the fly-through builder.
+- It routes to crew-web-fly-through-builder and explains the boundary: Immersive Narrative is for a multi-stage narrative told through a metaphor, where each stage is completed and advanced past, gated as a story; a single continuous descent with no stages belongs in the fly-through builder.
 - It does NOT scaffold a journey, does NOT ask the ten-question discovery brief, and does NOT extract frames.
 - No SCROLL JOURNEY OUTPUT report is produced for a journey that was not built.
 - Handoff file written, recording that the request was routed to crew-web-fly-through-builder and why.

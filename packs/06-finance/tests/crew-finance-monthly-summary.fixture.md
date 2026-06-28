@@ -1,6 +1,6 @@
 # Fixture: crew-finance-monthly-summary
 
-Three cases that exercise the skill against the Crew Method loops. Each EXPECT lists the output markers that must appear and asserts the handoff file at `.claude/crew-state/finance/crew-finance-monthly-summary-handoff.md` was written.
+Three cases that exercise the skill against the Crew Method loops. Each EXPECT lists the output markers that must appear and asserts the handoff file at `~/.claude/crew-state/finance/crew-finance-monthly-summary-handoff.md` was written.
 
 ## Case A: clean
 

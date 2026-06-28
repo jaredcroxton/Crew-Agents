@@ -31,7 +31,7 @@ If the brand basis is missing (no accent, no neutrals, no type direction), ask o
 
 - **Fast mode:** define or audit the core ladder (colour, type, spacing) for a single surface. Skip elevation, border, and the full drift audit. Use for a quick token set on a small build.
 - **Careful mode (default):** the full token system across all seven families, the naming conventions, and a coherence pass. Use when standing up or auditing a real project's language.
-- **Governed mode:** the full system, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the language carries across every page and build, the project brand playbook enforced as the primitive source of truth, and the full drift audit. Use for a multi-page product or a system handed to a team.
+- **Governed mode:** the full system, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the language carries across every page and build, the project brand playbook enforced as the primitive source of truth, and the full drift audit. Use for a multi-page product or a system handed to a team.
 
 Do not run this skill to score a single screen's quality (that is `crew-design-quality`), to polish pixels and motion (that is `crew-design-engineering`), to find reference sites (that is `crew-design-reference`), or to judge whether patterns are current (that is `crew-design-patterns`). This skill builds and maintains the token system itself.
 
@@ -180,7 +180,7 @@ How a build skill consumes the language. The token system is the contract every 
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-language-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: the token ladder for the marketing site, the dashboard surfaces still need semantic tokens"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the language carries across builds. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-language-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: the token ladder for the marketing site, the dashboard surfaces still need semantic tokens"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the language carries across builds. (Loop 4, Context Change.)
 
 1. **Establish the brand source and the surfaces.** State the accent, the neutral base, the type direction, and any locked brand values, and list the surfaces the language must cover. If the brand basis is missing, ask now. Do not invent a colour or a font.
 2. **Define the primitives.** Lay down the raw value families (the palette in OKLCH, the type scale in clamp, the spacing scale, the radius scale) once. Value-named, no meaning yet.
@@ -190,7 +190,7 @@ How a build skill consumes the language. The token system is the contract every 
 6. **Run the coherence audit.** Walk the Coherence rules across the surfaces (or the existing project, if auditing). Flag every hardcoded value, every duplicate concept, every off-scale value, and name the single token that resolves each.
 7. **Verify before emitting.** Confirm every token references the layer below it (component to semantic to primitive), no component reaches a primitive directly, every brand value traces to the source or is marked a slot, and the load-bearing choices (optical size, exact weight, line-heights) are named. Where a value needs the owner to decide, mark it Escalated and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-language-handoff.md` with: the language produced (the token ladder, the surfaces covered), decisions made (the accent, the type direction, the scales), unfinished work (slots to fill, surfaces not yet tokenised, anything Escalated, drift found but not fixed), what the building skill needs next, and any "Learned" note (a brand value or a naming rule the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-language-handoff.md` with: the language produced (the token ladder, the surfaces covered), decisions made (the accent, the type direction, the scales), unfinished work (slots to fill, surfaces not yet tokenised, anything Escalated, drift found but not fixed), what the building skill needs next, and any "Learned" note (a brand value or a naming rule the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -283,7 +283,7 @@ Typical calls that warrant a brief: one accent versus an accent plus a secondary
 
 ## Plan mode
 
-In plan mode this skill can read the brand basis, the surfaces, and the prior handoff, and produce a draft token ladder (the primitives and the semantic roles it would define, or the drift it would flag) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, commit the final brief, or decide a value the brand owner must set. The full ladder, the coherence audit, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brand basis, the surfaces, and the prior handoff, and produce a draft token ladder (the primitives and the semantic roles it would define, or the drift it would flag) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, commit the final brief, or decide a value the brand owner must set. The full ladder, the coherence audit, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -300,7 +300,7 @@ Before the run is marked done, confirm:
 [ ] Every undecided value is a named slot, not a guess; anything the owner must set is Escalated
 [ ] The brand playbook, if any, was the source of the primitives and won over the defaults
 [ ] No AI-slop, no emoji, no em dashes in the brief
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

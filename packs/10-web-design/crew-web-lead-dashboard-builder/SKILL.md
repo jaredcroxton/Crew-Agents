@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -44,7 +44,7 @@ If the scrape target is missing, ask once. If the brand profile is missing, defa
 
 - **Fast mode:** a clean target list already in hand, the default theme accepted. Scrape, score, draft, and build, but skip the deep per-lead personalisation pass and the calendar offer. Use for a quick triage list when speed beats polish.
 - **Careful mode (default):** the full discovery, LinkedIn person-research per lead, the one-sentence personalised insight, dual-channel drafts, and the design review gate. Use for any real outreach batch.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so the brand and the lead set carry across runs, verify-before-send enforced on every Derived contact, and a stricter no-fabrication audit before delivery. Use for a client-delivered list or regulated outreach.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so the brand and the lead set carry across runs, verify-before-send enforced on every Derived contact, and a stricter no-fabrication audit before delivery. Use for a client-delivered list or regulated outreach.
 
 Do not run this skill to send the outreach (it drafts only, a human reviews and sends), to push leads into a CRM (it produces a page and JSON, not an import), to build a multi-page marketing site (that is `crew-web-landing-page-builder`), or to buy or enrich contact data from a paid source (it works from public evidence only).
 
@@ -133,7 +133,7 @@ README.md:
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md`. If prior context exists, load it and state what was recovered. If not, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the brand and lead set carry across runs. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md`. If prior context exists, load it and state what was recovered. If not, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the brand and lead set carry across runs. (Loop 4, Context Change.)
 
 1. **Discovery.** Ask these four questions one at a time. Do not proceed until each is answered or skipped: Target (URL, industry, location, or list); Brand (colours, fonts, logo, or "use default slate-ink-lime"); Offer (one sentence); Proof (one result or signal). Optionally ask for an ideal customer profile or scoring weights. Do not ask about LinkedIn; person-research runs by default.
 2. **Scrape.** Run the scrape, extract the per-company fields and tag each Confirmed, Inferred, or Derived (see Data schema). Store as scrape.json.
@@ -149,7 +149,7 @@ README.md:
 12. **Output assembly.** Create one output folder: dashboard.html, scrape.json, leads.json, and a one-page README.md (see Data schema). The LinkedIn and website links open in a new tab, so tell the user to open dashboard.html in a browser, or serve it locally, to click through; an inline preview pane may block the links.
 13. **Calendar offer (ask, never create).** After the build, ask the user if they want calendar focus-blocks for the outreach (for example 30 minutes a day to send the top leads). Never auto-create an event. If they say yes, confirm each block explicitly before any calendar tool creates it. (Skipped in Fast mode.)
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md` with: output produced (dashboard path, lead count, Hot/Warm/Cool, emails and DMs); decisions (theme, scoring weights, calendar answer); unfinished work (Derived contacts and emails to verify, thin insights escalated, brand to confirm); what the next skill needs; and a Learned note. Always write it, even with no output. (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-lead-dashboard-builder-handoff.md` with: output produced (dashboard path, lead count, Hot/Warm/Cool, emails and DMs); decisions (theme, scoring weights, calendar answer); unfinished work (Derived contacts and emails to verify, thin insights escalated, brand to confirm); what the next skill needs; and a Learned note. Always write it, even with no output. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Design review gate
 
@@ -243,7 +243,7 @@ House style: No em dashes. No AI-slop openings or jargon (leverage, synergy, cir
 
 ## Plan mode
 
-In plan mode this skill can ask the discovery questions, read the prior handoff, and produce the draft lead plan (the target read, the scoring weights, the theme) and one preview lead card marked "(DRAFT, plan mode)" at the top. It cannot scrape live, run LinkedIn person-research, write to `.claude/crew-state/`, or emit the final dashboard and files. The scrape, the scoring, the lookups, the drafts, the build, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask the discovery questions, read the prior handoff, and produce the draft lead plan (the target read, the scoring weights, the theme) and one preview lead card marked "(DRAFT, plan mode)" at the top. It cannot scrape live, run LinkedIn person-research, write to `~/.claude/crew-state/`, or emit the final dashboard and files. The scrape, the scoring, the lookups, the drafts, the build, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -261,7 +261,7 @@ Before the run is marked done, confirm:
 [ ] The dashboard passed the Design review gate (DESIGN REVIEW PASS)
 [ ] No email or DM sent; no calendar event created without an explicit confirm
 [ ] No em dashes anywhere in the displayed text
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

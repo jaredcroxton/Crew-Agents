@@ -31,7 +31,7 @@ If the brief is too vague to spec, ask once what should animate, why, and on wha
 
 - **Fast mode:** a quick spring spec. The useSpring config, the preset or the mass, tension, and friction, and the animated component. Skip the gesture and the advanced hooks.
 - **Careful mode (default):** the full spec, the config form (object versus function plus api), the interpolation, the gesture or advanced hooks, the velocity handling, the performance, and the reduced-motion path. Use before building an interactive React animation.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (precision, batching, transform and opacity, on-demand rendering), and the accessibility floor (Globals.skipAnimation under prefers-reduced-motion, mandatory). Use for a production React app.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (precision, batching, transform and opacity, on-demand rendering), and the accessibility floor (Globals.skipAnimation under prefers-reduced-motion, mandatory). Use for a production React app.
 
 Do not run this skill for a precise, timeline-choreographed sequence where the marks must hit at exact times (that is `crew-animation-gsap`), for declarative variants, layout, or exit animation where React idiom matters more than physics accuracy (`crew-animation-motion` is often simpler), for a non-React project, or for a fixed-timeline designer asset (`crew-animation-lottie`). React Spring is for physics-accurate, gesture-driven, velocity-preserving React motion; name the better tool when the work is exact-timed or purely declarative.
 
@@ -155,7 +155,7 @@ The checklist a React build embeds when it uses React Spring.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-spring-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the drag spring and the trail were set, the velocity handoff still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-spring-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the drag spring and the trail were set, the velocity handoff still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
 
 1. **Read the motion brief.** Name what should animate, why it moves, and on what trigger. If the timing must be exact and synced, route to `crew-animation-gsap`; if the work is declarative variants, layout, or exit animation, route to `crew-animation-motion`; if it is not React, name the right tool. Only proceed when physics or gesture is the core.
 2. **Choose the construct.** Decide the hook: `useSpring` (object config for declarative, function config plus api for imperative), `useTrail` or `useTransition` or `useSprings` for multiple elements, `useChain` for a sequence, `useScroll` or `useInView` for scroll and reveal, and `@use-gesture/react` for a gesture.
@@ -165,7 +165,7 @@ The checklist a React build embeds when it uses React Spring.
 6. **Write the spec and run the anti-pattern check.** Assemble the Spring animation spec, and confirm none of the anti-patterns are present (no deps array, `.set` instead of `api.start`, a transform string, no velocity on interrupt, no reduced-motion).
 7. **Verify before emitting.** Confirm React Spring is justified, values are animated and composed, the function form has a deps array, gestures hand off velocity, multi-element motion uses the right hook, only transform and opacity animate, and the reduced-motion path exists. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-spring-handoff.md` with: the spec produced, decisions made (the hook, the config, the gesture wiring), unfinished work (motion not yet specced, the reduced-motion path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a feel preference or a config the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-spring-handoff.md` with: the spec produced, decisions made (the hook, the config, the gesture wiring), unfinished work (motion not yet specced, the reduced-motion path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a feel preference or a config the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -246,7 +246,7 @@ Typical calls that warrant a brief: a spring versus a duration timeline (physics
 
 ## Plan mode
 
-In plan mode this skill can read the motion brief and the prior handoff, and produce a draft spec (whether a spring fits, the hook and config it would choose, the gesture approach) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interpolation and gesture wiring, the performance and accessibility, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the motion brief and the prior handoff, and produce a draft spec (whether a spring fits, the hook and config it would choose, the gesture approach) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interpolation and gesture wiring, the performance and accessibility, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -261,7 +261,7 @@ Before the run is marked done, confirm:
 [ ] Only transform and opacity animate; precision is set; many springs are batched
 [ ] A reduced-motion path sets Globals.skipAnimation
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

@@ -20,7 +20,7 @@ EXPECT:
 - A Budget line carrying the 1,500-dollar figure (or "not set, owner decides" if it had been absent).
 - Success measures: a primary (demo calls, target 40, tracked via a unique demo-booking link) and leading measures, each naming a tracking method (a UTM, the page analytics, the email open report); targets only where a baseline exists, else "set with owner (no baseline)".
 - Escalations named where the business must decide (the boost spend within the stated cap is set; anything beyond it is escalated).
-- Handoff file written at `.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` naming what the social and email skills need next.
+- Handoff file written at `~/.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` naming what the social and email skills need next.
 
 ## Case B: messy
 INPUT:
@@ -48,4 +48,4 @@ EXPECT:
 - If no answer is obtainable, marks Goal as "Not provided" and does not invent a target number, a deadline, or a sales figure.
 - Invents nothing: the list size is used as given (800), no fabricated open rate, price, or past result; the offer price is marked "price not set" because none was given; Budget reads "not set, owner decides".
 - Produces the parts it can (audience segment from the 800-subscriber Warm list with its fit trait and objection, a candidate one-sentence message, the owned email channel) so the owner picks up a prepared draft, with the goal field clearly blank and the measures marked "set with owner".
-- Handoff file written at `.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` recording the missing goal as the blocker so the next run knows it is still open.
+- Handoff file written at `~/.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` recording the missing goal as the blocker so the next run knows it is still open.

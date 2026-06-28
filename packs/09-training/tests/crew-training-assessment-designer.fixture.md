@@ -18,7 +18,7 @@ EXPECT:
 - An "Answer key" section where every entry names the outcome it checks and a "Why" that cites a source section (2.1, 2.3, or 4).
 - The scenario item carries a model answer and a rubric so two assessors would score it the same way.
 - The pass standard is ESCALATED to the training owner, not set by the designer, and the consumer-law exposure under local law (jurisdiction from brand-context.md) is flagged for a "competent" sign-off.
-- Handoff file `.claude/crew-state/training/crew-training-assessment-designer-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/training/crew-training-assessment-designer-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

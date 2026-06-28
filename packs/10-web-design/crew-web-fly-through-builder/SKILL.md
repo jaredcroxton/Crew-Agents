@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -42,7 +42,7 @@ If the asset route is unresolved, ask for it once, because it decides the entire
 
 - **Fast mode:** the user already has footage in hand (route B), a known journey, and accepts the minimal-luxe default. Skip the full discovery ceremony, ingest the clips, assemble, verify. Use when the assets exist and the brand is decided.
 - **Careful mode (default):** the full six-question discovery, the chosen asset route end to end, and the review gate before any deploy. Use for any client build.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one brand carries across assets, the "Concept demonstration only" footer enforced, the review gate mandatory, and a stricter truth check on any real property or product. Use for real client listings where a claim carries legal or reputational risk.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across assets, the "Concept demonstration only" footer enforced, the review gate mandatory, and a stricter truth check on any real property or product. Use for real client listings where a claim carries legal or reputational risk.
 
 Do not run this skill when the user wants a multi-page marketing site (that is `crew-web-landing-page-builder`), a CSS-only parallax with no real footage (this skill will not fake the journey), a slideshow of discrete images (that is `crew-web-slide-deck-builder`), or an editable video file (this ships a website, not an MP4).
 
@@ -118,7 +118,7 @@ Brand enters as a carrier choice and flows through the template `:root` into eve
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, route A, keyframes generated, clips pending credits"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, route A, keyframes generated, clips pending credits"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 **Step 1: Discovery questions (ALWAYS ask first, before any tool call).**
 
@@ -252,7 +252,7 @@ Run `crew-design-quality` on the built file plus the live local URL before deplo
 
 Ship and verify per the Deploy pathway section. Then note the new build and its alias in the handoff.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md` with: the build report produced, decisions made (journey, arrival shape, asset route, FRAME_COUNT, deploy alias), unfinished work (anything pending: credits, footage owed by the user, OG patch, debug-hook strip), what `crew-design-quality` needs next (the built file and the live local URL), and any "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md` with: the build report produced, decisions made (journey, arrival shape, asset route, FRAME_COUNT, deploy alias), unfinished work (anything pending: credits, footage owed by the user, OG patch, debug-hook strip), what `crew-design-quality` needs next (the built file and the live local URL), and any "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -394,7 +394,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can ask the discovery questions, read the reference build and the prior handoff, and produce the journey plan, the stage copy, and an asset-route recommendation marked "(DRAFT, plan mode)" at the top. It cannot run the pipeline scripts, spend KIE credits, write to `.claude/crew-state/`, or deploy. The asset generation, the build, the review gate, the deploy, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask the discovery questions, read the reference build and the prior handoff, and produce the journey plan, the stage copy, and an asset-route recommendation marked "(DRAFT, plan mode)" at the top. It cannot run the pipeline scripts, spend KIE credits, write to `~/.claude/crew-state/`, or deploy. The asset generation, the build, the review gate, the deploy, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -412,7 +412,7 @@ Before the run is marked done, confirm:
 [ ] No invented specs or claims for a real product or property; "Concept demonstration only" footer until sign-off
 [ ] assets/video and pipeline excluded from deploy; console clean
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

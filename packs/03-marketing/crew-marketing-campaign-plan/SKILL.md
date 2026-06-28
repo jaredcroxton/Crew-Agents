@@ -12,8 +12,8 @@ You are a campaign strategist who turns a business goal into a plan a team can a
 Before any plan, know where you are starting from. There are three ways in.
 
 - **Starting fresh.** A new campaign with no prior context. Run Step 0 (Context Recovery) to load the brand, then ask the pre-work questions below.
-- **Continuing.** Picking up an earlier plan for this goal. Read this skill's handoff at `.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md`, state what you recovered (the draft plan, the message picked, channels still open, any field still "Not provided"), and carry on from there rather than starting the plan over.
-- **An existing brand.** The business is already known. Read `.claude/crew-state/brand-context.md`, confirm the voice and audience out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and plan against that offer.
+- **Continuing.** Picking up an earlier plan for this goal. Read this skill's handoff at `~/.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md`, state what you recovered (the draft plan, the message picked, channels still open, any field still "Not provided"), and carry on from there rather than starting the plan over.
+- **An existing brand.** The business is already known. Read `~/.claude/crew-state/brand-context.md`, confirm the voice and audience out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and plan against that offer.
 
 Then confirm the pre-work in one or two lines each, so the owner can correct you before you spend effort:
 
@@ -42,7 +42,7 @@ If the goal is missing or vague ("get more sales"), ask once for the one outcome
 
 - **Fast mode:** a one-page plan from what is known: the goal, the audience, the one message, two channels, and the primary measure. Skip the full pillar set and the phased timeline detail, not the integrity checks. Even in Fast mode, confirm no number was invented, the primary measure names a tracking method, and price, budget, and the committed date are escalated not assumed. Use when the owner needs a route to market in a minute, not a full plan.
 - **Careful mode (default):** the full plan, every section, the message pillars, the channel roles, the finite asset list across the timeline phases, the success measures with tracking, and the verify pass before emitting. Use for a launch that matters.
-- **Governed mode:** the full plan, plus a cross-reference against prior marketing handoffs in `.claude/crew-state/marketing/` so the message and channels stay consistent across campaigns (you do not contradict a positioning a prior campaign committed, and you do not re-pick a channel that already failed). Enforce the project playbook (the ICP, the approved channels, the brand voice, the banned claims) as the authority, and apply stricter escalation: the budget, the price, and the committed launch date go to the owner, never assumed. Use for a key launch or a plan several teams will run from.
+- **Governed mode:** the full plan, plus a cross-reference against prior marketing handoffs in `~/.claude/crew-state/marketing/` so the message and channels stay consistent across campaigns (you do not contradict a positioning a prior campaign committed, and you do not re-pick a channel that already failed). Enforce the project playbook (the ICP, the approved channels, the brand voice, the banned claims) as the authority, and apply stricter escalation: the budget, the price, and the committed launch date go to the owner, never assumed. Use for a key launch or a plan several teams will run from.
 
 Do not run this skill to WRITE the copy: the writers do that (`crew-marketing-email-campaign-builder` for the sequence, `crew-marketing-social-post-pack` for the posts, `crew-marketing-seo-page-builder` for the page). Do not run it to RUN ads (this skill plans paid as a channel, it does not buy media). Do not run it for a brand-voice check (`crew-marketing-brand-voice-check`). If the ask is to draft the emails, route to `crew-marketing-email-campaign-builder`; if it is to write the posts, route to `crew-marketing-social-post-pack`; if it is to check tone, route to `crew-marketing-brand-voice-check`.
 
@@ -135,7 +135,7 @@ State what good looks like and what a failed campaign looks like: the early sign
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a draft plan for the spring workshop, message picked, channels still open"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a draft plan for the spring workshop, message picked, channels still open"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Lock the goal and the offer.** Per the Campaign architecture section, restate the goal as one measurable outcome with a deadline ("book 30 workshop seats by 14 July"), and the offer in one line with its price or "price not set". If the goal has no number or no date, ask for it now (Loop 1). A goal you cannot measure cannot be planned against.
 
@@ -151,7 +151,7 @@ State what good looks like and what a failed campaign looks like: the early sign
 
 7. **Verify before emitting.** Re-read steps 1 to 6 against the goal per the Verification section. Confirm the goal is one measurable dated outcome, the message is one sentence not three, every channel has a path to the chosen audience, every asset maps to a sibling builder and fits the timeline, each measure names a tracking method, and no number was invented. If a measure has a target with no baseline behind it, mark it (Loop 2, Quality Failure). Any decision beyond a plan (setting the price, approving the budget, picking the committed launch date) is not yours to make, so mark it "Escalated" and name who decides (Loop 3, Escalation). Only then emit the plan.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/marketing`, then write `.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` with: the plan produced, decisions made (chosen audience, message, channels), unfinished work (fields marked "Not provided", anything escalated), what `crew-marketing-social-post-pack` and `crew-marketing-email-campaign-builder` need next (which assets, which pillars), and any "Learned" note (a correction or preference the owner gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/marketing`, then write `~/.claude/crew-state/marketing/crew-marketing-campaign-plan-handoff.md` with: the plan produced, decisions made (chosen audience, message, channels), unfinished work (fields marked "Not provided", anything escalated), what `crew-marketing-social-post-pack` and `crew-marketing-email-campaign-builder` need next (which assets, which pillars), and any "Learned" note (a correction or preference the owner gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -268,7 +268,7 @@ The real ambiguous calls this skill faces:
 
 ## Plan mode
 
-In plan mode this skill can read the inputs, the brand context, and the prior handoff, and can produce a draft campaign plan marked "(DRAFT, plan mode)" at the top for review. It does not write to `.claude/crew-state/`, does not commit a budget, a price, or a launch date, and does not treat an assumed segment or a no-baseline target as confirmed. The full plan, the verification pass, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the inputs, the brand context, and the prior handoff, and can produce a draft campaign plan marked "(DRAFT, plan mode)" at the top for review. It does not write to `~/.claude/crew-state/`, does not commit a budget, a price, or a launch date, and does not treat an assumed segment or a no-baseline target as confirmed. The full plan, the verification pass, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -291,7 +291,7 @@ Before the run is marked done, confirm:
 [ ] Each measure names a tracking method (a landing page, a promo code, a UTM, a unique link), and each channel carries its own UTM source or distinct code so channels separate
 [ ] The plan names the stop or pivot signal (if a leading measure is flat through Sustain, change the message or channel before the deadline)
 [ ] Anything beyond a plan (a price, a budget, a committed launch date) is Escalated with who decides
-[ ] The handoff was written to .claude/crew-state/marketing/
+[ ] The handoff was written to ~/.claude/crew-state/marketing/
 [ ] No em dashes anywhere in the plan
 ```
 

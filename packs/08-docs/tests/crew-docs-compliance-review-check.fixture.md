@@ -19,7 +19,7 @@ EXPECT:
 - The retention duration is named as a business or legal decision the skill cannot set, not invented; the lawful retention call is Escalated to legal counsel with the exact question, not adjudicated.
 - A "Re-review" line states fixed findings are re-checked on the next draft, not assumed closed.
 - Step 0 states first run or recovered context.
-- Handoff file `.claude/crew-state/docs/crew-docs-compliance-review-check-handoff.md` was written, recording the verdict tally, the Escalated legal call, and what `crew-docs-policy-document-generator` needs next.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-compliance-review-check-handoff.md` was written, recording the verdict tally, the Escalated legal call, and what `crew-docs-policy-document-generator` needs next.
 
 ## Case B: messy
 INPUT:
@@ -43,4 +43,4 @@ EXPECT:
 - It states the review cannot proceed without the rules; it certifies nothing and produces no compliant declaration.
 - Invents nothing: no rules, no clause numbers, no regulation names, no thresholds, no severity findings against absent rules.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so a pending review is not mistaken for a clean one.
-- Handoff file `.claude/crew-state/docs/crew-docs-compliance-review-check-handoff.md` written, recording the missing rule set as the blocker the next run needs, with "No output, run completed [date]" if nothing usable was produced.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-compliance-review-check-handoff.md` written, recording the missing rule set as the blocker the next run needs, with "No output, run completed [date]" if nothing usable was produced.

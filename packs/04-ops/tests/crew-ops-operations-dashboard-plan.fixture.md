@@ -27,7 +27,7 @@ EXPECT:
 - The layout puts the most-frequent-decision metric (open orders vs pickers, the shift lead's morning call) above the fold / top-left, and holds a scannable handful, not a wall.
 - An "Owner and review" line names who owns the dashboard and a review-and-retire cadence (e.g. quarterly, any metric whose decision no longer fires is cut), so the screen does not rot into vanity.
 - Nothing is invented: no fabricated source, no made-up target, no refresh the source cannot meet.
-- The handoff file `.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was written, recording the metrics that made the cut, the wrong-order counter-metric added, the no-source reason-code capture routed on, and the escalated cutoff target.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was written, recording the metrics that made the cut, the wrong-order counter-metric added, the no-source reason-code capture routed on, and the escalated cutoff target.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -41,7 +41,7 @@ EXPECT:
 - The per-name picker leaderboard is NOT built as posted individual rates. It is tested decision-first and, with no decision turning on an individual's rate, cut from the shared dashboard or at most aggregated to a team average; the per-person view is ESCALATED as an HR or surveillance matter, with a privacy and fairness flag (may breach local privacy law, the regime named only when the jurisdiction is known), not a specific act assumed. Named individual rates are never posted on a wall.
 - The cost-per-order metric has no source in the inputs, so it is marked "No source yet" as a data-capture request and routed to `crew-ops-recurring-task-automation`, never invented or pulled from a guessed system.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was written, recording the cut vanity metric, the counter-metric added to the speed target, the escalated individual-metric leaderboard, and the no-source cost-per-order capture request.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was written, recording the cut vanity metric, the counter-metric added to the speed target, the escalated individual-metric leaderboard, and the no-source cost-per-order capture request.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -54,5 +54,5 @@ EXPECT:
 - It invents no metric, no source, no target, and no refresh frequency to fill the screen.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was still written, recording the missing decisions so the next run does not repeat the ask.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-operations-dashboard-plan-handoff.md` was still written, recording the missing decisions so the next run does not repeat the ask.
 - No em dashes anywhere.

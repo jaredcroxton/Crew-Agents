@@ -14,7 +14,7 @@ EXPECT:
 - An "Undercuts authority (with the establishing swap):" block that names each anti-SaaS tell and its establishing swap: the rounded geometric sans (a serif or serious grotesque), the teal gradient accent (one deep muted accent on a warm neutral), the centered playful hero (a structured serif masthead), the vector illustrations (real photography of the firm), and the bouncy motion plus emoji (stillness and a formal register).
 - No invented element; only elements actually described are flagged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-authority-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-authority-handoff.md` was written.
 
 ## Case B: wrong-lens
 INPUT:
@@ -33,4 +33,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the design to review and who must trust it (the audience and the register goal), because the authority lens needs both a design and a register.
 - It does not invent a design, fabricate an authority read, or run the anti-SaaS playbook against nothing.
 - If it emits any partial output, the Artifact, Register goal, and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-authority-handoff.md` written, recording the missing artifact and register as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-authority-handoff.md` written, recording the missing artifact and register as the blocker the next run needs.

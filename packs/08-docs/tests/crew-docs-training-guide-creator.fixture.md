@@ -15,7 +15,7 @@ EXPECT:
 - The scripted Show section names the real field (Owner required) and button (Save), not a generic category, and nothing about the system is invented (confirmed paths stated as fact, the unconfirmed Pipeline label marked "[Confirm with system owner]").
 - One check question per objective, mapped by number, each with a markable Correct answer for the facilitator; the Recall check has the learner locate the real thing (open the pipeline view and show the trainer), not a define-the-term quiz, and the practical Apply check carries a rubric (done well versus not yet).
 - Accessibility honoured: alt text written only for screenshots that exist (none here, so none invented), the Save button named by label and position rather than colour alone, reading level matched to a new-hire room.
-- Handoff written to `.claude/crew-state/docs/crew-docs-training-guide-creator-handoff.md` recording the time split and the objective verbs chosen.
+- Handoff written to `~/.claude/crew-state/docs/crew-docs-training-guide-creator-handoff.md` recording the time split and the objective verbs chosen.
 
 ## Case B: messy
 INPUT:
@@ -35,4 +35,4 @@ EXPECT:
 - Loop 1 fires: names the missing topic as the blocking gap (audience and time cannot be scoped without it) and asks once, plainly, for the topic. It asks once, not a batched survey.
 - Does not invent a topic, a system, objectives, a timing, or any screen detail.
 - No TRAINING GUIDE block is emitted with fabricated content. Any placeholder timed fields read "Assumed" or "Not provided", not a guessed value.
-- Handoff still written to `.claude/crew-state/docs/crew-docs-training-guide-creator-handoff.md` recording "No output, run completed [date]" and the input that was requested.
+- Handoff still written to `~/.claude/crew-state/docs/crew-docs-training-guide-creator-handoff.md` recording "No output, run completed [date]" and the input that was requested.

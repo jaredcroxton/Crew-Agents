@@ -31,7 +31,7 @@ If the brief is too vague to spec (no idea what animates or why), ask once what 
 
 - **Fast mode:** a quick spec for one component (a hover button, a card reveal). The motion props and the transition. Skip the variant orchestration.
 - **Careful mode (default):** the full spec, the variants and propagation, the gestures, the layout and exit animations, the spring config, and the reduced-motion path. Use before building an interactive component or a page transition.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity, layout and layoutId used sparingly), and the accessibility floor (reduced-motion mandatory). Use for a production React app.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity, layout and layoutId used sparingly), and the accessibility floor (reduced-motion mandatory). Use for a production React app.
 
 Do not run this skill for vanilla JS or a non-React project (use `crew-animation-gsap`), for a complex scroll-scrubbed pinned timeline (GSAP owns imperative scroll choreography), for a CSS-only micro-interaction that needs no library, or to choose the aesthetic (the style skills). This skill specs Motion in React; if the motion does not fit Motion, name the better tool.
 
@@ -193,7 +193,7 @@ The checklist a React build embeds when its animation section says to use Motion
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-motion-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the card variants and gestures were set, the exit animation still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-motion-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the card variants and gestures were set, the exit animation still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
 
 1. **Read the motion brief.** Name what should animate, why it moves, and on what trigger (mount, state change, gesture, scroll, unmount). If the brief is vague, ask now. If the project is vanilla or the motion is a scrubbed scroll timeline, route to `crew-animation-gsap`. If a CSS hover or press would do, say so.
 2. **Choose the construct.** Decide the Motion construct: an `animate` prop for a state change, variants for orchestrated or repeated states, a `whileHover` / `whileTap` / `drag` gesture, `layout` plus `AnimatePresence` for a layout or exit animation, or `whileInView` for a scroll reveal.
@@ -203,7 +203,7 @@ The checklist a React build embeds when its animation section says to use Motion
 6. **Write the spec and run the anti-pattern check.** Assemble the Motion animation spec, and confirm none of the anti-patterns are present (layout properties, exit without AnimatePresence, missing keys, gesture-transition timing, no reduced-motion path).
 7. **Verify before emitting.** Confirm only transform and opacity animate, exits are wrapped in AnimatePresence with keys, gesture transitions are placed correctly, spring is used for physical motion, and the reduced-motion path exists. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-motion-handoff.md` with: the spec produced, decisions made (the constructs, the variants, the spring config), unfinished work (motion not yet specced, the reduced-motion path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a motion preference or a performance constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-motion-handoff.md` with: the spec produced, decisions made (the constructs, the variants, the spring config), unfinished work (motion not yet specced, the reduced-motion path if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement), and any "Learned" note (a motion preference or a performance constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -290,7 +290,7 @@ Typical calls that warrant a brief: spring physics versus a duration tween, a la
 
 ## Plan mode
 
-In plan mode this skill can read the motion brief and the prior handoff, and produce a draft spec (the construct it would choose, the variants and transitions, a provisional structure) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the gesture and layout detail, the accessibility, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the motion brief and the prior handoff, and produce a draft spec (the construct it would choose, the variants and transitions, a provisional structure) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the gesture and layout detail, the accessibility, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -306,7 +306,7 @@ Before the run is marked done, confirm:
 [ ] layout and layoutId are used sparingly; layout="position" where only position changes
 [ ] A reduced-motion path exists through useReducedMotion
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

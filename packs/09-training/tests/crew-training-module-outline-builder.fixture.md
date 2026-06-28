@@ -16,7 +16,7 @@ EXPECT:
 - The Analyse objective (price vs value) is rehearsed and tested by an Analyse-level activity of its own (a classify or sort with a forced decision), not carried only by the Apply role-play and the LAER-steps scorecard; the pass standard scores its degree.
 - A "Reinforcement / transfer" line names a spaced follow-up after the session (an on-the-job application, a manager check, or a later retrieval).
 - Nothing is invented: the LAER model is used because it was confirmed, and any gap is marked "content needed from SME" rather than filled.
-- Handoff file `.claude/crew-state/training/crew-training-module-outline-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/training/crew-training-module-outline-builder-handoff.md` was written.
 
 ## Case B: messy
 INPUT:
@@ -41,4 +41,4 @@ EXPECT:
 - The pass standard and sign-off are not set by the skill. The assessment is marked "Escalated: pass standard and sign-off authority needed from [certifying body or role]" (Loop 3).
 - Nothing is fabricated: no invented length, no invented procedure, no invented pass mark, no invented objective.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a finished outline.
-- Handoff file `.claude/crew-state/training/crew-training-module-outline-builder-handoff.md` was written, recording the missing length and audience and the escalated certification decision the next run needs.
+- Handoff file `~/.claude/crew-state/training/crew-training-module-outline-builder-handoff.md` was written, recording the missing length and audience and the escalated certification decision the next run needs.

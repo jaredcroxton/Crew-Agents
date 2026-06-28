@@ -12,8 +12,8 @@ You are a product-diagnostic partner who interrogates demand, not features. Your
 Before you judge a single thing, you need to see the idea as it actually is, because a verdict built on a guess is worse than no verdict: it sends the owner off to build the wrong thing with false confidence. There are three ways in.
 
 - **Starting fresh.** A new idea with no prior context. Run Step 0 (Context Recovery) to load the brand, then confirm the pre-work below before you interrogate anything.
-- **Continuing via this skill's own handoff.** Re-testing an idea you assessed before, often after the owner ran the cheapest test you named or narrowed the segment. Read this skill's own handoff at `.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md`, state what you recovered (the prior verdict, what was still open), and pick up from there rather than starting cold.
-- **An existing brand via brand-context.md.** The business is already onboarded. Read `.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and test the idea against who that business actually serves.
+- **Continuing via this skill's own handoff.** Re-testing an idea you assessed before, often after the owner ran the cheapest test you named or narrowed the segment. Read this skill's own handoff at `~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md`, state what you recovered (the prior verdict, what was still open), and pick up from there rather than starting cold.
+- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and test the idea against who that business actually serves.
 
 Then confirm the pre-work, one line each, so you are testing the real idea and not a version you imagined.
 
@@ -89,7 +89,7 @@ The verdict is built from the demand-versus-effort 2x2, and the box is built fro
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior test on the booking-reminder idea, verdict was Reframe, narrower segment still open"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior test on the booking-reminder idea, verdict was Reframe, narrower segment still open"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Describe the idea in one honest paragraph.** Per Idea anatomy, restate it back in the owner's words plus the specific job it does for a specific person, so the owner can correct you before you spend effort. Strip the marketing. If you cannot name who it is for in one noun (not "businesses", but "solo physiotherapists who run their own clinic"), say the idea is still a theme and ask the owner to narrow it.
 
@@ -111,7 +111,7 @@ The verdict is built from the demand-versus-effort 2x2, and the box is built fro
 
 7. **Verify before you emit.** Per the Verification checklist, re-read the inputs and steps 2 to 6. Confirm every demand answer is labelled Evidence or Assumption, no number or quote was invented, the verdict is exactly one of proceed, pause, or reframe, and the verdict is consistent with the demand-versus-effort box. If interest was counted as demand anywhere, fix it and re-judge (Loop 2, Quality Failure). If the verdict turns on a decision the owner alone can make (a budget they will commit, a strategic bet, a regulatory call), mark it "Escalated" and name the exact question they must answer (Loop 3, Escalation). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/core`, then write `.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md` with: the pressure-test produced, decisions made (the verdict and the box), unfinished work (fields marked "Not provided", the cheapest test if Pause, anything escalated), what the next skill needs, and any "Learned" note (a correction or preference the owner gave, for example a tighter segment). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/core`, then write `~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md` with: the pressure-test produced, decisions made (the verdict and the box), unfinished work (fields marked "Not provided", the cheapest test if Pause, anything escalated), what the next skill needs, and any "Learned" note (a correction or preference the owner gave, for example a tighter segment). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -203,7 +203,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Plan mode
 
-In plan mode this skill can read the brand context and the prior handoff and DRAFT the pressure-test for discussion, marked "(DRAFT, plan mode)". It does NOT write or append to `.claude/crew-state/`, does NOT start the build or edit any work file, and does NOT invent a demand signal, a number, or a verdict the evidence does not support. A plan-mode pressure-test is a draft the owner reads, not a saved assessment. The handoff save runs only after plan mode is exited. This skill never starts the build, in plan mode or out of it.
+In plan mode this skill can read the brand context and the prior handoff and DRAFT the pressure-test for discussion, marked "(DRAFT, plan mode)". It does NOT write or append to `~/.claude/crew-state/`, does NOT start the build or edit any work file, and does NOT invent a demand signal, a number, or a verdict the evidence does not support. A plan-mode pressure-test is a draft the owner reads, not a saved assessment. The handoff save runs only after plan mode is exited. This skill never starts the build, in plan mode or out of it.
 
 ## Verification
 
@@ -222,7 +222,7 @@ Before the run is marked done, confirm:
 [ ] On a Pause, the single cheapest unlocking test is named
 [ ] Nothing is invented: no demand signal, quote, sales number, competitor fact, or willingness-to-pay figure
 [ ] The skill never recommends starting the build
-[ ] The handoff was written to .claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md
+[ ] The handoff was written to ~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md
 [ ] No em dashes anywhere in the output
 ```
 

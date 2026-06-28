@@ -15,7 +15,7 @@ EXPECT:
 - A "To add" line and an "Accessibility floor" note are present (here, the page is cluttered not barren, so "To add" may read none).
 - No invented element; only what is described is flagged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` was written.
 
 ## Case B: barren
 INPUT:
@@ -35,4 +35,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the design to review and what the content must communicate, because minimalism cannot be judged without seeing the design and knowing whether the content can carry reduction.
 - It does not invent a design, fabricate a minimalist read, or flag clutter or barrenness against nothing.
 - If it emits any partial output, the Artifact, Content, and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` written, recording the missing artifact and content as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-minimalist-handoff.md` written, recording the missing artifact and content as the blocker the next run needs.

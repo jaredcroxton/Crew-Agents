@@ -19,7 +19,7 @@ EXPECT:
 - An accessibility / format line is present (readable size, contrast, not colour-only, plain language, write-in space sized to handwrite, a digital alternative or named accommodation, the requested A4 double-sided).
 - A keepable take-away or transfer element is present (a job aid or summary the learner keeps, plus an application prompt).
 - Blocks are in session order; nothing is invented beyond the guide.
-- Handoff file `.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was written, with block count and what crew-training-assessment-designer needs next.
+- Handoff file `~/.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was written, with block count and what crew-training-assessment-designer needs next.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -32,7 +32,7 @@ EXPECT:
 - The requested "graded test with a 70% pass mark" is recognised as a summative instrument, NOT built as a workbook check, and is Escalated and routed to crew-training-assessment-designer. The workbook checks stay formative, with no pass mark and no grade printed.
 - Nothing is invented: no activity, no answer, no objective, no content beyond the outline.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- Handoff file `.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was written, recording the outline-not-final state, the uncovered objective, the missing check answer, and the escalated graded assessment.
+- Handoff file `~/.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was written, recording the outline-not-final state, the uncovered objective, the missing check answer, and the escalated graded assessment.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -44,5 +44,5 @@ EXPECT:
 - It invents no activity, no check question, no objective, and no content.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- Handoff file `.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was still written, recording the missing guide so the next run knows.
+- Handoff file `~/.claude/crew-state/training/crew-training-learner-workbook-builder-handoff.md` was still written, recording the missing guide so the next run knows.
 - No em dashes anywhere.

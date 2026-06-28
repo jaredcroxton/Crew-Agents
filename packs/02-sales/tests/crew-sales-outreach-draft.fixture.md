@@ -2,7 +2,7 @@
 
 ## Case A: clean
 INPUT:
-Upstream: a crew-sales-prospect-brief handoff at .claude/crew-state/sales/crew-sales-prospect-brief-handoff.md, eligibility recorded clear, chosen angle the careers page.
+Upstream: a crew-sales-prospect-brief handoff at ~/.claude/crew-state/sales/crew-sales-prospect-brief-handoff.md, eligibility recorded clear, chosen angle the careers page.
 Audience: Dana Vogel, COO of Northwind Logistics, a regional cold-chain 3PL, around 50 to 200 staff. Fits because they are scaling ops fast.
 Offer: fractional ops support. One outcome: onboarding does not stall during a hiring push.
 Hook (from the brief): their careers page lists four open ops roles and no ops manager (source: northwind.com/careers, live 2026-06-17).
@@ -23,7 +23,7 @@ EXPECT:
 - The email draft includes a sender-identity block (rep name, company, role or contact) and an "[Unsubscribe + physical address: business to supply at send]" placeholder line.
 - The deliverability check passes: no spam-trigger vocabulary, one link or none, no ALL-CAPS or "!!!", subject truthfully matches the body, plain-text-first.
 - No em dashes, no "I hope this email finds you well", no stacked adjectives, no hype.
-- Handoff file written at .claude/crew-state/sales/crew-sales-outreach-draft-handoff.md recording channel, hook, outcome, and next step for crew-sales-follow-up-sequence.
+- Handoff file written at ~/.claude/crew-state/sales/crew-sales-outreach-draft-handoff.md recording channel, hook, outcome, and next step for crew-sales-follow-up-sequence.
 
 ## Case B: messy
 INPUT:

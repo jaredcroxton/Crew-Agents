@@ -32,7 +32,7 @@ If you cannot reach anyone who can answer for the brand and there is no site or 
 
 - **Fast mode:** skip the deep questions. Use what is already known (an existing `brand-context.md`, the website, or a guide) and confirm only the essentials: what they do, the product and price, who buys, the voice, and the one thing they never say. Use when you just need enough context to run one skill.
 - **Careful mode (default):** the full conversation, in the owner's words, written to one file. Use the first time a business is onboarded.
-- **Governed mode:** the full conversation, plus a cross-reference against the prior handoffs in `.claude/crew-state/` so the captured voice and the do-not list stay consistent with what other skills already produced. Flag any contradiction between what the owner says now and what is already on file, and lock the voice and the do-not list before writing. Use for an established business where consistency across many deliverables matters.
+- **Governed mode:** the full conversation, plus a cross-reference against the prior handoffs in `~/.claude/crew-state/` so the captured voice and the do-not list stay consistent with what other skills already produced. Flag any contradiction between what the owner says now and what is already on file, and lock the voice and the do-not list before writing. Use for an established business where consistency across many deliverables matters.
 
 ## How the brand context builder thinks
 
@@ -89,7 +89,7 @@ The file is only as good as its weakest field, because the weakest field is the 
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, the business is already onboarded: load it, state "Working with [brand]. [Product]. [Audience]. Voice: [tone]," and ask whether the owner wants to update it or start fresh. If it does not exist, state "No brand context yet. A few quick questions and every skill you run will know who you are." Then read this skill's own handoff at `.claude/crew-state/core/crew-core-brand-context-handoff.md`. If it exists, load it and state what was recovered. If it does not exist, state "No prior context, first run."
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, the business is already onboarded: load it, state "Working with [brand]. [Product]. [Audience]. Voice: [tone]," and ask whether the owner wants to update it or start fresh. If it does not exist, state "No brand context yet. A few quick questions and every skill you run will know who you are." Then read this skill's own handoff at `~/.claude/crew-state/core/crew-core-brand-context-handoff.md`. If it exists, load it and state what was recovered. If it does not exist, state "No prior context, first run."
 
 1. Confirm who is answering for the brand, or read the website and socials and pre-fill what you can.
 2. Ask question 1 (what they do and why it matters) and question 2 (the main product and its price); capture both.
@@ -103,11 +103,11 @@ The file is only as good as its weakest field, because the weakest field is the 
 10. Ask question 11 (anything else to get right: regulations, sensitive topics, and what you should have asked).
 11. Read the answers back to the owner in the file's shape and get a yes before writing.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state`, then write the completed `.claude/crew-state/brand-context.md` (the deliverable, in the Output format below). Then run `mkdir -p .claude/crew-state/core` and write `.claude/crew-state/core/crew-core-brand-context-handoff.md` with: that the brand context was captured, the brand name, any question left unanswered, any contradiction flagged in Governed mode, and a "Learned" note for any preference the owner gave. Always write the handoff, even with no output ("No output, run completed [date]").
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state`, then write the completed `~/.claude/crew-state/brand-context.md` (the deliverable, in the Output format below). Then run `mkdir -p ~/.claude/crew-state/core` and write `~/.claude/crew-state/core/crew-core-brand-context-handoff.md` with: that the brand context was captured, the brand name, any question left unanswered, any contradiction flagged in Governed mode, and a "Learned" note for any preference the owner gave. Always write the handoff, even with no output ("No output, run completed [date]").
 
 ## Output format
 
-The deliverable is `.claude/crew-state/brand-context.md`. Write it in this shape (a fenced block so the structure is exact). The first line is the header.
+The deliverable is `~/.claude/crew-state/brand-context.md`. Write it in this shape (a fenced block so the structure is exact). The first line is the header.
 
 ```
 BRAND CONTEXT FILE
@@ -145,14 +145,14 @@ Return a short confirmation to the owner: the file written, the brand named, and
 
 ## Handoffs
 
-- Every Crew skill reads `.claude/crew-state/brand-context.md` at its own Step 0, so once this skill runs, the whole Crew is trained on the business.
+- Every Crew skill reads `~/.claude/crew-state/brand-context.md` at its own Step 0, so once this skill runs, the whole Crew is trained on the business.
 - The design and web skills read the captured voice and the website, and gather any look-specifics (colours, fonts, visual style) themselves at build time, so this file stays jargon-free.
 - Run `crew-core-quality-checker` (pack 01 core, advisory) if you want the captured context sanity-checked before relying on it.
 - Hand off to `crew-core-context-save` to snapshot the working session.
 
 ## Plan mode
 
-In plan mode, draft the brand conversation and a proposed `brand-context.md` outline marked DRAFT for review. Do not write to `.claude/crew-state/`, do not overwrite an existing brand context, and do not treat any drafted answer as confirmed until the owner approves.
+In plan mode, draft the brand conversation and a proposed `brand-context.md` outline marked DRAFT for review. Do not write to `~/.claude/crew-state/`, do not overwrite an existing brand context, and do not treat any drafted answer as confirmed until the owner approves.
 
 ## Verification
 
@@ -165,7 +165,7 @@ Before completion, confirm:
 - [ ] The website and online presence are recorded.
 - [ ] Regulations and hard facts are recorded as facts.
 - [ ] No colour, font, or visual-style question was asked; the conversation stayed jargon-free.
-- [ ] `.claude/crew-state/brand-context.md` was written and read back to the owner, the per-skill handoff was written, and there are no em dashes anywhere.
+- [ ] `~/.claude/crew-state/brand-context.md` was written and read back to the owner, the per-skill handoff was written, and there are no em dashes anywhere.
 
 ## Completion
 

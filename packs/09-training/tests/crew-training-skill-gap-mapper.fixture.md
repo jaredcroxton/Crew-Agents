@@ -18,7 +18,7 @@ EXPECT:
 - A readiness risk is flagged (J. Bauer unlikely to reach Proficient on the report by go-live) and the go-live decision is Escalated to the sponsor.
 - The per-role view keeps the Team Lead's Expert target separate from the Reps, who do not carry that competency at all.
 - Nothing is invented: no score, no name, no certification, no date beyond the inputs.
-- Handoff file `.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was written, naming the priority gaps and using crew-training-needs-analyser (not a doubled name).
+- Handoff file `~/.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was written, naming the priority gaps and using crew-training-needs-analyser (not a doubled name).
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -31,7 +31,7 @@ EXPECT:
 - The two-week go-live against the uncloseable pipeline-report gap is flagged a readiness risk and the go-live decision is Escalated to the sponsor.
 - Nothing is invented: no score, no name, no certification, no date.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- Handoff file `.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was written, recording the unverified people, the environmental cause (broken field, undefined process), and the escalated go-live.
+- Handoff file `~/.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was written, recording the unverified people, the environmental cause (broken field, undefined process), and the escalated go-live.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -43,5 +43,5 @@ EXPECT:
 - It invents no competency, no person, no rating, and no target.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- Handoff file `.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was still written, recording the missing requirement so the next run knows.
+- Handoff file `~/.claude/crew-state/training/crew-training-skill-gap-mapper-handoff.md` was still written, recording the missing requirement so the next run knows.
 - No em dashes anywhere.

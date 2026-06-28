@@ -12,7 +12,7 @@ EXPECT:
 - Known risk recorded as the no-index point, Type TECH DEBT; the 24h assumption labelled ASSUMPTION.
 - Key files listed with state markers (partial, new).
 - No secret or credential is written into the note. The database URL is referenced only by where it lives (the environment variable), never as a value.
-- Step 0 states first-run or recovered; Final Step appends (does not overwrite) to .claude/crew-state/core/crew-core-context-save-handoff.md and the file is written.
+- Step 0 states first-run or recovered; Final Step appends (does not overwrite) to ~/.claude/crew-state/core/crew-core-context-save-handoff.md and the file is written.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -38,5 +38,5 @@ EXPECT:
 - If still unavailable, writes the CONTEXT SAVE with Active task, Status, Decisions, Remaining work, Risks, and Key files all marked "Not provided".
 - Invents nothing: no fabricated task, decision, file, or next step.
 - Pack defaults to core only because it is named in the path, project marked "Not provided".
-- Final Step still APPENDS a note (does not overwrite) to .claude/crew-state/core/crew-core-context-save-handoff.md, recording the missing-input gap (for example "No output, inputs not provided, run completed [date]"); the file is written.
+- Final Step still APPENDS a note (does not overwrite) to ~/.claude/crew-state/core/crew-core-context-save-handoff.md, recording the missing-input gap (for example "No output, inputs not provided, run completed [date]"); the file is written.
 - No em dashes anywhere.

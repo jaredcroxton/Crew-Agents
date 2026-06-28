@@ -15,7 +15,7 @@ EXPECT:
 - A "Lifecycle and accessibility:" block with update on resize and DOM change, destroy on unmount, a reduced-motion fallback to native scroll, and mobile disabled.
 - Native scroll is preserved; nothing traps the user.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-locomotive-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-locomotive-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what is being built and whether the cinematic smooth-scroll feel is worth its trade-offs (native momentum, keyboard scroll, accessibility), because smooth scroll is a trade, not a default.
 - It does not invent a smooth-scroll spec, fabricate parallax, or assume the cinematic feel is wanted.
 - If it emits any partial output, the Brief and HTML structure fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-locomotive-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-locomotive-handoff.md` written, recording the missing brief as the blocker the next run needs.

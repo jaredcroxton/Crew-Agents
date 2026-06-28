@@ -17,7 +17,7 @@ EXPECT:
 - Both frame sets are produced under a single FRAME_COUNT: a desktop set (frames/d) and a portrait-mobile set (frames/m), the count derived by to_webp.py, not asked of the user.
 - Deploy checks report the status-code matrix: index 200, a frame from frames/d and frames/m 200, listing images 200, and raw assets/video 404 (excluded).
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/web-design/crew-web-fly-through-builder-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

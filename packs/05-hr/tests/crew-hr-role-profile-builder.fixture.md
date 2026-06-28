@@ -16,7 +16,7 @@ EXPECT:
 - The title is plain and market-recognised (Dispatch Coordinator), and the level is not inflated above Coordinator.
 - Decision rights list "can decide" (reassign route, call standby) versus "must escalate" (hire permanent driver, change SLA).
 - The pay band and grade are Escalated and jurisdiction-neutral (no named statute, no assumed currency or market figure), not invented.
-- Handoff file `.claude/crew-state/hr/crew-hr-role-profile-builder-handoff.md` was written, naming what `crew-hr-interview-guide` needs next.
+- Handoff file `~/.claude/crew-state/hr/crew-hr-role-profile-builder-handoff.md` was written, naming what `crew-hr-interview-guide` needs next.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -44,6 +44,6 @@ EXPECT:
 - Asks once, plainly, for that one thing (the purpose / the gap it fills), not a batch survey.
 - Does not invent responsibilities, success measures, a reporting line, a level, a salary, or required certifications. Any field it cannot fill is marked "Not provided" rather than guessed.
 - If it produces a partial scaffold, every unconfirmed field reads "Not provided, manager to set"; nothing is fabricated to look complete.
-- Handoff file `.claude/crew-state/hr/crew-hr-role-profile-builder-handoff.md` still written, recording that the run is blocked on the missing purpose and what is needed to resume.
+- Handoff file `~/.claude/crew-state/hr/crew-hr-role-profile-builder-handoff.md` still written, recording that the run is blocked on the missing purpose and what is needed to resume.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
 - No em dashes anywhere.

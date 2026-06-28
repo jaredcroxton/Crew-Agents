@@ -15,7 +15,7 @@ EXPECT:
 - A "Recommendations:" block where at least one action carries an "Action type:" from the taxonomy, an "Owner: [role]", and a conservative "Estimated impact:" line (items per month and a realistic reduction, not a claim of elimination).
 - A "Top recommended action:" line and a "Pattern summary:" paragraph distinguishing systematic from one-off.
 - An "Open questions:" line.
-- Handoff file `.claude/crew-state/support/crew-support-feedback-summary-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/support/crew-support-feedback-summary-handoff.md` was written.
 
 ## Case B: messy
 INPUT:
@@ -37,4 +37,4 @@ EXPECT:
 - If it proceeds without an answer, it marks "Source: not provided" and "Sample size: unknown" or "Range: unknown", and sets confidence accordingly, inventing nothing.
 - It does not fabricate a channel, a date range, a percentage, or any quote it did not see.
 - The 14 real items are still counted and themed honestly against what is present.
-- Handoff file `.claude/crew-state/support/crew-support-feedback-summary-handoff.md` written, recording the missing source and range as the gap the next run needs to close.
+- Handoff file `~/.claude/crew-state/support/crew-support-feedback-summary-handoff.md` written, recording the missing source and range as the gap the next run needs to close.
