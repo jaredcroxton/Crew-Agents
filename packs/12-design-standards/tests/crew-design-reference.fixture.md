@@ -13,7 +13,7 @@ EXPECT:
 - An "Emulate:" line and an "Avoid:" line, where Avoid names the category's AI-slop defaults (centered hero, Inter, gradient glow, equal-weight cards).
 - No invented sites or URLs; every site named is real.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-reference-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md` was written.
 
 ## Case B: cross-category
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what is being built and the aesthetic goal, because a reference match needs a problem to match against.
 - It does NOT dump the whole library or invent a project, and it names no references against an unknown problem.
 - If it emits any partial output, the Problem, Category, and References fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-reference-handoff.md` written, recording the missing problem as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md` written, recording the missing problem as the blocker the next run needs.

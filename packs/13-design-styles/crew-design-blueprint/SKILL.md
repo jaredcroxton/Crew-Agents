@@ -31,7 +31,7 @@ If the niche is too vague to pick an archetype, or the primary goal is unstated,
 
 - **Fast mode:** a quick single-page blueprint (usually the homepage). Name the archetype, the section order, and the primary conversion. Skip the full sitemap and flows.
 - **Careful mode (default):** the full site blueprint, the page map, navigation, page templates, information hierarchy, user flows, and content strategy. Use before a multi-page build.
-- **Governed mode:** the full blueprint, plus a cross-reference against prior handoffs in `.claude/crew-state/design-styles/` so the architecture stays consistent, the business playbook enforced, a content-gap audit (what must be created before build), and a flow-completeness check (no dead ends, every conversion path traced). Use for a production site.
+- **Governed mode:** the full blueprint, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the architecture stays consistent, the business playbook enforced, a content-gap audit (what must be created before build), and a flow-completeness check (no dead ends, every conversion path traced). Use for a production site.
 
 Do not run this skill to critique a single element or screen (that is `crew-design-quality` or `crew-design-composition`), to choose the visual style (that is the style skills), to lift an existing design (that is `crew-design-redesign`), or for copywriting alone. This skill plans the structure of a site, not its surface.
 
@@ -146,7 +146,7 @@ The checklist a blueprint embeds. The architecture is the contract the build rea
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-styles/crew-design-blueprint-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior blueprint, the page map and nav were set, the flows still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the architecture stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-styles/crew-design-blueprint-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior blueprint, the page map and nav were set, the flows still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the architecture stays consistent. (Loop 4, Context Change.)
 
 1. **Clarify the brief and name the archetype.** State the business, the niche (specific enough to pick an archetype), the primary goal, and the scope. Infer the archetype and confirm it; the user can override. If the niche or goal is missing, ask now.
 2. **Build the page map.** List every page the site needs, grouped by level, with parent-child relationships, derived from the archetype and the goals. Check for orphans and dead ends.
@@ -156,7 +156,7 @@ The checklist a blueprint embeds. The architecture is the contract the build rea
 6. **Inventory the content and assemble the blueprint.** List what content exists and what must be created, flag every real-content gap, and assemble the deliverable: the sitemap, the per-page specs, and the key flows. Where evidence from the niche exists, report position and frequency.
 7. **Verify before emitting.** Confirm every page has a parent and a path in and out, each page has exactly one primary conversion, the nav covers all four layers, the flows have no dead ends, and every content gap is named rather than filled with a placeholder. Mark a deliberate business decision kept (the playbook wins), and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-styles`, then write `.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` with: the blueprint produced, decisions made (the archetype, the page map, the primary conversion), unfinished work (pages or flows not yet specified, content gaps to fill, anything Escalated or kept by the playbook), what the building skill needs next (the sitemap and per-page specs), and any "Learned" note (a business constraint or a conversion priority the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-styles`, then write `~/.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` with: the blueprint produced, decisions made (the archetype, the page map, the primary conversion), unfinished work (pages or flows not yet specified, content gaps to fill, anything Escalated or kept by the playbook), what the building skill needs next (the sitemap and per-page specs), and any "Learned" note (a business constraint or a conversion priority the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -270,7 +270,7 @@ Typical calls that warrant a brief: which archetype leads when a business spans 
 
 ## Plan mode
 
-In plan mode this skill can read the brief and the prior handoff, and produce a draft blueprint (the archetype, a draft page map, the primary conversion) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a blueprint as final, or trigger a build. The full page map, the navigation, the page specs, the flows, the content inventory, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brief and the prior handoff, and produce a draft blueprint (the archetype, a draft page map, the primary conversion) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a blueprint as final, or trigger a build. The full page map, the navigation, the page specs, the flows, the content inventory, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -287,7 +287,7 @@ Before the run is marked done, confirm:
 [ ] The deliverable is build-ready: a sitemap, per-page specs, and the key flows
 [ ] A deliberate business decision is marked kept; the playbook won over the defaults
 [ ] No AI-slop, no emoji, no em dashes in the blueprint
-[ ] The handoff was written to .claude/crew-state/design-styles/
+[ ] The handoff was written to ~/.claude/crew-state/design-styles/
 ```
 
 ## Completion

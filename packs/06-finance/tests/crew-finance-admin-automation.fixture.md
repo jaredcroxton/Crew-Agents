@@ -12,7 +12,7 @@ EXPECT:
 - An `Idempotent guard:` so a re-arrived or forwarded copy of the same email does not create a duplicate draft bill (the invoice number as the processed marker).
 - An `Audit trail:` note that each automated step records what it did and when, so a wrong or duplicate bill is traceable.
 - An `Exception path:` for unreadable fields and a `Fallback:` flagging a named person and leaving the item in a known state. `Escalated: none`.
-- The handoff file `.claude/crew-state/finance/crew-finance-admin-automation-handoff.md` was written with the chosen target, the review-gate decision, and the idempotency control.
+- The handoff file `~/.claude/crew-state/finance/crew-finance-admin-automation-handoff.md` was written with the chosen target, the review-gate decision, and the idempotency control.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -36,5 +36,5 @@ EXPECT:
 - Does not produce a plan with invented tasks, tools, frequencies, or savings; nothing fabricated.
 - Any frequency or tool field that would appear is marked `Not provided`.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a real plan.
-- The handoff file `.claude/crew-state/finance/crew-finance-admin-automation-handoff.md` is still written, recording the missing input and the one question asked ("No output, run completed [date]" if nothing was produced).
+- The handoff file `~/.claude/crew-state/finance/crew-finance-admin-automation-handoff.md` is still written, recording the missing input and the one question asked ("No output, run completed [date]" if nothing was produced).
 - No em dashes anywhere.

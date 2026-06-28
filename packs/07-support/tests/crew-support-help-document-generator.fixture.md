@@ -12,7 +12,7 @@ EXPECT:
 - The article follows the Structure template (Title, Answer, Steps, Example, Troubleshooting, Still stuck, Search terms, Status) with Type set per Document types (How-to).
 - A labelled Example with placeholder values, and a Troubleshooting section as "If [symptom], then [fix]" pairs including a "contact support" line for what the customer cannot self-fix.
 - Search terms line present.
-- Handoff written to `.claude/crew-state/support/crew-support-help-document-generator-handoff.md` recording the article, doc type, and what crew-support-faq-builder needs next.
+- Handoff written to `~/.claude/crew-state/support/crew-support-help-document-generator-handoff.md` recording the article, doc type, and what crew-support-faq-builder needs next.
 
 ## Case B: messy
 INPUT:

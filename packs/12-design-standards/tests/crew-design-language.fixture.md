@@ -14,7 +14,7 @@ EXPECT:
 - A "Naming convention" line stating primitives value-named, semantics role-named, components scoped, references one direction.
 - Any undecided value (the marketing light-theme neutrals) is marked a slot to fill, not a guessed hex.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-language-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-language-handoff.md` was written.
 
 ## Case B: drift audit
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the brand basis (the accent, the neutral base, the type direction) and the surfaces in scope, because a token system needs a source of truth.
 - It does not invent a palette, a font, or a scale, and it does not emit a full token ladder against an unknown brand.
 - If it emits any partial output, the Primitives and Semantic fields are marked "Not provided" or left as slots rather than filled with guesses.
-- Handoff file `.claude/crew-state/design-standards/crew-design-language-handoff.md` written, recording the missing brand basis as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-language-handoff.md` written, recording the missing brand basis as the blocker the next run needs.

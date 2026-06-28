@@ -13,7 +13,7 @@ EXPECT:
 - An "AI tells caught:" block that names each tell specifically, not generically: the Inter font, the centered H1 hero, the three equal-weight cards, the AI-purple gradient glow, the h-screen trap, and the John Doe generic names with the round 99.99% / 50% numbers.
 - A "Ranked fixes (highest impact first):" block with specific changes (for example swap Inter for Geist, replace the centered hero with a split or left-aligned hero, drop the purple glow for one desaturated accent, use min-h-[100dvh]), not "make it pop".
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-quality-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md` was written.
 
 ## Case B: messy
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once, plainly, for the artifact (a screenshot, a code block, or a URL), because there is nothing to review without it.
 - It does not invent a design, fabricate dimension scores, or name AI tells against an artifact it cannot see.
 - If it emits any partial output, the Artifact, dimension scores, and verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-quality-handoff.md` written, recording the missing artifact as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md` written, recording the missing artifact as the blocker the next run needs.

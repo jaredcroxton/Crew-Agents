@@ -15,7 +15,7 @@ EXPECT:
 - At least one gap ties its expected impact to the meetings-booked metric.
 - Capability claims are labelled Evidence (the 12 recordings), Manager view, or Assumed; no capability score or headcount is invented.
 - An "Open questions for the manager" line appears.
-- Handoff file `.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written.
 
 ## Case B: messy (manager pre-decided the training)
 INPUT:
@@ -31,7 +31,7 @@ EXPECT:
 - The skill does not invent a headcount precision or a per-person skill level: "maybe 8" and the unclear seniorities are restated for the manager to confirm; the "used to be a trainer" individual read is flagged unverified and routed to crew-training-skill-gap-mapper, not recorded as fact.
 - The vague goal ("just make them better") is sharpened or flagged: any gap with no metric tie is marked "impact unquantified, manager to confirm", not given an invented metric.
 - Mixed seniority is surfaced because a senior and a junior have different "good" for the same task; the report does not blend them into one undifferentiated level silently.
-- Handoff file `.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written, noting the unconfirmed headcount, levels, and goal, and the escalated motivation gap as unfinished work.
+- Handoff file `~/.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written, noting the unconfirmed headcount, levels, and goal, and the escalated motivation gap as unfinished work.
 
 ## Case C: missing-input
 INPUT:
@@ -42,4 +42,4 @@ EXPECT:
 - It does not fabricate a goal metric (no invented "lift to 85 percent") or invent a gap to fill the blank.
 - If it proceeds at all, the ranking and "expected impact" fields are marked pending the goal, not invented, and the report states it cannot rank by business impact without the desired state.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a finished analysis.
-- Handoff file `.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written, recording the missing desired outcome as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/training/crew-training-needs-analyser-handoff.md` was written, recording the missing desired outcome as the blocker the next run needs.

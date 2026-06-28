@@ -31,7 +31,7 @@ If no artifact is supplied, or the register goal is unclear, ask once what is be
 
 - **Fast mode:** a quick soft check. Name the worst hard or cold element (a sharp corner, a harsh shadow, a snappy transition) or the worst saccharine excess, and the single move that fixes it. Skip the full sweep.
 - **Careful mode (default):** the full review across typography, colour, layout, motion, and imagery, plus the warmth-versus-sugar judgment and the contrast floor, with the fix for each. Use before a soft design ships.
-- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `.claude/crew-state/design-styles/` so the warmth holds across pages, the brand playbook enforced, a stricter saccharine check, and a credibility-and-accessibility floor (soft pastels and warm grays must stay readable). Use for a multi-page soft build.
+- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the warmth holds across pages, the brand playbook enforced, a stricter saccharine check, and a credibility-and-accessibility floor (soft pastels and warm grays must stay readable). Use for a multi-page soft build.
 
 Do not run this skill for a brand that must read authoritative and serious (a bank, a law firm, route to `crew-design-authority`), for a product that needs urgency or a hard conversion edge, for a tough, raw, or technical brand (that is `crew-design-brutalist`), or to score broad visual quality regardless of style. Soft is wrong where the brand must read serious, fast, or tough; name the mismatch rather than rounding the corners on a register that needs edges.
 
@@ -136,7 +136,7 @@ The checklist a build embeds when the goal is soft. The warmth is the contract.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-styles/crew-design-soft-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review, the shadows were harsh, awaiting the diffuse fix"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the warmth holds across pages. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-styles/crew-design-soft-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review, the shadows were harsh, awaiting the diffuse fix"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the warmth holds across pages. (Loop 4, Context Change.)
 
 1. **Confirm soft is the right call.** State the register goal and the audience. If the brand must read authoritative, urgent, or tough, say so now, route it (`crew-design-authority` for gravity), and do not soften a register that needs edges. If soft fits, proceed.
 2. **Read the typography.** Check for rounded humanist or soft grotesque faces, generous line-height, medium weights, sentence case, and off-black text. Flag any cold tight grotesque, condensed face, aggressive uppercase, or pure-black text, and flag any childish bubble font on the saccharine side.
@@ -146,7 +146,7 @@ The checklist a build embeds when the goal is soft. The warmth is the contract.
 6. **Run both leak lists and write the verdict.** Flag the hard or cold elements to soften and the saccharine excess to mature, and set a verdict (Warm, Cold, or Saccharine) with the single highest-impact move.
 7. **Verify before emitting.** Confirm every flagged element is present, every fix is concrete (round this corner, diffuse this shadow, desaturate this pastel, calm this bounce), and the warm-versus-cold-versus-saccharine call is honest. Mark a deliberate brand exception kept (the playbook wins), and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-styles`, then write `.claude/crew-state/design-styles/crew-design-soft-handoff.md` with: the review produced, decisions made (the cold elements softened and the saccharine excess matured, whether soft was confirmed as the right call), unfinished work (fixes not applied, contrast defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a register choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-styles`, then write `~/.claude/crew-state/design-styles/crew-design-soft-handoff.md` with: the review produced, decisions made (the cold elements softened and the saccharine excess matured, whether soft was confirmed as the right call), unfinished work (fixes not applied, contrast defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a register choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -247,7 +247,7 @@ Typical calls that warrant a brief: how round and warm to go before soft tips in
 
 ## Plan mode
 
-In plan mode this skill can read the design and the prior handoff, and produce a draft soft read (whether soft is the right call, the cold spots it would soften, the saccharine excess it would mature, a provisional Warm, Cold, or Saccharine) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full review, both leak lists, the fixes, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the design and the prior handoff, and produce a draft soft read (whether soft is the right call, the cold spots it would soften, the saccharine excess it would mature, a provisional Warm, Cold, or Saccharine) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full review, both leak lists, the fixes, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -265,7 +265,7 @@ Before the run is marked done, confirm:
 [ ] A Warm / Cold / Saccharine verdict with the single highest-impact move
 [ ] A deliberate brand exception is marked kept; the playbook won over the defaults
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-styles/
+[ ] The handoff was written to ~/.claude/crew-state/design-styles/
 ```
 
 ## Completion

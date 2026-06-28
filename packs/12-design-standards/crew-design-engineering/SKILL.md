@@ -30,7 +30,7 @@ If no artifact is supplied, ask once for the component or the interaction, becau
 
 - **Fast mode:** a quick craft pass on one component or interaction. Flag the top animation and polish issues as a Before, After, Why table, and skip the full framework sweep. Use mid-build.
 - **Careful mode (default):** the full pass, the animation decision framework, the component polish rules, performance and accessibility, the complete Before, After, Why table, and a verdict. Use before a component ships.
-- **Governed mode:** the ship gate. Every check run, the project's motion system enforced over the defaults, a hard Ship, Polish, or Rework verdict, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so motion stays consistent across the product. Use as the last polish gate.
+- **Governed mode:** the ship gate. Every check run, the project's motion system enforced over the defaults, a hard Ship, Polish, or Rework verdict, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so motion stays consistent across the product. Use as the last polish gate.
 
 Do not run this skill for the broad dimensional sweep (typography, colour, layout, that is `crew-design-quality`), for copy or content correctness, for backend or non-visual code, or to design a component from scratch (this polishes what exists).
 
@@ -207,7 +207,7 @@ no :active state on a button             -> transform: scale(0.97) on :active
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-engineering-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the modal, easing fixed, popover origin still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project's motion system. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-engineering-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the modal, easing fixed, popover origin still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project's motion system. (Loop 4, Context Change.)
 
 1. **Identify the component and its frequency.** Name what is under review and how often a user sees it, because frequency decides whether it should animate at all.
 2. **Run the animation decision framework.** For each animation, check should-it-animate, the purpose, the easing, and the duration against The animation decision framework. Flag a keyboard-action animation, an over-long duration, or an ease-in.
@@ -217,7 +217,7 @@ no :active state on a button             -> transform: scale(0.97) on :active
 6. **Set the verdict.** Ship, Polish, or Rework, with the single highest-impact fix called out.
 7. **Verify before emitting.** Re-read the table against the code. Confirm every Before is real code from the artifact, every After is a specific correct fix, and no easing, duration, or property was invented. Where a flagged choice is a deliberate decision in the project's motion system, mark it kept and do not flag it (the playbook wins). If a call needs the owner, mark it Escalated and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-engineering-handoff.md` with: the verdict produced, decisions made (the issues found, the fixes given), unfinished work (fixes not yet applied, anything Escalated or kept by the motion system), what the building skill needs next, and any "Learned" note (a motion token or a curve the user prefers). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-engineering-handoff.md` with: the verdict produced, decisions made (the issues found, the fixes given), unfinished work (fixes not yet applied, anything Escalated or kept by the motion system), what the building skill needs next, and any "Learned" note (a motion token or a curve the user prefers). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -274,7 +274,7 @@ Typical calls that warrant a brief: bold expressive motion versus restrained, a 
 
 ## Plan mode
 
-In plan mode this skill can read the component and the prior handoff, and produce a draft review (the issues it would flag, a provisional Ship, Polish, or Rework) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a ship gate, or edit the source. The full framework sweep, the Before, After, Why table, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the component and the prior handoff, and produce a draft review (the issues it would flag, a provisional Ship, Polish, or Rework) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a ship gate, or edit the source. The full framework sweep, the Before, After, Why table, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -290,7 +290,7 @@ Before the run is marked done, confirm:
 [ ] A Ship / Polish / Rework verdict with the single highest-impact fix
 [ ] A deliberate motion-system choice is marked kept; the playbook won over the defaults
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

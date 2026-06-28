@@ -31,7 +31,7 @@ If no artifact is supplied, ask once for it, because there is nothing to review 
 
 - **Fast mode:** a quick gut-check on one screen or component. Name the three worst tells and the single highest-impact fix. Skip the full per-dimension scoring. Use for a rapid sanity pass mid-build.
 - **Careful mode (default):** the full dimension sweep, a score per dimension, every AI tell named, and ranked fixes. Use before a design is shown to a client.
-- **Governed mode:** the ship gate. Every dimension scored, the project playbook enforced over the defaults, a hard Pass, Revise, or Fail verdict with nothing waived, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the standard holds across a project. Use as the last gate before publish.
+- **Governed mode:** the ship gate. Every dimension scored, the project playbook enforced over the defaults, a hard Pass, Revise, or Fail verdict with nothing waived, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the standard holds across a project. Use as the last gate before publish.
 
 Do not run this skill to check copy or content correctness (that is a writing pass), to run an accessibility audit on its own (use a dedicated accessibility check), to review backend or non-visual code, or when a locked brand playbook already dictates the look and the user only wants it applied, not judged.
 
@@ -155,7 +155,7 @@ The condensed checklist a design gate embeds. Run it as the last filter before a
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-quality-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the dashboard, typography failed, awaiting the font swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project standard. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the dashboard, typography failed, awaiting the font swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project standard. (Loop 4, Context Change.)
 
 1. **Establish the dials and the context.** State the product type, audience, and brand or playbook, and the three dial targets (or the baseline 8 / 6 / 4). If no artifact is present, ask for it now; do not review what you cannot see.
 2. **Sweep each dimension** per The quality framework. For each, decide Premium, Mixed, or Slop, with one concrete reason tied to what is on screen.
@@ -165,7 +165,7 @@ The condensed checklist a design gate embeds. Run it as the last filter before a
 6. **Set the verdict.** Pass, Revise, or Fail, with the single change that moves it up a grade. Governed mode waives nothing.
 7. **Verify before emitting.** Re-read steps 2 to 6 against the artifact. Confirm every score has a reason from what is visible, every tell names a real element, and no dimension was scored on something you could not see. Where a flagged choice is a deliberate brand decision in the playbook, mark it "Brand-lock, not a tell" and do not red-flag it (the playbook wins over the defaults). If a call needs the owner (a brand exception, a deliberate off-spec choice), mark it "Escalated" and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-quality-handoff.md` with: the verdict produced, decisions made (the dial targets, the dimensions that failed), unfinished work (fixes not yet applied, anything Escalated or marked Brand-lock), what the building skill needs next, and any "Learned" note (a brand rule or a preferred font the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md` with: the verdict produced, decisions made (the dial targets, the dimensions that failed), unfinished work (fixes not yet applied, anything Escalated or marked Brand-lock), what the building skill needs next, and any "Learned" note (a brand rule or a preferred font the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -260,7 +260,7 @@ Typical calls that warrant a brief: bold and expressive versus restrained and qu
 
 ## Plan mode
 
-In plan mode this skill can read the artifact and the prior handoff, and produce a draft verdict (the dimensions it would flag, a provisional Pass, Revise, or Fail) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a ship gate, or apply a fix to the source. The full sweep, the scoring, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the artifact and the prior handoff, and produce a draft verdict (the dimensions it would flag, a provisional Pass, Revise, or Fail) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a ship gate, or apply a fix to the source. The full sweep, the scoring, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -276,7 +276,7 @@ Before the run is marked done, confirm:
 [ ] A deliberate brand choice is marked "Brand-lock, not a tell"; the playbook won over the defaults
 [ ] No redesign from scratch, no invented brand, no fabricated score
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

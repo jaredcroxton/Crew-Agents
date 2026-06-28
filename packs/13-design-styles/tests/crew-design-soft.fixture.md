@@ -15,7 +15,7 @@ EXPECT:
 - A "Saccharine excess (to mature)" line and an "Accessibility floor" note are present (here the page is cold, not sweet, so the saccharine list may read none).
 - No invented element; only what is described is flagged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-styles/crew-design-soft-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-soft-handoff.md` was written.
 
 ## Case B: saccharine
 INPUT:
@@ -35,4 +35,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the design to review and how it should feel (the audience and register), because warmth cannot be judged without seeing the design.
 - It does not invent a design, fabricate a soft read, or flag cold or saccharine elements against nothing.
 - If it emits any partial output, the Artifact, Audience, and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-styles/crew-design-soft-handoff.md` written, recording the missing artifact as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-soft-handoff.md` written, recording the missing artifact as the blocker the next run needs.

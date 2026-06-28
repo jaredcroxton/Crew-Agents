@@ -13,7 +13,7 @@ EXPECT:
 - A "Performance:" block bounding the named set (only the photo and the page root named, not the grid container), sizing and containing the captures, and avoiding layout shift by loading the detail image before the swap.
 - An "Accessibility and fallback:" block with a progressive-enhancement path (feature-detect document.startViewTransition, unsupported browsers swap instantly) and a reduced-motion path that disables the named animations under prefers-reduced-motion.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-view-transitions-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-view-transitions-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what changes, why it should morph, and on what trigger (a click, a navigation, a state update), because a spec needs a brief and the same-document versus cross-document shape.
 - It does not invent a transition, fabricate a view-transition-name, or assume the framework path.
 - If it emits any partial output, the Brief and Shared-elements fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-view-transitions-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-view-transitions-handoff.md` written, recording the missing brief as the blocker the next run needs.

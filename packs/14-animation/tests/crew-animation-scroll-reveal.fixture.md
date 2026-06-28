@@ -14,7 +14,7 @@ EXPECT:
 - A "Performance and accessibility:" block: transform and opacity only, fire once, a reduced-motion path that collapses to an instant appearance under prefers-reduced-motion, and a no-JS fallback keeping content readable.
 - The reveals fire once on entry (not re-trigger on every scroll past).
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-scroll-reveal-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-scroll-reveal-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should reveal, why it should reveal, and whether elements reveal as a group or one at a time, because a spec needs a motion brief.
 - It does not invent a reveal, fabricate a pattern set, or assume a grid cascade.
 - If it emits any partial output, the Brief and Reveal-patterns fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-scroll-reveal-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-scroll-reveal-handoff.md` written, recording the missing brief as the blocker the next run needs.

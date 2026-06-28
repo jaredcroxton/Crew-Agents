@@ -30,7 +30,7 @@ If you are handed feedback with no count or no source, ask once for the source a
 
 - **Fast mode:** pattern detection and root cause only. Skip the action recommendations and the impact estimate. Use when the business just wants to know whether a pattern exists.
 - **Careful mode (default):** the full summary, ranked themes, named root causes, recommended actions, impact estimates, and confidence per theme. Use for normal operation.
-- **Governed mode:** the full summary, plus a cross-reference against prior feedback handoffs in `.claude/crew-state/support/` to mark each pattern New, recurring, or resolved, plus a short trend read. Use when the same corpus is reviewed on a cadence.
+- **Governed mode:** the full summary, plus a cross-reference against prior feedback handoffs in `~/.claude/crew-state/support/` to mark each pattern New, recurring, or resolved, plus a short trend read. Use when the same corpus is reviewed on a cadence.
 
 Do not run this skill when there are fewer than two items sharing the same complaint (one item is a data point, not a pattern), when the items share no common topic, when the request is to draft a reply (that is `crew-support-reply-builder`), or when the request is about a single item's root cause (that is closer to triage, not pattern analysis).
 
@@ -106,7 +106,7 @@ Before the summary is final, answer these:
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/support/crew-support-feedback-summary-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior summary from 2026-06-10, checkout theme was open, root cause unconfirmed"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for patterns reported before. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/support/crew-support-feedback-summary-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior summary from 2026-06-10, checkout theme was open, root cause unconfirmed"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for patterns reported before. (Loop 4, Context Change.)
 
 1. **Confirm the corpus.** Restate in one line what you were given: how many items, from where, over what range. If the count or source is missing, ask now. Do not theme feedback you have not bounded.
 2. **Read every item and tag sentiment.** Classify each item with this enum, definitions fixed: Positive (praises something specific), Negative (reports a problem or frustration), Mixed (both in one item), Neutral (a question or factual note, no clear sentiment). Tag, do not skim. Hold a rough count per tag.
@@ -117,7 +117,7 @@ Before the summary is final, answer these:
 7. **Recommend actions and estimate impact.** For the top themes, name one or two concrete improvements, each tied to the root cause and specific enough that a team could act without further clarification. Tag each with an Action Type from the action taxonomy. Add a conservative impact estimate (items per month now, realistic reduction if taken), and a prior-detection note in Governed mode. If the pattern is a deliberate business decision, the recommendation is "review the policy", not "change it". If a recommendation requires the business to set a price, change a policy, or make a refund or compliance call, do not decide it. Mark it and route it (Loop 3, Escalation), with the exact question the owner must answer.
 8. **Verify before you emit.** Re-read steps 3 to 7. Confirm every theme has a real item count, every quote is something you actually saw, no percentage was invented, every root cause is a process or policy (not a frontline person) and is tagged Evidence or Inference, every action carries a type, and confidence matches the sample. If a gap remains, follow Loop 2 (Quality Failure) before continuing. Only then emit the summary.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/support`, then write `.claude/crew-state/support/crew-support-feedback-summary-handoff.md` with: the summary produced, decisions made (theme ranking, named root causes, top action), unfinished work (themes marked Low confidence, anything escalated, root causes marked Inference), what the next skill needs (the top issue for `crew-support-help-document-generator` or `crew-support-faq-builder`), and any "Learned" note (a correction, a recurring pattern, a prioritisation preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/support`, then write `~/.claude/crew-state/support/crew-support-feedback-summary-handoff.md` with: the summary produced, decisions made (theme ranking, named root causes, top action), unfinished work (themes marked Low confidence, anything escalated, root causes marked Inference), what the next skill needs (the top issue for `crew-support-help-document-generator` or `crew-support-faq-builder`), and any "Learned" note (a correction, a recurring pattern, a prioritisation preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -219,7 +219,7 @@ Net: [one-line tradeoff]
 
 ## Plan mode
 
-In plan mode this skill can read the feedback items and the specification, and can produce draft themes and root causes marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, run file operations, or reach prior handoffs. The full analysis, the handoff save, and any trend cross-reference run only after plan mode is exited.
+In plan mode this skill can read the feedback items and the specification, and can produce draft themes and root causes marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, run file operations, or reach prior handoffs. The full analysis, the handoff save, and any trend cross-reference run only after plan mode is exited.
 
 ## Verification
 
@@ -238,7 +238,7 @@ Before the run is marked done, confirm:
 [ ] No invented percentage, count, sentiment score, name, or quote
 [ ] Confidence matches the sample
 [ ] No em dashes, no internal names, no business jargon in the summary
-[ ] The handoff was written to .claude/crew-state/support/
+[ ] The handoff was written to ~/.claude/crew-state/support/
 [ ] Top recommended action identified and the pattern summary written
 ```
 

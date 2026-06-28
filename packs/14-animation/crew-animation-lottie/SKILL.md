@@ -31,7 +31,7 @@ If there is no asset and no description of the designer animation, ask once for 
 
 - **Fast mode:** a quick embed spec. The player, the source, autoplay and loop, and a stable container size. Skip the interactivity and the After Effects workflow.
 - **Careful mode (default):** the full spec, the player and format and renderer choice, the implementation, the interactivity, the performance handling (lazy-load, renderer, file budget), the cleanup, and the reduced-motion path. Use before shipping a Lottie animation.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (a file-size budget, dotLottie, lazy-load, the renderer, a worker for a heavy animation), and the accessibility floor (a reduced-motion path and a static fallback for an animation that carries meaning). Use for a production animation.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (a file-size budget, dotLottie, lazy-load, the renderer, a worker for a heavy animation), and the accessibility floor (a reduced-motion path and a static fallback for an animation that carries meaning). Use for a production animation.
 
 Do not run this skill for code-authored motion (a UI transition, a sequence, or a stagger is cheaper and more flexible in `crew-animation-gsap`, `crew-animation-motion`, or `crew-animation-anime` than a JSON asset), for scroll-scrubbed timeline choreography (GSAP), or when there is no After Effects asset to render. Lottie is for designer-made vector animations shipped as a file; if the motion is better authored in code, name the better tool.
 
@@ -180,7 +180,7 @@ The checklist a build embeds when it ships a Lottie animation.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-lottie-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the player and the lazy-load were set, the reduced-motion fallback still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-lottie-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the player and the lazy-load were set, the reduced-motion fallback still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
 
 1. **Confirm Lottie is the right tool, and identify the asset.** State what the animation is and that a designer-made After Effects asset exists or is coming. If the motion is a code-authored UI transition, say so now and route it (`crew-animation-motion` or `crew-animation-gsap`). If there is no asset and no description, ask for it. Only proceed when Lottie fits.
 2. **Choose the player, the format, and the renderer.** Prefer dotLottie for production, pick the library for the framework (dotLottie-web, DotLottieReact, lottie-react, Vue, Svelte), and pick the renderer by complexity (svg crisp, canvas or worker heavy).
@@ -190,7 +190,7 @@ The checklist a build embeds when it ships a Lottie animation.
 6. **Write the spec and run the anti-pattern check.** Assemble the Lottie animation spec, and confirm none of the anti-patterns are present (a heavy file, a runtime remote path, autoplay abuse, no cleanup, an SVG renderer on a complex animation, no reduced-motion).
 7. **Verify before emitting.** Confirm the asset is justified and within budget, the player and renderer fit, autoplay and loop are off by default, the animation lazy-loads, the instance is cleaned up, and the reduced-motion path exists. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-lottie-handoff.md` with: the spec produced, decisions made (the player, the format, the renderer, the trigger), unfinished work (the asset or export not yet final, the reduced-motion fallback if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement, the export fixes for the designer), and any "Learned" note (a motion preference or a file-budget constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-lottie-handoff.md` with: the spec produced, decisions made (the player, the format, the renderer, the trigger), unfinished work (the asset or export not yet final, the reduced-motion fallback if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement, the export fixes for the designer), and any "Learned" note (a motion preference or a file-budget constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -280,7 +280,7 @@ Typical calls that warrant a brief: a Lottie asset versus code-authored motion (
 
 ## Plan mode
 
-In plan mode this skill can read the brief, the asset, and the prior handoff, and produce a draft spec (whether Lottie fits, the player and format it would choose, the trigger and the budget) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interactivity, the performance and export notes, the cleanup and accessibility, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brief, the asset, and the prior handoff, and produce a draft spec (whether Lottie fits, the player and format it would choose, the trigger and the budget) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interactivity, the performance and export notes, the cleanup and accessibility, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -297,7 +297,7 @@ Before the run is marked done, confirm:
 [ ] The After Effects export notes name what to fix and what does not survive export
 [ ] A reduced-motion path shows a static frame; a meaningful animation has a fallback
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

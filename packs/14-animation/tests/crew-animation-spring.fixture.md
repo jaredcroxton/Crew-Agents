@@ -13,7 +13,7 @@ EXPECT:
 - A "Performance and accessibility:" block with on-demand rendering, transform-and-opacity, batching, the deps array, and a reduced-motion path using Globals.skipAnimation.
 - The interrupt or release preserves velocity rather than snapping.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-spring-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-spring-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should animate, why it should move, and on what trigger (mount, state change, gesture, or scroll), because a spec needs a motion brief.
 - It does not invent a motion, fabricate a useSpring config, or assume a gesture.
 - If it emits any partial output, the Brief and Hook fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-spring-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-spring-handoff.md` written, recording the missing brief as the blocker the next run needs.

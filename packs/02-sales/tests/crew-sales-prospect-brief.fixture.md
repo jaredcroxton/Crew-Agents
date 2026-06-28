@@ -22,7 +22,7 @@ EXPECT:
 - Two or three objections, each tagged with a taxonomy type (Price, Timing, Status quo, Trust, Authority,
   or Fit), each with a one-line response; any unbacked response carries a "Needs: [proof]" tag.
 - One next step, a single concrete ask phrased in the rep's voice, not multiple options.
-- Handoff file written at .claude/crew-state/sales/crew-sales-prospect-brief-handoff.md naming the chosen
+- Handoff file written at ~/.claude/crew-state/sales/crew-sales-prospect-brief-handoff.md naming the chosen
   opener, objection picks, next step, and what crew-sales-outreach-draft needs.
 
 ## Case B: messy

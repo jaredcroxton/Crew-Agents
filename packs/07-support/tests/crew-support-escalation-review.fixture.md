@@ -15,7 +15,7 @@ EXPECT:
 - An "Escalation note" block following the Response framework (acknowledge what happened and the ask, assess the trigger and risk and what is already done, action the decision needed, timeline), with any inference labelled.
 - A "Pattern:" line classifying the issue one-off or systemic.
 - A "Next step:" line that says escalate now.
-- Handoff file `.claude/crew-state/support/crew-support-escalation-review-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/support/crew-support-escalation-review-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

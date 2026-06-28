@@ -30,7 +30,7 @@ If the issue text is missing, ask once for it plainly, because you cannot judge 
 
 - **Fast mode:** a clear single trigger and the rules supplied. Name the trigger, set the risk, route to the owner with the exact question. Skip the full cold-read note and the pattern check. Use when the escalation path is obvious and speed matters (a live outage, a named legal threat).
 - **Careful mode (default):** all trigger families checked, the risk reasoned, the threshold confirmed, the full cold-read note, and the pattern check. Use for any non-obvious or high-stakes issue.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/support/` for a repeat or systemic pattern, every owner confirmed against the rules (no "Assumed" left unflagged), and a stricter no-fabrication audit. Use for regulated, legal, or VIP escalations where a wrong route carries real cost.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/support/` for a repeat or systemic pattern, every owner confirmed against the rules (no "Assumed" left unflagged), and a stricter no-fabrication audit. Use for regulated, legal, or VIP escalations where a wrong route carries real cost.
 
 Do not run this skill to resolve the issue or write the customer reply (that is `crew-support-reply-builder`), to triage an unsorted inbox (that is `crew-support-ticket-triage`), to make the escalated decision itself (the refund figure, the legal ruling, the public statement stay with the owner), or for an issue that meets no escalation trigger (route it back to normal handling).
 
@@ -108,11 +108,11 @@ Decide whether this escalation is a one-off or a symptom of something systemic, 
 - **Systemic:** the same trigger arriving across many tickets, the same fault hitting many customers at once (Outage or systemic), or repeat contact on the same unresolved issue (third touch or more). The escalation is real, but escalating each instance does not fix the cause.
 - **Recurring types to watch:** a billing-error cluster on a renewal date, an outage or defect pattern after a release, a policy-confusion pattern where many customers hit the same rule.
 
-When the signal is systemic, escalate the immediate issue as normal AND route the pattern to `crew-support-feedback-summary`, so the root cause is named once rather than re-escalated every time. In Governed mode, check the prior handoffs in `.claude/crew-state/support/` for the same trigger before deciding one-off versus systemic.
+When the signal is systemic, escalate the immediate issue as normal AND route the pattern to `crew-support-feedback-summary`, so the root cause is named once rather than re-escalated every time. In Governed mode, check the prior handoffs in `~/.claude/crew-state/support/` for the same trigger before deciding one-off versus systemic.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/support/crew-support-escalation-review-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior review of ticket 4821, escalated to Legal, awaiting clause check"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for a repeat trigger. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/support/crew-support-escalation-review-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: prior review of ticket 4821, escalated to Legal, awaiting clause check"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for a repeat trigger. (Loop 4, Context Change.)
 
 1. **Review the issue.** Restate in one line what the customer is actually upset about and what they are demanding, separating the two. The complaint and the ask are different (a customer can be angry but ask for nothing, or calm and demand a full refund). If either is unclear from the input, mark it "Not stated", do not guess it.
 2. **Check the triggers.** Test the issue against each family in Escalation triggers and mark which fire, naming the specific trigger. If none fires, say so and route back to normal handling.
@@ -123,7 +123,7 @@ When the signal is systemic, escalate the immediate issue as normal AND route th
 7. **Check the pattern.** Decide one-off versus systemic per Pattern recognition. If systemic, route the pattern to `crew-support-feedback-summary` in parallel with the escalation.
 8. **Verify before emitting.** Re-read steps 1 to 7. Confirm every fired trigger is named, the risk level has a reason, the owner has an exact question, the threshold is confirmed or marked, and nothing (an amount, a clause, a name, an SLA) was fabricated. If a required field is empty, write "Not provided" rather than filling it (Loop 2, Quality Failure). Any decision beyond this skill (the actual refund figure, the legal ruling, the public statement, a policy the business must set) stays marked "Escalated" and routed, never made here (Loop 3, Escalation). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/support`, then write `.claude/crew-state/support/crew-support-escalation-review-handoff.md` with: the escalation summary produced, decisions made (risk level, chosen owner), unfinished work (fields marked "Not provided", anything awaiting a threshold or a name), what the owner or `crew-support-reply-builder` needs next, any pattern flagged for `crew-support-feedback-summary`, and any "Learned" note (a correction or a rule the user gave, such as "refunds over 100 go to Finance, not the lead"). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/support`, then write `~/.claude/crew-state/support/crew-support-escalation-review-handoff.md` with: the escalation summary produced, decisions made (risk level, chosen owner), unfinished work (fields marked "Not provided", anything awaiting a threshold or a name), what the owner or `crew-support-reply-builder` needs next, any pattern flagged for `crew-support-feedback-summary`, and any "Learned" note (a correction or a rule the user gave, such as "refunds over 100 go to Finance, not the lead"). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -215,7 +215,7 @@ Typical calls that warrant a brief: escalate versus resolve at the agent's level
 
 ## Plan mode
 
-In plan mode this skill can ask for the issue, read the prior handoff, and produce a draft review (the triggers it spots, a provisional risk level, a suggested owner) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, send the escalation note up, or make the call. The full review, the routing, the pattern check, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask for the issue, read the prior handoff, and produce a draft review (the triggers it spots, a provisional risk level, a suggested owner) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, send the escalation note up, or make the call. The full review, the routing, the pattern check, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -232,7 +232,7 @@ Before the run is marked done, confirm:
 [ ] One-off versus systemic decided; a systemic pattern routed to crew-support-feedback-summary
 [ ] No invented amount, clause, SLA, threshold, quote, or name; the call left to the owner
 [ ] No em dashes anywhere
-[ ] The handoff was written to .claude/crew-state/support/
+[ ] The handoff was written to ~/.claude/crew-state/support/
 ```
 
 ## Completion

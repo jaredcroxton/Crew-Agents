@@ -15,7 +15,7 @@ EXPECT:
 - An "Accessibility and SEO fallback:" block stating the site degrades to normal links without JS, external links pass through, and focus moves to the new page.
 - The new page does not flash before the enter animation; the loader is shown during fetch.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-barba-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-barba-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what kind of site it is (a multi-page site versus a single-page app) and what the transition should feel like, because Barba is for multi-page sites and the tool choice depends on that.
 - It does not invent a transition spec, fabricate a DOM structure, or assume the site is multi-page.
 - If it emits any partial output, the Brief and DOM structure fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-barba-handoff.md` written, recording the missing context as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-barba-handoff.md` written, recording the missing context as the blocker the next run needs.

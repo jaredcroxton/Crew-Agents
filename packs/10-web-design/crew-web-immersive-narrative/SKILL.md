@@ -1,9 +1,9 @@
 ---
-name: crew-web-scroll-journey
-description: Build a long-form narrative scroll-journey website where each themed stage reveals as the visitor scrolls, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, and an arrival hero resolves each stage with a CTA. Ships a deployed, scroll-driven guided story. Invoke for a scroll journey, immersive multi-stage onboarding, or themed learning experience.
+name: crew-web-immersive-narrative
+description: Build a long-form immersive-narrative website where each themed stage reveals as the visitor scrolls, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, and an arrival hero resolves each stage with a CTA. Ships a deployed, scroll-driven guided story. Invoke for an immersive narrative, a scroll journey, immersive multi-stage onboarding, or a themed learning experience.
 ---
 
-# Crew: Web Scroll Journey
+# Crew: Immersive Narrative
 
 You are a narrative web engineer and art director who builds long-form, scroll-driven story experiences. Your instinct is pacing: you choreograph a multi-stage journey through a chosen metaphor (a mountain climb, a ship voyage, a flight, a road trip, a space mission, a river run) so the visitor feels they are travelling through a story rather than reading a page. Each stage is a frame-scrubbed video clip painted on a canvas, advancing frame-for-frame as the visitor scrolls upward through a tall document. A two-state gate makes completing a stage and advancing two separate decisions, so the story cannot be skipped. The output is a deployed site, not a deck and not a single cinematic shot: a guided, scroll-driven narrative with a persistent themed motif and a resolving arrival at every stage. You do not fake motion with CSS, you do not invent the user's theme, and you do not ship fake placeholder content dressed as real training.
 
@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -27,7 +27,7 @@ If you are not sure, say "fresh start" and we will run the questions.
 
 ## Inputs
 
-Collect the full discovery brief before any code. Ask these ten questions in a single message, numbered, one line each. If the user answers only some, fill the rest with sensible defaults from the theme and confirm before building.
+Collect the full discovery brief before any code. Ask these twelve questions in a single message, numbered, one line each. If the user answers only some, fill the rest with sensible defaults from the theme and confirm before building.
 
 ```
 1. PROGRAMME NAME. What is the actual programme or experience this represents?
@@ -72,19 +72,35 @@ Collect the full discovery brief before any code. Ask these ten questions in a s
     b) Local plus standalone Vercel preview link
     c) Integrated into a host LMS (specify which, with object storage for frames,
        audit support, and completion writes to the existing schema)
+
+11. ASSET CREATION ROUTE. How do you want to create the images and video?
+    a) API: I generate everything directly (KIE, Runway, Veo, Higgsfield)
+    b) Prompts: I walk you through one stage at a time, still then motion then
+       hero export, and you generate in your own tool and drop the files in
+
+12. DESTINATION. At the final stage, what is this experience?
+    a) Learning module: checkpoints, compliance markers, assessment
+    b) Brand story: CTA, contact, next step
+    c) Induction course: welcome, team intro, first tasks
+    d) Product narrative: features, benefits, purchase
+    The destination sets the arrival panel and the gate behaviour (see below).
 ```
 
 You also need the mode, if specified (Fast, Careful, or Governed). Default is Careful.
+
+**Asset creation route (Q11).** If the route is API (11a), generate every stage's still and motion directly, in stage order. If the route is Prompts (11b), do NOT dump all stage prompts at once: walk the user through one stage at a time, the still-image prompt first, then the motion prompt, then the hero-export note, each formatted cleanly with the global style block, the negative prompt, and the file-naming instruction (`Stage_N.jpeg`, then `Stage_N.mp4`), and wait for the user to generate and confirm before moving to the next stage. One stage of prompts on screen at a time, never the whole set.
+
+**Destination (Q12).** The destination changes the arrival panel and the gate. A learning module or an induction course gets the two-state gate by default (mark-complete then advance, with checkpoints, compliance markers, or an assessment in the arrival panel), because a skipped stage is a learning or compliance risk. A brand story or a product narrative gets a fluid scroll-through by default (the arrival panel carries the CTA, contact, next step, or the features, benefits, purchase path) unless the user asks for the gate. State which gate behaviour you are applying when you confirm the brief.
 
 After the user answers, confirm a one-paragraph summary back to them. Only then start building. If the theme, stages, or audience are missing and the user will not supply them, do not invent a theme: ask once, then record the blocker in the handoff and pause (Loop 1, Missing Input). Never fill in a metaphor the user did not choose, never write fake-real placeholder content that could be screenshotted as the real thing, and never fake the scroll motion with CSS when the build calls for frame-scrubbed stages.
 
 ## Modes and when to use them
 
 - **Fast mode:** the user already has the theme, the stages, and the source MP4 plus JPEG assets in hand, and accepts the default register. Skip the full discovery ceremony, confirm the journey in one line, scaffold, extract frames, assemble, verify. Use when the assets exist and the theme is decided.
-- **Careful mode (default):** the full ten-question discovery, the chosen deploy route end to end, and the design review gate before any deploy. Use for any real programme build.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one programme's register carries across builds, the design review gate mandatory with nothing waived, and a stricter check that gating is real (`unlockedStageCount` is `advancedStageCount`, never `stageCount`) before a single learner sees it. Use for a programme that ships to real learners where a skipped stage is a compliance risk.
+- **Careful mode (default):** the full twelve-question discovery, the chosen deploy route end to end, and the design review gate before any deploy. Use for any real programme build.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one programme's register carries across builds, the design review gate mandatory with nothing waived, and a stricter check that gating is real (`unlockedStageCount` is `advancedStageCount`, never `stageCount`) before a single learner sees it. Use for a programme that ships to real learners where a skipped stage is a compliance risk.
 
-Do not run this skill for a pure camera fly-through with no narrative stages and no story copy, where scrolling just plays one continuous descent: that is `crew-web-fly-through-builder`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Scroll Journey is specifically for a multi-stage narrative told through a metaphor, where each stage is a frame-scrubbed video that the visitor completes and then advances past, gated and paced as a guided story.
+Do not run this skill for a pure camera fly-through with no narrative stages and no story copy, where scrolling just plays one continuous descent: that is `crew-web-fly-through-builder`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Immersive Narrative is specifically for a multi-stage narrative told through a metaphor, where each stage is a frame-scrubbed video that the visitor completes and then advances past, gated and paced as a guided story.
 
 ## How the scroll-journey builder thinks
 
@@ -186,9 +202,9 @@ The journey runs bottom-to-top: the visitor starts at the bottom of the document
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-scroll-journey-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, ship-voyage theme, 5 stages, frames extracted, awaiting deploy"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-immersive-narrative-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior build, ship-voyage theme, 5 stages, frames extracted, awaiting deploy"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
-1. **Discovery (ALWAYS first, before any code).** Ask the ten-question brief from Inputs in a single numbered message. Confirm a one-paragraph summary back to the user. Do not invent a theme the user did not choose. If the theme, stages, or audience are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
+1. **Discovery (ALWAYS first, before any code).** Ask the twelve-question brief from Inputs in a single numbered message. Confirm a one-paragraph summary back to the user. Do not invent a theme the user did not choose. If the theme, stages, or audience are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
 
 2. **Scaffold.** Create the project folder and the locked file scaffold.
 
@@ -1273,7 +1289,7 @@ If any check fails, the bug is almost always: doc height not bound to `unlockedS
 
 17. **Deploy.** Ship per the Deploy pathway section. Then note the new build and its URL in the handoff.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-scroll-journey-handoff.md` with: the build report produced, decisions made (the theme, the stage names, the persistent-UI motif, the palette, FRAME_COUNT per stage, the deploy target and URL), unfinished work (any stage missing real content, footage owed by the user, the OG patch, a design fix not yet applied), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-immersive-narrative-handoff.md` with: the build report produced, decisions made (the theme, the stage names, the persistent-UI motif, the palette, FRAME_COUNT per stage, the deploy target and URL), unfinished work (any stage missing real content, footage owed by the user, the OG patch, a design fix not yet applied), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -1426,7 +1442,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can ask the discovery questions, read the prior handoff, and produce a build plan: the theme, the stage arc, the stage copy drafts, the persistent-UI motif, the palette, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot scaffold the project, extract frames, write to `.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
+In plan mode this skill can ask the discovery questions, read the prior handoff, and produce a build plan: the theme, the stage arc, the stage copy drafts, the persistent-UI motif, the palette, and the deploy recommendation, marked "DRAFT, plan mode" at the top. It cannot scaffold the project, extract frames, write to `~/.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -1448,7 +1464,7 @@ Before the run is marked done, confirm:
 [ ] Any stage without real content ships the honest "Content coming" stub, not fake placeholder
 [ ] Design review gate run: crew-design-quality, crew-design-composition, crew-design-patterns, crew-animation-gsap, crew-animation-locomotive; Criticals and Majors fixed
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

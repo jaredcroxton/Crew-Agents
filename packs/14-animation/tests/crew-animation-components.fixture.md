@@ -13,7 +13,7 @@ EXPECT:
 - A "Pre-built vs custom and dependency cost:" block justifying pre-built (consistency, correctness, speed) and not pulling a heavy library for a single primitive.
 - A "Performance and accessibility:" block with transform-and-opacity only (the accordion height exception noted where relevant), the focus trap, focus restore, and Escape on the overlay, and a reduced-motion path that drops decorative motion and keeps the fade.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-components-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-components-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once which UI element should animate (a button, card, modal, nav, loader, toast, accordion, or tabset), why it should move, and on what trigger (hover, click, mount, open, dismiss, or in-view), because a spec needs a component brief.
 - It does not invent a component, fabricate a primitive choice, or assume a framework or library.
 - If it emits any partial output, the Brief and Primitive fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-components-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-components-handoff.md` written, recording the missing brief as the blocker the next run needs.

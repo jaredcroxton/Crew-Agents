@@ -12,7 +12,7 @@ EXPECT:
 - A "Performance and accessibility:" block confirming only transform and opacity animate, will-change applied narrowly and removed, the 60fps off-main-thread rationale, and a reduced-motion path.
 - The reduced-motion path removes or reduces each of the three motions to a static or minimal state.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-css-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-css-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -31,4 +31,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should animate, why it should move, and on what trigger (a state change, hover or focus, load, in-view, or a JS event), because a spec needs a motion brief.
 - It does not invent a motion, fabricate a keyframe block, or assume a trigger.
 - If it emits any partial output, the Brief and Primitive fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-css-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-css-handoff.md` written, recording the missing brief as the blocker the next run needs.

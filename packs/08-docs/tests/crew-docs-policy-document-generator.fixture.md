@@ -20,7 +20,7 @@ EXPECT:
 - An Acknowledgement field is present, capturing how staff acknowledge the policy or marked "To be set by [owner]".
 - Owner, version, effective date, and review date are captured or marked "To be set by [owner]"; nothing is invented.
 - A "Sign-off required: Escalated" line names HR or Legal review (Loop 3), and the whole document is "Draft, pending review".
-- Handoff file `.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written.
 
 ## Case B: messy
 INPUT:
@@ -33,7 +33,7 @@ EXPECT:
 - The performance trigger the business "has not worked out" is marked "To be set by [owner]" and Escalated, with no invented disciplinary step, penalty, or termination trigger, and procedural fairness preserved.
 - Because pulling remote days for performance changes conditions and carries a consequence, the consultation question is flagged and routed to crew-docs-compliance-review-check, not assumed; and any must-rule with no stated consequence is flagged "To be set by [owner]", not left silently blank.
 - No invented threshold, citation, approver name, version history, or effective date. Document still marked "Draft, pending review", sign-off Escalated.
-- Handoff file `.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written, listing the unresolved day count, the routed compliance question, and the unset performance trigger as unfinished work.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written, listing the unresolved day count, the routed compliance question, and the unset performance trigger as unfinished work.
 
 ## Case C: missing-input
 INPUT:
@@ -43,4 +43,4 @@ EXPECT:
 - It asks once, not a batched survey, and does not fabricate conduct rules, prohibited behaviours, or disciplinary consequences to fill the template.
 - If it proceeds at all, the Rules, Consequences, and Owner sections are marked "Not provided" or "To be set by [owner]", and the document is still "Draft, pending review" with sign-off Escalated.
 - No version history, past approval, or effective date is fabricated; each is marked "To be set by [owner]".
-- Handoff file `.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written, recording the missing rule set as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/docs/crew-docs-policy-document-generator-handoff.md` was written, recording the missing rule set as the blocker the next run needs.

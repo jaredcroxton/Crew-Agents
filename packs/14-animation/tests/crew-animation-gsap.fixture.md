@@ -15,7 +15,7 @@ EXPECT:
 - A "Cleanup:" block that kills triggers and tweens on teardown and turns markers off in production.
 - No animation of width, height, top, or left; transform and opacity only.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-gsap-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-gsap-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should move, why it should move, and on what trigger (load, scroll, or interaction), because a spec needs a motion brief.
 - It does not invent a motion, fabricate a timeline, or spec a scroll effect against nothing.
 - If it emits any partial output, the Brief, Trigger, and Motion fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-gsap-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-gsap-handoff.md` written, recording the missing brief as the blocker the next run needs.

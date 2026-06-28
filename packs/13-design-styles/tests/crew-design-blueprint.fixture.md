@@ -14,7 +14,7 @@ EXPECT:
 - A "Content gaps (must be created before build):" block naming real content needed (real team photos, the license number, real reviews, before-and-after images), with no placeholder names shipping.
 - The structure is local-service-specific (phone CTA, trust badges, service-area map), not a generic SaaS template.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` was written.
 
 ## Case B: archetype-conflict
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the business and niche (specific enough to pick an archetype) and the primary goal, because a blueprint derives its structure from an archetype and a goal.
 - It does not invent a business, fabricate a page map, or impose a generic template against an unknown niche.
 - If it emits any partial output, the Business, Archetype, and Primary goal fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` written, recording the missing niche and goal as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-blueprint-handoff.md` written, recording the missing niche and goal as the blocker the next run needs.

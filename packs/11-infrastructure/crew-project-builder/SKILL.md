@@ -14,8 +14,8 @@ Your output is for a business operator or developer who needs a structured proje
 Before you scaffold a single file, you need to see what is actually being built, because a project scaffolded from a guess wastes the structure: it hard-codes the wrong goal into the memory files and sends every later phase down the wrong path. There are three ways in.
 
 - **Starting fresh.** A new build with no prior context. Run Step 0 (Context Recovery) to load the brand, then ask the five discovery questions one at a time before anything is scaffolded.
-- **Continuing via this skill's own handoff.** Resuming a build that was scaffolded or partly built in an earlier session, often blocked at a gate or waiting on a credential. Read this skill's own handoff at `.claude/crew-state/infrastructure/crew-project-builder-handoff.md`, state what you recovered (the project path, the phase reached, what was blocked), and continue from there rather than re-scaffolding.
-- **An existing brand via brand-context.md.** The business is already onboarded. Read `.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and build in the terms that business uses.
+- **Continuing via this skill's own handoff.** Resuming a build that was scaffolded or partly built in an earlier session, often blocked at a gate or waiting on a credential. Read this skill's own handoff at `~/.claude/crew-state/infrastructure/crew-project-builder-handoff.md`, state what you recovered (the project path, the phase reached, what was blocked), and continue from there rather than re-scaffolding.
+- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and build in the terms that business uses.
 
 Then confirm the pre-work, one line each, so the build starts on solid ground.
 
@@ -42,7 +42,7 @@ If the goal is missing, ask the five discovery questions one at a time (Loop 1, 
 
 - **Fast mode:** a quick scaffold-and-blueprint for a small, well-specified build where the goal and the data shape are already clear. Lay down the project structure, ask any unanswered discovery questions, lock the data schema, and stop at the next phase gate for the operator. The Governed cross-check and the heavier verification pass are lighter, but the integrity gates never soften: the data schema is still locked before any code, no real credential is ever written, no trigger goes live without approval, and no production data is touched. Abandon Fast and finish in Careful the moment the build touches production, the logic is unclear, or a credential is missing.
 - **Careful mode (default):** the full protocol. Recover context, scaffold the project, run the five discovery questions, lock the data schema, verify every link, build the three layers, stylize the payload, and stop at the human-approval gate before any trigger goes live. Use for any real build.
-- **Governed mode:** the full protocol, plus a cross-reference against prior infrastructure handoffs in `.claude/crew-state/infrastructure/` to carry forward a build that was blocked or a decision that was still open, and stricter provenance on every choice (each recorded as Given, Inferred, or To confirm). Enforce any project playbook (a required scaffold, a deployment convention, an approval chain) as the authority over these defaults. Use where the build becomes infrastructure others depend on.
+- **Governed mode:** the full protocol, plus a cross-reference against prior infrastructure handoffs in `~/.claude/crew-state/infrastructure/` to carry forward a build that was blocked or a decision that was still open, and stricter provenance on every choice (each recorded as Given, Inferred, or To confirm). Enforce any project playbook (a required scaffold, a deployment convention, an approval chain) as the authority over these defaults. Use where the build becomes infrastructure others depend on.
 
 This skill BUILDS systems, it does not run them past the operator's approval. It does NOT deploy a trigger, rotate a key, or touch production data without explicit human confirmation. It is NOT a frontend design tool (it hands frontend work to the web-design builders) and it is NOT a session scribe (that is crew-core-context-save). Route rather than stretch this one past a verified, approved build.
 
@@ -114,7 +114,7 @@ Trigger is the last phase, and the most dangerous, so it runs behind a gate that
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/infrastructure/crew-project-builder-handoff.md`. If prior context exists, load it and state what was recovered. If not, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/infrastructure/crew-project-builder-handoff.md`. If prior context exists, load it and state what was recovered. If not, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Run Project scaffolding (Protocol 0).** Lay down the project structure before any code: CLAUDE.md at the root, the four memory/ files, the architecture/ execution/ and .tmp/ folders, and .env.example with placeholder credentials. Memory files come before tools. Do not start the build until the scaffold exists.
 
@@ -130,7 +130,7 @@ Trigger is the last phase, and the most dangerous, so it runs behind a gate that
 
 7. **Phase 5, Trigger: deploy behind the human-approval gate.** Only after the user approves the full build, transfer the logic to production, set up the trigger chosen by the Blueprint cadence, and write the maintenance log in CLAUDE.md. No trigger goes live and no production data is touched without explicit approval. See Deployment pathway. When anything fails later, run the self-repair loop and update the SOP so the error never repeats.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/infrastructure`, then write `.claude/crew-state/infrastructure/crew-project-builder-handoff.md` with: output produced (project path, phases completed), decisions made (architecture choices, deployment target), unfinished work (blocked by missing credentials, phases not yet reached), what the next session needs, and any Learned note. Always write it, even with no output. (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/infrastructure`, then write `~/.claude/crew-state/infrastructure/crew-project-builder-handoff.md` with: output produced (project path, phases completed), decisions made (architecture choices, deployment target), unfinished work (blocked by missing credentials, phases not yet reached), what the next session needs, and any Learned note. Always write it, even with no output. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -231,7 +231,7 @@ Before the build is marked done, confirm:
 [ ] The self-repair loop keeps a regression test that reproduces the original failure (so a fixed bug cannot silently return) and updates the SOP, and soft delete only (never a hard delete of a production record)
 [ ] Nothing is invented: not a credential, an endpoint, a schema, or a goal
 [ ] The output uses the PROJECT BUILD PLAN format (Project / Phase / Status), and any worked example is generic (no real client name, no absolute machine path, no named proprietary tool)
-[ ] The handoff was written to .claude/crew-state/infrastructure/crew-project-builder-handoff.md
+[ ] The handoff was written to ~/.claude/crew-state/infrastructure/crew-project-builder-handoff.md
 [ ] No em dashes anywhere in the output
 ```
 

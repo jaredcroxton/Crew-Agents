@@ -14,7 +14,7 @@ EXPECT:
 - A "Performance, export, and accessibility:" block with lazy-load via an IntersectionObserver, After Effects export notes (simplify paths, shape layers, what does not survive export such as glows), cleanup (destroy and remove listeners on unmount), and a reduced-motion path showing a static frame.
 - The animation does not autoplay-and-loop by default.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-lottie-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-lottie-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -33,4 +33,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the animation asset (the After Effects JSON or dotLottie file, or a description of what it should depict) and the trigger, because Lottie renders an asset and cannot author one.
 - It does not invent an animation file, fabricate a spec, or assume a depiction or a trigger.
 - If it emits any partial output, the Asset and Implementation fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-lottie-handoff.md` written, recording the missing asset as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-lottie-handoff.md` written, recording the missing asset as the blocker the next run needs.

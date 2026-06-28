@@ -13,7 +13,7 @@ EXPECT:
 - The Inter screaming H1 is flagged with a swap to a distinct face and hierarchy by weight.
 - No invented pattern; only patterns actually described are flagged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-patterns-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-patterns-handoff.md` was written.
 
 ## Case B: pattern decision
 INPUT:
@@ -32,4 +32,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the design or the page to review (a screenshot, the code, or a description of the patterns in use), because pattern currency cannot be judged without the patterns.
 - It does not invent a design, fabricate a pattern read, or run the watchlist against nothing.
 - If it emits any partial output, the Artifact and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-patterns-handoff.md` written, recording the missing artifact as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-patterns-handoff.md` written, recording the missing artifact as the blocker the next run needs.

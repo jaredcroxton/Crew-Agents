@@ -13,7 +13,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -47,7 +47,7 @@ If any required input is missing, ask once in a single message listing only the 
 
 - **Fast mode:** build straight from a complete brief and a chosen preset. Skip the plan-confirmation step and the preview path, go straight to the file. Use when the brief is complete, the brand is decided, and the user wants the deck now.
 - **Careful mode (default):** the full flow, branding discovery, a slide plan confirmed before the build, and the quality check before delivery. Use for any client-facing or pitch deck.
-- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so one brand carries across assets, plus a stricter contrast and keyboard-accessibility pass. Use for public or high-visibility decks where the brand and accessibility matter most.
+- **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across assets, plus a stricter contrast and keyboard-accessibility pass. Use for public or high-visibility decks where the brand and accessibility matter most.
 
 Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-landing-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative).
 
@@ -107,7 +107,7 @@ Inline `<span>` with classes `.kw` (keywords), `.str` (strings), `.fn` (function
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md`. If prior context exists, load it and state what was recovered (previous deck brand, slide count, unfinished work). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the brand carries across assets. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md`. If prior context exists, load it and state what was recovered (previous deck brand, slide count, unfinished work). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the brand carries across assets. (Loop 4, Context Change.)
 
 1. **Branding discovery (ask this first, before anything else).** Offer three paths:
    - Path A, use a preset: read the `themes/` directory next to this skill and present each preset name with a one-line description of its visual character. Do not show hex unless asked.
@@ -121,7 +121,7 @@ Inline `<span>` with classes `.kw` (keywords), `.str` (strings), `.fn` (function
 6. **Quality check.** Run the full checklist below before output.
 7. **Deliver.** Output the complete HTML file in a single fenced code block. After it, one sentence on how to open it, for example "Save as `deck.html` and open in any browser." Add no warnings, disclaimers, or extra notes after that line.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md` with: the deck produced (filename, slide count, brand used, preset or custom), decisions made (animation intensity, background, layout, auto-advance), unfinished work (slides the user will fill later, open branding questions), what the next skill needs (if a matching landing page is wanted, pass the `:root` brand block to `crew-web-landing-page-builder`), and a "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md` with: the deck produced (filename, slide count, brand used, preset or custom), decisions made (animation intensity, background, layout, auto-advance), unfinished work (slides the user will fill later, open branding questions), what the next skill needs (if a matching landing page is wanted, pass the `:root` brand block to `crew-web-landing-page-builder`), and a "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ### File architecture (Step 4)
 
@@ -130,7 +130,7 @@ One file: DOCTYPE, head with meta and title, a single `<style>` block, body, the
 The `<style>` block holds nine sections, in this order:
 1. Reset and base.
 2. Brand `:root` variables.
-3. Layout and slide container.
+3. Layout and slide container. The `.slide` lays its content out with `justify-content: flex-start; padding-top: max(8vh, 80px)` (NOT `justify-content: center`), so content always starts below the fixed logo and never overflows upward or clips on a short viewport. Let a dense slide scroll within its own bounds rather than centre-clipping.
 4. Slide-specific styles.
 5. Components (cards, code blocks, icons).
 6. Animations and transitions.
@@ -221,7 +221,7 @@ Typical calls that warrant a brief: auto-advance versus manual for the venue, Dr
 
 ## Plan mode
 
-In plan mode this skill can read the brief, the preset themes, and the prior handoff, and can produce the numbered slide plan and a single preview slide marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, run file operations, or output the final multi-slide file. The full build, the quality check, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brief, the preset themes, and the prior handoff, and can produce the numbered slide plan and a single preview slide marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, run file operations, or output the final multi-slide file. The full build, the quality check, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -236,9 +236,10 @@ Before the run is marked done, confirm:
 [ ] Code slides use inline .kw / .str / .fn / .cm / .num spans, no highlighting library
 [ ] Logo present and positioned; a wordmark only if the user asked for one
 [ ] Responsive at 375px, smooth cubic-bezier transitions, no console errors
+[ ] Tested at 4 viewport sizes minimum (1920x1080, 1366x768, 1180x640, 375x812), no content overflow or clip at any size
 [ ] No invented company name, colour, font, link, or slide content
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

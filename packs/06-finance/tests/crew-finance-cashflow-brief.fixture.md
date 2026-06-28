@@ -1,6 +1,6 @@
 # Fixture: crew-finance-cashflow-brief
 
-Three cases that exercise the skill: a clean run, a messy run, and a missing-input run. Each EXPECT lists the output markers that must appear and confirms the handoff file at `.claude/crew-state/finance/crew-finance-cashflow-brief-handoff.md` was written.
+Three cases that exercise the skill: a clean run, a messy run, and a missing-input run. Each EXPECT lists the output markers that must appear and confirms the handoff file at `~/.claude/crew-state/finance/crew-finance-cashflow-brief-handoff.md` was written.
 
 ## Case A: clean
 

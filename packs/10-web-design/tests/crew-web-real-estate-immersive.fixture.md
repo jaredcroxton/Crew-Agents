@@ -20,7 +20,7 @@ EXPECT:
 - The reduced-motion path is present and confirmed: matchMedia holds a representative static frame, no auto motion, the page still reads.
 - The Design review gate is run: crew-design-quality (binding) plus crew-design-composition and crew-design-patterns, a register-conditional pack-13 lens (here crew-design-soft for the warm and inviting register), and crew-animation-gsap and crew-animation-locomotive as authoring references (status, not verdict).
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:

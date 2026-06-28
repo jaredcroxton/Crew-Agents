@@ -20,7 +20,7 @@ EXPECT:
 - A "Before the conversation (prepare)" line is present.
 - A "Frame it first" contracting line is present, naming the conversation as developmental (not a performance or disciplinary process) and what will and will not be shared.
 - Nothing is invented about the coachee: no quote they did not say, no metric, no performance fact, no backstory beyond what was given.
-- Handoff file `.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was written, recording the topic type and the outcome aimed at.
+- Handoff file `~/.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was written, recording the topic type and the outcome aimed at.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -35,7 +35,7 @@ EXPECT:
 - Because performance distress can surface, the "if distress surfaces" move is scripted (pause, offer a break, point to the support line or EAP), with the EAP or support contact marked Escalated to the business, never invented.
 - The skill does not adjudicate whether the coachee is actually underperforming; it does not decide who is right.
 - The dual-role tension is respected: the conversation is not used to gather appraisal, pay, or exit evidence against the coachee, and the guide flags that the manager is also the boss.
-- Handoff file `.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was written, recording the escalation to HR and the procedural-fairness flag.
+- Handoff file `~/.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was written, recording the escalation to HR and the procedural-fairness flag.
 - STATUS is DONE_WITH_GAPS or BLOCKED (something is Escalated), never a clean DONE.
 - No em dashes anywhere.
 
@@ -47,5 +47,5 @@ EXPECT:
 - It invents no outcome, no quote Jordan said, no performance fact, and no view for Jordan; no fabricated guide is produced as if the outcome were known.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- Handoff file `.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was still written, recording the missing outcome so the next run knows.
+- Handoff file `~/.claude/crew-state/training/crew-training-coaching-conversation-guide-handoff.md` was still written, recording the missing outcome so the next run knows.
 - No em dashes anywhere.

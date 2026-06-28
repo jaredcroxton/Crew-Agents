@@ -31,7 +31,7 @@ If no artifact is supplied, or the layout cannot be seen or described, ask once 
 
 - **Fast mode:** a quick composition gut-check on one view. Trace the eye path (or name its absence) and call the single worst flatness or crowding issue with its fix. Skip the full sweep.
 - **Careful mode (default):** the full read across hierarchy, rhythm, negative space, and tension, plus the composition sins, each with the move that fixes it. Use before a layout ships.
-- **Governed mode:** the full read, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the compositional language holds across pages, the brand playbook enforced, and a stricter eye-path trace on every key screen. Use for a multi-page product.
+- **Governed mode:** the full read, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the compositional language holds across pages, the brand playbook enforced, and a stricter eye-path trace on every key screen. Use for a multi-page product.
 
 Do not run this skill to score broad visual quality (that is `crew-design-quality`), to check pattern currency (that is `crew-design-patterns`), to build the token system (that is `crew-design-language`), or to judge the authority register (that is `crew-design-authority`). This skill judges how the elements sit and where the eye goes.
 
@@ -111,7 +111,7 @@ The checklist a build embeds before a layout ships. Composition is judged before
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-composition-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior composition review of the homepage, the hero had two focal points, awaiting the demotion"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the compositional language holds across pages. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-composition-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior composition review of the homepage, the hero had two focal points, awaiting the demotion"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the compositional language holds across pages. (Loop 4, Context Change.)
 
 1. **Identify the view and trace the eye path.** Name what is being reviewed and trace where the eye lands first, second, and third. If no artifact is present, ask for it now. The eye-path trace is the spine of the review.
 2. **Read the hierarchy.** Check the focal point (is there one, and only one), the scale jumps between levels, and whether weight and isolation carry the order or size is doing all the work. Confirm the path matches the intended priority.
@@ -121,7 +121,7 @@ The checklist a build embeds before a layout ships. Composition is judged before
 6. **Write the review and the verdict.** Assemble the eye-path trace, the per-dimension reads, the flagged sins with their fixes, and a verdict (Composed, Arranged, or Flat) with the single highest-impact move.
 7. **Verify before emitting.** Confirm the eye-path trace is honest to what is on screen, every flagged sin is actually present, every fix is a concrete compositional move (not "make it pop"), and a deliberate brand choice was marked kept, not flagged (the playbook wins). Where a call needs the owner, mark it Escalated and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-composition-handoff.md` with: the review produced, decisions made (the focal point chosen, the sins flagged and the moves given), unfinished work (fixes not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a compositional choice the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-composition-handoff.md` with: the review produced, decisions made (the focal point chosen, the sins flagged and the moves given), unfinished work (fixes not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a compositional choice the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -211,7 +211,7 @@ Typical calls that warrant a brief: symmetric and calm versus asymmetric and dyn
 
 ## Plan mode
 
-In plan mode this skill can read the layout and the prior handoff, and produce a draft composition read (the eye path it traces, the sins it would flag, a provisional Composed, Arranged, or Flat) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full read, the composition sins, the moves, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the layout and the prior handoff, and produce a draft composition read (the eye path it traces, the sins it would flag, a provisional Composed, Arranged, or Flat) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full read, the composition sins, the moves, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -228,7 +228,7 @@ Before the run is marked done, confirm:
 [ ] No invented element or eye path; nothing traced that could not be seen
 [ ] A Composed / Arranged / Flat verdict with the single highest-impact move
 [ ] No vague fixes, no AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

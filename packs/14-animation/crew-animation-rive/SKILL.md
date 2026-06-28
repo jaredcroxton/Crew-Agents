@@ -31,7 +31,7 @@ If there is no .riv asset and no description of the state machine and its inputs
 
 - **Fast mode:** a quick Rive embed spec. The file, the artboard or state machine, the layout, and one input wired. Skip the ViewModel binding and the events.
 - **Careful mode (default):** the full spec, the state machine and its inputs, the interactivity wiring, the ViewModel binding, the events, the performance, the cleanup, and the reduced-motion path. Use before shipping an interactive Rive animation.
-- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (file and artboard size, vector over raster, preload, the off-screen renderer), the accessibility floor (a reduced-motion path and a non-animated fallback for a state-driven control), and the design-dev name contract verified against the editor. Use for a production animation.
+- **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (file and artboard size, vector over raster, preload, the off-screen renderer), the accessibility floor (a reduced-motion path and a non-animated fallback for a state-driven control), and the design-dev name contract verified against the editor. Use for a production animation.
 
 Do not run this skill for a fixed-timeline playback animation (a logo reveal, a loader, a marketing accent with no states or input, that is `crew-animation-lottie`, which is lighter for one-way playback), for code-authored UI motion (a transition or a sequence belongs in `crew-animation-motion`, `crew-animation-gsap`, or `crew-animation-anime`), for a scroll-scrubbed timeline (GSAP), or when there is no .riv asset. Rive is for stateful, interactive, or data-bound designer animations; if the animation just plays, name Lottie instead.
 
@@ -171,7 +171,7 @@ The checklist a build embeds when it ships a Rive animation.
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/animation/crew-animation-rive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the state machine and the hover input were wired, the events still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/animation/crew-animation-rive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior spec, the state machine and the hover input were wired, the events still open"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the motion language stays consistent. (Loop 4, Context Change.)
 
 1. **Confirm Rive is the right tool, and identify the asset.** State what the animation does. If it is fixed playback with no states or input, say so now and route it to `crew-animation-lottie`; if it is code-authored UI motion, route it to `crew-animation-motion` or `crew-animation-gsap`. If there is no .riv asset, ask for it. Only proceed when the animation is stateful or interactive.
 2. **Establish the design-dev contract.** Get the exact names from the editor or the file: the state machine, its inputs and their types, the ViewModel properties, and the events. The spec names them so the build does not guess; a missing state is a designer task.
@@ -181,7 +181,7 @@ The checklist a build embeds when it ships a Rive animation.
 6. **Write the spec and run the anti-pattern check.** Assemble the Rive animation spec, and confirm none of the anti-patterns are present (autoBind on with ViewModels, a name mismatch, an unguarded input, missing event handling, no cleanup, raster art, no reduced-motion).
 7. **Verify before emitting.** Confirm Rive is justified, the names match the editor, the state machine is run, the inputs are wired and guarded by type, ViewModels and events are configured, the artboards are light, and the reduced-motion path exists. Mark a deliberate playbook choice kept, and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/animation`, then write `.claude/crew-state/animation/crew-animation-rive-handoff.md` with: the spec produced, decisions made (the state machine, the wired inputs, the ViewModel and event setup), unfinished work (the asset or a state not yet final, the reduced-motion fallback if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement, any state the designer must add), and any "Learned" note (a name from the editor or a constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/animation`, then write `~/.claude/crew-state/animation/crew-animation-rive-handoff.md` with: the spec produced, decisions made (the state machine, the wired inputs, the ViewModel and event setup), unfinished work (the asset or a state not yet final, the reduced-motion fallback if deferred, anything Escalated or kept by the playbook), what the building skill needs next (the spec to implement, any state the designer must add), and any "Learned" note (a name from the editor or a constraint the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -265,7 +265,7 @@ Typical calls that warrant a brief: Rive versus Lottie (a state machine versus f
 
 ## Plan mode
 
-In plan mode this skill can read the brief, the asset, and the prior handoff, and produce a draft spec (whether Rive fits, the state machine and inputs it would wire, the runtime) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interactivity wiring, the ViewModel and event setup, the performance and accessibility, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the brief, the asset, and the prior handoff, and produce a draft spec (whether Rive fits, the state machine and inputs it would wire, the runtime) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a spec as final, or edit the build. The full spec, the interactivity wiring, the ViewModel and event setup, the performance and accessibility, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -281,7 +281,7 @@ Before the run is marked done, confirm:
 [ ] The animation lazy-loads below the fold; a reduced-motion path holds a static state
 [ ] A state-driven control has a non-animated fallback; a missing state is routed to the designer
 [ ] No AI-slop, no emoji, no em dashes in the spec
-[ ] The handoff was written to .claude/crew-state/animation/
+[ ] The handoff was written to ~/.claude/crew-state/animation/
 ```
 
 ## Completion

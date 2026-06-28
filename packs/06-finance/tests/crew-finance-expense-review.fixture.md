@@ -27,7 +27,7 @@ EXPECT:
 - Approval chain checked: the records do not state who approved, so the approval chain is noted as not provided (no self-approval could be confirmed or cleared), never assumed sound. If the records did imply a self-approval, it would be flagged for review, never waved through.
 - A Patterns paragraph with figures, no adjectives like "healthy".
 - No currency symbol, named tax, or statute appears anywhere; amounts are bare numbers.
-- The handoff file `.claude/crew-state/finance/crew-finance-expense-review-handoff.md` was written.
+- The handoff file `~/.claude/crew-state/finance/crew-finance-expense-review-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -67,5 +67,5 @@ EXPECT:
 - Invents nothing: no totals, no categories, no example numbers presented as the business's data, no fabricated exceptions, no guessed receipt status.
 - Marks the review "Not provided" rather than producing a hollow EXPENSE REVIEW.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a real review.
-- Still writes the handoff file `.claude/crew-state/finance/crew-finance-expense-review-handoff.md` recording "No output, run completed [date], awaiting expense export and period."
+- Still writes the handoff file `~/.claude/crew-state/finance/crew-finance-expense-review-handoff.md` recording "No output, run completed [date], awaiting expense export and period."
 - No em dashes anywhere.

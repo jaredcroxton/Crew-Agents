@@ -1,6 +1,6 @@
 # Fixture: crew-marketing-social-post-pack
 
-Three cases that exercise the skill end to end. Each EXPECT lists the output markers that must appear and asserts the handoff file was written to `.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md`.
+Three cases that exercise the skill end to end. Each EXPECT lists the output markers that must appear and asserts the handoff file was written to `~/.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md`.
 
 ## Case A: clean
 
@@ -24,7 +24,7 @@ EXPECT:
 - Angle mix uses distinct labels from the taxonomy (for example Problem, How-to, Offer), not the same angle repeated, with the Offer earned by value posts before it.
 - No invented statistics, prices, results, or testimonials. Times of day may be set because the timezone was given.
 - Copy is in the audience's market English (matching the brand-context audience loaded at Step 0).
-- Handoff file written at `.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md` recording the angle mix, platform set, and chosen CTAs.
+- Handoff file written at `~/.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md` recording the angle mix, platform set, and chosen CTAs.
 
 ## Case B: messy
 
@@ -57,4 +57,4 @@ EXPECT:
 - The skill does NOT write posts and does NOT invent an offer, a statistic, a result, or a goal.
 - If it cannot get the input, affected fields are marked "Not provided" rather than filled.
 - Because voice was not provided, the voice line is labelled "Assumed voice: neutral, confirm before publishing" rather than fabricated.
-- Handoff file still written at `.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md`, recording the gap ("blocked: awaiting core idea and goal") so the next run does not repeat the question.
+- Handoff file still written at `~/.claude/crew-state/marketing/crew-marketing-social-post-pack-handoff.md`, recording the gap ("blocked: awaiting core idea and goal") so the next run does not repeat the question.

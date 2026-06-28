@@ -10,7 +10,7 @@ EXPECT:
 - Intent named as a sales prep job (the job, not the words).
 - Match is Strong and routes to crew-sales-lead-research.
 - A "Next in chain" naming crew-sales-prospect-brief.
-- Handoff file `.claude/crew-state/core/crew-core-using-crew-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/core/crew-core-using-crew-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy

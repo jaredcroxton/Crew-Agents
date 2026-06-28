@@ -16,7 +16,7 @@ EXPECT:
 - Contacts and Files-and-access sections present; access lists the system (client Slack) and grantor (Dana Okafor), with no credential written.
 - Nothing is invented: the client IT contact's direct name is marked "Unknown, confirm with Dana" rather than fabricated.
 - Step 0 states first run or recovered context.
-- Handoff file written at `.claude/crew-state/docs/crew-docs-handover-document-writer-handoff.md`, recording the handover type (Leave), the depth chosen for Tom, and the open items (the unsigned skip, the unknown IT contact).
+- Handoff file written at `~/.claude/crew-state/docs/crew-docs-handover-document-writer-handoff.md`, recording the handover type (Leave), the depth chosen for Tom, and the open items (the unsigned skip, the unknown IT contact).
 
 ## Case B: messy
 INPUT:
@@ -43,4 +43,4 @@ EXPECT:
 - Invents no status, no decision, no contact, no deadline, no file path, and picks no default receiver or seniority.
 - The first-actions block is marked "to confirm with [person]" rather than a fabricated day-one plan.
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE, so an empty skeleton is not mistaken for a finished handover.
-- Handoff file written at `.claude/crew-state/docs/crew-docs-handover-document-writer-handoff.md`, recording that the run was blocked on the missing receiver and state, what was asked for, and "No output, run completed [date]" if nothing usable was produced.
+- Handoff file written at `~/.claude/crew-state/docs/crew-docs-handover-document-writer-handoff.md`, recording that the run was blocked on the missing receiver and state, what was asked for, and "No output, run completed [date]" if nothing usable was produced.

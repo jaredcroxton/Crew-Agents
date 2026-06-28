@@ -23,7 +23,7 @@ EXPECT:
 - Transition buffers are built into the timing, and an "if it runs over" cut on a Tell or passive block is named, never a Do.
 - The materials list and the room setup are named (whiteboard, scenario cards, timer, table layout), with no vague "the materials".
 - Nothing is invented: no stat, no customer name, no policy, no objective beyond the outline.
-- Handoff file `.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was written, naming what crew-training-learner-workbook-builder needs next.
+- Handoff file `~/.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was written, naming what crew-training-learner-workbook-builder needs next.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -39,7 +39,7 @@ EXPECT:
 - Because "Handling Difficult Conversations" is a genuinely sensitive topic, the skill escalates whether a non-expert lead should facilitate it at all, and scripts an "if distress surfaces" move (pause, offer a break, point to the support line or EAP, do not press a disclosure), with the support contact marked Escalated to the business, never invented.
 - An accessibility note covers the reshaped virtual activity (chat alternative for those who cannot speak on camera, captions or a narrated demo), so no learner is silently excluded.
 - No objective, customer name, quote, or policy beyond the outline is invented.
-- Handoff file `.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was written, recording the reshaped activity, the missing timing, and the unapproved stat as unfinished work.
+- Handoff file `~/.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was written, recording the reshaped activity, the missing timing, and the unapproved stat as unfinished work.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -51,5 +51,5 @@ EXPECT:
 - It invents no objectives, no sections, no timings, no scripted lines, and no audience. No fabricated guide is produced.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- Handoff file `.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was still written, recording the gap ("blocked: no approved outline provided") so the next run knows.
+- Handoff file `~/.claude/crew-state/training/crew-training-facilitator-guide-creator-handoff.md` was still written, recording the gap ("blocked: no approved outline provided") so the next run knows.
 - No em dashes anywhere.

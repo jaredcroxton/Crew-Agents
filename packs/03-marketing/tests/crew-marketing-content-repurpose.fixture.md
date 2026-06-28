@@ -18,7 +18,7 @@ EXPECT:
 - Any alt text describes only the actual or intended image and invents no data value, chart contents, or visual detail not present; a placeholder visual is marked "Alt text (to finalise once the image is made)".
 - The source credited to Priya Anand at least once across the pack and on each asset where attribution reads naturally; alt text noted for the video or any image asset (accessibility); a suggested publishing sequence; CTAs drive to the blog.
 - The spine and the numbers consistent across all assets (no asset states the churn figures differently).
-- Handoff written at `.claude/crew-state/marketing/crew-marketing-content-repurpose-handoff.md` recording assets produced, anchor messages, and the source classification.
+- Handoff written at `~/.claude/crew-state/marketing/crew-marketing-content-repurpose-handoff.md` recording assets produced, anchor messages, and the source classification.
 
 ## Case B: messy
 INPUT:
@@ -45,4 +45,4 @@ EXPECT:
 - Asks once, plainly, for the one thing needed (the transcript, recording notes, or a summary of the actual points made), explaining that repurposing without source material would mean inventing the content.
 - Does NOT draft a blog, posts, newsletter, or script from nothing. Invents no claims, no numbers, no quotes, no speaker name.
 - If it emits anything, it returns only the empty pack structure with every field marked "Not provided", not filled with placeholder content.
-- Handoff still written at `.claude/crew-state/marketing/crew-marketing-content-repurpose-handoff.md` recording the run was blocked on missing source content and what to supply next time.
+- Handoff still written at `~/.claude/crew-state/marketing/crew-marketing-content-repurpose-handoff.md` recording the run was blocked on missing source content and what to supply next time.

@@ -11,7 +11,7 @@ EXPECT:
 - Destructive actions section flags Overwrite for this in-place copy task.
 - Rules section carries the Refuse rule, the Confirm rule, and the explicit Honesty line that it is a convention, not a mechanism that blocks an edit.
 - Lift condition names approval of the copy.
-- Handoff written to .claude/crew-state/core/crew-core-guard-boundary-handoff.md with the record, lists, and an Active status the next skill must honour.
+- Handoff written to ~/.claude/crew-state/core/crew-core-guard-boundary-handoff.md with the record, lists, and an Active status the next skill must honour.
 - No em dashes anywhere.
 
 ## Case B: messy

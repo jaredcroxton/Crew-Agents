@@ -15,7 +15,7 @@ EXPECT:
 - An "Accessibility floor:" note (focus visible, contrast readable, or the defect to fix).
 - No invented element; only what is described is flagged.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` was written.
 
 ## Case B: wrong-lens
 INPUT:
@@ -35,4 +35,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the design to review and the intended mode (Swiss industrial print or tactical telemetry), because the brutalist read needs both a design and a committed mode.
 - It does not invent a design, fabricate a brutalist read, or flag leaks against nothing.
 - If it emits any partial output, the Artifact, Mode, and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` written, recording the missing artifact and mode as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` written, recording the missing artifact and mode as the blocker the next run needs.

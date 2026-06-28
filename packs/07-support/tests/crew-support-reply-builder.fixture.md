@@ -13,7 +13,7 @@ EXPECT:
 - The reply contains zero banned phrases (no "Unfortunately", no "we value your feedback", no "rest assured") and is under 150 words.
 - The refund value is NOT promised in the reply; it is bracketed and the Escalation line reads "Escalated: refund amount, who approves", routed to crew-support-escalation-review.
 - No invented order number, amount, or account detail; unknowns marked "Not provided".
-- Handoff file `.claude/crew-state/support/crew-support-reply-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/support/crew-support-reply-builder-handoff.md` was written.
 
 ## Case B: messy
 INPUT:

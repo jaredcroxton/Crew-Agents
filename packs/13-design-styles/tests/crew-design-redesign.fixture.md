@@ -17,7 +17,7 @@ EXPECT:
 - A "Strategic omissions / accessibility floor:" line flagging the missing focus rings, 404, legal links, and form validation.
 - No invented current state; only what is described is diagnosed.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-styles/crew-design-redesign-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-redesign-handoff.md` was written.
 
 ## Case B: start-over
 INPUT:
@@ -37,4 +37,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the existing design or codebase to audit (a screenshot, the live page, or the code), because a redesign needs something to lift and this skill does not build from nothing.
 - It does not invent the current state of a site, fabricate a diagnosis, or produce a keep, cut, elevate triage against nothing.
 - If it emits any partial output, the Artifact, Stack, and Verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-styles/crew-design-redesign-handoff.md` written, recording the missing design as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-styles/crew-design-redesign-handoff.md` written, recording the missing design as the blocker the next run needs.

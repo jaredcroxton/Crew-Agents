@@ -22,7 +22,7 @@ EXPECT:
 - A row flags the missing `:active` state and adds `transform: scale(0.97)` on `:active`, with the reason that a button must feel responsive to press.
 - A row flags the thin hover (background only) and adds a more considered hover, gated behind `@media (hover: hover) and (pointer: fine)` where motion is involved.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/design-standards/crew-design-engineering-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-engineering-handoff.md` was written.
 
 ## Case B: animation decision
 INPUT:
@@ -42,4 +42,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once, plainly, for the component or interaction to review (the code, a snippet, or a concrete interaction), because craft review is specific to real code.
 - It does not invent a component, fabricate an easing or duration, or produce a Before/After table against code it cannot see.
 - If it emits any partial output, the Component and verdict fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/design-standards/crew-design-engineering-handoff.md` written, recording the missing artifact as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/design-standards/crew-design-engineering-handoff.md` written, recording the missing artifact as the blocker the next run needs.

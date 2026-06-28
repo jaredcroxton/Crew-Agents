@@ -14,7 +14,7 @@ EXPECT:
 - A "Performance and accessibility:" block with a reduced-motion path that holds a static state, and cleanup (rive.off on unmount).
 - No fabricated input or state name beyond what the brief gives; the names match the editor contract.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-rive-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-rive-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -33,4 +33,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once for the Rive (.riv) asset and the names from the editor (the state machine, its inputs and types, any ViewModel properties, and events), because Rive wires a designer-authored state machine and cannot author one.
 - It does not invent a state machine, fabricate input names, or assume the interactivity.
 - If it emits any partial output, the Asset and the contract fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-rive-handoff.md` written, recording the missing asset and contract as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-rive-handoff.md` written, recording the missing asset and contract as the blocker the next run needs.

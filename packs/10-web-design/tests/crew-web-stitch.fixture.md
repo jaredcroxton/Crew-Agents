@@ -10,7 +10,7 @@ Three cases that exercise the skill: a clean DESIGN.md taste contract, a wrong-t
 
 **Expect.**
 
-- Step 0 reads `.claude/crew-state/web-design/crew-web-stitch-handoff.md` and states what was recovered (or "No prior context, first run").
+- Step 0 reads `~/.claude/crew-state/web-design/crew-web-stitch-handoff.md` and states what was recovered (or "No prior context, first run").
 - The brief is captured first: Linear as the reference, finance operators in a B2B treasury console as audience, dials Variance 6 / Motion 5 / Density 7, the dashboard plus settings plus empty state as target screens.
 - The reference is analyzed across all nine dimensions: atmosphere and the three dials, color palette and roles, typography rules, the hero section, component stylings, layout principles, responsive rules, motion philosophy, and the anti-pattern / AI-tell list. No dimension is left descriptive-only.
 - The seven-part DESIGN.md is drafted with precise values: a Visual Theme and Atmosphere section, a Color Palette and Roles section (an absolute neutral base, a single accent below 80 percent saturation with its hex, no purple/neon, no pure black), Typography Rules (Inter and generic serifs banned, distinctive type forced, mono for high-density numbers since density exceeds 7), Component Stylings, Layout Principles, Motion and Interaction (spring physics constants, perpetual micro-loops, transform and opacity only), and Anti-Patterns (the full ban list enumerated).
@@ -19,7 +19,7 @@ Three cases that exercise the skill: a clean DESIGN.md taste contract, a wrong-t
 - The build report begins with the exact line `STITCH OUTPUT`.
 - The Design review gate is run against `crew-design-quality`, `crew-design-composition`, `crew-design-patterns`, `crew-design-soft`, `crew-animation-motion`, and `crew-animation-css`, with Criticals and Majors fixed, and a fail blocking the handover to Stitch.
 - No em dashes anywhere.
-- The handoff is written to `.claude/crew-state/web-design/crew-web-stitch-handoff.md`.
+- The handoff is written to `~/.claude/crew-state/web-design/crew-web-stitch-handoff.md`.
 
 ## Case B: wrong-tool
 
@@ -46,5 +46,5 @@ Three cases that exercise the skill: a clean DESIGN.md taste contract, a wrong-t
 - Loop 1, Missing Input. The skill does NOT invent a brand, does NOT pick a reference, and does NOT draft any taste.
 - It asks once for the brief: the brand or reference (a URL, a brand name, or an existing product), the audience and product type, and the design intent / dials, plus the target screens.
 - It invents no taste, no palette, and no dials on a guess; it does not start drafting the seven-part contract.
-- It records the blocker in the handoff at `.claude/crew-state/web-design/crew-web-stitch-handoff.md` and pauses rather than fabricating a brief.
+- It records the blocker in the handoff at `~/.claude/crew-state/web-design/crew-web-stitch-handoff.md` and pauses rather than fabricating a brief.
 - No em dashes anywhere.

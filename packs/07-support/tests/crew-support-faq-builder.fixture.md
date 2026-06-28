@@ -14,7 +14,7 @@ EXPECT:
 - Three FAQ entries, each following the FAQ structure anatomy: an intent tag in brackets ([Billing] for refund, [Problem] for damaged, [Setup] or [Using] for tracking), the question in the customer's own words, a one to three sentence answer that leads with the answer (Tone and clarity), "Source: returns-policy.md", and a "Next:" action.
 - Most-asked question (refund, 14) appears first, per Organisation logic (ordered by the tally, not by taste).
 - "Cut (not real questions): none" (or no marketing entries kept).
-- A handoff file is written at `.claude/crew-state/support/crew-support-faq-builder-handoff.md` recording the FAQ produced and the ordering decision.
+- A handoff file is written at `~/.claude/crew-state/support/crew-support-faq-builder-handoff.md` recording the FAQ produced and the ordering decision.
 
 ## Case B: messy
 INPUT:
@@ -44,4 +44,4 @@ EXPECT:
 - Loop 1 (Missing Input) behaviour: the skill names the gap plainly (there are no real questions to build from) and asks once for the question source (tickets, chats, search queries, or a written list).
 - It does NOT invent customer questions or write a generic made-up FAQ.
 - If told to proceed anyway, it marks the deliverable "Not provided: no real question source" rather than fabricating entries, and produces nothing it cannot source.
-- The handoff file is still written at `.claude/crew-state/support/crew-support-faq-builder-handoff.md`, recording that the question source was missing and the run is blocked pending it ("No output, run completed [date]" if nothing was produced).
+- The handoff file is still written at `~/.claude/crew-state/support/crew-support-faq-builder-handoff.md`, recording that the question source was missing and the run is blocked pending it ("No output, run completed [date]" if nothing was produced).

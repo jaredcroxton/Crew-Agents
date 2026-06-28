@@ -31,7 +31,7 @@ If no artifact is supplied, or it is unclear whether brutalist is even the goal,
 
 - **Fast mode:** a quick brutalist check. Confirm the mode (Swiss or tactical) is committed and call the single worst commercial-default leak (a gradient, a rounded corner, a soft shadow, an eased fade). Skip the full sweep.
 - **Careful mode (default):** the full review across typography, colour, layout, and interactions, plus the right-call judgment and the accessibility floor, with the raw fix for each leak. Use before a brutalist design ships.
-- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `.claude/crew-state/design-styles/` so the chosen mode holds across pages, the brand playbook enforced, and a stricter accessibility-floor pass (brutalist often breaks contrast and focus, which must still be flagged). Use for a multi-page brutalist build.
+- **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the chosen mode holds across pages, the brand playbook enforced, and a stricter accessibility-floor pass (brutalist often breaks contrast and focus, which must still be flagged). Use for a multi-page brutalist build.
 
 Do not run this skill for a commercial product that must read trustworthy and safe (use `crew-design-authority`), to score broad visual quality regardless of style (that is `crew-design-quality`), to build the token system (that is `crew-design-language`), or for a brand that should read warm, friendly, or accessibility-first. Brutalist is a deliberate, narrow register; name the mismatch rather than forcing it.
 
@@ -135,7 +135,7 @@ The checklist a build embeds when the goal is brutalist. The aesthetic is the co
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-styles/crew-design-brutalist-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review in tactical mode, the rounded cards were flagged, awaiting the square fix"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the chosen mode holds across pages. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-styles/crew-design-brutalist-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review in tactical mode, the rounded cards were flagged, awaiting the square fix"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the chosen mode holds across pages. (Loop 4, Context Change.)
 
 1. **Confirm brutalist is the right call, and the mode.** State the register goal and the audience. If the brand must read trustworthy, safe, or accessibility-first, say so now, route it (`crew-design-authority` for trust), and do not force raw onto it. If brutalist fits, confirm the mode, Swiss industrial print or tactical telemetry, and check it is committed, not mixed.
 2. **Read the typography.** Check the macro type (heavy uppercase grotesque, massive scale, tight tracking, compressed leading) against the micro type (small uppercase monospace, generous tracking). Flag any friendly geometric body face or any soft, smoothed treatment.
@@ -145,7 +145,7 @@ The checklist a build embeds when the goal is brutalist. The aesthetic is the co
 6. **Run the commercial-default leaks and write the verdict.** Assemble the per-dimension reads, flag every commercial default that crept in with its raw fix, and set a verdict (Brutal, Diluted, or Wrong lens) with the single highest-impact move.
 7. **Verify before emitting.** Confirm every flagged leak is actually present, every fix is a concrete raw move (square the corner, remove the shadow, snap the hover), the mode is judged as committed or mixed, and brutalist was confirmed as the right call. Mark a deliberate brand exception kept (the playbook wins), and Escalate anything the owner must decide (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-styles`, then write `.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` with: the review produced, decisions made (the mode, the leaks flagged and the fixes, whether brutalist was confirmed as the right call), unfinished work (fixes not applied, accessibility defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a mode choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-styles`, then write `~/.claude/crew-state/design-styles/crew-design-brutalist-handoff.md` with: the review produced, decisions made (the mode, the leaks flagged and the fixes, whether brutalist was confirmed as the right call), unfinished work (fixes not applied, accessibility defects, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a mode choice or a brand exception the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -239,7 +239,7 @@ Typical calls that warrant a brief: Swiss industrial print versus tactical telem
 
 ## Plan mode
 
-In plan mode this skill can read the design and the prior handoff, and produce a draft brutalist read (whether brutalist is the right call, the mode it would confirm, the leaks it would flag, a provisional Brutal, Diluted, or Wrong lens) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full review, the leak sweep, the fixes, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the design and the prior handoff, and produce a draft brutalist read (whether brutalist is the right call, the mode it would confirm, the leaks it would flag, a provisional Brutal, Diluted, or Wrong lens) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full review, the leak sweep, the fixes, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -257,7 +257,7 @@ Before the run is marked done, confirm:
 [ ] A deliberate brand exception is marked kept; the playbook won over the defaults
 [ ] A Brutal / Diluted / Wrong lens verdict with the single highest-impact move
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-styles/
+[ ] The handoff was written to ~/.claude/crew-state/design-styles/
 ```
 
 ## Completion

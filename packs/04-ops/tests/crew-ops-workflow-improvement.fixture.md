@@ -21,7 +21,7 @@ EXPECT:
 - A current-state baseline (the ~9-day cycle, with the demand rate and a rework-rate baseline captured or marked Not provided) is named, AND the after-measure target is split honestly by the constraint: stage 1 (handoff removed, re-key merged, the ~3-day approval wait still standing) targets ~4 days, and only stage 2 (the approval relieved once the policy is confirmed) reaches under 3 days. The actioned changes alone are NOT claimed to hit under 3, because they do not touch the constraint.
 - An implementation plan appears: what changes first (the lowest-risk handoff removal, the control change held until escalation), who is affected (manager, team lead, Finance), a pilot (one team for a short window) before a wide rollout, and a rollback. The plan documents the lean flow as standard work, names a sign-off (the ops manager as process owner) for pilot and rollout distinct from the escalated policy answer, and the after-measure tracks the rework rate against its baseline, not only cycle time.
 - Nothing is invented: no fabricated time saving asserted as fact, the cycle-time claim is checked against the baseline in the pilot, not asserted.
-- The handoff file `.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was written, naming the steps cut and the lever for each, the escalated policy change, the baseline and the target, and that the lean flow is the input to crew-ops-automation-opportunity-review.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was written, naming the steps cut and the lever for each, the escalated policy change, the baseline and the target, and that the lean flow is the input to crew-ops-automation-opportunity-review.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -38,7 +38,7 @@ EXPECT:
 - An unknown per-step time is written "Not provided" and the improvement is flagged unmeasurable until the steps are timed, never an invented saving or cycle time.
 - The finance control check in the flow is NOT cut; any change to it is Escalated.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was written, recording the escalated policy or capacity change, the training routed to crew-training-needs-analyser, and the unmeasured baseline.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was written, recording the escalated policy or capacity change, the training routed to crew-training-needs-analyser, and the unmeasured baseline.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -50,5 +50,5 @@ EXPECT:
 - It invents no step, no cycle time, no owner, and no waste type to fill the redesign.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was still written, recording the missing as-is process so the next run knows.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-workflow-improvement-handoff.md` was still written, recording the missing as-is process so the next run knows.
 - No em dashes anywhere.

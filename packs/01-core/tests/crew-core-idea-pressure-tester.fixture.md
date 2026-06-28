@@ -19,7 +19,7 @@ EXPECT:
 - Risk of doing nothing scored Acute with a reason.
 - Demand vs effort placed in Build now.
 - SIGNAL: PROCEED with a one-line reason tied to the prepaying clinic.
-- Handoff written at .claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md recording
+- Handoff written at ~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md recording
   the verdict, the box, and a handoff of the smallest version to the build-planning step (the Crew
   Method "Plan in bite-sized tasks" standard). Does not reference a non-existent plan-writer skill
   and does not start the build itself.
@@ -60,6 +60,6 @@ EXPECT:
   "Not provided" rather than filled. Nothing is invented.
 - No fabricated quote, sales number, or competitor fact appears anywhere.
 - Run-level STATUS is NEEDS_CONTEXT (or BLOCKED), never DONE, because no idea could be assessed.
-- Handoff still written at .claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md
+- Handoff still written at ~/.claude/crew-state/core/crew-core-idea-pressure-tester-handoff.md
   recording that the idea was not provided and no verdict was reached.
 - No em dashes anywhere.

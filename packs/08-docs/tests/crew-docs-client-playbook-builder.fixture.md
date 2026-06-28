@@ -20,7 +20,7 @@ EXPECT:
 - The FAQ has three to six real client questions (revisions included, late feedback, who is my contact) each answered in two sentences, no invented refund or cancellation policy.
 - Nothing is invented: no fabricated price, turnaround, guarantee, SLA, or named person; no other client's data appears; reading level matches a new client.
 - Step 0 states first run or recovered context.
-- Handoff written to `.claude/crew-state/docs/crew-docs-client-playbook-builder-handoff.md` recording the type chosen, the section to confirm (the fee), and what `crew-docs-sop-builder` needs to write the matching internal version.
+- Handoff written to `~/.claude/crew-state/docs/crew-docs-client-playbook-builder-handoff.md` recording the type chosen, the section to confirm (the fee), and what `crew-docs-sop-builder` needs to write the matching internal version.
 
 ## Case B: messy
 INPUT:
@@ -44,4 +44,4 @@ EXPECT:
 - If it proceeds at all, the spine (overview, how it works, timeline, responsibilities, communication, what you get, pricing structure, FAQ, next step) is present but bodies read "To be confirmed by [role]", and pricing is not given a number.
 - Any section it cannot found is marked "To be confirmed by [role]" or left as a labelled placeholder, never filled with fabricated content.
 - Because every core section is unconfirmed, any emitted shell carries a "[DRAFT SHELL, not for client release, N sections to confirm]" header stamp and STATUS DONE_WITH_GAPS or BLOCKED, never DONE, so a hollow placeholder is not mistaken for a publishable deliverable; a "Current as of [date]" or "No output, run completed [date]" stamp is still written.
-- Handoff written to `.claude/crew-state/docs/crew-docs-client-playbook-builder-handoff.md` recording the missing inputs so the next run does not repeat the ask, with "No output, run completed [date]" if nothing usable was produced.
+- Handoff written to `~/.claude/crew-state/docs/crew-docs-client-playbook-builder-handoff.md` recording the missing inputs so the next run does not repeat the ask, with "No output, run completed [date]" if nothing usable was produced.

@@ -31,7 +31,7 @@ If no artifact is supplied, or the register goal is unclear, ask once what is be
 
 - **Fast mode:** a quick authority gut-check. Name the three elements that most undercut credibility (a trendy gradient, a startup font, a playful hero) and the establishing swap for each. Skip the full sweep.
 - **Careful mode (default):** the full authority sweep across typography, colour, layout, and imagery, plus the anti-SaaS playbook, each element marked establishes or undercuts, with the establishing fix. Use before a credibility-critical design ships.
-- **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the authority register holds across the whole property, the brand playbook enforced, and a stricter "would a sceptical buyer trust this" pass. Use for regulated, financial, legal, or luxury work where credibility carries real money.
+- **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the authority register holds across the whole property, the brand playbook enforced, and a stricter "would a sceptical buyer trust this" pass. Use for regulated, financial, legal, or luxury work where credibility carries real money.
 
 Do not run this skill when the brief genuinely wants to read as a fresh modern startup (use `crew-design-quality` and `crew-design-patterns` for that register), for a playful consumer brand, or for an internal tool where trust is assumed. Authority is the wrong lens for a product that should feel young and energetic; gravity would make it read stiff and old. Name that mismatch rather than forcing serifs and navy onto a brand that needs lift.
 
@@ -112,7 +112,7 @@ The checklist a build embeds when the goal is to read established. The authority
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-authority-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior authority review of the homepage, the startup font was flagged, awaiting the serif swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the register holds across the property. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-authority-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior authority review of the homepage, the startup font was flagged, awaiting the serif swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder so the register holds across the property. (Loop 4, Context Change.)
 
 1. **Confirm the register before reviewing.** State the register goal and the audience, and pick one of three: old-world authority, modern-establishment, or fresh. If the brand should read young, playful, or energetic, say so now, recommend the fresh register (`crew-design-quality`, `crew-design-patterns`), and do not force gravity onto it. If the brand is established but contemporary (a top consultancy, a modern fintech that must look trustworthy and current), do not reach for full old-world gravity (a serif masthead, a crest, near-zero motion); set the modern-establishment dial instead, a serious grotesque over a serif, one restrained accent, structure without a crest, minimal but present motion. Only run the full old-world sweep when that is genuinely the goal.
 2. **Sweep the authority dimensions.** Check the design against Authority typography, colour, layout, and imagery. For each element, decide whether it establishes authority, is neutral, or undercuts it.
@@ -122,7 +122,7 @@ The checklist a build embeds when the goal is to read established. The authority
 6. **Write the review and the verdict.** Assemble the per-dimension reads, the flagged elements with swaps, and a verdict (Commands authority, Credible, or Reads startup) with the single highest-impact establishing move.
 7. **Verify before emitting.** Confirm every flagged element is actually in the design, every swap genuinely raises authority (not just changes the look), and a deliberate brand choice was marked kept, not flagged (the playbook wins). Confirm authority was the right lens to apply. Where a call needs the owner, mark it Escalated and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-authority-handoff.md` with: the review produced, decisions made (the elements flagged and the swaps given, whether authority was confirmed as the right lens), unfinished work (swaps not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a brand value or a register decision the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-authority-handoff.md` with: the review produced, decisions made (the elements flagged and the swaps given, whether authority was confirmed as the right lens), unfinished work (swaps not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a brand value or a register decision the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -209,7 +209,7 @@ Typical calls that warrant a brief: a serif versus a serious grotesque, old-worl
 
 ## Plan mode
 
-In plan mode this skill can read the design and the prior handoff, and produce a draft authority read (the dimensions it would flag, whether authority is the right lens, a provisional verdict) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full sweep, the anti-SaaS playbook, the swaps, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the design and the prior handoff, and produce a draft authority read (the dimensions it would flag, whether authority is the right lens, a provisional verdict) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full sweep, the anti-SaaS playbook, the swaps, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -226,7 +226,7 @@ Before the run is marked done, confirm:
 [ ] No AI-generated imagery recommended for a brand that must be trusted
 [ ] A Commands authority / Credible / Reads startup verdict with the single highest-impact move
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

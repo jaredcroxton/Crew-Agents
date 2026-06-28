@@ -10,7 +10,7 @@ EXPECT:
 - The scaffold is listed: CLAUDE.md, memory/ (task_plan, findings, progress, decisions), architecture/, execution/, .tmp/, .env.example.
 - The five discovery answers are recorded, and the data schema is noted as locked in CLAUDE.md before any code.
 - Next phase named (Link). No real credential value is written into .env.example, placeholders only.
-- Handoff file `.claude/crew-state/infrastructure/crew-project-builder-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/infrastructure/crew-project-builder-handoff.md` was written.
 - No em dashes anywhere.
 
 ## Case B: messy

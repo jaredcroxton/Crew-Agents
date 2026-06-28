@@ -19,7 +19,7 @@ EXPECT:
 - The source section is cited beside each rule so any reader can trace it back to the policy.
 - A precedence note appears (if the summary differs from the policy, the policy governs).
 - No legal requirement is asserted about the 300 allowance or the 2-working-day notice; only what the policy states is carried, anything about a legal minimum is flagged, not declared.
-- Handoff file written to .claude/crew-state/hr/crew-hr-policy-summary-handoff.md with artefacts and decisions.
+- Handoff file written to ~/.claude/crew-state/hr/crew-hr-policy-summary-handoff.md with artefacts and decisions.
 - No em dashes anywhere.
 
 ## Case B: messy

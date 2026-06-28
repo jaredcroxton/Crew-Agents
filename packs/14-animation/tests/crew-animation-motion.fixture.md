@@ -15,7 +15,7 @@ EXPECT:
 - An "Accessibility:" block with a useReducedMotion path that zeroes or reduces the movement.
 - No animation of top, left, width, or height; transform and opacity only.
 - No em dashes anywhere in the output.
-- Handoff file `.claude/crew-state/animation/crew-animation-motion-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-motion-handoff.md` was written.
 
 ## Case B: wrong-tool
 INPUT:
@@ -34,4 +34,4 @@ EXPECT:
 - The skill follows Loop 1 (Missing Input): it asks once what should animate, why it should move, and on what trigger (mount, state change, gesture, scroll, or unmount), because a spec needs a motion brief.
 - It does not invent a motion, fabricate components, or spec variants against nothing.
 - If it emits any partial output, the Brief, Trigger, and Components fields are marked "Not provided" rather than filled.
-- Handoff file `.claude/crew-state/animation/crew-animation-motion-handoff.md` written, recording the missing brief as the blocker the next run needs.
+- Handoff file `~/.claude/crew-state/animation/crew-animation-motion-handoff.md` written, recording the missing brief as the blocker the next run needs.

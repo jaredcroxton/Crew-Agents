@@ -30,7 +30,7 @@ If the message text or the core facts are missing, ask once for that one thing, 
 
 - **Fast mode:** draft only. Skip the banned-phrase self-check and the quality self-score (they run later at the quality gate). Use when volume is high and every reply still passes a separate gate.
 - **Careful mode (default):** draft, self-check against the banned-phrase list, self-score against the quality checklist, then output. Use for normal operation.
-- **Governed mode:** draft, self-check, and cross-reference prior replies in `.claude/crew-state/support/` so tone and language stay consistent across the batch. Use for public-facing or high-visibility replies where the brand voice is critical.
+- **Governed mode:** draft, self-check, and cross-reference prior replies in `~/.claude/crew-state/support/` so tone and language stay consistent across the batch. Use for public-facing or high-visibility replies where the brand voice is critical.
 
 Do not draft when the triage card marks the item Escalated (no public reply), when the priority is "no reply needed", when this message was already answered this session, or when the triage card is missing the facts a reply depends on.
 
@@ -102,7 +102,7 @@ PRICING OR VALUE: acknowledge the concern, do not debate the price. Use "We unde
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/support/crew-support-reply-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior reply to this customer, tone was apologetic, the refund was escalated to the owner"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for tone consistency. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/support/crew-support-reply-builder-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior reply to this customer, tone was apologetic, the refund was escalated to the owner"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for tone consistency. (Loop 4, Context Change.)
 
 1. **Validate and check escalation first.** Confirm the message needs a reply and is not already escalated. If the triage card marks Escalation = Yes, or the message carries a legal threat, a safety or discrimination claim, or fraud, do not draft a public reply: return "ESCALATED, no public reply drafted" and route it (step 7). Identify the complaint type from the triage topic.
 2. **Understand the issue and read the sentiment.** Restate in one line what the customer actually wants (an answer, a fix, a refund, an apology, an update). Classify the tone into one band: Positive (thanks, easy request), Neutral (a plain question), Negative (frustrated, let down), or At-risk (threatening to leave, public complaint, legal or safety language). The band sets the opening.
@@ -113,7 +113,7 @@ PRICING OR VALUE: acknowledge the concern, do not debate the price. Use "We unde
 7. **Flag approval and escalation needs.** If the reply promises anything the business must authorise (a refund or credit amount, a discount, a policy exception, a goodwill gesture, a legal or compliance reply, anything for an At-risk customer), do not send it as final. Mark it "Escalated: [exact decision needed, who must approve]", draft up to that boundary with the unapproved part in brackets, and hand it to `crew-support-escalation-review` (Loop 3, Escalation). Never quietly approve a refund or invent a concession.
 8. **Verify before emitting.** Re-read the message against the draft. Confirm the actual ask is answered, every fact traces to a named source or the message itself, no number, date, or policy is invented, the tone matches the band, the banned-phrase list is clean, and the close is genuine. Run the quality self-check below. If a gap remains, fix it (Loop 2, Quality Failure). Only then emit the reply.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/support`, then write `.claude/crew-state/support/crew-support-reply-builder-handoff.md` with: the reply produced, decisions made (sentiment band, macro used or default voice, word count), unfinished work (anything bracketed or escalated, fields marked "Not provided"), what `crew-support-escalation-review` or the next skill needs, and a "Learned" note (a tone correction, a fact about this customer, a macro the user prefers, a phrase to add to the banned list). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/support`, then write `~/.claude/crew-state/support/crew-support-reply-builder-handoff.md` with: the reply produced, decisions made (sentiment band, macro used or default voice, word count), unfinished work (anything bracketed or escalated, fields marked "Not provided"), what `crew-support-escalation-review` or the next skill needs, and a "Learned" note (a tone correction, a fact about this customer, a macro the user prefers, a phrase to add to the banned list). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Quality self-check
 
@@ -196,7 +196,7 @@ This skill drafts text only. It does not send, post, or publish replies, and it 
 
 ## Plan mode
 
-In plan mode this skill can read the triage card, the message, and the voice specification, and can produce a draft marked "(DRAFT, plan mode, not for publication)" at the top. It cannot write to `.claude/crew-state/`, run file operations, or reach external systems. The full drafting, the handoff save, and any consistency cross-reference run only after plan mode is exited.
+In plan mode this skill can read the triage card, the message, and the voice specification, and can produce a draft marked "(DRAFT, plan mode, not for publication)" at the top. It cannot write to `~/.claude/crew-state/`, run file operations, or reach external systems. The full drafting, the handoff save, and any consistency cross-reference run only after plan mode is exited.
 
 ## Verification
 
@@ -214,7 +214,7 @@ Before the run is marked done, confirm:
 [ ] No invented number, date, policy, name, or amount; gaps marked "Not provided"
 [ ] No em dashes, no internal business language
 [ ] The quality self-score was completed
-[ ] The handoff was written to .claude/crew-state/support/
+[ ] The handoff was written to ~/.claude/crew-state/support/
 [ ] Anything needing approval is bracketed and routed to crew-support-escalation-review
 ```
 

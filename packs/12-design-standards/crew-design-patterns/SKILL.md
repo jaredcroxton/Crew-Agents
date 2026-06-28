@@ -31,7 +31,7 @@ If no artifact or pattern description is supplied, ask once for the design or th
 
 - **Fast mode:** a quick currency check on the most visible patterns (hero, cards, navigation). Name the two or three most dated patterns and their current swaps. Skip the full category sweep.
 - **Careful mode (default):** the full sweep across every pattern category, each marked fresh, current, tired, or timeless, with the current replacement for every dated one. Use before a build ships.
-- **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `.claude/crew-state/design-standards/` so the pattern language stays consistent across a product, and the project's brand playbook enforced over these defaults (a deliberate retro choice is kept, not flagged). Use for a client deliverable.
+- **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the pattern language stays consistent across a product, and the project's brand playbook enforced over these defaults (a deliberate retro choice is kept, not flagged). Use for a client deliverable.
 
 Do not run this skill to score broad visual quality (that is `crew-design-quality`), to do pixel and motion polish (that is `crew-design-engineering`), to find reference sites (that is `crew-design-reference`), or to write copy. This skill judges whether the patterns are current and names the swap.
 
@@ -157,7 +157,7 @@ How a build skill uses this library. The pattern read becomes a gate, fresh and 
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/design-standards/crew-design-patterns-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior pattern review of the homepage, the carousel was flagged, awaiting the swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project's pattern language. (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-patterns-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior pattern review of the homepage, the carousel was flagged, awaiting the swap"). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in that folder for the project's pattern language. (Loop 4, Context Change.)
 
 1. **Identify the page type and the patterns in use.** Name what is being reviewed and list the patterns actually present (the hero shape, the card style, the navigation, the type, the colour, the scroll behaviour). If no artifact is present, ask for it now.
 2. **Sweep each pattern category.** Check the design against Layout, Navigation, Card and container, Typography, Colour, Scroll, and Responsive patterns. For each pattern present, decide fresh, current, tired, or timeless.
@@ -167,7 +167,7 @@ How a build skill uses this library. The pattern read becomes a gate, fresh and 
 6. **Write the pattern review.** Assemble the per-category reads, the flagged patterns with their swaps, and a verdict (Current, Refresh, or Dated) with the single highest-impact swap.
 7. **Verify before emitting.** Confirm every flagged pattern is actually in the design, every swap is a real current convention (not a personal preference or a passing trend), and a deliberate brand choice was marked kept, not flagged (the playbook wins). If a call needs the owner, mark it Escalated and route it (Loop 2 and Loop 3). Only then emit.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/design-standards`, then write `.claude/crew-state/design-standards/crew-design-patterns-handoff.md` with: the review produced, decisions made (the patterns flagged and the swaps given), unfinished work (swaps not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a brand pattern or a convention the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/design-standards`, then write `~/.claude/crew-state/design-standards/crew-design-patterns-handoff.md` with: the review produced, decisions made (the patterns flagged and the swaps given), unfinished work (swaps not yet applied, anything Escalated or kept by the playbook), what the building skill needs next, and any "Learned" note (a brand pattern or a convention the user confirmed). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -255,7 +255,7 @@ Typical calls that warrant a brief: a fresh leading-edge pattern versus a curren
 
 ## Plan mode
 
-In plan mode this skill can read the design and the prior handoff, and produce a draft pattern read (the categories it would flag, a provisional Current, Refresh, or Dated) marked "(DRAFT, plan mode)" at the top. It cannot write to `.claude/crew-state/`, sign off a gate, or edit the source. The full sweep, the watchlist, the swaps, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the design and the prior handoff, and produce a draft pattern read (the categories it would flag, a provisional Current, Refresh, or Dated) marked "(DRAFT, plan mode)" at the top. It cannot write to `~/.claude/crew-state/`, sign off a gate, or edit the source. The full sweep, the watchlist, the swaps, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -272,7 +272,7 @@ Before the run is marked done, confirm:
 [ ] No recommendation that fights performance or accessibility
 [ ] A Current / Refresh / Dated verdict with the single highest-impact swap
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] The handoff was written to .claude/crew-state/design-standards/
+[ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
 ## Completion

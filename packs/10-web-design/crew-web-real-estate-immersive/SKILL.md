@@ -15,7 +15,7 @@ Before I build anything:
 
 1. Are we starting fresh, continuing, or using an existing brand?
    - **Continuing:** I read this skill's handoff and pick up where we left off.
-   - **Existing brand:** I read `.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
+   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
    - **Fresh start:** we run the questions in Inputs below, then build.
 
 If you are not sure, say "fresh start" and we will run the questions.
@@ -70,12 +70,12 @@ After the user answers, confirm a one-paragraph summary back to them: the proper
 
 - **Fast mode:** the user already has the listing scraped, the real tour video on disk, and the photos in hand, and accepts the default register. Skip the full discovery ceremony, confirm the tour in one line, extract frames, assemble, verify. Use only when the real assets exist and the property is decided.
 - **Careful mode (default for a personal or speculative build):** the full seven-question discovery, the chosen deploy route end to end, and the design review gate before any deploy.
-- **Governed mode (the right default for a REAL client listing):** the full flow, plus a cross-reference against prior handoffs in `.claude/crew-state/web-design/` so an agency's register carries across builds, the design review gate mandatory with nothing waived, and a stricter integrity check that every on-page claim (price, beds, baths, car, land size) matches the live listing and that not one frame of property imagery was generated or altered. Use this whenever a claim on the page carries a legal or reputational risk, which is almost every real listing for a real agent.
+- **Governed mode (the right default for a REAL client listing):** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so an agency's register carries across builds, the design review gate mandatory with nothing waived, and a stricter integrity check that every on-page claim (price, beds, baths, car, land size) matches the live listing and that not one frame of property imagery was generated or altered. Use this whenever a claim on the page carries a legal or reputational risk, which is almost every real listing for a real agent.
 
 Anti-trigger routing, so this skill stays in its lane:
 
 - A fully fictional cinematic concept site with invented spaces belongs in `crew-web-cinematic-build`.
-- A multi-stage learning or onboarding narrative told through a metaphor belongs in `crew-web-scroll-journey`.
+- A multi-stage learning or onboarding narrative told through a metaphor belongs in `crew-web-immersive-narrative`.
 - A generic continuous camera fly-through with no rooms and no listing belongs in `crew-web-fly-through-builder`.
 - A cursor-spotlight image-reveal hero belongs in `crew-web-spotlight-hero`.
 
@@ -396,7 +396,7 @@ The assembly contract, condensed into a checklist every build must satisfy:
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If it does not exist, state: "I do not know your business yet. Let us fix that. A few quick questions and every skill you run will know who you are," then run `crew-core-brand-context` to ask a few quick questions before continuing. Then read this skill's own handoff at `.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior waterfront build, footage cut into seven room chapters, frames extracted, awaiting the design review gate"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior waterfront build, footage cut into seven room chapters, frames extracted, awaiting the design review gate"). If it does not exist, state "No prior context, first run." (Loop 4, Context Change.)
 
 1. **Discovery (ALWAYS first, before any tool call or scrape).** Ask the seven-question brief from Inputs in a single numbered message, plus the deploy target and the mode. Confirm a one-paragraph summary back to the user: property and address, brand or vibe, style and mood, buyer and feeling, image-handling path, deploy target. Do not invent the listing, the footage, or the photos. If the property, the footage, or the photos are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
 2. **Ingest the listing data.** Scrape the listing per Listing data ingestion: capture price, beds, baths, car, land size, address, headline, description, features, agent details, the real photo set, and the floorplan. Verify the status code is 200 and the address matches what the user gave you, so no hallucinated listing slips in. Download the photos and floorplan into the project assets folder.
@@ -408,7 +408,7 @@ The assembly contract, condensed into a checklist every build must satisfy:
 8. **Run the design review gate.** Per the Design review gate section, hand the built file and the live local URL to the reviewers. Fix all Criticals and Majors. A fail blocks the ship.
 9. **Deploy only after the user approves a live test.** Per the Deploy pathway section, show a local preview, let the user approve it, then deploy to Vercel. Patch the OG alias if it differs from the guess, and verify the live site serves the frames, the photos, and the floorplan while the source video stays private.
 
-**Final Step: Handoff Save.** Run `mkdir -p .claude/crew-state/web-design`, then write `.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` with: the build report produced, decisions made (the property and address, the title choice, the number of room chapters, the frame count `N`, the brand assets generated or pending, the deploy target and URL), unfinished work (footage owed by the user, photos not yet supplied, the OG patch, a design fix not yet applied, the agency sign-off on attribution), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (an agency register, a buyer feeling, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.)
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` with: the build report produced, decisions made (the property and address, the title choice, the number of room chapters, the frame count `N`, the brand assets generated or pending, the deploy target and URL), unfinished work (footage owed by the user, photos not yet supplied, the OG patch, a design fix not yet applied, the agency sign-off on attribution), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (an agency register, a buyer feeling, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -553,7 +553,7 @@ House style:
 
 ## Plan mode
 
-In plan mode this skill can read the prior handoff, ask the discovery questions, and produce a build plan marked "DRAFT, plan mode" at the top: the property, the title choice, the proposed room chapters, the style and mood register, the image-handling path, the brand-asset prompt slots, and the deploy recommendation. It cannot scrape the listing or trigger any scraping side effect, source or extract footage, write to `.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
+In plan mode this skill can read the prior handoff, ask the discovery questions, and produce a build plan marked "DRAFT, plan mode" at the top: the property, the title choice, the proposed room chapters, the style and mood register, the image-handling path, the brand-asset prompt slots, and the deploy recommendation. It cannot scrape the listing or trigger any scraping side effect, source or extract footage, write to `~/.claude/crew-state/`, run the design review gate, or deploy. The build, the gate, the deploy, and the handoff save run only after plan mode is exited.
 
 ## Verification
 
@@ -573,7 +573,7 @@ Before the run is marked done, confirm:
 [ ] The footer carries an honest attribution and the concept-demonstration note
 [ ] Design review gate run: crew-design-quality (binding), crew-design-composition, crew-design-patterns, the register-conditional pack-13 lens, crew-animation-gsap and crew-animation-locomotive authoring refs; Criticals and Majors fixed
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The handoff was written to .claude/crew-state/web-design/
+[ ] The handoff was written to ~/.claude/crew-state/web-design/
 ```
 
 ## Completion

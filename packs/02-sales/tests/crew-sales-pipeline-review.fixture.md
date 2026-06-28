@@ -22,7 +22,7 @@ EXPECT:
 - Exactly ONE concrete next action per flagged deal, no "follow up" or "touch base".
 - An Escalated line: Acme's 40k is below the floor, a manager must approve the discount.
 - No invented values, dates, stages, or probabilities. No committed forecast number.
-- Handoff file written at .claude/crew-state/sales/crew-sales-pipeline-review-handoff.md.
+- Handoff file written at ~/.claude/crew-state/sales/crew-sales-pipeline-review-handoff.md.
 
 ## Case B: messy
 INPUT:
@@ -48,11 +48,11 @@ EXPECT:
 - Asks once for the one thing needed: the open-deals export with deal name, value, stage, close date, and last activity. Not a batched survey.
 - Produces no PIPELINE REVIEW with invented deals. Invents no deal names, values, stages, or dates.
 - If pressed to proceed with nothing, returns an empty review marked "Not provided" rather than fabricating a pipeline.
-- Handoff file still written at .claude/crew-state/sales/crew-sales-pipeline-review-handoff.md, recording "No output, run completed [date]" and that the opportunity list is the blocking input.
+- Handoff file still written at ~/.claude/crew-state/sales/crew-sales-pipeline-review-handoff.md, recording "No output, run completed [date]" and that the opportunity list is the blocking input.
 
 ## Case D: continuing, slip and closed-lost candidate
 INPUT:
-Current date 2026-06-25. Default stage thresholds. A prior handoff exists at .claude/crew-state/sales/crew-sales-pipeline-review-handoff.md recording: Acme close date 2026-05-30, Globex close date 2026-06-11, and a deal "Cyberdyne" 12,000 in Proposal, close 2026-05-01, flagged Overdue last review. This export:
+Current date 2026-06-25. Default stage thresholds. A prior handoff exists at ~/.claude/crew-state/sales/crew-sales-pipeline-review-handoff.md recording: Acme close date 2026-05-30, Globex close date 2026-06-11, and a deal "Cyberdyne" 12,000 in Proposal, close 2026-05-01, flagged Overdue last review. This export:
 - Acme Corp, 40,000, Negotiation, close 2026-06-30, last activity 2026-06-20, next step: none.
 - Globex, 15,000, Proposal, close 2026-06-11, last activity 2026-06-24, next step: proposal call booked 2026-06-27.
 - Cyberdyne, 12,000, Proposal, close 2026-05-01, last activity 2026-04-28, next step: none.

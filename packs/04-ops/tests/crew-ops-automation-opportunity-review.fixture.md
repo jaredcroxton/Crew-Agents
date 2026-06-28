@@ -22,7 +22,7 @@ EXPECT:
 - A build-vs-buy option is given (hybrid, an off-the-shelf connector wired to the existing sheet) WITHOUT naming a product, with the trade-off (subscription, lock-in) noted, and a named owner/maintainer after launch with the adoption risk is carried onto the chosen target.
 - The high-risk auto-email is held back with what would lower its risk (a review step before send).
 - Nothing is invented: no hours-per-week figure asserted as fact, no precise payback, no tool capability claimed. Assumed fields (the approval delay, the per-copy time) are marked Assumed.
-- The handoff file `.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was written, naming the chosen first target, the ROI range, the feasibility gap, and what crew-ops-recurring-task-automation needs next.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was written, naming the chosen first target, the ROI range, the feasibility gap, and what crew-ops-recurring-task-automation needs next.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -39,7 +39,7 @@ EXPECT:
 - The ~40-percent exception rate is named as the reason the saving is small (a bot automates the happy path and the human still does roughly four in ten refunds by hand), and whether those exceptions are caught (kicked to a human) or silent (processed wrongly) bears on the risk, not just the saving.
 - The ROI is not fabricated: with no volume and no per-refund cost, the payback is marked "needs the volume and the per-run time", not asserted.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was written, recording the redesign route to crew-ops-workflow-improvement, the Assumed volume, and the escalated payment automation.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was written, recording the redesign route to crew-ops-workflow-improvement, the Assumed volume, and the escalated payment automation.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -52,5 +52,5 @@ EXPECT:
 - It invents no candidate task, no automation type, no metric, and no saving to fill the review.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was still written, recording the missing workflow so the next run knows.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-automation-opportunity-review-handoff.md` was still written, recording the missing workflow so the next run knows.
 - No em dashes anywhere.

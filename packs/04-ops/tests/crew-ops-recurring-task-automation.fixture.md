@@ -23,7 +23,7 @@ EXPECT:
 - Everything automated is honestly "Designed, not yet built, requires X" (the API connector and the scheduled-job runner set up by IT), never claimed running.
 - The credentials the automation would hold are named as least-privilege (a named service account with read-only access to the one Sales folder, not a person's login, logged, the secret in a secret manager with a rotation owner).
 - Nothing is invented: no made-up system, no fabricated cadence, no invented approver, no asserted tool capability or price.
-- The handoff file `.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was written, recording the workflow, the trigger type, the named method, the approval point, and the reliability and maintenance choices.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was written, recording the workflow, the trigger type, the named method, the approval point, and the reliability and maintenance choices.
 - No em dashes anywhere.
 
 ## Case B: messy
@@ -41,7 +41,7 @@ EXPECT:
 - The blast radius of a wrong run is named (up to the whole overdue-customer book charged a fee and emailed per night), and it is what drives the human-in-the-loop, the pilot, and the heavy reliability.
 - The credentials the bot would hold are named as an attack surface: standing access to a billing system is a new privileged actor, so least-privilege, a named service account, logged, never a broad borrowed login, and a bot with broad standing billing access is flagged.
 - STATUS is DONE_WITH_GAPS or BLOCKED, never a clean DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was written, recording the escalated money / customer automation, the brittle screen-scraping method and its better-path flag, and the idempotency and alerting requirements for the unattended run.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was written, recording the escalated money / customer automation, the brittle screen-scraping method and its better-path flag, and the idempotency and alerting requirements for the unattended run.
 - No em dashes anywhere.
 
 ## Case C: missing-input
@@ -54,5 +54,5 @@ EXPECT:
 - It invents no step, no system, no trigger, and no tool to fill the design.
 - Step 0 still runs (states first run, or recovers prior context).
 - STATUS is NEEDS_CONTEXT or BLOCKED, never DONE.
-- The handoff file `.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was still written, recording the missing steps so the next run does not repeat the ask.
+- The handoff file `~/.claude/crew-state/ops/crew-ops-recurring-task-automation-handoff.md` was still written, recording the missing steps so the next run does not repeat the ask.
 - No em dashes anywhere.
