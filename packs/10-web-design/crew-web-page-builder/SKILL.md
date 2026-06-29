@@ -328,7 +328,7 @@ House style:
 
 ## Handoffs
 
-- Take the `:root` brand block from `crew-web-slide-deck-builder` or `crew-web-design-system-extractor` if either ran earlier, so one brand carries across assets. If `crew-web-design-system-extractor` produced a `:root` block from a reference URL, use it as the token source instead of building one from scratch.
+- Take the `:root` brand block from `crew-web-slide-deck-builder` or `crew-web-website-architect` if either ran earlier, so one brand carries across assets. If `crew-web-website-architect` produced a `:root` block from a reference URL, use it as the token source instead of building one from scratch.
 - After delivery, hand the `:root` brand block and the approved copy to `crew-web-slide-deck-builder` for a matching deck in the same brand.
 - Run the Design review gate before the site ships: hand the built file plus the live local URL to `crew-design-quality` (binding) plus the pack-12/13/14 skills it enumerates (`crew-design-composition`, `crew-design-patterns`, the register-conditional pack-13 style lens, with `crew-animation-scroll-reveal` and `crew-animation-css` as authoring references). Fix all Criticals and Majors before deploy.
 - Before the site goes to a client or a live URL is shared, run `crew-core-quality-checker` (pack 01 core). Its output is advisory, not a hard gate, but it flags broken links, console errors, and unverified claims to fix before handing a URL over. Pairs with the Crew Method standard "Verify before claiming done".

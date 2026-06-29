@@ -217,7 +217,7 @@ Typical calls that warrant a brief: auto-advance versus manual for the venue, Dr
 
 ## Handoffs
 
-- Take the `:root` brand block from `crew-web-landing-page-builder` or `crew-web-design-system-extractor` if either ran earlier, so one brand carries across assets.
+- Take the `:root` brand block from `crew-web-landing-page-builder` or `crew-web-website-architect` if either ran earlier, so one brand carries across assets.
 - After delivery, hand the `:root` block and approved slide content to `crew-web-landing-page-builder` for a matching landing page.
 - Before a deck is sent to a client or shown publicly, run `crew-core-quality-checker`. Pairs with the Crew Method standards "Verify before claiming done" and "Review before shipping".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`. The deck itself references no skill at runtime; it is a standalone HTML file.
