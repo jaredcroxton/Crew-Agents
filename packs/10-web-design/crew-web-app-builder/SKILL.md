@@ -47,11 +47,11 @@ Halt execution until:
 
 Ask the user these five discovery questions. Do not skip any.
 
-1. **North Star.** What is the singular desired outcome?
-2. **Integrations.** Which external services do we need? Are API keys ready?
-3. **Source of truth.** Where does the primary data live?
-4. **Delivery payload.** How and where should the final result be delivered?
-5. **Behavioural rules.** How should the system act? Tone, logic constraints, "do not" rules.
+1. **North Star.** What is the single outcome this system must deliver? One sentence.
+2. **Integrations.** Which external services does it touch (Supabase, Vercel, GitHub, Slack, an API, a scraper), and are the keys ready?
+3. **Source of truth.** Where does the primary data live right now?
+4. **Delivery payload.** Where should the final result land, and in what shape (Slack message, Supabase rows, a dashboard card, an email, a file)?
+5. **Behavioural rules.** How should the system act, including any hard "do not" rules?
 
 **Data-first rule.** Lock the JSON input and output shapes in `claude.md` before writing code.
 
@@ -215,11 +215,13 @@ When the user starts a new Antigravity build, open with something like this. Kee
 >
 > Phase 1 Discovery. Please answer these five:
 >
-> 1. North Star. What is the singular outcome this system must deliver?
-> 2. Integrations. Which external services, and are the keys ready?
-> 3. Source of truth. Where does the primary data live?
-> 4. Delivery payload. How and where should the result land?
-> 5. Behavioural rules. How should the system act, including any "do not" rules?
+> 1. North Star. What is the single outcome this system must deliver? One sentence.
+> 2. Integrations. Which external services does it touch (Supabase, Vercel, GitHub, Slack, an API, a scraper), and are the keys ready?
+> 3. Source of truth. Where does the primary data live right now?
+> 4. Delivery payload. Where should the final result land, and in what shape (Slack message, Supabase rows, a dashboard card, an email, a file)?
+> 5. Behavioural rules. How should the system act, including any hard "do not" rules?
+>
+> Answer those and I will lock the data schema in `claude.md` before writing a line of Python.
 
 ---
 
