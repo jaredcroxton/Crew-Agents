@@ -297,6 +297,46 @@ Deploy checks: index 200, frames/d and frames/m 200, listing images 200, assets/
 Open / handed off: __FLYTHROUGH debug hook left in (harmless). OG tags patched to final alias.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the review gate scores. The descent scrub is already engineered (Route architecture, the load gate, the arrival lock), but the typography, the interactive UI, and the arrival bloom do not animate until you author them here. The design review gate names the pack 14 animation skills as motion reviewers; they have nothing to review until this layer exists in the file. The output is not complete until all three layers below are present in `index.html`.
+
+**Motion budget (three required layers).** Every fly-through ships exactly these, no more:
+
+- **Entrance reveals.** Scroll-triggered, one-shot, transform and opacity only, staggered. These are the stage type blocks (the `01 // ... / 02 // ... / 03 // ...` indicator and each stage's headline and sub-label), the arrival ENTER panel, and, on an expanded arrival, the listing section heads and gallery tiles. A ScrollTrigger per element, `once: true`, `start: "top 80%"`. Never a calculated `scrollY / maxScroll` fraction. Stage and arrival reveals bind both `opacity` AND `visibility`, never `pointer-events` or `z-index` alone (see the failure mode: two stage backgrounds visible at once).
+- **Micro-interactions.** Hover, press, and focus on the actual interactive elements: the ENTER / arrival button, the home / reset control, and any listing CTA or nav. Transform and opacity transitions, 120 to 220ms, a visible focus ring. No layout-shifting hover, no decorative idle loop.
+- **The one signature moment.** The warm champagne accent bloom on the final stage only. As the scrub crosses into stage 03 (the arrival), the stage headline's `<em>` accent word ignites with a keyed glow and the arrival ENTER panel resolves, so the descent reads as landing at a destination rather than just stopping. The text reveals are scrubbed and pinned typography that crossfades in lockstep with the underlying frame crossfade, not a separate flourish. One moment, on one stage. Do not bloom the earlier stages.
+
+**Stack rule (locked).** The library is GSAP + ScrollTrigger and nothing else. It lives in the single `index.html`: GSAP and ScrollTrigger registered once at the top of the inline `<script>`, the descent scrub tied to the `#cine` 500vh runway, every reveal authored as a ScrollTrigger inside that same block. The scrub IS the smoothing. Forbidden, never reach for them: Lenis or any smooth-scroll / inertia library (it fights the lock and phantom-scrolls), a `<video>` element for the descent, any JS UI framework or componentized frontend (one monolithic file only), and any reveal driven by a raw scroll listener or `scrollY / maxScroll` fraction math. Do not rip out the load gate, the arrival lock, or the `jumpTo` spaced-retry to make a reveal land.
+
+One correct pattern, scroll-driven idiom, transform and opacity only:
+
+```js
+gsap.registerPlugin(ScrollTrigger);
+
+// entrance reveal: one-shot, fires once on entry, never scrubbed
+gsap.utils.toArray(".reveal").forEach((el) => {
+  gsap.from(el, {
+    y: 24, opacity: 0, duration: 0.7, ease: "power2.out",
+    stagger: 0.08,
+    scrollTrigger: { trigger: el, start: "top 80%", once: true }
+  });
+});
+
+// signature bloom: bound to the stage-03 scrub, opacity AND visibility
+ScrollTrigger.create({
+  trigger: "#cine", start: "85% top", end: "bottom top",
+  onEnter: () => document.body.classList.add("arrived"),   // .arrived em { ... } keyed glow
+  onLeaveBack: () => document.body.classList.remove("arrived")
+});
+```
+
+**Authoring references (read the spec before writing motion).** Pull the exact easing, stagger, and scroll-binding contracts from pack 14 before you author: `crew-animation-gsap` for the ScrollTrigger timelines, scrub, and pin; `crew-animation-scroll-reveal` for the one-shot enter-the-viewport reveals and stagger; `crew-animation-css` for the micro-interaction transitions and the keyed `<em>` glow keyframes; `crew-animation-locomotive` only to confirm the smooth-scroll trade is correctly declined for this single-file lock. These are spec-writers, not the verdict.
+
+**Reduced-motion and performance guardrails.** Honor `prefers-reduced-motion`: the scrub snaps to the arrival frame and every reveal is instant (no `from` tween, no scrub, no parallax), matching the locked rule. Transform and opacity only, never animate layout (`width`, `height`, `top`, `margin`). One-shot observers carry `once: true` so the trigger is spent after the first reveal and does not re-run. Disable scrub and any parallax under reduced motion. Hold 60fps and stay under the motion budget: no compositor-thrashing properties, no idle animation burning frames on the pinned canvas.
+
+This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`, the binding verdict) then scores, with `crew-animation-gsap`, `crew-animation-scroll-reveal`, and `crew-animation-css` as the authoring references it holds the motion to. Author the layer here, then the gate has motion to review, and the loop closes.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

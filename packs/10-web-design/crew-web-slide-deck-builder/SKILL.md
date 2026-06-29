@@ -166,6 +166,54 @@ wordmark logo bottom-right at 24px. Arrow keys and swipe advance. Content fades 
 over 0.4s with cubic-bezier(0.4, 0, 0.2, 1) easing. One file, no external requests.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the Design review gate later judges. The gate's Motion dimension (inside `crew-design-quality`) scores rendered slides, so a deck whose slides hold no entrance reveal, no element build-in, and no live nav-control feedback fails that dimension on an empty page. The output is not complete until this layer exists in the file, written into the animations section of the `<style>` block (section 6 of nine: Animations and transitions) and the animation-triggers section of the `<script>` block (section 6 of six).
+
+The motion budget is three required layers, no more:
+
+1. **Entrance reveals (one-shot, scroll-triggered per slide).** When a slide becomes active, its content elements reveal in: the slide heading, the content cards in the grid, the code block, and the CTA button, each rising from `translateY` with an opacity fade, staggered. Transform and opacity only. Fired by an IntersectionObserver watching the active slide, so a slide animates only when it enters view, never on load behind the scenes, and never on every revisit (unobserve after the first reveal per slide).
+2. **Micro-interactions (hover, press, focus).** The interactive surfaces this deck renders: nav arrows (opacity 0.6 to 1, accent glow ring, scale on hover; `:focus-visible` outline on focus), nav dots (active-state pulse, glow ring on hover), the CTA button (`translateY(-2px)` lift plus accent box-shadow glow on hover, a slight press inset on `:active`), and the content cards (hover lift plus an accent box-shadow). Every one keeps a `:focus-visible` outline so the control stays keyboard-reachable.
+3. **The signature moment.** On slide advance, the new slide's content elements build in staggered (nth-child delays .1s / .25s / .4s) with a springy settle, each card and the CTA rising into place; the same per-slide IntersectionObserver fires the entrance reveal so a slide's elements only animate when it becomes the active slide, never on load behind the scenes.
+
+Stack is locked. The only animation engine is CSS keyframes plus the Web Animations API (`element.animate()`) plus IntersectionObserver, authored inline in the single file's `<style>` and `<script>` blocks. No GSAP, no Motion or Framer Motion, no animation library of any kind, no slide library, no JS framework, no `<link>` and no `<script src>` (no CDN). If you reach for one of those, you have broken the stack. Reveals and build-ins live in CSS toggled by a class the observer adds; any imperative one-off (a per-element stagger computed at runtime) uses `element.animate()`.
+
+Define two easing tokens in the `:root` block and reuse them throughout this layer: `--ease: cubic-bezier(0.4, 0, 0.2, 1)` for transitions (this is the deck's standing easing, stated in the Animation section), and `--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)` for the settle on the signature build-in. The host skill staggers with `animation-delay` on `nth-child`; the class-toggle reveal below carries the same cascade on `transition-delay` because it transitions on a toggled class rather than running a named keyframe. Either is correct, do not run both on one element.
+
+Minimal correct pattern in this stack's idiom (IntersectionObserver toggling a CSS class, transform and opacity only):
+
+```css
+.slide-content > * { opacity: 0; transform: translateY(20px); }
+.slide.reveal .slide-content > * {
+  opacity: 1; transform: none;
+  transition: opacity .5s var(--ease), transform .5s var(--ease-spring);
+}
+.slide.reveal .slide-content > *:nth-child(1) { transition-delay: .1s; }
+.slide.reveal .slide-content > *:nth-child(2) { transition-delay: .25s; }
+.slide.reveal .slide-content > *:nth-child(3) { transition-delay: .4s; }
+```
+
+```js
+const io = new IntersectionObserver((entries, obs) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('reveal'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.slide').forEach(s => io.observe(s));
+```
+
+Before writing the motion, read the matching spec-writers in pack 14 for the right shape: `crew-animation-css` for the keyframe, transition, and `element.animate()` authoring this stack uses; `crew-animation-scroll-reveal` for the IntersectionObserver-first one-shot entrance pattern (fade-up, stagger, unobserve); and `crew-animation-components` for the nav-dot, arrow, and CTA micro-interaction primitives. Do not consult `crew-animation-gsap`, `crew-animation-motion`, `crew-animation-locomotive`, or `crew-animation-view-transitions` for code here: their engines are forbidden in this single-file stack. These are authoring references that emit STATUS, not Pass or Fail, so they shape the motion, they do not clear it.
+
+Guardrails:
+
+- Honor `prefers-reduced-motion`: drop the deck's `bg-float` background drift and the nav-dot `dotPulse` when the user has reduced-motion enabled, and keep the layout functional. Reveals collapse to a plain opacity change or none, the stagger delays go to zero, and content is visible without the transform. This reduced-motion path doubles as the print-appropriate layout.
+- Animate transform and opacity only. Never animate layout properties (width, height, top, left, margin), which force reflow and drop frames.
+- Each entrance observer is one-shot: `unobserve` the slide after its first reveal so it does not re-trigger on revisit.
+- No scrub and no parallax under reduced motion; this deck has neither by default, and neither may be added behind the reduced-motion switch.
+- Stay at 60fps and under the 500KB single-file budget. Compositor-only properties and inline CSS keep both true.
+
+This injected layer is exactly what the Design review gate's Motion dimension (`crew-design-quality`) then scores on the rendered deck, with `crew-animation-css`, `crew-animation-scroll-reveal`, and `crew-animation-components` as the authoring references that shaped it. The build produces the motion, the gate judges it, and the loop closes.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:
