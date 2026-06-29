@@ -37,6 +37,8 @@ If the scope is missing or vague ("just be careful", "the usual"), ask once for 
 - **Careful mode (default):** the full record. Recover context, confirm the scope, record the inside-list with kinds, record the off-limits list with reasons, define the destructive actions for this task, state the confirm and refuse rules, set the lift condition, verify it, then emit and write the per-skill handoff. Use for any real boundary.
 - **Governed mode:** the full record, plus a cross-reference against prior core handoffs in `~/.claude/crew-state/core/` to carry an active boundary forward unchanged and keep the trail consistent. Treat a house protected-paths list, an approval policy, or a deploy-freeze rule as the authority over these defaults. Apply a stricter confirm on anything destructive: every delete, overwrite, move, bulk edit, or irreversible command stops and asks, and any path on the house protected list is declined and cited back by convention, not just flagged. (Governed is a stricter convention, not a stronger lock, this skill still cannot physically block.) Use where the boundary becomes a reference others rely on.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This is a SOFT convention, NOT a hard block, NOT a sandbox, NOT a security boundary, NOT a permissions system, NOT a guarantee. It does not physically stop an edit, it records a fence the Crew chooses to honour. It prevents accidental scope creep, nothing more. Route rather than stretch this one into a claim it cannot keep.
 
 ## How the scope warden thinks
@@ -47,6 +49,7 @@ This is a SOFT convention, NOT a hard block, NOT a sandbox, NOT a security bound
 4. **Confirm before anything destructive.** A delete, overwrite, move, bulk edit, or irreversible command stops and asks, naming the exact file and action, and waits for a yes. It is never self-approved, because the one action you cannot take back is the one that most needs a second pair of eyes.
 5. **Refuse and offer to widen.** An edit aimed outside the inside-list is declined with the boundary cited and offered back as "this is outside the guarded scope, confirm you want to widen it to include [path]", never quietly done. A boundary crossed in silence is a boundary that was never real.
 6. **A boundary needs an exit.** Name the lift condition, because a boundary with no exit goes stale and gets ignored, which is worse than none: a fence everyone has learned to step over teaches people to step over fences.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Boundary definition
 

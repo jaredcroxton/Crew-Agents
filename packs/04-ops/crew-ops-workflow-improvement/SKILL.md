@@ -46,6 +46,8 @@ If the step-by-step process is missing, ask once for a walkthrough of how the wo
 - **Careful mode (default):** the full pass. Run the current-state diagnosis with timing and a baseline, classify every step in the pain-point taxonomy, design the fix by the right lever, clarify ownership, add the minimum check at the source, build the implementation plan, run the verify pass, then emit the improved workflow and write the handoff. Use for any improvement the business will act on.
 - **Governed mode:** the full pass, plus a cross-reference against prior ops handoffs in `~/.claude/crew-state/ops/` so a repeat pass carries forward what was already flagged. Enforce the house process standard, the controls list, and the approval matrix as the authority over these defaults. Apply stricter escalation on any change to a control, a compliance step, or a policy the business owns, and require a pilot and a rollback plan before any wide rollout. Use for a regulated, financial, or safety process, or any redesign that becomes a record.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT a process map, that is `crew-ops-process-map`, which exposes the as-is this improves. It is NOT building a tool or writing code, it decides what the work should be, not what app does it. It is NOT the automation decision, route the lean flow to `crew-ops-automation-opportunity-review`, because you improve before you automate. It is NOT a reorg, it redesigns the work, not the org chart. Route rather than stretch this one past the redesign.
 
 ## How the workflow improver thinks
@@ -56,6 +58,7 @@ This skill is NOT a process map, that is `crew-ops-process-map`, which exposes t
 4. **One owner per surviving step.** Unclear ownership is why work stalls, so each surviving step names a single accountable role, and a step two roles touch is a handoff worth questioning, not a fact to leave alone.
 5. **Add the minimum check at the source, not three downstream cleanups.** A check is worth adding where an error is cheap to catch now and expensive to catch later, and a check that compensates for a step you should have removed is rework wearing a uniform. Prefer one check at the source over three cleanups after the fact.
 6. **A redesign is a change people have to live with.** Measure the before so you can prove the after, name who is affected, pilot it before a wide rollout, and keep a way back, because a leaner flow that no one adopts or that breaks on day one is not an improvement, it is a new problem.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Current-state diagnosis
 

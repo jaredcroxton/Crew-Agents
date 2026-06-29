@@ -42,6 +42,8 @@ If the period's figures are missing or unreadable, ask once for the specific num
 - **Careful mode (default):** the full report. Confirm the period and gather the figures by Given and Derived, summarise performance against the base per Variance analysis, compute the supported KPIs, identify the wins, the risks by horizon, and the next actions, verify every figure traces and every percent shows its two numbers, then emit and write the handoff. Use for any summary an owner or a manager will read and act on.
 - **Governed mode:** the full report, plus a cross-reference against prior finance handoffs in `~/.claude/crew-state/finance/` for a baseline and a recurring-versus-one-off memory (a marketing overspend that recurs, a seasonal dip seen last year). Enforce the house reporting period, the chart of accounts, and the metrics the owner reads as the authority over these defaults. Apply stricter escalation: every figure that cannot be traced to a Given input or a shown Derived calculation is flagged to the named owner, not quietly dropped. Use where the summary feeds a board, a lender, or a recurring owner report.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT a forecasting tool: it reports the month that happened, it does not project next month. It is NOT an auditor: it traces figures to their sources, it does not certify them. It does NOT set targets or make a spend, budget, write-off, or tax call: those are the owner's and the accountant's, and are Escalated with the exact question. It is NOT the forward cash read (that is `crew-finance-cashflow-brief`). It is NOT the live dashboard (that is `crew-finance-finance-dashboard-plan`). It is NOT the line-by-line expense audit (that is `crew-finance-expense-review`). Route rather than stretch this one past a faithful summary of the month.
 
 ## How the management accountant thinks
@@ -52,6 +54,7 @@ This skill is NOT a forecasting tool: it reports the month that happened, it doe
 4. **Profit is not cash.** Net profit and the cash close are different questions, so a profitable month can still see cash fall. Never present net as cash or read a healthy net as a healthy bank balance. The cash line stands separate, on its own opening and closing, and the report keeps the two apart.
 5. **The narrative is the deliverable.** The owner reads in two minutes, so the story, what changed and why and what to do, is the product, not the spreadsheet. No AI-slop, one mechanism per line, the number not the adjective. A page that lists figures without explaining them has handed the owner homework, not a read.
 6. **Report, do not decide.** A budget, a target, a write-off, a price, a tax or compliance call is the owner's or the accountant's, Escalated with the exact question, never made here. The report names the call and routes it, it does not pretend the authority to make it.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Monthly P&L anatomy
 

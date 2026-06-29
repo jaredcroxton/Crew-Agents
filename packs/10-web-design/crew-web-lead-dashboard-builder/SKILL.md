@@ -46,6 +46,8 @@ If the scrape target is missing, ask once. If the brand profile is missing, defa
 - **Careful mode (default):** the full discovery, LinkedIn person-research per lead, the one-sentence personalised insight, dual-channel drafts, and the design review gate. Use for any real outreach batch.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so the brand and the lead set carry across runs, verify-before-send enforced on every Derived contact, and a stricter no-fabrication audit before delivery. Use for a client-delivered list or regulated outreach.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to send the outreach (it drafts only, a human reviews and sends), to push leads into a CRM (it produces a page and JSON, not an import), to build a multi-page marketing site (that is `crew-web-landing-page-builder`), or to buy or enrich contact data from a paid source (it works from public evidence only).
 
 ## How the lead dashboard builder thinks
@@ -56,6 +58,7 @@ Do not run this skill to send the outreach (it drafts only, a human reviews and 
 4. **Drafts, never sends.** The skill writes the email and the DM; the human reviews and sends. No auto-send, no auto-calendar, no stored credentials. The build hands over work, it does not take irreversible action.
 5. **The page is the product.** One operator opens one page, filters, scans, and actions it. The filters and the fit badges are not decoration, they are how the page gets used under time pressure.
 6. **Honest about freshness and gaps.** Capture the source date, write "to be supplied" for a missing proof point, and use a people-search link where no profile is public. A blank field beats a fabricated one.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Fit scoring model
 

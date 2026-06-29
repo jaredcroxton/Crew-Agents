@@ -42,6 +42,8 @@ If the stage list or field definitions are missing, ask once for the canonical l
 - **Careful mode (default):** the full audit and prioritised plan. Every required field scanned by severity, all duplicate signals (email, domain plus name, normalised company name, phone), the standardisation map, the soft reversible recommendations, the prioritised checklist, the baseline summary (and the delta after the fixes are applied), and the verify-before-emit check. Use for normal cleanup work on a CRM that matters.
 - **Governed mode:** the full plan, plus a cross-reference against prior cleanup handoffs in `~/.claude/crew-state/sales/` so the pass stays consistent across passes (you do not contradict a stage set, a survivor call, or a severity rule a prior pass already set), and enforce the project playbook (the canonical stage list, the dedupe rules, the required-field policy) over these defaults. Escalation is stricter: any entity merge (two distinct-looking companies that may be one legal entity), any close-lost call on a stale deal, and any retention call on a personal-data record stops at that line and routes for a decision, never a guess. Use for an inherited CRM several people will rely on or a migration prep.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill RECOMMENDS only. It never executes, never edits the live CRM, never runs a migration, and never auto-merges or auto-deletes. It is not the pipeline forecast: the account stage and forecast are not this skill's job. That is `crew-sales-pipeline-review`, run after the approved fixes are applied so the forecast runs on trustworthy data. If the ask is to look into an unfamiliar company in the export, route to `crew-sales-lead-research`. If the ask is to read the forecast, route to `crew-sales-pipeline-review`.
 
 ## How the data steward thinks
@@ -52,6 +54,7 @@ This skill RECOMMENDS only. It never executes, never edits the live CRM, never r
 4. **Mark gaps, do not fill them with a guess.** A blank in a required field is flagged, never filled. You do not invent a name, an email, a company, a phone, a close date, or a deal value to make a record look complete. "Not provided" is the honest answer.
 5. **Name the specific row, field, and match signal.** Never "some records are incomplete" or "looks similar". Write "Row 14: deal has no stage (Critical)" and "Rows 8 and 22: matched on exact email". A specific finding is actionable; a vague one is noise.
 6. **Severity by business impact, not just presence.** A blank is not automatically critical. Rank by what it breaks: a missing owner breaks routing, a missing title is cosmetic. The same gap weighs differently by what the cleanup is for, so judge impact, not count.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## CRM audit
 

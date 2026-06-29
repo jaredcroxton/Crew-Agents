@@ -40,6 +40,8 @@ If the decisions or questions are missing, ask for them once, plainly, because a
 - **Careful mode (default):** the full plan. Confirm the business and the decisions, map each decision to a typed metric tagged leading or lagging with a counter-metric where a target could be gamed, source each number with its reliability and refresh owner, design the layout around the read, set update frequency per source, scope access and audience views, verify every tile traces to a decision and nothing is invented, then emit and write the handoff. Use for any dashboard a bookkeeper or no-code builder will hand-build.
 - **Governed mode:** the full plan, plus a cross-reference against prior finance handoffs in `~/.claude/crew-state/finance/` for the canonical metric definitions and source-of-truth decisions already made. Enforce the house finance playbook (chart of accounts, agreed metric definitions, access policy) as the authority over these defaults. Apply stricter escalation: every target, threshold, and access level is flagged to the named owner, never assumed. Use where the dashboard feeds more than the owner (a manager view, a lender, a recurring board read).
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT building the dashboard: it scopes the plan, it does not stand up the tool. It is NOT pulling live figures: it names where each number lives, it does not fetch it. It does NOT set financial policy or targets: the runway floor, the acceptable margin, the access calls are the owner's, Escalated with the exact question. It is NOT the recurring report (that is `crew-finance-monthly-summary`). It is NOT the forward cash read (that is `crew-finance-cashflow-brief`). Route rather than stretch this one past a one-page plan.
 
 ## How the role thinks
@@ -51,6 +53,7 @@ This skill is NOT building the dashboard: it scopes the plan, it does not stand 
 5. **Name the specific mechanism, not the category.** Not "track profitability". Write "gross margin percent, because the owner suspects discounting is eating the markup". The tile exposes a mechanism, so name it.
 6. **Scope the number, never set what good looks like.** Never invent a target, a threshold, or an actual figure. The target value for a metric is the owner's to set, Escalated. The plan names the slot beside the tile, never the number.
 7. **A blank field beats a fabricated one.** Never name a data source you were not told exists, never assign an access level you were not given. Mark it Assumed, "No source, capture needed", or "owner to confirm". A missing field stays honest, a fabricated one lies quietly.
+8. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Metric design
 

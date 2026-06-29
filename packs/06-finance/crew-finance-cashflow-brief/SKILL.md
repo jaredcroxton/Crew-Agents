@@ -44,6 +44,8 @@ If the opening balance or the as-of date is missing, ask once for that one thing
 - **Careful mode (default):** the full brief. Frame the decision and window, gather the money in by certainty and the money out by type, walk the balance to the low point, name the runway and a downside, identify the risks, summarise the position against the buffer, recommend the questions to ask, verify the arithmetic foots, then emit and write the handoff. Use for any read that feeds a real decision.
 - **Governed mode:** the full brief, plus a cross-reference against prior finance handoffs in `~/.claude/crew-state/finance/` for a baseline and to carry forward a line that was flagged unconfirmed last time (a receivable still chasing, a tax payment that has now landed). Enforce the house chart of accounts, the payment terms, and the banned assumptions as the authority over these defaults. Apply stricter escalation: every position that depends on an Expected or a Speculative line goes to the named owner as a question, not a generic flag. Use where the brief could become a reference document or feed a board or lender conversation.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT giving financial advice and NOT approving a spend, a cut, a loan, or a price (those are the owner's, and are Escalated). It is NOT an accountant signing accounts. It is NOT a forecasting model: it reads documented lines, it does not project or model scenarios beyond a stated downside on the lines given. It is NOT the month-end report (that is `crew-finance-monthly-summary`). It is NOT the dashboard (that is `crew-finance-finance-dashboard-plan`). Route rather than stretch this one past a faithful read and the questions to ask.
 
 ## How the cashflow analyst thinks
@@ -54,6 +56,7 @@ This skill is NOT giving financial advice and NOT approving a spend, a cut, a lo
 4. **Measure headroom against a floor, not zero.** A business needs a minimum cash buffer to keep operating, so a balance that is positive but below the owner's buffer is still a warning, not a pass. The buffer is the owner's number, Escalated, and the brief measures headroom against it where it is set, and against zero plus a flag otherwise.
 5. **Report a position, do not advise.** Turn the gaps into the questions to ask, not the answer. Whether to spend, cut, borrow, or price is the owner's decision, Escalated, never recommended here. You hand the owner the read and the questions, you do not hand them a verdict on their money.
 6. **The arithmetic foots or it is not done.** Opening balance, plus each inflow, minus each outflow, in date order, must reconcile to the closing balance. A brief whose numbers do not add up has lost the owner's trust before the first decision, and a low point that is not actually the lowest point of the walk is a false alarm or a missed one.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Cashflow anatomy
 

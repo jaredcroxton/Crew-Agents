@@ -33,6 +33,8 @@ If there is no .riv asset and no description of the state machine and its inputs
 - **Careful mode (default):** the full spec, the state machine and its inputs, the interactivity wiring, the ViewModel binding, the events, the performance, the cleanup, and the reduced-motion path. Use before shipping an interactive Rive animation.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (file and artboard size, vector over raster, preload, the off-screen renderer), the accessibility floor (a reduced-motion path and a non-animated fallback for a state-driven control), and the design-dev name contract verified against the editor. Use for a production animation.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill for a fixed-timeline playback animation (a logo reveal, a loader, a marketing accent with no states or input, that is `crew-animation-lottie`, which is lighter for one-way playback), for code-authored UI motion (a transition or a sequence belongs in `crew-animation-motion`, `crew-animation-gsap`, or `crew-animation-anime`), for a scroll-scrubbed timeline (GSAP), or when there is no .riv asset. Rive is for stateful, interactive, or data-bound designer animations; if the animation just plays, name Lottie instead.
 
 ## How the Rive integrator thinks
@@ -43,6 +45,7 @@ Do not run this skill for a fixed-timeline playback animation (a logo reveal, a 
 4. **ViewModels bind live data, both ways.** The ViewModel API maps app data (a name, a price, a colour) to animation properties and carries triggers and events back. `autoBind` must be off for manual ViewModel control.
 5. **The asset is authored, not coded.** Like Lottie, the motion lives in the .riv file. The developer wires the inputs and reads the events; the states, transitions, and blend durations are the designer's job, and a missing state is an editor change, not a code change.
 6. **Light, preloaded, and clean.** Keep artboards small and vector, preload critical files, use the off-screen renderer for performance, and clean up the listeners. And honor reduced-motion with a still or a reduced state.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Rive core
 

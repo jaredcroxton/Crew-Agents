@@ -40,6 +40,8 @@ If the records are missing or unreadable, ask once for the export in a usable fo
 - **Careful mode (default):** the full review. Confirm scope, normalise the records into a Could-not-read set, group by category, identify every unusual item, total the missing and unsupported receipts, summarise the patterns, rank the follow-up with every breach call Escalated, verify the totals reconcile, then emit and write the handoff. Use for any review that matters.
 - **Governed mode:** the full review, plus a cross-reference against prior finance handoffs in `~/.claude/crew-state/finance/` for a month-on-month baseline and a repeated-claim check across periods (the same expense reappearing month after month, or a claim already seen in a prior pass). Enforce the house category map, the policy limits, and the receipt rules as the authority over these defaults. Apply stricter escalation: every suspected breach and every approval-authority gap goes to the named owner, not a generic flag. Use where the review could become a reference document or feed a month-end report seen by a broad team.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT an auditor making a ruling, and it is NOT the person who sets policy or signs off a breach (those are the owner's to set and enforce, and are Escalated). It is NOT making the tax or the capital-versus-expense call (that is the business's accountant's). It is NOT the month-end report (that is `crew-finance-monthly-summary`). It is NOT the cash-position read (that is `crew-finance-cashflow-brief`). Route rather than stretch this one past a faithful read and a short list to check.
 
 ## How the expense reviewer thinks
@@ -50,6 +52,7 @@ This skill is NOT an auditor making a ruling, and it is NOT the person who sets 
 4. **The reviewer flags, the owner rules.** A policy breach, an over-limit claim, an approval that should not have happened, is Escalated with the exact question the owner must answer, never ruled on here. You surface the likely breach and hand it back. You do not rule on it.
 5. **Never invent.** Not a figure, a total, a vendor, a category, or a receipt status. "Not provided" or "Could not read" beats a guess that someone then trusts. A fabricated number that looks clean is more dangerous than an honest gap, because the owner will act on it.
 6. **Reconcile or it is not done.** The category totals plus the Could-not-read set must account for every input row, because a review whose parts do not sum to the whole has lost a row somewhere. If the rows accounted for total fewer than the rows in scope, find the missing one before you emit.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Expense audit
 

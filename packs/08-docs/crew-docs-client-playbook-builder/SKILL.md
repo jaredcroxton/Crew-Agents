@@ -43,6 +43,8 @@ If the delivery steps or responsibilities are vague, ask once for the single mos
 - **Careful mode (default):** the full playbook and verify. Confirm the service and audience, lock the section order, write the process as the client experiences it, split the two-column responsibilities, design the communication block, show the pricing structure and the FAQ, run the verify pass, then emit and write the handoff. Use for any playbook a client will actually read before or after signing.
 - **Governed mode:** the full build, plus a cross-reference against prior docs handoffs in `~/.claude/crew-state/docs/` so you can see what other skills already built. Enforce the house playbook template, the approved claims, and the standard terms as the authority, and apply stricter escalation on pricing, terms, and guarantees: any price, SLA, turnaround, refund, cancellation rule, or outcome guarantee is always routed to the business owner, never asserted here. Use for a regulated offer, a tier that several teams must keep consistent, or any playbook that becomes a published representation to buyers.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to write the internal SOP (the team's standing how-to, not the client's view); route to `crew-docs-sop-builder`. Do not run it to transfer a single named account from one owner to another; route to `crew-docs-handover-document-writer`. Do not run it to write a sales proposal that inflates outcomes to win the deal; a playbook states only what the business confirmed, so route a persuasion-first proposal to the sales pack rather than overstating here. Route to the right skill rather than stretching this one to fit.
 
 ## How the client playbook writer thinks
@@ -53,6 +55,7 @@ Do not run this skill to write the internal SOP (the team's standing how-to, not
 4. **Boundaries protect the relationship.** Say what is NOT included as clearly as what is. The unstated exclusion is the one that becomes a dispute. A client who knows the edge of the service up front trusts the playbook; a client who discovers the edge mid-project feels misled.
 5. **Plain client language at the audience's reading level.** Short sentences, no acronyms the buyer would not recognise, no tool names or process codes. Match the plainness to who reads it, a new client buying for the first time needs more plainness than a returning enterprise contact.
 6. **The most-missed client obligation is the reason the playbook exists.** The single thing a client most often fails to provide on time is what stalls delivery. Surface it, in bold, so the playbook prevents the delay it is built to prevent. A playbook that hides the client's hardest obligation has failed at its one job.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Playbook anatomy
 

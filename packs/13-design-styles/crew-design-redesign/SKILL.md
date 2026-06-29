@@ -33,6 +33,8 @@ If there is no existing design or codebase to audit, ask once for it (Loop 1, Mi
 - **Careful mode (default):** the full audit across typography, colour, layout, states, content, and components, plus the keep, cut, elevate triage and the quick-wins order. Use before a real redesign.
 - **Governed mode:** the full audit, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the lift is consistent across pages, the brand playbook enforced, the accessibility and strategic-omissions floor checked (focus, alt text, legal links, validation, skip-to-content), and the rebuild-versus-polish call made explicitly. Use for a production redesign.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to build a design from scratch (there is nothing to lift; use a style skill for a fresh aesthetic), to score a single dimension of a finished design (that is `crew-design-quality`), or to choose a brand-new visual language from nothing. This skill lifts something that already exists.
 
 ## How the redesign reviewer thinks
@@ -43,6 +45,7 @@ Do not run this skill to build a design from scratch (there is nothing to lift; 
 4. **Highest impact, lowest risk first.** A font swap lifts more than a week of micro-tweaks and breaks nothing. Order the work by impact over risk, not by what is most fun to build.
 5. **Finished beats fancy.** The missing states (hover, focus, loading, empty, error) and the missing pieces (404, legal links, validation) read as unfinished. Adding them lifts a design more than a new animation.
 6. **Know when polish is not enough.** Sometimes the structure is the problem and surface fixes only paint over it. Name when a deeper rebuild, or an honest fresh start, is the right answer, and do not default to a rewrite.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Redesign diagnosis
 

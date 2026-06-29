@@ -42,6 +42,8 @@ If the source content is absent or too thin to extract real points from (a title
 - **Careful mode (default):** the full pack across the chosen channels. Extract the spine, map messages to formats, re-cut each asset for its channel, hold every asset against the spine, package the set, and run the verify pass before emitting. Use for anything that ships.
 - **Governed mode:** the full pack, plus a cross-reference against prior marketing handoffs in `~/.claude/crew-state/marketing/` so the spine and the numbers stay consistent across the whole pack and across runs (you do not state a figure one asset stated differently, and you do not contradict a thesis a prior run committed). Run every asset through `crew-marketing-brand-voice-check` so the pack sounds like one business, and enforce the project playbook (the channel CTAs, the claim approvals, the banned phrases) as the authority. Use for a pack several assets and several teams must stay consistent with.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to GHOSTWRITE fresh opinions (it re-cuts the source, it does not invent a new argument). Do not run it to TRANSCRIBE a source verbatim into boxes (it re-cuts for each channel, it does not paste). Do not run it to expand a SINGLE channel further: `crew-marketing-social-post-pack` builds out the posts, `crew-marketing-email-campaign-builder` builds out the sequence. Do not run it to SEQUENCE a campaign (`crew-marketing-campaign-plan` does that). If the ask is to invent new opinions, that is a writing job, not a repurpose; if it is to expand one channel, route to the matching builder; if it is to plan the campaign these feed, route to `crew-marketing-campaign-plan`.
 
 ## How the content editor thinks
@@ -52,6 +54,7 @@ Do not run this skill to GHOSTWRITE fresh opinions (it re-cuts the source, it do
 4. **Numbers and quotes are copied exactly, a misquote is a fabrication.** A statistic is carried digit for digit, a quote word for word. A shifted number or a paraphrased "quote" presented as exact words is an invention, even when the rest of the asset is faithful.
 5. **Vary the entry point per channel, not the message.** The same message opens differently on a blog, a LinkedIn post, and a video, because each channel is read differently. You change how a reader enters the idea, never the idea itself, and you never paste the same words into every box.
 6. **Every claim in every asset traces to an extracted message.** Each line of each asset maps back to a specific message in the spine, with its spot in the source. A claim that traces to nothing in the spine is an invention and does not ship.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Source extraction
 

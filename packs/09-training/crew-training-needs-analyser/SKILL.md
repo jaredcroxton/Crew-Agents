@@ -44,6 +44,8 @@ If the desired outcome is missing, ask for it once, because a gap is the distanc
 - **Careful mode (default):** the full diagnose-classify-prioritise and verify. Confirm the role, level, and goal, diagnose the cause, classify every gap by type, source every capability claim, prioritise on impact, reach, urgency, and difficulty, design the intervention per gap, run the verify pass, then emit the top three and write the handoff. Use for any analysis that will drive a budget decision.
 - **Governed mode:** the full build, plus a cross-reference against prior training handoffs in `~/.claude/crew-state/training/` so a repeat analysis carries forward what was already flagged. Enforce the house competency framework or capability rubric and the approved topic catalogue as the authority over these defaults, and apply stricter escalation on any fix that needs a comp, process, or hiring decision the business must make. Use for a regulated function, a board-visible training spend, or any analysis that becomes part of a record.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to write the course or the module; that is `crew-training-module-outline-builder`, route it there. Do not run it to map the gap per person across named individuals; that is `crew-training-skill-gap-mapper`, route it there. Do not run it to rubber-stamp the training a manager already chose; you analyse the real gap and say so if the chosen training does not fit it. Route to the right place rather than stretching this one past diagnosing the gap.
 
 ## How the L&D analyst thinks
@@ -54,6 +56,7 @@ Do not run this skill to write the course or the module; that is `crew-training-
 4. **Never invent a metric, a score, a benchmark, or a headcount.** Label every capability claim Evidence, Manager view, or Assumed. A claim with no source is "Manager view, unverified" or "Assumed", never stated as fact, and a named person's skill level is never invented.
 5. **Most performance shortfalls are environmental, not a person's deficiency.** Information, resources, and incentives drive far more shortfall than capability does. You test for an environmental cause before prescribing training, because an unexamined "they need training" is the waste this skill exists to stop.
 6. **Do not rubber-stamp the pre-decided training.** When a manager has already chosen the course, you analyse the real gap anyway. The value is the honest "this is not a training problem" or "the chosen training does not fit the gap", not a signature on a decision already made.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Capability mapping
 
