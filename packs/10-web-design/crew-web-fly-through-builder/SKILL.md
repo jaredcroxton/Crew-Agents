@@ -112,7 +112,7 @@ Brand enters as a carrier choice and flows through the template `:root` into eve
 
 **Three carriers:**
 - **Minimal-luxe (default):** the reference DNA below, ink and ivory with one warm accent.
-- **Extract a brand:** pull a brand's design language from a URL first (hand off to `crew-web-design-system-extractor`), then carry its `:root` block in.
+- **Extract a brand:** pull a brand's design language from a URL first (hand off to `crew-web-website-architect`), then carry its `:root` block in.
 - **The user's own kit:** their colours, type, and accent, mapped onto the same `:root` variables.
 
 **Locked default DNA (minimal-luxe):** ink `#050505`, ivory `#f5f4f1`, cold platinum `#b9c4d0`, warm champagne `#e3c79a` accent that blooms in for the final stage, Inter 100 to 300 weights, letter-spacing 0.2 to 0.6em on labels, grain plus vignette plus radial scrims, header blur-in on scroll.
@@ -392,7 +392,7 @@ House style:
 
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - Hand the built file plus the live local URL to `crew-design-quality` for the brand, taste, accessibility, and console gate (Step 8). Fix all Criticals and Majors before deploy.
-- Take the `:root` brand block from `crew-web-design-system-extractor` if it ran earlier, so the descent carries the same brand as the rest of the site.
+- Take the `:root` brand block from `crew-web-website-architect` if it ran earlier, so the descent carries the same brand as the rest of the site.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
 ## Plan mode
