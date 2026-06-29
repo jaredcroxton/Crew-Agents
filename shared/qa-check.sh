@@ -56,6 +56,11 @@ for d in "$PACKS_DIR"/*/; do
   for sd in "$packdir"/crew-*/; do
     [ -d "$sd" ] || continue
     skill="$(basename "${sd%/}")"
+    # crew-web-app-builder is the BLAST-protocol mirror, a deliberate exception to the
+    # gold-standard structural gates (its own SKILL.md plus assets/templates/, ported whole).
+    # Skip the per-skill structural check here; the global em-dash and ban-list checks above
+    # still cover it.
+    case "$skill" in crew-web-app-builder) continue ;; esac
     f="$sd/SKILL.md"
     SKILL_COUNT=$((SKILL_COUNT+1))
     [ -f "$f" ] || { note "$skill: no SKILL.md"; continue; }
