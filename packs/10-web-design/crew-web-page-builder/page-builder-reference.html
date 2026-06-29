@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  CREW WEB PAGE BUILDER  ::  LOCKED ROUTE REFERENCE TEMPLATE
+  ============================================================================
+  This is the single self-contained reference the skill clones for every
+  build. It renders immediately in any browser with placeholder content.
+  Zero dependencies except the Google Fonts CDN link below.
+
+  HOW THE SKILL USES THIS FILE:
+    1. Copy this whole file.
+    2. Swap the brand tokens in :root (and the [data-theme="light"] block).
+    3. Swap the font pairing (one heading font, one body font).
+    4. Replace every block marked REPLACE with real content.
+    5. Keep the engineering intact: theme toggle, nav, reveal, overflow safety.
+
+  LOCKED ENGINEERING (do not remove):
+    - All brand values live in CSS custom properties. Nothing hardcoded.
+    - Sticky header, in-page smooth scroll, mobile hamburger.
+    - Dark and light mode. Dark is default. Honours prefers-color-scheme on
+      first load, user can override, choice persists to localStorage.
+    - Mobile-first responsive. Breakpoints at 768px and 1024px.
+    - Vanilla JS ONLY, and ONLY for: hamburger toggle, theme toggle, reveal.
+    - Subtle motion only. Honours prefers-reduced-motion.
+    - Overflow safety: content never clips under the sticky header. No
+      horizontal overflow at any width.
+    - Print stylesheet for PDF delivery.
+  ============================================================================
+-->
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: page title and meta description with the real business -->
+  <title>Northbridge Studio :: Premium business website</title>
+  <meta name="description" content="A clean, premium, fast multi-page business website built as one self-contained file." />
+
+  <!-- THEME INIT (runs synchronously BEFORE first paint, so no flash).
+       Resolves the theme from the saved choice, else prefers-color-scheme,
+       else dark, and sets data-theme on <html> before the page renders.
+       The data-theme="dark" on <html> above is only the no-JS fallback. -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("crew-theme");
+        var theme = (saved === "light" || saved === "dark")
+          ? saved
+          : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Google Fonts CDN (the only external dependency). REPLACE the pairing per brand. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ======================================================================
+       BRAND TOKENS  ::  the only place colour, type, and spacing live.
+       Swap these per brand. Selectors below reference the tokens, never raw
+       values. Dark is the default theme (set on <html data-theme="dark">).
+       ====================================================================== */
+    :root {
+      /* Typography (REPLACE the two families to rebrand) */
+      --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      /* Fluid type scale (clamp keeps it readable at every width) */
+      --step-hero: clamp(2.6rem, 6vw, 4.75rem);
+      --step-h2: clamp(1.9rem, 3.6vw, 2.85rem);
+      --step-h3: clamp(1.2rem, 1.8vw, 1.45rem);
+      --step-body: clamp(1rem, 1.1vw, 1.0625rem);
+      --step-small: 0.875rem;
+
+      /* Spacing scale */
+      --space-1: 0.5rem;
+      --space-2: 1rem;
+      --space-3: 1.5rem;
+      --space-4: 2.5rem;
+      --space-5: 4rem;
+      --space-6: 6.5rem;
+
+      /* Layout */
+      --header-h: 4.5rem;       /* drives overflow safety, see scroll-margin */
+      --maxw: 72rem;
+      --gutter: clamp(1.25rem, 5vw, 3rem);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --border-w: 1px;
+
+      /* Motion */
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --dur: 0.55s;
+
+      /* ---- DARK THEME PALETTE (default) ---- */
+      --bg: #0c0e12;
+      --bg-soft: #14171d;
+      --surface: #181c24;
+      --surface-2: #1f2530;
+      --text: #eef1f6;
+      --text-soft: #aab2c0;
+      --text-faint: #6f7888;
+      --border: #2a313c;
+      --border-soft: #222933;
+      --accent: #c8a25b;       /* warm gold, REPLACE per brand */
+      --accent-soft: #e0c489;
+      --accent-ink: #0c0e12;   /* text colour that sits on the accent */
+      --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
+    }
+
+    /* ---- LIGHT THEME OVERRIDE ---- */
+    [data-theme="light"] {
+      --bg: #f7f5f1;
+      --bg-soft: #efece6;
+      --surface: #ffffff;
+      --surface-2: #f3f0ea;
+      --text: #1a1d22;
+      --text-soft: #4f5662;
+      --text-faint: #8a93a1;
+      --border: #e2ddd3;
+      --border-soft: #ebe6dc;
+      --accent: #9a7320;       /* darker gold for contrast on light, REPLACE */
+      --accent-soft: #b88f33;
+      --accent-ink: #ffffff;
+      --shadow: 0 24px 60px -28px rgba(40, 34, 20, 0.22);
+    }
+
+    /* ======================================================================
+       RESET AND BASE
+       ====================================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* OVERFLOW SAFETY: clip on html/body only, never overflow-x: hidden on an
+       ancestor of the sticky header (that would break position: sticky). */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: clip;
+      max-width: 100%;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      /* Anchored sections offset so headings never hide under the header */
+      scroll-padding-top: var(--header-h);
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--step-body);
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.015em;
+      margin: 0 0 var(--space-2);
+      color: var(--text);
+    }
+
+    p { margin: 0 0 var(--space-2); color: var(--text-soft); }
+    p:last-child { margin-bottom: 0; }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { max-width: 100%; display: block; }
+
+    ::selection { background: var(--accent); color: var(--accent-ink); }
+
+    /* ======================================================================
+       LAYOUT HELPERS
+       ====================================================================== */
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+
+    .section {
+      padding-block: var(--space-6);
+      /* OVERFLOW SAFETY: anchored sections clear the sticky header */
+      scroll-margin-top: var(--header-h);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: var(--step-small);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-2);
+    }
+
+    .lede {
+      font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+      color: var(--text-soft);
+      max-width: 42ch;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--step-small);
+      letter-spacing: 0.01em;
+      padding: 0.85rem 1.6rem;
+      border-radius: 999px;
+      border: var(--border-w) solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s var(--ease), background 0.2s var(--ease),
+                  border-color 0.2s var(--ease), color 0.2s var(--ease);
+      min-height: 48px; /* comfortable touch target */
+    }
+    .btn-primary { background: var(--accent); color: var(--accent-ink); }
+    .btn-primary:hover { transform: translateY(-2px); background: var(--accent-soft); }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* ======================================================================
+       HEADER  ::  sticky, brand wordmark + nav + theme toggle + hamburger
+       ====================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: saturate(140%) blur(14px);
+      border-bottom: var(--border-w) solid var(--border-soft);
+      transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+    .header-inner {
+      width: 100%;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+    .brand {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .brand span { color: var(--accent); }
+
+    .nav { display: flex; align-items: center; gap: var(--space-1); }
+    .nav-links { display: flex; align-items: center; gap: 0.35rem; list-style: none; margin: 0; padding: 0; }
+    .nav-links a {
+      display: inline-block;
+      font-size: var(--step-small);
+      font-weight: 500;
+      color: var(--text-soft);
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface); }
+
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    /* Theme toggle button */
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: var(--border-w) solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .icon-btn svg { width: 20px; height: 20px; }
+    /* Show the right glyph per theme */
+    .icon-sun { display: none; }
+    .icon-moon { display: block; }
+    [data-theme="light"] .icon-sun { display: block; }
+    [data-theme="light"] .icon-moon { display: none; }
+
+    /* Hamburger (hidden on desktop, shown under 768px) */
+    .hamburger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      border: var(--border-w) solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 18px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+    }
+    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ======================================================================
+       HERO
+       ====================================================================== */
+    .hero {
+      /* OVERFLOW SAFETY: padding-top clears the sticky header, no centre-clip */
+      padding-top: calc(var(--header-h) + var(--space-5));
+      padding-bottom: var(--space-6);
+      position: relative;
+    }
+    .hero h1 { font-size: var(--step-hero); max-width: 16ch; margin-bottom: var(--space-3); }
+    .hero .lede { margin-bottom: var(--space-4); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .hero-meta {
+      margin-top: var(--space-5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      border-top: var(--border-w) solid var(--border-soft);
+      padding-top: var(--space-3);
+    }
+    .hero-meta .stat strong {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--text);
+      line-height: 1;
+    }
+    .hero-meta .stat span { font-size: var(--step-small); color: var(--text-faint); }
+
+    /* ======================================================================
+       SECTION HEADER (shared)
+       ====================================================================== */
+    .section-head { max-width: 46rem; margin-bottom: var(--space-5); }
+    .section-head h2 { font-size: var(--step-h2); }
+
+    /* ======================================================================
+       SERVICES  ::  card grid
+       ====================================================================== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .card {
+      background: var(--surface);
+      border: var(--border-w) solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      color: var(--accent);
+      margin-bottom: var(--space-2);
+    }
+    .card-icon svg { width: 24px; height: 24px; }
+    .card h3 { font-size: var(--step-h3); }
+    .card p { font-size: var(--step-small); }
+
+    /* ======================================================================
+       SOCIAL PROOF  ::  reviews strip
+       ====================================================================== */
+    .proof { background: var(--bg-soft); transition: background var(--dur) var(--ease); }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .quote {
+      background: var(--surface);
+      border: var(--border-w) solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+    .quote .stars { color: var(--accent); letter-spacing: 2px; margin-bottom: var(--space-1); }
+    .quote blockquote {
+      margin: 0 0 var(--space-2);
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .quote cite { font-style: normal; font-size: var(--step-small); color: var(--text-faint); }
+    .quote cite strong { color: var(--text-soft); display: block; font-weight: 600; }
+
+    /* ======================================================================
+       FAQ  ::  details / summary accordion
+       ====================================================================== */
+    .faq-list { max-width: 48rem; margin-inline: auto; }
+    .faq-item {
+      border-bottom: var(--border-w) solid var(--border);
+    }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: var(--space-3) 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      font-family: var(--font-heading);
+      font-size: var(--step-h3);
+      color: var(--text);
+      transition: color 0.2s var(--ease);
+    }
+    .faq-item summary:hover { color: var(--accent); }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item .plus {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      position: relative;
+      transition: transform 0.3s var(--ease);
+    }
+    .faq-item .plus::before,
+    .faq-item .plus::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      background: currentColor;
+      border-radius: 2px;
+    }
+    .faq-item .plus::before { width: 14px; height: 2px; }
+    .faq-item .plus::after { width: 2px; height: 14px; }
+    .faq-item[open] .plus { transform: rotate(135deg); }
+    .faq-item .answer { padding: 0 0 var(--space-3); max-width: 60ch; }
+    .faq-item .answer p { font-size: var(--step-small); }
+
+    /* ======================================================================
+       CONTACT
+       ====================================================================== */
+    .contact-card {
+      background: var(--surface);
+      border: var(--border-w) solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(var(--space-3), 5vw, var(--space-5));
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .contact-card h2 { font-size: var(--step-h2); }
+    .contact-card .lede { margin-inline: auto; margin-bottom: var(--space-3); }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+
+    /* ======================================================================
+       FOOTER  ::  footer nav
+       ====================================================================== */
+    .site-footer {
+      border-top: var(--border-w) solid var(--border-soft);
+      padding-block: var(--space-4);
+      background: var(--bg-soft);
+      transition: background var(--dur) var(--ease);
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .footer-top { display: flex; flex-direction: column; gap: var(--space-3); }
+    .footer-brand .brand { font-size: 1.2rem; }
+    .footer-brand p { font-size: var(--step-small); max-width: 34ch; margin-top: var(--space-1); }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); }
+    .footer-col h4 {
+      font-size: var(--step-small);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 0 0 var(--space-1);
+    }
+    .footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+    .footer-col a { font-size: var(--step-small); color: var(--text-soft); transition: color 0.2s var(--ease); }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      justify-content: space-between;
+      align-items: center;
+      border-top: var(--border-w) solid var(--border-soft);
+      padding-top: var(--space-3);
+      font-size: var(--step-small);
+      color: var(--text-faint);
+    }
+
+    /* ======================================================================
+       REVEAL  ::  one-shot fade-up, added by IntersectionObserver
+       ====================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+      will-change: opacity, transform;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ======================================================================
+       RESPONSIVE  ::  mobile-first, breakpoints at 768px and 1024px
+       ====================================================================== */
+
+    /* Mobile nav drawer (under 768px the links collapse behind the hamburger) */
+    @media (max-width: 767.98px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: var(--header-h);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: var(--bg);
+        border-bottom: var(--border-w) solid var(--border);
+        padding: var(--space-2) var(--gutter) var(--space-3);
+        transform: translateY(-12px);
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0.3s;
+      }
+      .nav-links.open {
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+      }
+      .nav-links a { padding: 0.9rem 0.5rem; border-radius: var(--radius-sm); font-size: 1.05rem; }
+    }
+
+    /* Tablet and up */
+    @media (min-width: 768px) {
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+      .quote-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+      .footer-nav { gap: var(--space-5); }
+    }
+
+    /* Desktop and up */
+    @media (min-width: 1024px) {
+      .card-grid { grid-template-columns: repeat(3, 1fr); }
+      .quote-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero h1 { max-width: 14ch; }
+    }
+
+    /* ======================================================================
+       REDUCED MOTION  ::  reveals instant, no smooth scroll
+       ====================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ======================================================================
+       PRINT  ::  clean PDF delivery (chosen when output is a PDF)
+       ====================================================================== */
+    @media print {
+      .site-header, .hamburger, .nav-actions, .hero-actions,
+      .contact-actions, .icon-btn { display: none !important; }
+      html, body {
+        background: #ffffff;
+        color: #111111;
+      }
+      .section { padding-block: 1.25rem; page-break-inside: avoid; }
+      .card, .quote, .contact-card {
+        border: 1px solid #cccccc;
+        box-shadow: none;
+        background: #ffffff;
+      }
+      a { color: #111111; text-decoration: underline; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ====================================================================
+       HEADER
+       REPLACE: brand wordmark, and the nav link labels to match the pages
+       chosen in discovery (home, about, services, pricing, contact, FAQ, blog)
+       ==================================================================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#home" class="brand">North<span>bridge</span></a>
+
+      <nav class="nav" aria-label="Primary">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#proof">Reviews</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Theme toggle: swaps dark and light, persists to localStorage -->
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark and light theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+          </button>
+
+          <!-- Hamburger: opens the mobile nav drawer -->
+          <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================================================================
+         HERO
+         REPLACE: headline, lede, button labels.
+         The hero-meta stat strip below is OPTIONAL. Like social proof, it
+         ships ONLY if the user gave real, verifiable numbers. Never invent a
+         project count, a star rating, or any metric. If the user has none,
+         DELETE the entire .hero-meta block rather than ship a fabricated stat.
+         ================================================================== -->
+    <section class="hero section" id="home">
+      <div class="wrap">
+        <span class="eyebrow reveal">Premium business websites</span>
+        <h1 class="reveal">A site that looks like it cost twenty grand.</h1>
+        <p class="lede reveal">REPLACE: one sentence on what you do and who you do it for. Clear, confident, plain language. No jargon, no filler.</p>
+        <div class="hero-actions reveal">
+          <a href="#contact" class="btn btn-primary">Start a project</a>
+          <a href="#services" class="btn btn-ghost">See what we do</a>
+        </div>
+        <!-- OPTIONAL stat strip: each stat must be a real, user-supplied number, or delete the whole block. -->
+        <div class="hero-meta reveal">
+          <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
+          <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
+          <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SERVICES  ::  card grid
+         REPLACE: each card title and copy. Keep three to six cards.
+         ================================================================== -->
+    <section class="section" id="services">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">What we do</span>
+          <h2>Everything you need, nothing you do not.</h2>
+          <p class="lede">REPLACE: one line framing your services. Group them so a visitor understands the offer in five seconds.</p>
+        </div>
+
+        <div class="card-grid">
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 22V12h6v10" />
+              </svg>
+            </div>
+            <h3>Strategy first</h3>
+            <p>REPLACE: describe this service in two sentences. Lead with the outcome, not the activity.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
+              </svg>
+            </div>
+            <h3>Design and build</h3>
+            <p>REPLACE: describe this service. Keep the sentence rhythm tight so the grid reads evenly.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="M22 4L12 14.01l-3-3" />
+              </svg>
+            </div>
+            <h3>Launch and care</h3>
+            <p>REPLACE: describe this service. Close on the reassurance a buyer needs before they commit.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+              </svg>
+            </div>
+            <h3>Fast turnaround</h3>
+            <p>REPLACE: describe this service. A specific timeframe builds more trust than a vague promise.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h3>A real team</h3>
+            <p>REPLACE: describe this service. Name the people or the principle behind the work.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2l3 7h7l-5.5 4.5L18.5 22 12 17.5 5.5 22l2-8.5L2 9h7z" />
+              </svg>
+            </div>
+            <h3>Work you are proud of</h3>
+            <p>REPLACE: describe this service. End the grid on the emotional payoff of the result.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SOCIAL PROOF  ::  reviews strip
+         REPLACE: each quote, name, and role. Real reviews only.
+         ================================================================== -->
+    <section class="section proof" id="proof">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">In their words</span>
+          <h2>People keep coming back.</h2>
+        </div>
+
+        <div class="quote-grid">
+          <figure class="quote reveal">
+            <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a short, specific quote about a real result. Specificity beats superlatives.</blockquote>
+            <cite><strong>Client name</strong>Role, Company</cite>
+          </figure>
+
+          <figure class="quote reveal">
+            <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a short, specific quote. One sentence is stronger than a paragraph.</blockquote>
+            <cite><strong>Client name</strong>Role, Company</cite>
+          </figure>
+
+          <figure class="quote reveal">
+            <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a short, specific quote. Mention the outcome or the feeling, ideally both.</blockquote>
+            <cite><strong>Client name</strong>Role, Company</cite>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         FAQ  ::  details / summary accordion
+         REPLACE: each question and answer with the real ones.
+         ================================================================== -->
+    <section class="section" id="faq">
+      <div class="wrap">
+        <div class="section-head reveal" style="text-align: center; margin-inline: auto;">
+          <span class="eyebrow">Good questions</span>
+          <h2>The things people ask first.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item reveal">
+            <summary>REPLACE: the first question a real buyer would ask<span class="plus" aria-hidden="true"></span></summary>
+            <div class="answer"><p>REPLACE: answer it plainly and honestly. Lead with the answer, then the reason.</p></div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>REPLACE: the second most common question<span class="plus" aria-hidden="true"></span></summary>
+            <div class="answer"><p>REPLACE: answer it. If price is the question, name a range rather than dodging it.</p></div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>REPLACE: the objection that loses you sales<span class="plus" aria-hidden="true"></span></summary>
+            <div class="answer"><p>REPLACE: answer the objection head on. This is the most valuable line on the page.</p></div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>REPLACE: a logistics question (timing, process, what next)<span class="plus" aria-hidden="true"></span></summary>
+            <div class="answer"><p>REPLACE: answer it. Tell them exactly what happens after they get in touch.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         CONTACT
+         REPLACE: heading, lede, button labels, and the link targets
+         ================================================================== -->
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="contact-card reveal">
+          <span class="eyebrow">Let us talk</span>
+          <h2>Ready when you are.</h2>
+          <p class="lede">REPLACE: a warm one-liner inviting them to reach out. Make the next step feel small and easy.</p>
+          <div class="contact-actions">
+            <!-- REPLACE: real email and phone -->
+            <a href="mailto:hello@example.com" class="btn btn-primary">Email us</a>
+            <a href="tel:+10000000000" class="btn btn-ghost">Call the studio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       FOOTER  ::  footer nav
+       REPLACE: brand line, columns, links, and the legal line
+       ==================================================================== -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#home" class="brand">North<span>bridge</span></a>
+          <p>REPLACE: a one-line description of the business for the footer.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#proof">Reviews</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="#contact">Contact</a></li>
+              <li><a href="#home">About</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Connect</h4>
+            <ul>
+              <li><a href="#contact">Email</a></li>
+              <li><a href="#contact">Phone</a></li>
+              <li><a href="#home">Social</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>REPLACE: copyright line, year and business name.</span>
+        <span>Built as one fast, self-contained file.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================================
+       VANILLA JS  ::  hamburger toggle, theme toggle, reveal observer ONLY
+       No framework. No build step. This is the whole script.
+       ==================================================================== -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var STORE_KEY = "crew-theme";
+
+      /* ---- THEME TOGGLE -------------------------------------------------
+         The initial theme is resolved by the inline script in <head> before
+         paint (no flash). Here we only handle the click: flip data-theme and
+         persist the choice so it wins on the next load. */
+      var themeToggle = document.getElementById("themeToggle");
+      if (themeToggle) {
+        themeToggle.addEventListener("click", function () {
+          var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem(STORE_KEY, next); } catch (e) {}
+        });
+      }
+
+      /* ---- HAMBURGER TOGGLE --------------------------------------------- */
+      var hamburger = document.getElementById("hamburger");
+      var navLinks = document.getElementById("navLinks");
+      function closeMenu() {
+        if (!navLinks) return;
+        navLinks.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        hamburger.setAttribute("aria-label", "Open menu");
+      }
+      if (hamburger && navLinks) {
+        hamburger.addEventListener("click", function () {
+          var open = navLinks.classList.toggle("open");
+          hamburger.setAttribute("aria-expanded", open ? "true" : "false");
+          hamburger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        });
+        /* Close the drawer after tapping any in-page link */
+        navLinks.addEventListener("click", function (e) {
+          if (e.target.closest("a")) closeMenu();
+        });
+      }
+
+      /* ---- REVEAL ON SCROLL  ::  one-shot fade-up, then unobserve --------
+         Honours prefers-reduced-motion: reveals everything instantly. */
+      var reveals = document.querySelectorAll(".reveal");
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reduce || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              obs.unobserve(entry.target); /* one-shot */
+            }
+          });
+        }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>
