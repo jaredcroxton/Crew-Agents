@@ -25,9 +25,15 @@ Then the five discovery questions, asked in order:
 
 1. **North Star.** What is the singular desired outcome this system must deliver? One sentence, one job.
 2. **Integrations.** Which external services do we need, and are the API keys ready? Name each service and whether the credential exists.
-3. **Source of truth.** Where does the primary data live? The sheet, the database, the inbox, the site to scrape, the API to poll.
-4. **Delivery payload.** How and where should the final result be delivered? The Slack message, the Notion page, the database row, the email, the dashboard card, the file.
-5. **Behavioural rules.** How should the system act? Tone, logic constraints, and the "do not" rules. What it must never do.
+3. **Source of truth.** Where does the primary data live?
+4. **Delivery payload.** How and where should the final result be delivered?
+5. **Behavioural rules.** How should the system act? Tone, logic constraints, and the "do not" rules.
+
+Internal interpretation (these examples guide your reading of the answers, do not show them to the user as part of the question):
+
+- **Source of truth:** sheet, database, inbox, site to scrape, API to poll.
+- **Delivery payload:** Slack message, Notion page, database row, email, dashboard card, file.
+- **Behavioural rules:** hard limits, tone boundaries, what the system must never do.
 
 Lock the JSON input and output shapes in `app-spec.md` before writing code. This is the data-first rule, and it is the gate between discovery and the build.
 
