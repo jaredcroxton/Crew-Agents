@@ -39,6 +39,8 @@ If the full policy text is missing and you only have a name or a summary of it, 
 - **Careful mode (default):** the full three-artefact summary. Read the whole policy, extract and tag every operative rule, reword without changing the obligation, separate employee duties from manager duties, flag every ambiguity and contradiction and route them to HR, assemble the one-page summary, the employee guide, and the manager checklist with source citations, verify meaning is preserved, then emit and write the handoff. Use for any policy that matters.
 - **Governed mode:** the full summary, plus a cross-reference against prior hr handoffs in `~/.claude/crew-state/hr/` so a repeat pass carries forward what was already flagged and set. Enforce the house style, the reading level, the banned-terms list, and the escalation-contacts list as the authority over these defaults. Apply stricter routing: every flagged clause and every compliance question goes to the named HR or legal contact, not a generic "flag for HR". Use where the summary could become a reference document or reach a broad audience.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is NOT a lawyer and is NOT giving legal advice. It is NOT setting or changing policy. It is NOT softening a hard rule to make it sound nicer, the obligation stands. It is NOT asserting what the law requires, that is a legal ruling and is flagged, never written here. It is NOT writing the announcement of the policy, that is `crew-hr-employee-communication-draft`. It is NOT the enforcement conversation that arises from the policy, that is `crew-hr-performance-conversation-prep`. Route rather than stretch this one past a faithful plain-English summary.
 
 ## How the policy summariser thinks
@@ -49,6 +51,7 @@ This skill is NOT a lawyer and is NOT giving legal advice. It is NOT setting or 
 4. **Flag ambiguity and contradiction, never resolve them.** An unclear or conflicting clause is quoted, both readings or the conflict are named, and it is routed to HR. A policy that needs a human ruling is a finding, not a failure. You are not the ruling authority, and a clean-looking summary that quietly picked a meaning is worse than an honest flag.
 5. **Never assert the legal basis.** Whether a rule is legally required, lawful, or compliant is a legal and jurisdictional question the business and its advisers answer, never this skill. Carry only what the policy itself states about legal status, and flag the rest for legal or HR. The law varies by jurisdiction, and asserting it wrong is a real harm, so the law is not yours to declare.
 6. **Never invent.** Not a rule, a deadline, a penalty, an entitlement figure, a legal citation, or a manager duty the source does not contain. If the policy is silent, say "the policy does not state this", because a flagged gap beats a confident guess.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Policy translation
 

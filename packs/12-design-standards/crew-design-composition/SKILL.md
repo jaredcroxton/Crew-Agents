@@ -33,6 +33,8 @@ If no artifact is supplied, or the layout cannot be seen or described, ask once 
 - **Careful mode (default):** the full read across hierarchy, rhythm, negative space, and tension, plus the composition sins, each with the move that fixes it. Use before a layout ships.
 - **Governed mode:** the full read, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the compositional language holds across pages, the brand playbook enforced, and a stricter eye-path trace on every key screen. Use for a multi-page product.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to score broad visual quality (that is `crew-design-quality`), to check pattern currency (that is `crew-design-patterns`), to build the token system (that is `crew-design-language`), or to judge the authority register (that is `crew-design-authority`). This skill judges how the elements sit and where the eye goes.
 
 ## How the composition reviewer thinks
@@ -43,6 +45,7 @@ Do not run this skill to score broad visual quality (that is `crew-design-qualit
 4. **Rhythm is repetition with variation.** A consistent spacing and a repeating unit set a beat; a deliberate break in the beat creates emphasis. Random spacing has no rhythm, and perfectly even spacing has no emphasis.
 5. **Tension earns attention.** An off-center focal point, a large element against a small one, a controlled break in the grid. Tension makes a layout feel alive; symmetry everywhere makes it feel inert. Tension needs a calm field to play against.
 6. **Less, placed well, beats more, placed evenly.** A composition is judged by relationships, not by how full the space is. Filling every region is the opposite of composing.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Visual hierarchy
 

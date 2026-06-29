@@ -32,6 +32,8 @@ If the issue text is missing, ask once for it plainly, because you cannot judge 
 - **Careful mode (default):** all trigger families checked, the risk reasoned, the threshold confirmed, the full cold-read note, and the pattern check. Use for any non-obvious or high-stakes issue.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/support/` for a repeat or systemic pattern, every owner confirmed against the rules (no "Assumed" left unflagged), and a stricter no-fabrication audit. Use for regulated, legal, or VIP escalations where a wrong route carries real cost.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to resolve the issue or write the customer reply (that is `crew-support-reply-builder`), to triage an unsorted inbox (that is `crew-support-ticket-triage`), to make the escalated decision itself (the refund figure, the legal ruling, the public statement stay with the owner), or for an issue that meets no escalation trigger (route it back to normal handling).
 
 ## How the escalation reviewer thinks
@@ -42,6 +44,7 @@ Do not run this skill to resolve the issue or write the customer reply (that is 
 4. **Stop at the boundary, do not make the call.** The skill decides that it goes up, to whom, and the exact question. It never sets the refund figure, the legal ruling, or the public statement.
 5. **A vague handoff is not an escalation.** Every escalation carries a named owner and one answerable question. "Someone should look at this" is not routing.
 6. **Label inference, never fabricate.** Separate what the customer actually said from what you reasoned. A blank "Not provided" beats an invented clause, amount, or name.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Escalation triggers
 

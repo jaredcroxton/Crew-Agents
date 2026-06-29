@@ -72,6 +72,8 @@ After the user answers, confirm a one-paragraph summary back to them: the proper
 - **Careful mode (default for a personal or speculative build):** the full seven-question discovery, the chosen deploy route end to end, and the design review gate before any deploy.
 - **Governed mode (the right default for a REAL client listing):** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so an agency's register carries across builds, the design review gate mandatory with nothing waived, and a stricter integrity check that every on-page claim (price, beds, baths, car, land size) matches the live listing and that not one frame of property imagery was generated or altered. Use this whenever a claim on the page carries a legal or reputational risk, which is almost every real listing for a real agent.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Anti-trigger routing, so this skill stays in its lane:
 
 - A fully fictional cinematic concept site with invented spaces belongs in `crew-web-cinematic-build`.
@@ -89,6 +91,7 @@ Real Estate Immersive is specifically for a REAL property listing with REAL tour
 4. **The single buyer feeling guides style and mood.** The one audience and one feeling from discovery question 6 set the register. A downsizing couple who should feel "this is the easy life" wants warm and golden calm, not dark and dramatic tension. Every style and mood choice serves that one feeling.
 5. **Honesty in every claim.** Price, beds, baths, car, and land size on the page match the live listing exactly. No rounding up, no aspirational staging language presented as fact, no feature chip that the listing does not support. The footer carries an honest attribution and a concept-demonstration note until the agency signs off.
 6. **Accessibility and the reduced-motion floor.** `prefers-reduced-motion` gets a real path: the scrub holds a single representative still instead of animating, no auto motion, and the chapters, the gallery, the floorplan, and the CTAs all still read. A tour that only works with full motion excludes part of the audience and fails the brief before it ships.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## The asset manifest and image prompts
 

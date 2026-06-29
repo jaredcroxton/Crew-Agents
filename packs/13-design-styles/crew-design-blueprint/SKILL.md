@@ -33,6 +33,8 @@ If the niche is too vague to pick an archetype, or the primary goal is unstated,
 - **Careful mode (default):** the full site blueprint, the page map, navigation, page templates, information hierarchy, user flows, and content strategy. Use before a multi-page build.
 - **Governed mode:** the full blueprint, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the architecture stays consistent, the business playbook enforced, a content-gap audit (what must be created before build), and a flow-completeness check (no dead ends, every conversion path traced). Use for a production site.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to critique a single element or screen (that is `crew-design-quality` or `crew-design-composition`), to choose the visual style (that is the style skills), to lift an existing design (that is `crew-design-redesign`), or for copywriting alone. This skill plans the structure of a site, not its surface.
 
 ## How the blueprint architect thinks
@@ -43,6 +45,7 @@ Do not run this skill to critique a single element or screen (that is `crew-desi
 4. **Every page earns its place and its links.** A page exists because a flow needs it. If nothing links to it, it is an orphan; if it has no next step, it is a dead end. Pages connect or they do not belong.
 5. **One primary conversion per page.** Each page has a single job (call, sign up, buy, book, subscribe). A page with three competing goals converts on none.
 6. **Content is half the blueprint.** A page spec that lists sections but not the content each one needs is a wireframe, not a plan. Name what content exists and what must be created.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Site architecture
 

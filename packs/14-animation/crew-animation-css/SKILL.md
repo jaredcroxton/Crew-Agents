@@ -33,6 +33,8 @@ If the brief is too vague to spec, ask once what should animate, why, and on wha
 - **Careful mode (default):** the full spec, the keyframes or transition, the shorthand and longhands, the fill mode and play-state, the WAAPI control surface if JS control is needed, the compositor-only performance, and the reduced-motion path. Use before building any state or loop motion.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity only, will-change used sparingly and removed, contain where it helps, the 60fps budget), and the accessibility floor (a prefers-reduced-motion path, mandatory). Use for a production surface.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill for complex multi-step sequencing and orchestrated timelines (that is `crew-animation-anime` or `crew-animation-gsap`, which own the timeline and relative offsets), for declarative React component motion with variants, layout, or exit animation (`crew-animation-motion` is more idiomatic), for physics-accurate, gesture-driven, velocity-preserving motion (`crew-animation-spring`), or for scroll-driven reveals (`crew-animation-scroll-reveal`). CSS is the lightest, framework-independent, no-dependency path: CSS keyframes and transitions for declarative and state motion, WAAPI for JS control without a library. Name the heavier tool when the work needs orchestrated timelines or dynamic runtime values across many elements, where the native primitives turn into a pile of hand-managed delays.
 
 ## How the CSS animator thinks
@@ -43,6 +45,7 @@ Do not run this skill for complex multi-step sequencing and orchestrated timelin
 4. **Fill mode decides the held state.** Without a fill mode, the element snaps back to its unanimated style before and after the run. `forwards` holds the end, `backwards` applies the start during the delay, `both` does both. A seeked or settled animation needs `both` so the held state is correct.
 5. **CSS until you need JS, then WAAPI before a library.** When the motion needs dynamic values, playback control, sequencing, or a promise to chain on, WAAPI gives the native engine a JS handle (element.animate(), play, pause, reverse, finished) with no dependency. Reach for a library only when WAAPI is not enough (orchestrated timelines, many coordinated elements, runtime-computed values everywhere).
 6. **Finite, purposeful, and accessible.** Loops are finite or earn their infinity (a deliberate, lightweight motif), never an idle drain on battery and the main thread. Every motion has a `prefers-reduced-motion` path that removes or reduces it. Native does not mean exempt from the accessibility floor.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## CSS keyframes
 

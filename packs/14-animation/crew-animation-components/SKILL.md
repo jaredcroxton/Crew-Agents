@@ -33,6 +33,8 @@ If the brief is too vague to spec, ask once which UI element animates, why, and 
 - **Careful mode (default):** the full spec, the primitive chosen, the motion primitives and their composition, the framework mapping, the pre-built versus custom call, the performance, and the reduced-motion path. Use before building an animated UI section.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the component language stays consistent (the same modal motion everywhere, the same toast slide), the brand playbook enforced, a stricter dependency audit (no heavy library pulled for one primitive, bundle cost named), and the accessibility floor (focus trap on overlays and reduced-motion under prefers-reduced-motion, mandatory). Use for a production app or a design system.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill for bespoke physics and gesture motion that needs velocity preservation and interruptible springs (that is `crew-animation-spring`), for declarative one-off component animation where you hand-write the variants on a single element (`crew-animation-motion`), for scroll-driven reveals where the trigger and choreography are the scroll position (`crew-animation-scroll-reveal`), or for lightweight CSS-only motion that needs no library at all (`crew-animation-css`). Components is the pre-built primitive catalogue: reach for it to ship standard animated UI fast and consistently, and name the custom tool when the motion is a brand signature or no primitive fits.
 
 ## How the component animator thinks
@@ -43,6 +45,7 @@ Do not run this skill for bespoke physics and gesture motion that needs velocity
 4. **Accessibility is part of the primitive, not a bolt-on.** An overlay primitive (modal, dialog, popover, menu) traps focus, restores it on close, and closes on Escape. Every primitive honors `prefers-reduced-motion`. A pretty animation that ignores focus or reduced-motion is a broken primitive.
 5. **A primitive earns its dependency.** Pulling a 150-component library to ship one animated button is a bad trade; copy the one component or hand-write it. A library earns its place when you use many of its primitives and want them consistent.
 6. **Consistency is the payoff.** The reason to use a catalogue is that every modal opens the same way, every toast slides from the same edge, every tab transition matches. Compose from the same primitives so the surface reads as one system, not a patchwork.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Component catalogue
 

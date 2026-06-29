@@ -32,6 +32,8 @@ If the message text or the core facts are missing, ask once for that one thing, 
 - **Careful mode (default):** draft, self-check against the banned-phrase list, self-score against the quality checklist, then output. Use for normal operation.
 - **Governed mode:** draft, self-check, and cross-reference prior replies in `~/.claude/crew-state/support/` so tone and language stay consistent across the batch. Use for public-facing or high-visibility replies where the brand voice is critical.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not draft when the triage card marks the item Escalated (no public reply), when the priority is "no reply needed", when this message was already answered this session, or when the triage card is missing the facts a reply depends on.
 
 ## Brand voice

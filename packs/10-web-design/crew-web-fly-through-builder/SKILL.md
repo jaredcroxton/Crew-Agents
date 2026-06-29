@@ -44,6 +44,8 @@ If the asset route is unresolved, ask for it once, because it decides the entire
 - **Careful mode (default):** the full six-question discovery, the chosen asset route end to end, and the review gate before any deploy. Use for any client build.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across assets, the "Concept demonstration only" footer enforced, the review gate mandatory, and a stricter truth check on any real property or product. Use for real client listings where a claim carries legal or reputational risk.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill when the user wants a multi-page marketing site (that is `crew-web-landing-page-builder`), a CSS-only parallax with no real footage (this skill will not fake the journey), a slideshow of discrete images (that is `crew-web-slide-deck-builder`), or an editable video file (this ships a website, not an MP4).
 
 Do not run this skill expecting a canvas frame-scrub descent when the user only has still images. Clarify in discovery: still images produce Route D (a cinematic stage-switcher), not a frame-scrub descent. The distinction matters; a client shown a stage-switcher who expected continuous camera motion will notice.
@@ -56,6 +58,7 @@ Do not run this skill expecting a canvas frame-scrub descent when the user only 
 4. **The locked engineering is scar tissue, not preference.** The load gate, the arrival lock, the no-smooth-scroll-library rule, the spaced-retry `jumpTo`, each one fixed a real production bug (see Failure modes). Ripping one out to "simplify" re-breaks it. Change a locked block only with a reason that survives the failure-modes table.
 5. **Truth over spectacle.** Never present AI imagery of a real property as filmed, never invent a spec or a price. A "Concept demonstration only" footer rides until the owner signs off. The effect is the sell; the facts stay honest.
 6. **Never wait for all frames.** Paint after the gate (48 frames) plus a progress bar, release scroll, and background-load the rest. A descent that blocks on a full preload feels broken before it begins.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Canonical pin and crossfade reference (read before touching the scroll engine)
 

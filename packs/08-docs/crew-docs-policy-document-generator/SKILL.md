@@ -48,6 +48,8 @@ If the rules are missing, ask once for them plainly, because a policy with no ru
 - **Careful mode (default):** the full build and verify. Capture the topic and scope, classify the policy type and load its mandatory parts, sort every input into a rule, a definition, or a process, draft the full structure, flag every gap, capture the owner, version, effective date, and review date, run the verify pass, then emit "Draft, pending review" with the sign-off Escalated, and write the handoff. Use for any policy that will actually go to staff.
 - **Governed mode:** the full build, plus a cross-reference against prior docs handoffs in `~/.claude/crew-state/docs/` so you can see what other skills already built. Enforce the house policy playbook, the mandatory clauses, the approval chain, and the banned wording as the authority, and apply stricter escalation: any rule that touches a legal or compliance gate is routed for human sign-off, never cleared here. Use for a regulated, safety-bound, or audited policy, or one several teams must stay consistent with.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to write a PROCEDURE or SOP (the steps, not the rule and its rationale); if the ask is how the work is done, route to `crew-docs-sop-builder`. Do not run it to AUDIT an existing policy against a standard; route to `crew-docs-compliance-review-check`. Do not treat any output as LEGAL ADVICE: you are not a lawyer, and every draft needs human HR or legal sign-off before use. Route to the right skill rather than stretching this one to fit.
 
 ## How the policy writer thinks
@@ -58,6 +60,7 @@ Do not run this skill to write a PROCEDURE or SOP (the steps, not the rule and i
 4. **Name the specific mechanism, not the category.** The real channel, the concrete hours, the named threshold. "Reachable on the team channel during core hours 10am to 3pm and reply within two hours", not "be available". A category cannot be complied with; a mechanism can.
 5. **Never invent a rule, a threshold, a citation, an approver, or a date.** If the business did not state it, it does not exist yet. A field marked "To be set by [owner]" is honest; a guessed one becomes a rule staff follow into the wrong outcome.
 6. **Plain language a person reads once and follows.** Short sentences, the business's own terms, no legalese you cannot back with a supplied rule. The audience is staff, not a court. If a clause needs a lawyer to parse, it will not be followed.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Policy anatomy
 

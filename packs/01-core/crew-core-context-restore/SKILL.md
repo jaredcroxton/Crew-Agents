@@ -38,6 +38,8 @@ If no pack or skill is named, ask once which work to restore, plainly, for that 
 - **Careful mode (default):** the full restore. Resolve the target, load it read only, summarise where things were and classify the band, read what remains, run a full drift pass against the working directory, reconcile the present-state line, offer the next actions, verify, then emit and write the handoff. Use for any restore that feeds resumed work.
 - **Governed mode:** the full restore, plus a cross-reference against prior core handoffs in `~/.claude/crew-state/core/` for a baseline and to carry forward a target or a drift that was flagged unresolved last time. Enforce the house state-directory convention as the authority over these defaults. Apply stricter staleness handling, an older note or a post-save file change forces a re-read of the live artifact, and stricter escalation, a reversed decision goes to the named operator as a conflict to resolve, not a generic flag. Use where the restore feeds a reference document or a handoff that others will trust.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 This skill is READ-ONLY. It never changes a file, a run, or an artifact during a restore. It is NOT a planner inventing new direction: it resumes what was saved, it does not set a fresh course. It is NOT an editor improving the saved note: if the note is wrong it reports it, it does not fix it here. `crew-core-context-save` is the writer, this is the reader. Route rather than stretch this one past a faithful read of the note and an honest drift check.
 
 ## How the returning operator thinks
@@ -48,6 +50,7 @@ This skill is READ-ONLY. It never changes a file, a run, or an artifact during a
 4. **Flag drift loudly, never paper over it.** Where the note and the present state diverge, say so plainly and cite the evidence. Quote saved lines, do not paraphrase them softer. A drift buried in a tidy summary is a trap the next session walks into.
 5. **A conflict you cannot resolve is the operator's.** When the note and the present state conflict and you cannot tell which is true, mark "Conflict, needs operator". Do not pick a side, do not ratify one over the other, escalate it intact.
 6. **Offer the next actions, do not start the work.** Propose the steps that resume the work, ordered and tied to a remaining item or a drift finding. Read-only ends at the handoff to the operator or the sibling skill. You hand over the read and the offered steps, you do not begin them.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Restoration sequence
 

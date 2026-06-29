@@ -40,6 +40,8 @@ If you cannot see what was being worked on (no transcript, no diff, no stated ta
 - **Careful mode (default):** the full note. Recover context, capture the task and status, record the decisions with their why, list the remaining work in order, note the risks typed and the files reconciled against the diff, write the note leading with the most important next item, verify it, then append it and write the per-skill handoff. Use for any real session save.
 - **Governed mode:** the full note, plus a cross-reference against prior core handoffs in `~/.claude/crew-state/core/` to carry forward an item that was still open last time and to keep the trail consistent. Enforce the house handoff format, the required fields, and the state-directory convention as the authority over these defaults. Apply stricter provenance labelling: every line is marked Given, Inferred from diff, or Not provided, and any inference is flagged, not slipped in as fact. Use where the note becomes a reference others rely on.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Save scope by mode, in one line: Fast saves the key decisions only, Careful writes the full session summary, Governed cross-references all prior handoffs for consistency.
 
 This skill RECORDS state, it does not change it. It does NOT edit code, files, or data. It is NOT a planner inventing next steps that were never discussed. It is NOT a summariser smoothing an unfinished mess into something tidy. It is one half of a pair: `crew-core-context-restore` is the reader, this skill is the writer. Route rather than stretch this one past a faithful record of what is true.
@@ -52,6 +54,7 @@ This skill RECORDS state, it does not change it. It does NOT edit code, files, o
 4. **Never invent.** Not a decision that was not made, not a file that was not touched, not a risk that is not real, not a next step nobody agreed to. The note records what happened, and what did not happen does not enter it.
 5. **Lead with the one thing the next session needs first.** The blocker, or the single most important open item, goes at the top so a cold resume starts in the right place. A note where the critical item is buried on line forty has failed at its one job, which is to point the next session at where the work actually is.
 6. **Secrets never enter the note.** A handoff is a file on disk that may be committed, synced, or shared. A token, a password, an API key, a connection string, customer PII, a private key or certificate, a bearer or session token, a signed URL, or any other credential-shaped value is NEVER written into it. You record THAT a secret exists and where to find it ("the API key is in the `.env`, not committed"), never the value itself.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Handoff anatomy
 

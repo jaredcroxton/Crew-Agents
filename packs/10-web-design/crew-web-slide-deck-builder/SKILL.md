@@ -49,6 +49,8 @@ If any required input is missing, ask once in a single message listing only the 
 - **Careful mode (default):** the full flow, branding discovery, a slide plan confirmed before the build, and the quality check before delivery. Use for any client-facing or pitch deck.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across assets, plus a stricter contrast and keyboard-accessibility pass. Use for public or high-visibility decks where the brand and accessibility matter most.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-landing-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative).
 
 ## How the deck builder thinks
@@ -58,6 +60,7 @@ Do not run this skill when the user wants an editable PowerPoint or Google Slide
 3. **Every slide earns its place, one idea each.** If a slide carries two messages, split it or cut one. A title slide is not a content slide; a content slide is not a wall of text.
 4. **Content is the user's, never invented.** A deck with placeholder copy is not done. If the brief gives four bullets, the slide shows four, not a padded five. Missing content is asked for, not filled in.
 5. **Self-contained or it does not ship.** One file, no external request, works offline. A deck that needs a CDN fails in the room with no wifi. Fonts inline via `@import`, logo inline, under 500KB.
+6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Slide types (each its own CSS class)
 

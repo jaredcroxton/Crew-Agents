@@ -64,6 +64,8 @@ If any required input is missing, ask once in a single message listing only the 
 - **Careful mode (default):** the full flow, brand discovery, a page-and-section plan confirmed before the build, and the quality check before delivery. Use for any client-facing or public site.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/web-design/` so one brand carries across assets, a stricter contrast and keyboard-accessibility pass, and the Design review gate mandatory with nothing waived. Use for a public launch where the brand and accessibility carry reputational weight.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill when the user wants a scroll-driven camera fly-through (that is `crew-web-fly-through-builder`), a multi-scene 3D cinematic site (that is `crew-web-cinematic-build`), a cursor-reveal spotlight hero (that is `crew-web-spotlight-hero`), a webcam hand-tracking activation (that is `crew-web-webcam-website`), a real-estate property tour (that is `crew-web-real-estate-immersive`), or a slide deck (that is `crew-web-slide-deck-builder`). This skill is for a clean, fast, professional multi-page business website with no heavy animation and no framework. If the brief wants the page to perform a camera move or scrub a video on scroll, it is the wrong skill.
 
 ## How the page builder thinks
@@ -79,6 +81,7 @@ Do not run this skill when the user wants a scroll-driven camera fly-through (th
 5. **The page reads top to bottom on every device.** Mobile-first. The hero, the sections, the CTAs, the footer all stack and stay legible at 375px and open up at 768 and 1024. Touch targets are comfortable, type is readable at every size, and nothing scrolls sideways. A site that breaks on a phone is broken, because most visitors are on a phone.
 
 6. **Content traces to the user, never invented.** A site with placeholder copy is not done. If the brief gives three services, the page shows three, not a padded four. No invented price, no invented testimonial, no invented client logo, no stock claim. Missing content is asked for, not filled in. The honest version that ships today beats the fabricated version that looks fuller.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Architecture (locked engineering)
 

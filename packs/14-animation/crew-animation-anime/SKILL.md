@@ -33,6 +33,8 @@ If the brief is too vague to spec, ask once what should animate, why, and on wha
 - **Careful mode (default):** the full spec, the timeline with relative offsets, the SVG or stagger detail, the integration cleanup, and the reduced-motion path. Use before building a sequence or an SVG animation.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity, batching, finite loops, CSS for large sets), and the accessibility floor (reduced-motion mandatory). Use for a production animation.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill for scroll-linked or pinned-scrub motion (that is `crew-animation-gsap`, which has the scroll engine), for React-state, gesture, or layout animation (Motion is more idiomatic there), for a CSS-only micro-interaction or an infinite loop that CSS does more cheaply, or for a smooth-scroll surface (that is `crew-animation-locomotive`). Anime.js is the right tool for SVG drawing and morphing and for framework-agnostic choreographed sequences; name the better tool when the work fits it.
 
 ## How the Anime animator thinks
@@ -43,6 +45,7 @@ Do not run this skill for scroll-linked or pinned-scrub motion (that is `crew-an
 4. **The timeline is the choreography.** Sequenced motion lives in `anime.timeline` with relative offsets (`+=`, `-=`), not scattered delays. Stagger handles many elements in one call.
 5. **It animates, it does not scroll.** Anime.js has no scroll engine, and a raw scroll listener thrashes the main thread. For scroll-linked motion, drive `seek` from an IntersectionObserver, or hand the scroll choreography to `crew-animation-gsap`.
 6. **Know when CSS wins.** An infinite spinner or a thousand-element set belongs in CSS, not a JS animation loop (battery, main thread). Anime.js is for choreographed, finite, JS-driven sequences.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Anime core
 

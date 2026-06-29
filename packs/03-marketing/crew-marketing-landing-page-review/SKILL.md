@@ -44,6 +44,8 @@ If the conversion goal is missing, ask for it once, because a page cannot be sco
 - **Careful mode (default):** the full dimension-by-dimension review with the verify pass. Confirm the goal and the visitor and the traffic, check the headline, the offer, the proof, the CTA, and the layout against the Conversion anatomy, score with the Scorecard, compare against any competitor, rank and triage the fixes, rewrite the weakest CTA, and run the verify pass before emitting. Use for anything before paid traffic is switched on.
 - **Governed mode:** the full review, plus a cross-reference against prior marketing handoffs in `~/.claude/crew-state/marketing/` so the trend since the last review is shown (the score then and now, whether the weak points were fixed or carried forward). Enforce the project playbook (the brand voice, the approved proof, the offer's real terms) as the authority, run alongside `crew-design-quality` for the visual craft so the copy review and the design review land together, and apply stricter escalation: a claim, a price, or a guarantee is routed for sign-off, never assumed. Use for a page several teams must stay consistent with, or a page where the offer's terms carry real stakes.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to choose FONTS or judge visual craft (that is `crew-design-quality`, which judges typography, colour, spacing, and motion). Do not run it to WRITE the whole page from scratch (that is `crew-marketing-seo-page-builder`). Do not run it to build the campaign PLAN the page serves (that is `crew-marketing-campaign-plan`). Do not run it to promise a conversion-rate NUMBER (no skill should, a predicted rate you cannot back is a fabrication). If the ask is the visual craft, route to `crew-design-quality`; if it is to build the page, route to `crew-marketing-seo-page-builder`; if it is to plan the campaign, route to `crew-marketing-campaign-plan`.
 
 ## How the conversion reviewer thinks
@@ -54,6 +56,7 @@ Do not run this skill to choose FONTS or judge visual craft (that is `crew-desig
 4. **Never invent page copy, a testimonial, a logo, or a statistic the page does not show.** Review what is there, name what is missing. A blank "Not provided" is honest; a fabricated testimonial or a guessed figure breaks the review the moment it is checked.
 5. **Cite the specific location of every issue.** "Section 3, the pricing block", "the H1", "the form below the fold". An issue with no location cannot be found or fixed. Name where it is, every time.
 6. **Rank by conversion impact, the biggest leak first.** Not every fault costs the same. The missing proof above the fold that stops a cold visitor cold outranks a soft word choice three scrolls down. Lead with the leak that loses the most conversions.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Conversion anatomy
 

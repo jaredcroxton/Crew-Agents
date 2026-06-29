@@ -43,6 +43,8 @@ If the topic is named but the audience or time is missing, ask once for the one 
 - **Careful mode (default):** the full timed guide and verify. Confirm the topic, audience, and time, write the objectives, break the topic into sections by the Tell, Show, Do, Check rhythm, script the Show steps with the real mechanism, build a worked example and a time-boxed activity per Do section, write one check per objective, run the verify pass, then emit and write the handoff. Use for any guide that will actually be delivered.
 - **Governed mode:** the full build, plus a cross-reference against prior docs handoffs in `~/.claude/crew-state/docs/` so you can see what other skills already built. Enforce the house facilitation format and objective verbs as the authority, and apply stricter escalation: whether what is being taught is current or compliance-bound is always routed to the system or policy owner, never asserted as current here. Use for a regulated rollout, a compliance topic, or a guide several teams must stay consistent with.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to write a reference SOP (the standing steps a learner keeps, not a timed session); route to `crew-docs-sop-builder`. Do not run it to capture follow-up actions from a meeting or the session run; route to `crew-docs-meeting-notes-to-actions`. Do not run it to build a full learner workbook or an end-to-end L&D module (needs analysis, multi-session curriculum, assessment instrument); that is the deeper Training and L&D build. Route to the right skill rather than stretching this one to fit.
 
 ## How the training guide creator thinks
@@ -53,6 +55,7 @@ Do not run this skill to write a reference SOP (the standing steps a learner kee
 4. **Never invent how the system works.** A screen name, a menu path, a field, a shortcut, a step, or a rule you were not given does not exist yet. Write "[Confirm with system owner]" rather than a screen you have not seen, because a fabricated step teaches the wrong thing to the whole room.
 5. **Never pad time, and never cram it.** If the topic needs 40 minutes, say so, do not stretch it to 60. The reverse fails just as hard: four practice-heavy objectives crammed into a fifteen-minute huddle still sums on paper but leaves each objective no real practice block. Each objective needs enough Do time to be practised at its verb level, so when the minutes-per-objective run thin, cut an objective and recommend the honest duration. Honest scope beats both a padded and a crammed run-of-show.
 6. **Every objective maps to a section and a check (alignment).** An objective with no section is a promise the session never keeps; a section with no objective is filler; a check that does not test an objective is trivia. The three line up, by number, or the guide is not aligned.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Guide anatomy
 

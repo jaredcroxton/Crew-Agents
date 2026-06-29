@@ -41,6 +41,8 @@ If no facilitator guide is provided, ask once for it, because a workbook with no
 - **Careful mode (default):** the full build and verify. Confirm the guide and the format, footprint-tag every guide section, build the guided notes, the activity worksheets, the reflection space, and the check questions, assemble in session order with the cover, run the verify pass, then emit the workbook and write the handoff. Use for any workbook a learner will actually fill in.
 - **Governed mode:** the full build, plus a cross-reference against prior training handoffs in `~/.claude/crew-state/training/` so a repeat workbook carries forward what was already flagged. Enforce the house workbook template, the branding, the accessibility standard, and the page format as the authority over these defaults, and apply stricter escalation on a formal-assessment, a compliance, or an accessibility-certification boundary. Use for a compliance or certification workbook, a board-visible programme, or any workbook that becomes a record.
 
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+
 Do not run this skill to rewrite or redesign the facilitator guide; the guide is the approved parent, and a weak guide goes back to `crew-training-facilitator-guide-creator`, route it there. Do not run it to build the validated, scored, graded assessment instrument; that is `crew-training-assessment-designer`, and the workbook checks are formative practice only, route the graded instrument there. Do not run it to invent content the guide never agreed; mark the gap "Not in guide, confirm" and leave it unbuilt. Do not run it to produce a marketing handout; this is a learner job aid, not a brochure. Route to the right place rather than stretching this one past extracting the guide.
 
 ## How the workbook builder thinks
@@ -51,6 +53,7 @@ Do not run this skill to rewrite or redesign the facilitator guide; the guide is
 4. **Every block traces to the guide and to an objective.** An orphan block (in the workbook but not the guide, or serving no objective) is cut or marked "Not in guide, confirm", never invented. The workbook adds no content the guide did not agree, it only re-faces what the guide already holds.
 5. **Strip the trainer's stage directions.** Room setup, timing cues, "if running long", contingency notes, the trainer's debrief answers: none of these reach a learner page. The learner sees what they do and write, not how the trainer runs the room.
 6. **The workbook is a keepable job aid.** It is built so the learner uses it back at work, not binned at the door. The take-away, the summary the learner keeps, and the application prompt are designed in, because transfer (using it on the real job) is the point, not a tidy page at the end of the day.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
 
 ## Workbook anatomy
 
