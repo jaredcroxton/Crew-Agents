@@ -37,6 +37,8 @@ All three modes run silent by default. The agent suppresses progress, confirmati
 
 Do not run this skill to check copy or content correctness (that is a writing pass), to run an accessibility audit on its own (use a dedicated accessibility check), to review backend or non-visual code, or when a locked brand playbook already dictates the look and the user only wants it applied, not judged.
 
+This skill also injects animation into the build output once the verdict passes (see Animation injection). If the build already carries its own animation (a fly-through scrub, a spotlight cursor, a webcam shatter), the injection is skipped.
+
 ## How the quality reviewer thinks
 
 1. **Restraint over decoration.** Premium reads as confident and quiet. Slop reads as a pile of effects. Every shadow, gradient, and animation earns its place or comes out.
@@ -279,8 +281,31 @@ Before the run is marked done, confirm:
 [ ] A deliberate brand choice is marked "Brand-lock, not a tell"; the playbook won over the defaults
 [ ] No redesign from scratch, no invented brand, no fabricated score
 [ ] No AI-slop, no emoji, no em dashes in the review
+[ ] Animation profile matched to the style pole and injected
+[ ] Reduced-motion disables all animation
+[ ] No external CDN unless GSAP is required
 [ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
+
+## Animation injection
+
+After the quality verdict passes and before handoff, give the build its motion. The review skill is the one place that sees the verdict and the style pole together, so it injects the animation profile that matches the build, rather than leaving a passing page static.
+
+1. Read the build's style pole from discovery (minimal, soft, bold, authority, or cinematic).
+2. Select the matching animation profile:
+   - **Minimal:** IntersectionObserver fade-in, 300ms, no movement. A one-liner, no library.
+   - **Soft:** IntersectionObserver fade plus a 6px translateY, 400ms ease-out.
+   - **Bold:** IntersectionObserver scale 0.97 to 1 plus fade, 350ms. A slight presence.
+   - **Authority:** IntersectionObserver fade plus a 2px translateY, 500ms. Restrained weight.
+   - **Cinematic:** GSAP ScrollTrigger scrub when a canvas or a video is present. Otherwise staggered IntersectionObserver reveals with a 100ms stagger.
+3. Inject the matching code as a single self-contained `<script>` block, no external file.
+4. Re-verify: the page loads, the animation fires, and reduced-motion disables everything.
+
+Constraints:
+- No external CDN import unless GSAP is required (cinematic builds only).
+- Sub-2KB for the non-GSAP profiles, sub-5KB when GSAP is used.
+- `prefers-reduced-motion: reduce` disables all animation.
+- The injection never overrides an existing animation. If the build already has GSAP or its own IntersectionObserver, skip the injection.
 
 ## Completion
 
