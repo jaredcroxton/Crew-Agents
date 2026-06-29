@@ -21,7 +21,7 @@ First, which of the three ways are we starting?
 
 If you are not sure, say "fresh start" and we will run the questions.
 
-Then the five discovery questions, asked in order:
+Then the five discovery questions. Ask all five in one message and wait. Display each question EXACTLY as the clean one-line form below, word for word, with nothing appended. Do NOT attach any example category from the Internal interpretation block to a question the user reads.
 
 1. **North Star.** What is the singular desired outcome this system must deliver? One sentence, one job.
 2. **Integrations.** Which external services do we need, and are the API keys ready? Name each service and whether the credential exists.
@@ -29,7 +29,7 @@ Then the five discovery questions, asked in order:
 4. **Delivery payload.** How and where should the final result be delivered?
 5. **Behavioural rules.** How should the system act? Tone, logic constraints, and the "do not" rules.
 
-Internal interpretation (these examples guide your reading of the answers, do not show them to the user as part of the question):
+Internal interpretation (FOR YOUR READING ONLY, never shown to the user, never appended to a question). These example categories are how you interpret an answer once it comes back, not part of what you ask. The moment you attach them to a displayed question, it reads as a multiple-choice menu and the user names one of your examples instead of their real source or destination. That corrupts the schema this skill exists to get right, so the examples stay on your side of the line. When you ask question 3, 4, or 5, the user sees only the clean one-liner above.
 
 - **Source of truth:** sheet, database, inbox, site to scrape, API to poll.
 - **Delivery payload:** Slack message, Notion page, database row, email, dashboard card, file.
@@ -164,7 +164,7 @@ project-root/
 
 **Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/web-design/crew-web-app-builder-handoff.md`. If prior context exists, load it and state what was recovered (the prior automation, the locked schema, the SOPs and tools built, unfinished work). If it does not exist, state "No prior context, first run." In Governed mode, also scan the other handoffs in `~/.claude/crew-state/web-design/` so the brand and the conventions carry across the user's automations. (Loop 4, Context Change.)
 
-1. **Run the discovery framing and the five questions (ALWAYS first, before any code).** Ask the three-way framing (fresh, continuing, existing brand) and the five discovery questions from Discovery in one short message: North Star, integrations and keys, source of truth, delivery payload, behavioural rules. Confirm a one-line summary back. If a required answer is missing, ask once listing only the gaps and pause (Loop 1). Never invent an integration, a data source, a schema field, or a delivery destination the user did not give.
+1. **Run the discovery framing and the five questions (ALWAYS first, before any code).** Ask the three-way framing (fresh, continuing, existing brand) and the five discovery questions from Discovery in one short message: North Star, integrations and keys, source of truth, delivery payload, behavioural rules. Display each question as its clean one-line form only, never with the internal example categories attached (see Discovery and Guardrails). Confirm a one-line summary back. If a required answer is missing, ask once listing only the gaps and pause (Loop 1). Never invent an integration, a data source, a schema field, or a delivery destination the user did not give.
 
 2. **Phase 1, Blueprint: scaffold and lock the schema.** Scaffold `app-spec.md` and the `memory/` files, create the `architecture/`, `tools/`, and `.tmp/` folders, and write `.env.example`. Define the JSON input and output schema in `app-spec.md` under the Data Schema heading, with a real sample for each, and confirm the payload shape with the user. Research shortening patterns and log them in `memory/findings.md`. Do not proceed until the schema is confirmed and the memory files exist.
 
@@ -323,6 +323,7 @@ Reliability, data, and honesty:
 - Never commit a secret. Every key and secret lives in `.env`; `.env.example` holds the names with placeholder values. No live secret in `app-spec.md`, in a committed file, or in chat. A missing key halts the Link phase; it is not a reason to guess or to skip a connection.
 - Soft delete only on production records, never a hard delete. Intermediates live in `.tmp/` and are disposable; the global deliverable is the payload in its final destination, and the project is complete only when it lands there.
 - Every fix teaches the SOP: analyse the full error, patch the tool, test end to end, update the matching SOP. A break that is patched but not written into its SOP is a break that returns.
+- Discovery display discipline: when you ask the five discovery questions, the user sees only the clean one-line question, never the internal interpretation examples. The examples (sheet, inbox, Slack message, and the rest) are how you read an answer, never a menu the user picks from. A question with the examples attached reads as multiple choice, and the user names one of your examples instead of their real source or destination, which corrupts the schema. Ask the clean line, then map the answer to a category yourself.
 
 House style:
 - Never use an em dash anywhere (text, code comments, strings, and the chat reply). Use commas, periods, colons, or parentheses. The same goes for en dashes.
