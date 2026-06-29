@@ -201,6 +201,47 @@ Per-lead records (every dashboard field):
   Signal: posted two engineering roles this month (Confirmed) | Channels: email + LinkedIn DM | Outreach: not contacted | Flags: none
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the design review gate scores. The gate's Motion dimension assumes a page that already moves; this section is where that movement is written into dashboard.html. Until this layer is in the file, the output is not done: a dashboard with no entrance reveals, no hover feedback, and a static fit-score badge has not passed this skill, it has only been laid out.
+
+The motion budget is three required layers, no more.
+
+1. **Entrance reveals.** Scroll-triggered, one-shot, transform and opacity only, staggered. The lead cards reveal as they enter the viewport, fade-up with a 60 to 120ms stagger by row. The header (wordmark, title, date) and the filter bar reveal once on load. Nothing scrubs the scrollbar; each element fires once on entry and is then left alone.
+2. **Micro-interactions.** Hover, press, and focus on the elements this skill actually renders: the hover lift on each lead card, the active and focus states on the three filters (region, score, status), the email and DM expander toggle, and the fit badge and LinkedIn link on focus. These are fast (under 150ms), functional, and read as response, not decoration.
+3. **The signature moment.** Lead cards cascade-reveal (fade-up, 60 to 120ms stagger by row) as they enter the viewport, each card's fit-score badge counting up 0 to 100 once on reveal, so the dashboard reads as live intelligence resolving rather than a static table. The count-up must never delay the card's readability and must never sit over or obscure the verify-before-send flag or the evidence tags.
+
+Stack rule, stated plainly. The animation layer is native only: CSS keyframes plus transitions for reveals and hover, the Web Animations API (`element.animate()`) for the badge count-up, and IntersectionObserver to trigger both. It lives in the single inline `<script>` block and the inline `<style>` block of dashboard.html, alongside the markup. The only external dependency permitted is the Tailwind CDN. Do not reach for GSAP or ScrollTrigger, AOS, Sal.js, Anime.js, Motion or Framer Motion, Locomotive Scroll, or any other animation library. There is no build step and no bundle: single file, under 500KB.
+
+```html
+<style>
+  .reveal { opacity: 0; transform: translateY(16px); }
+  .reveal.is-in { opacity: 1; transform: none; transition: opacity .5s ease, transform .5s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal.is-in { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target, row = +el.dataset.row || 0;
+      el.style.transitionDelay = (row * 60) + 'ms';
+      el.classList.add('is-in');
+      io.unobserve(el);            // one-shot: fire once, never flicker
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal').forEach((el) => reduce ? el.classList.add('is-in') : io.observe(el));
+</script>
+```
+
+Consult the spec skills before writing the motion, do not improvise it. Read `crew-animation-scroll-reveal` for the IntersectionObserver one-shot reveal and the per-row stagger, and `crew-animation-css` for the keyframe, transition, and `element.animate()` count-up patterns and the reduced-motion contract. Those two cover this stack. Do not pull in `crew-animation-gsap`, `crew-animation-motion`, or `crew-animation-locomotive`: their libraries are forbidden here, and `crew-animation-components` only applies if a brand-signature primitive is requested.
+
+Reduced-motion and performance guardrails are non-negotiable. Under `prefers-reduced-motion: reduce`, reveals collapse to an instant appearance (opacity 1, no translate, no blur, no transition) and count-ups resolve instantly to their final value. The revealed state is the CSS default so content survives without JS; the hidden state is applied only by a JS-added class, and each element is unobserved after its first intersection so it fires once and never flickers. Animate transform and opacity only, never layout properties (top, height, margin) that force reflow. There is no scrub or parallax in this build, and nothing scroll-linked runs under reduced motion. Keep the whole layer at 60fps and inside the file budget: a few transitions and one WAAPI count-up per card, no continuous loops.
+
+This injected layer is exactly what the design review gate Motion dimension (`crew-design-quality`) then scores, with `crew-animation-scroll-reveal` and `crew-animation-css` as the authoring references behind it. The gate reviews the motion this step produces; this step is why there is motion to review.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

@@ -1347,6 +1347,41 @@ Open / handed off: stage 4 ships with the honest "Content coming" stub, awaiting
 OG tags patched to the final alias. Reviewer has the built file and the live local URL.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the design review gate scores. The gate's Motion dimension cites the pack 14 animation skills as the discipline bar, but citing a bar does not put motion in the file. Until the three layers below exist in the React source, the journey is unfinished: a frame-scrubbed narrative with no entrance reveals and no inline feedback reads as raw footage on a scrollbar, not an art-directed build. Do not call the output done until this layer ships.
+
+The motion budget is three required layers, no more.
+
+1. Entrance reveals. Scroll-triggered, one-shot, transform and opacity only, staggered. The elements this skill renders and reveals on stage entry: the stage label, the oversized arrival-hero serif headline, the arrival body copy, and the arrival CTA. They fade-up and settle once when the stage's arrival zone enters, then never animate again. The scrub canvas is not a reveal; it is the centerpiece below.
+2. Micro-interactions. Hover, press, and focus on the actual interactive elements: the arrival CTA (hover lift plus accent bloom, active press), and the persistent-UI stage nodes in their three states (locked dimmed and non-interactive, active accent ring, done check). Feedback only, no decoration.
+3. The signature moment. Per-stage scroll-scrubbed canvas centerpiece: the frame sequence advances frame-for-frame tied to the inverted scrollbar position (never a scroll listener fired animation), crossfading into the next stage as a scene cut, then resolving into the arrival hero that slides up only in the final 30 percent of the stage's scroll zone.
+
+Stack rule, stated plainly. The library this skill uses is none. The centerpiece is hand-rolled rAF scroll math plus Canvas 2D frame-scrub inside `useScrollJourney` and the stage canvas component; React 18 is the framework, not a motion library. Reveals and micro-interactions are CSS keyframes plus the Web Animations API plus IntersectionObserver, authored in the stage component's effect and its module CSS, nothing else. `crew-animation-gsap` and `crew-animation-scroll-reveal` are consulted for the motion discipline only, never added to the stack. Forbidden, so a builder never reaches for them: GSAP, Locomotive Scroll, any external animation library bolted onto the stack, and CSS-faked frame motion (the scrub is the real canvas frame-scrub, never a CSS approximation). The locked engineering holds: rAF and canvas drive the scrub, the named skills are the bar, not an import.
+
+The reveal idiom for this stack (IntersectionObserver one-shot, transform and opacity only):
+
+```js
+useEffect(() => {
+  const els = stageRef.current.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('is-in'); // CSS: opacity 0->1, translateY 16px->0
+      io.unobserve(e.target);          // one-shot
+    }
+  }, { threshold: 0.4 });
+  els.forEach((el, i) => { el.style.transitionDelay = `${i * 80}ms`; io.observe(el); });
+  return () => io.disconnect();
+}, []);
+```
+
+Read before writing the motion. For the reveal spec: `crew-animation-scroll-reveal` (IntersectionObserver one-shot, stagger, reduced-motion floor). For the keyframe and Web Animations API spec on reveals and micro-interactions: `crew-animation-css`. For the scroll-linked scrub discipline (scrollbar-tied, not listener-fired, the bar the centerpiece is held to): `crew-animation-gsap`. Pull the spec from these, then implement in the rAF and canvas idiom above.
+
+Reduced-motion and performance guardrails are not optional. Honor the floor exactly: `prefers-reduced-motion` snaps the scrub to the arrival frame and makes reveals instant, and the story still reads. Concretely, under reduced motion the IntersectionObserver adds `is-in` with no transition (content present immediately), the scrub and any parallax are disabled (paint the arrival frame directly), and there is no smooth scroll. Animate transform and opacity only, never layout properties (no top, left, width, height, margin). Observers are one-shot and call `unobserve` on first reveal. Hold the frame-scrub paint to 60fps and under budget: read the scroll position once per rAF tick, draw a single canvas frame, no per-frame layout reads.
+
+This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`) then scores, with `crew-animation-scroll-reveal`, `crew-animation-css`, and `crew-animation-gsap` as the authoring references it grades against. Ship the motion, then run the gate.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

@@ -355,6 +355,39 @@ Generated DESIGN.md: full seven-part contract below, ready to paste into Stitch.
 Open / handed off: accent hex confirmed with the user; nothing pending. Reviewer and Stitch have the DESIGN.md content.
 ```
 
+## Animation injection
+
+The Design review gate scores a Motion dimension, but the motion it scores does not exist until Section 6 of the DESIGN.md encodes it. This is the build step that produces that motion. Drafting Section 6 is not optional polish: the contract is not complete until the motion layer (entrance reveals, micro-interactions, and the one signature loop) is written into Section 6 as descriptive-plus-precise-value rules. A DESIGN.md handed to the gate with a thin or absent Section 6 fails the binding Motion verdict, so author this layer before the gate runs.
+
+Encode three required motion layers in Section 6, each as a Stitch-readable description paired with exact values:
+
+- **(a) Entrance reveals.** Scroll-triggered, one-shot, transform-and-opacity-only, staggered. Name the actual elements this contract renders: dashboard rows and card grids cascade in on first scroll into view, the hero headline (with its inline type-height images) and the single primary CTA settle on load, feature zig-zag rows reveal in sequence. Spring entrance, stiffness 100 / damping 20, with cascade delays so lists never mount instantly. Never scrub the scrollbar for these; they fire once on entry and do not replay.
+- **(b) Micro-interactions.** Hover, press, and focus on the actual interactive elements: buttons take a tactile -1px translateY on :active (90ms cubic-bezier(0.4, 0, 0.2, 1)), inputs raise an accent focus ring, cards and rows lift on hover via transform only. Default UI transition 180ms cubic-bezier(0.4, 0, 0.2, 1) on transform and opacity. No neon glow, no custom cursor.
+- **(c) The one signature moment.** Perpetual restrained micro-motion: every active component carries a subtle infinite-loop feedback state (the worked example is a skeletal shimmer loop, 1.5s ease-in-out infinite, on active dashboard rows), entering with spring-physics cascade reveals (stiffness 100, damping 20), transform-and-opacity-only so it stays fast by construction. Motion serves feedback, never decoration.
+
+**Stack rule.** This deliverable is a text taste contract, not runtime code, so no animation library is bundled or shipped. Motion is encoded as native CSS-style rules: CSS keyframes and transitions, the spring-physics constants above, transform-and-opacity-only. The rules live in Section 6 of the DESIGN.md as values Stitch interprets, never as imported framework calls. `crew-animation-css` and `crew-animation-motion` are pack-14 authoring cross-references for sourcing those values, never a shipped dependency and never a gate reviewer. A builder must never reach for the forbidden libraries or aesthetics: no `Inter`-driven motion styling, no AI Purple/Blue neon glow or neon gradients, no neon or outer-glow shadows on animated states, no custom mouse cursors, no circular loading spinners (use the skeletal shimmer instead). When Stitch renders to real CSS, the only motion primitives are CSS keyframes plus the Web Animations API plus IntersectionObserver, and nothing else.
+
+When Section 6 needs to express how a reveal reads in real code so Stitch generates it faithfully, the idiom is IntersectionObserver plus a CSS class, transform and opacity only:
+
+```css
+.reveal { opacity: 0; transform: translateY(16px); }
+.reveal.in { opacity: 1; transform: none; transition: 320ms cubic-bezier(0.4, 0, 0.2, 1); }
+```
+```js
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }
+}, { threshold: 0.2 });
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+```
+
+Before writing Section 6, consult the pack-14 spec skills that fit this stack: `crew-animation-css` for the keyframe, transition, and Web Animations API values; `crew-animation-spring` for the stiffness 100 / damping 20 constants; `crew-animation-scroll-reveal` for the IntersectionObserver one-shot reveal pattern; `crew-animation-components` for the shimmer-loader and active-state primitives. Reach for `crew-animation-gsap` only if a target screen genuinely calls for scroll-linked scrubbing or pinning, which the default register does not.
+
+**Guardrails.** Honor `prefers-reduced-motion`: the reduced-motion path is the same static layout the `@media print` block serves, with motion removed via `animation: none` and `transition: none`. Encode this in Section 6 so Stitch generates it. Animate transform and opacity only, never layout (no `top`, `left`, `width`, `height`). Entrance observers are one-shot and unobserve after the first reveal. Any scrub or parallax is disabled under reduced motion. Hold the whole layer to 60fps and under budget by construction: transform-and-opacity-only is what keeps it there.
+
+This injected Section 6 is exactly what the Design review gate's Motion dimension (`crew-design-quality`, binding via its Motion and Interactive-states dimensions, since pack 14 has no review skill) then scores, with `crew-animation-css`, `crew-animation-spring`, and `crew-animation-scroll-reveal` named as the authoring references behind the encoded values. The build step produces the motion; the gate scores it; the loop closes.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

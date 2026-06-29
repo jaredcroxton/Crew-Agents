@@ -390,6 +390,45 @@ Reduced-motion path: confirmed, scrubbed camera moves disabled, scenes hold stat
 Open / handed off: all nine assets wired, mobile cut shipped, ambient drone layered. Reviewer has the built file and the live local URL.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the design review gate scores. The gate names `crew-animation-gsap`, `crew-animation-locomotive`, and `crew-animation-scroll-reveal` as reviewers of the build's motion, but a reviewer scores nothing until the motion exists in the file. The single-file site is not complete until this layer is written. The master scrub timeline, the entrance reveals, the micro-interactions, and the reduced-motion branch all ship as real code in the one `.html`, or the output is not done.
+
+The motion budget is three required layers, no more.
+
+- **Entrance reveals.** Scroll-triggered, one-shot, transform and opacity only, staggered. These are the per-scene type and CTA reveals: the oversized editorial serif headline, the supporting line, and the CTA in each of the five scenes (entrance, reveal, contrast, product moment, close) lift and fade in as their scene enters, never on a scrub. Stagger the headline, the line, then the CTA. They fire once and stay put.
+- **Micro-interactions.** Hover, press, and focus on the only interactive elements this build renders: the CTA links and any in-scene nav or scroll cue. A restrained scale or opacity shift on hover, a smaller depress on press, a visible focus ring for keyboard. No micro-interaction touches layout.
+- **The signature moment.** The high-meets-modern contrast frame: a classical object (e.g. a weathered marble Corinthian pillar) meeting a modern glowing object (e.g. a luminous orb floating just above it) in a single Scene 3 composite, marked by a bloom-flash transition as the master scrub timeline morphs camera, fog density, and bloom strength together. It lives on the master scrubbed timeline, not in a one-shot reveal.
+
+The stack rule is absolute. The motion library this build uses is GSAP + ScrollTrigger, with Lenis as the smooth-scroll layer wired into the GSAP ticker (`lenis.on('scroll', ScrollTrigger.update)` plus `gsap.ticker.add(t => lenis.raf(t*1000))` and `gsap.ticker.lagSmoothing(0)`). The timeline and the reveals live in the page's single ES-module script block, alongside the Three.js, postprocessing, and scene setup. Forbidden: npm or any build step (CDN importmap and script tags only), React, Vue, or any framework (this is one self-contained HTML file, never componentised), any animation library beyond GSAP, ScrollTrigger, and Lenis, and any extra source file. The scroll spine is the master scrubbed timeline. The entrance reveals are GSAP tweens fired by a per-scene ScrollTrigger on enter, one-shot, not scrubbed.
+
+```js
+gsap.utils.toArray('.scene').forEach((scene) => {
+  const items = scene.querySelectorAll('.reveal'); // headline, line, CTA
+  gsap.set(items, { opacity: 0, y: 28 });
+  ScrollTrigger.create({
+    trigger: scene,
+    start: 'top 70%',
+    once: true,
+    onEnter: () => gsap.to(items, {
+      opacity: 1, y: 0,
+      duration: 0.9, ease: 'expo.out', stagger: 0.12
+    })
+  });
+});
+```
+
+Read the spec before writing the motion. `crew-animation-gsap` for the master scrubbed timeline, the ScrollTrigger config, pinning, and scrub choreography. `crew-animation-scroll-reveal` for the one-shot enter-the-viewport reveals, the stagger, and the unobserve-on-first-fire discipline. `crew-animation-locomotive` for the smooth-scroll trade and the rule that smooth scroll disables on mobile and under reduced motion. Consult `crew-animation-css` if any micro-interaction is cleaner as a CSS transition than a GSAP tween. Author against those specs, do not improvise the motion.
+
+Guardrails, all grep-verifiable, none asserted:
+
+- Honor `prefers-reduced-motion` with a real `matchMedia('(prefers-reduced-motion: reduce)')` check plus a runtime `change` listener for a mid-session flip. When set: build the ScrollTrigger timelines with `scrub:false` or skip the camera, fog, and bloom tweens entirely, snap each scene to its end state on enter, leave the float and yoyo loops off, and render every headline and CTA from the DOM independent of WebGL.
+- Animate transform and opacity only. Never animate width, height, top, left, or any layout property. No move triggers reflow.
+- One-shot reveals use `once: true` (or `unobserve` after the first fire) so the trigger does not re-run. Scrub and scroll-velocity parallax are disabled under reduced motion.
+- Hold 60fps. If a tween drops frames, cut the move before you cut the frame rate. Motion that does not advance the drift or reveal the next scene comes out.
+
+This injected layer is exactly what the design review gate Motion dimension (`crew-design-quality`, alongside `crew-design-composition`, `crew-design-patterns`, and `crew-design-soft`) then scores, with `crew-animation-gsap`, `crew-animation-scroll-reveal`, and `crew-animation-locomotive` as the authoring references the gate reviews against. Build the motion here, the gate scores it there, and the loop closes.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

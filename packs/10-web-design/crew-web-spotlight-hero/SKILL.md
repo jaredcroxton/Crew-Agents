@@ -624,6 +624,51 @@ Design review gate: crew-design-quality pass (Revise then fixed), crew-design-co
 Open / handed off: pair wired, mobile and reduced-motion paths real. Reviewer has the built file and the live local URL.
 ```
 
+## Animation injection
+
+The design review gate scores this hero's Motion dimension, but the gate cannot score motion that does not exist yet. This section is the build step that produces it. The entrance keyframes in `index.css`, the cursor-led reveal in `App.tsx`, and the micro-interactions on the nav and CTA are the motion layer, and the output is not done until that layer is in the file. Wire it before the gate runs, or the reviewer is judging an empty page.
+
+The motion budget is three required layers, no more:
+
+1. **Entrance reveals (on-load, one-shot, transform and opacity only, staggered).** The hero copy enters once on load. The base layer runs `heroZoom` (a slow `scale(1.12)` to `scale(1)`). The two headline lines run `heroReveal` (translateY up, fade in, de-blur) on staggered `animationDelay` (0.25s then 0.42s). The left paragraph, the right paragraph, and the CTA block run `heroFadeUp` on later delays (0.7s, 0.85s). These fire once, never loop, and touch only `transform`, `opacity`, and `filter: blur`, never layout. This hero is one screen, so the entrance fires on load, not IntersectionObserver-deferred. If the build ever grows a section below the fold, an IntersectionObserver that unobserves after the first reveal is the only acceptable trigger.
+2. **Micro-interactions (hover, press, focus).** The CTA button: `hover:bg-[hover-hex]`, `hover:scale-[1.03]`, `active:scale-95`, `hover:shadow-lg` (the four states already on the template button). The nav pill items: `hover:bg-white/20 hover:text-white` with `transition-colors`. The Sign Up button: `hover:bg-gray-100`. Keep these to `transform`, `opacity`, `color`, and `box-shadow`. Every interactive element gets a visible focus state for keyboard users.
+3. **The one signature moment.** The cursor-dragged spotlight reveal itself: a soft glowing radial-gradient mask circle trailing the cursor on a weighted lerp, bleeding the transformed after-image through the dark before-image. Paired with the one dramatic entrance (a slow `heroZoom` scale-out on the base while the headline lines rise, fade and de-blur in staggered). This is the page's single trick. Nothing else animates for its own sake.
+
+**Stack rule, exact.** This is a React 18 plus Vite project, not a single HTML file. The entrance and micro-interaction motion is CSS keyframes in `src/index.css` (`heroReveal`, `heroFadeUp`, `heroZoom`, all on `cubic-bezier(0.16,1,0.3,1)`) plus Tailwind utility transitions on the elements. The signature reveal is a CSS `radial-gradient` mask driven per-frame from a single `requestAnimationFrame` loop in `App.tsx`, writing only `--mx`, `--my`, `--r`. The one declarative animation library this skill MAY reach for is **Motion (Framer Motion)** for entrance reveals (`whileInView`, `variants`, `AnimatePresence`) and micro-interactions (`whileHover`, `whileTap`, `spring`), used inside the React components only. FORBIDDEN, never reach for these: **GSAP, ScrollTrigger, Anime.js, Locomotive Scroll, Lottie, Barba.js, and any per-frame `canvas.toDataURL` mask encoding.** The spotlight invariants hold under every library: the radial-gradient mask, the `--mx` / `--my` per-frame writes, no `transform` on the reveal layer, and no per-frame encode are not negotiable, and no animation library may break them.
+
+One correct pattern, in this stack's idiom (Motion for an entrance reveal and a CTA micro-interaction, transform and opacity only):
+
+```tsx
+import { motion } from 'motion/react'
+
+const rise = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(12px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)',
+    transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] } },
+}
+
+// Headline line: enters once, staggered by delay, transform and opacity only.
+<motion.span variants={rise} initial="hidden" animate="show"
+  transition={{ delay: 0.25 }} className="block font-playfair italic">
+  HEADING_LINE_1
+</motion.span>
+
+// CTA: hover and press springs, no layout animation.
+<motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
+  transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+  className="bg-[#e8702a] text-white px-7 py-3 rounded-full">
+  CTA_LABEL
+</motion.button>
+```
+
+The CSS-keyframe path already shipped in the template (`hero-anim`, `hero-reveal`, `hero-zoom` with their `@media (prefers-reduced-motion: reduce)` override) is the default and needs no library. Reach for Motion only when a component genuinely wants declarative variants or a spring, never to re-do what one keyframe already does.
+
+**Read the spec before writing the motion.** Consult, in this order: `crew-animation-css` for the entrance keyframes, fill modes, and the `transition` versus `animation` boundary; `crew-animation-scroll-reveal` for the one-shot, IntersectionObserver-first, unobserve-after-first-reveal pattern if a below-fold section is ever added; `crew-animation-motion` for the React `whileInView`, `variants`, `whileHover`, `whileTap`, and spring idiom; `crew-animation-spring` for the press and hover spring feel; and `crew-animation-components` if a standard animated primitive (a toast, a modal) is ever bolted on. Do not consult `crew-animation-gsap`, `crew-animation-locomotive`, or `crew-animation-view-transitions` for the build: GSAP and Locomotive are forbidden here, and view transitions do not apply to a single-screen no-router hero. They stay as authoring references the gate names, not as code paths.
+
+**Guardrails (reduced-motion and performance).** Honor `prefers-reduced-motion`: the reduced-motion floor is mandatory and ships as real code. `prefers-reduced-motion` pins a fixed off-centre spotlight (a static partial reveal: the after inside the circle, the before around it) and never chases the cursor, the headline and CTA still read, the branch is the `reduce` check in `App.tsx` and `RevealLayer`, verifiable by grep not a claim, and a live `matchMedia('change')` listener honours an OS toggle without a reload. Under reduced motion, Motion springs become instant and reveals show immediately while the spotlight still tracks without easing. Animate `transform` and `opacity` (and `filter` on the entrance) only, never width, height, top, left, or margin. Any IntersectionObserver fires once and unobserves. No scrub and no parallax exist here, and if added they disable under reduced motion. The reveal `rAF` loop does one variable write per frame and no image encode, so the page holds 60fps on mid-range and mobile hardware and stays inside budget.
+
+This injected layer is exactly what the Design review gate's Motion dimension (`crew-design-quality`, binding) then scores, with `crew-animation-css`, `crew-animation-scroll-reveal`, `crew-animation-motion`, and `crew-animation-spring` standing as the authoring references the gate enumerates. The gate judges the motion this step produced, closing the loop between building the animation and reviewing it.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:

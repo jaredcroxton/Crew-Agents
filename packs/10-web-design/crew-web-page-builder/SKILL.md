@@ -253,6 +253,48 @@ Design review gate: crew-design-quality pass (Revise then fixed), crew-design-co
 Open / handed off: the about photo is owed by the user, the contact form needs an endpoint. Reviewer has the built file and the live local URL.
 ```
 
+## Animation injection
+
+The build is not done when the markup and the tokens are in place. It is done when the motion layer is in the file. This step produces the exact motion the Design review gate then scores: the one-shot reveals, the hover, press, and focus micro-interactions, and the smooth scroll. A page that ships without this layer fails the Motion dimension by omission, because there is nothing for it to judge. Write the motion as part of Step 4, not after.
+
+The motion budget is three layers and nothing more.
+
+- **Entrance reveals.** Scroll-triggered, one-shot, transform and opacity only. The `IntersectionObserver` adds a reveal class once and then `unobserve`s the element so a re-scroll never re-fires. The elements this skill reveals: the hero block, each content section, the three-card service grid (staggered card to card with a small per-index delay), the alternating two-column rows, the pricing plan cards, the accordion items, and the closing full-bleed CTA. Stagger is a short cascade (around 60 to 90ms between siblings), never a long sequence that makes the page wait.
+- **Micro-interactions.** Hover, press, and focus on the actual interactive elements: the primary and secondary CTA buttons, the service and pricing cards, the nav links and the footer nav, the theme toggle, the hamburger, and the FAQ accordion headers. CSS transitions on transform and opacity (a calm lift or a tint shift on hover, a small scale-down on `:active` press, a visible non-color focus ring on `:focus-visible`). Nothing loops, nothing bounces.
+- **The signature moment.** One named beat, not a restatement of the layer above: the hero headline and subhead rise and fade in on first paint (a slightly larger `translateY` and a touch more duration than the section reveals), answered at the bottom of the page by the closing full-bleed CTA revealing as a single block. That pairing is the page's signature. It runs through the same one-shot observer and the same transform-and-opacity surface as every other reveal, so it adds an intent, not an engine.
+
+Stack rule, absolute. The library is none: CSS keyframes and transitions, the Web Animations API (`element.animate()`), and `IntersectionObserver`, vanilla JS only. The CSS lives in style-block section 8 (Motion); the observer lives in the deferred `<script>` as the third of its three pieces; `scroll-behavior: smooth` is one declaration on `html` in that same section, not a fourth layer. Forbidden, never reach for any of them: GSAP, ScrollTrigger, Motion / Framer Motion, Anime.js, Lottie, Locomotive Scroll, jQuery, any animation library at all, and any CSS or JS framework. There is no build step and no bundler to add one. If a pattern seems to want a library, it is out of budget; cut it.
+
+The reveal pattern, in this stack's idiom:
+
+```js
+const revealed = 'is-revealed'; // CSS: .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+                                 //      .reveal.is-revealed{opacity:1;transform:none}
+                                 //      html{scroll-behavior:smooth}  (disabled under reduced motion, see below)
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add(revealed)); // instant, no observer
+} else {
+  const io = new IntersectionObserver((entries, obs) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.style.transitionDelay = `${[...e.target.parentElement.children].indexOf(e.target) * 70}ms`;
+      e.target.classList.add(revealed);
+      obs.unobserve(e.target); // one-shot, never re-fires
+    }
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+```
+
+Read the spec before writing the motion. `crew-animation-css` bounds the keyframe, transition, and `element.animate()` work (the transition-versus-animation boundary, fill modes, transform and opacity only). `crew-animation-scroll-reveal` bounds the enter-the-viewport reveal (one-shot `IntersectionObserver`, unobserve after first fire, stagger and cascade, content visible without JS). `crew-animation-components` is the reference for the micro-interaction states on the buttons, cards, nav, and accordion. Do not consult `crew-animation-gsap`, `crew-animation-motion`, `crew-animation-locomotive`, `crew-animation-spring`, or `crew-animation-view-transitions`: their engines are forbidden in this single-file vanilla stack.
+
+Guardrails, non-negotiable:
+- **Reduced motion.** `prefers-reduced-motion: reduce` makes the reveals instant (no transition, no observer dependence on a class that delays paint) and disables smooth scroll. The observer is skipped entirely so content is visible immediately, and `scroll-behavior: smooth` is turned off. There is no scrub or parallax to disable, because neither exists in this budget.
+- **Transform and opacity only.** Never animate layout (`width`, `height`, `top`, `left`, `margin`) and never animate color in a way that triggers paint on scroll. The reveal moves `translateY` and fades `opacity`; that is the whole transform surface.
+- **One-shot and cheap.** Every observer `unobserve`s its element after the first reveal. The motion holds 60fps because it touches only compositor properties, stays inside the under-2-second, under-500KB budget, and adds no weight beyond a few lines of CSS and the one observer.
+
+This injected layer is exactly what the Design review gate then scores: the Motion dimension inside `crew-design-quality` returns the binding verdict on whether the reveals and micro-interactions are restrained and purposeful, with `crew-animation-scroll-reveal` and `crew-animation-css` as authoring cross-references (they emit STATUS, not Pass or Fail). Build the motion here, and the gate has something true to judge.
+
 ## Print and PDF
 
 When PDF or Both delivery is chosen, add a `@media print` block to the output:

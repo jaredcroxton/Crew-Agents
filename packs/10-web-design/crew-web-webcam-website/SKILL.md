@@ -992,6 +992,48 @@ Design review gate: crew-design-quality pass (Revise then fixed), crew-design-co
 Open / handed off: the live hand test is owed (camera is headless-blocked in preview). Reviewer has the built file and the live local URL.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the Design review gate scores. The gate names `crew-design-quality`'s Motion dimension as the binding verdict and cites the pack-14 animation skills as authoring references, but none of that judges anything until this layer exists in the file. The output is not done when the keyer and the scrub work. It is done when the loader pill, the permission and calibration prompts, the hint cards, and the activate handoff are authored as real motion in the single index.html script block. Stay subordinate to the two hard contracts already locked: getUserMedia only inside the activate click with stopCamera on teardown, and the reduced-motion floor. Motion serves the transformation. It never decorates, and you do not bolt a second mechanic onto the one gesture.
+
+The motion budget is three required layers, no more:
+
+1. **Entrance reveals.** One-shot, transform and opacity only, off an IntersectionObserver that unobserves after the first fire. The elements this skill renders that get a staggered reveal: the poster stage (`#poster`), the activate button (`.btn` / `#breakout-cta`), and, in card or band mode, the surrounding copy and frame. Fade-up (small translateY plus opacity) on entry, staggered, then static. Above-the-fold elements reveal on load, not on scroll.
+2. **Micro-interactions.** Hover, press, and focus on the actual interactive elements: the activate button (`.btn:hover` lift, `:active` press, a visible `:focus-visible` ring), the no-camera fallback scrub slider, and the status and hint pills appearing. Transform and opacity only, short and legible, never a layout shift.
+3. **The signature moment, the activate handoff.** On the explicit "Try it" click the poster overlay fades and lifts out (opacity to 0 plus a small translateY, transform and opacity only) while the loader/status pill cross-fades through its "Loading hand tracking... / Preparing N%" states, and once frames are keyed the hint pill rises in from the bottom (translateY plus opacity) inviting the open palm. One legible reveal that hands the screen from poster to live camera, never competing with the keyed subject.
+
+Stack rule, no exceptions. The injection is CSS keyframes plus the Web Animations API (`element.animate()`) plus IntersectionObserver, and nothing else. It lives in the same `<script>` block and `<style>` block as the lifecycle, driven off the existing hooks (`activate`, `loadModel`, `loadFrames`, `startCamera`, `deactivate`) and the IntersectionObserver pause. The skill cites `crew-animation-gsap` and `crew-animation-motion` as authoring references for the gesture scrub spec, but the UI-overlay injection uses no library beyond the MediaPipe Tasks Vision tracking runtime. Forbidden here: GSAP, ScrollTrigger, Motion / Framer Motion, Anime.js, Locomotive Scroll, Lottie, Rive, Barba.js, any JS framework (React, Vue, Svelte), and any animation library beyond the MediaPipe tracking runtime. A builder must never reach for one. This is a single self-contained HTML file with no build step, and the engineering stays locked.
+
+```js
+// Entrance reveals: one-shot, transform + opacity only, unobserve after first fire.
+const io = new IntersectionObserver((entries, obs) => {
+  for (const e of entries) {
+    if (!e.isIntersecting) continue;
+    if (!REDUCE_MOTION) {
+      e.target.animate(
+        [{ opacity: 0, transform: "translateY(16px)" },
+         { opacity: 1, transform: "translateY(0)" }],
+        { duration: 460, easing: "cubic-bezier(.22,.61,.36,1)", fill: "both",
+          delay: Number(e.target.dataset.revealDelay || 0) }  // stagger
+      );
+    }
+    obs.unobserve(e.target);   // never re-fire
+  }
+}, { threshold: 0.2 });
+document.querySelectorAll("[data-reveal]").forEach(el => io.observe(el));
+```
+
+Before writing any of it, read the spec from the pack-14 skills that fit this stack: `crew-animation-css` for the keyframe and WAAPI idiom and the fill-mode and easing choices, `crew-animation-scroll-reveal` for the IntersectionObserver one-shot entrance and the stagger, `crew-animation-components` for the loader, pill, and prompt primitives, and `crew-animation-gsap` plus `crew-animation-motion` for the gesture-scrub spec only (not the UI injection, and the skill ships no GSAP). They emit a spec, not a verdict.
+
+Guardrails:
+
+- Honor `prefers-reduced-motion`. The skill already sets `const REDUCE_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;` (grep on `matchMedia` to verify). Under reduced motion the overlays appear instantly, opacity and visibility toggled with no transition and no entrance animation. No autoplay, no idle wobble, no auto scrub. The subject holds static at state A and only a deliberate hand or the fallback slider advances the transformation.
+- Transform and opacity only. Never animate width, height, top, left, or margin. Same constraint the keyer and the scrub already follow.
+- One-shot observers call `unobserve` after the first reveal. The gesture scrub stays user-driven, never autoplay, so it is untouched by the reduced-motion branch.
+- Stay under budget. Transform and opacity composite on the GPU and hold 60fps next to the per-frame keyer and tracking loop. No scrub or parallax is added by this layer, and any decorative motion is disabled under reduced motion.
+
+This injected layer is exactly what the Design review gate's Motion dimension (`crew-design-quality`, the binding verdict) then scores, with `crew-animation-gsap` and `crew-animation-motion` consulted as authoring references for the scrub. The gate now has real motion to judge, which closes the loop.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:
