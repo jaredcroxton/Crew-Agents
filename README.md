@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="header.png" alt="CREW — World-Class AI Agent Skills" width="100%">
+  <img src="header.png" alt="CREW: World-Class AI Agent Skills" width="100%">
 </p>
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.0">
-  <img src="https://img.shields.io/badge/SKILLS-93-333333?style=for-the-badge&labelColor=lime&color=333333" alt="93 Skills">
+  <img src="https://img.shields.io/badge/CREW-v1.1.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.1.0">
+  <img src="https://img.shields.io/badge/SKILLS-97-333333?style=for-the-badge&labelColor=lime&color=333333" alt="97 Skills">
   <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
   <img src="https://img.shields.io/badge/LICENSE-MIT-333333?style=for-the-badge&labelColor=lime&color=333333" alt="License MIT">
@@ -19,13 +19,13 @@
 
 # CREW: World-Class AI Agent Skills
 
-> **The only agent skill pack with a built-in brand context system.** 93 gold-standard skills. 14 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
+> **The only agent skill pack with a built-in brand context system.** 97 gold-standard skills. 14 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
 
 ---
 
 ## What CREW is
 
-CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge: 93 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
+CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge: 97 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
 
 **What makes CREW different:**
 
@@ -34,7 +34,7 @@ CREW gives your AI agents the skills to operate as a full business team. Not one
 | 11-question business onboarding, every skill knows your brand | Generic prompts, no business context |
 | Design review gates cross-reference 3 packs before output ships | No quality gates, output is whatever the model produces |
 | 3-lens adversarial review on every skill | No adversarial review, bugs ship to production |
-| Brand context persists across all 93 skills | Each skill is an island, no shared knowledge |
+| Brand context persists across all 97 skills | Each skill is an island, no shared knowledge |
 | Evidence/Inference discipline, nothing fabricated | No fabrication guardrails |
 
 ---
@@ -42,18 +42,32 @@ CREW gives your AI agents the skills to operate as a full business team. Not one
 ## Quick Start
 
 ```bash
-# Clone and build
+# Clone
 git clone https://github.com/jaredcroxton/crew-skill-packs.git
 cd crew-skill-packs
-bash package.sh && bash build-plugins.sh
 
-# Install on your platform
-claude plugins install crew-full          # Claude Code
+# Route A (recommended): direct install into ~/.claude/skills
+bash install.sh --all --global
+
+# Route B: Claude Code plugins (generate the plugin tree + manifest first)
+bash build-plugins.sh
+# then inside Claude Code:  /plugin marketplace add ./crew-skill-packs
+#                           /plugin install crew-full@crew-packs
+
+# Other platforms
 cp -r packs/* ~/.hermes/skills/crew/      # Hermes Agent
 claw skills import ./packs/               # OpenClaw
 ```
 
-**First run:** Open your agent. Run any skill. It asks 11 questions about your business. After that, every skill knows who you are.
+**Then restart your Claude session.** Skills load at session start; after any install or update, a fresh session is what makes them visible.
+
+**First run:** Run any skill. It asks 11 questions about your business (or run `crew-core-brand-context` directly). After that, every skill knows who you are. Worked example brand files live under `examples/brand-context/`.
+
+**Runs best on:** a Sonnet-class model or better. Smaller models hold the skill discipline less reliably; the status vocabulary, the run receipt, and the onboarding gate degrade first.
+
+**Updating:** `git pull && bash install.sh --all --global --force --prune` (prune removes renamed or retired Crew skills, never anything else). Zip buyers: see `shared/INSTALL.md`.
+
+**QA smoke suite:** `bash shared/qa-check.sh --smoke` invokes the Claude CLI roughly once per skill (about 98 metered calls on the full catalogue). Use `--pack <id>` to narrow it. The structural pass (`bash shared/qa-check.sh`) is free.
 
 ---
 
@@ -73,7 +87,7 @@ Every skill follows the same disciplined path:
                                ▼
                     ┌──────────────────────────┐
                     │   SKILL INVOKED           │
-                    │   93 skills, 14 packs     │
+                    │   97 skills, 14 packs     │
                     └──────────┬───────────────┘
                                │
                                ▼
@@ -127,19 +141,19 @@ A standard is what good looks like. A loop is what the skill does when reality i
 The design packs use a three-layer architecture. Only the Engine is customer-facing:
 
 ```
-BEDROCK (Pack 12 — Design Standards, 7 skills)
+BEDROCK (Pack 12 : Design Standards, 8 skills)
 The eye. Quality, composition, patterns, language, reference.
 Embedded into every build skill's gate. Never invoked directly.
 
         ↓
 
-FUEL (Packs 13-14 — Design Styles + Animation, 17 skills)
+FUEL (Packs 13-14 : Design Styles + Animation, 17 skills)
 The look and the motion. Visual languages + animation engines.
 Embedded into build skills. Never invoked directly.
 
         ↓
 
-ENGINE (Pack 10 — Web Design, 9 skills)
+ENGINE (Pack 10 : Web Design, 12 skills)
 The output. Slide decks, cinematic sites, dashboards, scroll journeys.
 The only skills a business invokes. One call, one output.
 ```
@@ -165,9 +179,9 @@ The only skills a business invokes. One call, one output.
 | 07 | Support | 6 | Ticket triage, replies, FAQ, escalation |
 | 08 | Docs | 7 | SOPs, policies, training guides, handovers |
 | 09 | Training | 8 | Needs analysis, modules, facilitation, onboarding |
-| 10 | Web Design | 9 | Slide decks, cinematic sites, scroll journeys |
+| 10 | Web Design | 12 | Slide decks, cinematic sites, scroll journeys |
 | 11 | Infrastructure | 1 | Project scaffolding |
-| 12 | Design Standards | 7 | Quality, composition, patterns, language |
+| 12 | Design Standards | 8 | Quality, composition, patterns, language |
 | 13 | Design Styles | 5 | Brutalist, minimalist, soft, redesign |
 | 14 | Animation | 12 | GSAP, Motion, Lottie, Rive, Spring, CSS |
 
@@ -183,7 +197,7 @@ Every skill is gold-standard. Here is what that means:
 | **3-lens adversarial review** | Harness check + white-label scan + senior domain expert before QA |
 | **Design review gates** | Build skills cross-reference packs 12-14, block output on failure |
 | **Fixtures** | Cases A, B, C per skill: clean, messy, and missing-input scenarios |
-| **0 em dashes** | Strict white-label discipline across all 93 skills |
+| **0 em dashes** | Strict white-label discipline across all 97 skills |
 | **0 banned terms** | No leaked internal names, no placeholder names |
 | **Evidence/Inference discipline** | Every claim labelled. Nothing fabricated. |
 | **AU-law jurisdiction-neutral** | Business sets jurisdiction once. Skills adapt. |
