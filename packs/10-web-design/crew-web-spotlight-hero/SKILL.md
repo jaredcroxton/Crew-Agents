@@ -734,7 +734,7 @@ B) [option B]: [2 reasons for, 1 against]
 Net: [one-line tradeoff]
 ```
 
-Typical calls that warrant a brief: the spotlight radius and softness (a tight hot circle is dramatic but shows little of the after, a wide soft one reveals more but feels less like a torch), auto-animate the spotlight on desktop versus cursor-only (an idle auto-sweep teaches the visitor the trick, but a cursor-only reveal feels more earned), how dramatic the before-and-after delta should be (a subtle delta is tasteful but the reveal can read as a non-event, a strong delta lands but risks gimmick), and one hero versus a section series (this skill ships one hero, more than one spotlight on a page dilutes the single-focal premium). When the user names a site or studio as a reference, never guess the look from the name: ask for one sentence of description, then hand off to `deep-research` before proposing a look.
+Typical calls that warrant a brief: the spotlight radius and softness (a tight hot circle is dramatic but shows little of the after, a wide soft one reveals more but feels less like a torch), auto-animate the spotlight on desktop versus cursor-only (an idle auto-sweep teaches the visitor the trick, but a cursor-only reveal feels more earned), how dramatic the before-and-after delta should be (a subtle delta is tasteful but the reveal can read as a non-event, a strong delta lands but risks gimmick), and one hero versus a section series (this skill ships one hero, more than one spotlight on a page dilutes the single-focal premium). When the user names a site or studio as a reference, never guess the look from the name: ask for one sentence of description, then hand off to `crew-web-website-architect` (the inspiration lens) before proposing a look.
 
 ## Guardrails
 
@@ -758,7 +758,7 @@ House style:
 
 - Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate: run `crew-design-quality` (binding) plus the pack-12/13/14 skills it enumerates, here `crew-design-composition`, `crew-design-patterns`, the register-conditional pack-13 style lens (`crew-design-soft` (warm/premium), `crew-design-minimalist` (serious, composed), or `crew-design-brutalist` (raw/technical)), with `crew-animation-gsap` and `crew-animation-motion` consulted as authoring references. Fix all Criticals and Majors before deploy.
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker` (pack 01 core). Its output is advisory, not a hard gate: it does not block ship on its own the way the pack-12 reviewers (binding) do, but it flags broken links, console errors, and unverified claims to fix before handing a URL over. Pairs with the Crew Method standard "Verify before claiming done".
-- Hand off to `deep-research` when the user names a reference brand or studio. Pull the real palette, type, and imagery before proposing a look. Never guess a brand's look from the name alone.
+- Hand off to `crew-web-website-architect` (inspiration lens) when the user names a reference brand or studio: it pulls the real palette, type, and imagery into a fill-in kit before a look is proposed. An external research skill, where installed, can supplement for non-web references. Never guess a brand's look from the name alone.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
 ## Plan mode

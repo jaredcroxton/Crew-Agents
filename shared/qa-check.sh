@@ -91,7 +91,9 @@ for d in "$PACKS_DIR"/*/; do
     # Context Loop
     grep -qE 'Step 0: Context Recovery' "$f" || note "$skill: missing Step 0 Context Recovery"
     grep -qE 'Final Step: Handoff Save' "$f" || note "$skill: missing Final Step Handoff Save"
-    grep -q "crew-state/$packid/$skill-handoff.md" "$f" || note "$skill: handoff path not crew-state/$packid/$skill-handoff.md"
+    grep -qF "~/.claude/crew-state/$packid/$skill-handoff.md" "$f" || note "$skill: handoff path not ~/.claude/crew-state/$packid/$skill-handoff.md"
+    # the state root is home-global; a bare relative .claude/crew-state forks the memory
+    perl -ne 'exit 1 if /(?<!~\/)\.claude\/crew-state/' "$f" || note "$skill: bare relative .claude/crew-state path (must be ~/.claude/crew-state)"
     # output fenced block present
     awk '/^## Output format/{o=1} o&&/^```/{c++} END{exit !(c>=2)}' "$f" || note "$skill: no fenced block under Output format"
     # workflow has >=6 numbered steps
@@ -104,6 +106,15 @@ for d in "$PACKS_DIR"/*/; do
     grep -q '## Case A' "$packdir/tests/$skill.fixture.md" 2>/dev/null && \
     grep -q '## Case B' "$packdir/tests/$skill.fixture.md" 2>/dev/null && \
     grep -q '## Case C' "$packdir/tests/$skill.fixture.md" 2>/dev/null || note "$skill: fixture missing one of cases A/B/C"
+    # cross-skill reference integrity: every backticked crew-* token must exist as a pack folder.
+    # A phantom skill name in a routing rule or Handoffs section is a broken chain link.
+    for tok in $(grep -o '`crew-[a-z0-9-]*`' "$f" | tr -d '`' | sed 's/-handoff$//' | sort -u); do
+      case "$tok" in crew-state|crew-method|crew-|crew) continue ;; esac
+      # a token may name a skill folder or a pack (`crew-core`, `crew-web-design`, ...)
+      ls -d "$PACKS_DIR"/*/"$tok" >/dev/null 2>&1 && continue
+      ls -d "$PACKS_DIR"/*-"${tok#crew-}" >/dev/null 2>&1 && continue
+      note "$skill: references \`$tok\` which exists in no pack"
+    done
 
     [ "$FAIL" = 0 ] && ok "$skill"
   done
@@ -126,9 +137,22 @@ if [ "$SMOKE" = 1 ]; then
       caseA="$(awk '/^## Case A/{a=1;next} a&&/^## Case/{exit} a&&/^INPUT:/{p=1;next} a&&/^EXPECT:/{exit} p{print}' "$fx")"
       body="$(cat "$f")"   # read before the cd so the relative path resolves
       work="$(mktemp -d)"
-      # Spawns the claude CLI. acceptEdits lets the skill write its handoff file
-      # without disabling permissions. Run this pass where spawning the CLI is allowed.
-      ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. VERIFICATION OVERRIDE for this run: write the handoff file under ./crew-state/<pack>/ instead of .claude/crew-state/<pack>/ (same filename and content). After writing the handoff, output the completed Output-format artifact, fully filled, as your FINAL message, with nothing after it. Do not ask questions, act on the input given.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseA" \
+      # Sanctioned test seam: a SYNTHETIC brand fixture so the brand hard gate passes
+      # honestly (never bypassed, never the real brand file), plus an explicit state
+      # root for the test run. Spawns the claude CLI; acceptEdits lets the skill write
+      # its handoff without disabling permissions.
+      mkdir -p "$work/crew-state"
+      cat > "$work/crew-state/brand-context.md" <<'FIXTURE'
+# Brand Context: Harbourline Studio (synthetic QA fixture)
+- Name: Harbourline Studio
+- What they do: a small fictional design consultancy that exists only inside the Crew QA harness.
+- Main product: fixed-scope brand refresh projects (fictional).
+- Audience: fictional small businesses.
+- Voice: plain, direct, warm.
+- Never say: guaranteed results.
+- Note: synthetic fixture, not a real business. Invent nothing beyond this file.
+FIXTURE
+      ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md). Print the three-line run receipt, then the completed Output-format artifact, fully filled, as your final message.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseA" \
         | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
       hp="$work/crew-state/$packid/$skill-handoff.md"
       okrun=1
@@ -138,6 +162,19 @@ if [ "$SMOKE" = 1 ]; then
       rm -rf "$work"
     done
   done
+  # Negative case: with NO brand-context seeded, the brand hard gate must HOLD.
+  # A pass here proves the gate survives a plain run instruction; the harness never
+  # instructs around it.
+  nf="$PACKS_DIR/01-core/crew-core-quality-checker/SKILL.md"
+  if [ -f "$nf" ] && command -v claude >/dev/null; then
+    work="$(mktemp -d)"; body="$(cat "$nf")"
+    ( cd "$work" && printf 'Run the following Crew skill against the input. For this test run the crew-state root is ./crew-state/.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nCheck this one-line summary for quality: "We ship fast."\n' "$body" \
+      | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
+    grep -qF "Your business is not onboarded yet" "$work/out.txt" 2>/dev/null \
+      && ok "smoke negative: brand hard gate holds without brand-context" \
+      || note "smoke negative: gate did not fire without brand-context"
+    rm -rf "$work"
+  fi
 fi
 
 echo "------------------------------------------------------------"

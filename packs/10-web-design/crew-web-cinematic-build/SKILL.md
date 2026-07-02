@@ -474,7 +474,7 @@ B) [option B]: [2 reasons for, 1 against]
 Net: [one-line tradeoff]
 ```
 
-Typical calls that warrant a brief: how many scenes (five is the default film shape, four when the story is tight), a video-loop backdrop versus a still (a loop reads richer but costs load budget and a generation round trip), 3D weight versus load time (a real GLTF hero versus an additive plane versus procedural geometry, each heavier than the last), and audio or not (an ambient bed lifts the drift but adds an unmute affordance and an autoplay constraint). When the user names a site, designer, studio, or campaign as a reference, never guess the look from the name: ask for one sentence of description, then hand off to `deep-research` before proposing a theme.
+Typical calls that warrant a brief: how many scenes (five is the default film shape, four when the story is tight), a video-loop backdrop versus a still (a loop reads richer but costs load budget and a generation round trip), 3D weight versus load time (a real GLTF hero versus an additive plane versus procedural geometry, each heavier than the last), and audio or not (an ambient bed lifts the drift but adds an unmute affordance and an autoplay constraint). When the user names a site, designer, studio, or campaign as a reference, never guess the look from the name: ask for one sentence of description, then hand off to `crew-web-website-architect` (the inspiration lens) before proposing a theme.
 
 ## Guardrails
 
@@ -498,7 +498,7 @@ House style:
 
 - Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate: run `crew-design-quality` (binding) plus the pack-12/13/14 skills it enumerates, here `crew-design-composition`, `crew-design-patterns`, `crew-design-soft`, `crew-animation-gsap`, `crew-animation-locomotive`, and `crew-animation-scroll-reveal`. Fix all Criticals and Majors before deploy.
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
-- Hand off to `deep-research` when the user names a reference brand or campaign. Pull the real palette, type, and imagery before proposing a theme. Never guess a brand's look from the name alone.
+- Hand off to `crew-web-website-architect` (inspiration lens) when the user names a reference brand or campaign: it pulls the real palette, type, and imagery into a fill-in kit before a theme is proposed. An external research skill, where installed, can supplement for non-web references. Never guess a brand's look from the name alone.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
 ## Plan mode
