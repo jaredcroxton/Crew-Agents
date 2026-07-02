@@ -245,7 +245,7 @@ If any box is empty, stop. Fix that first. Tell the user which gate is blocking.
 If the goal or the credentials are missing so the build cannot proceed, set the run-level STATUS to NEEDS_CONTEXT or BLOCKED, never complete, so a halted build is not mistaken for a finished one, and still write the handoff recording the gap. Map this to the output's Status line: a build still moving is "active", a build stopped at a gate is "blocked", a build deployed and approved is "complete". If the project was scaffolded but blocked at a gate (a missing credential, an unconfirmed source), or deployed with a phase left incomplete, set DONE_WITH_GAPS, never a clean complete, so the open loops stay visible to the next session.
 
 ```
-STATUS: COMPLETE | DONE_WITH_GAPS | BLOCKED | NEEDS_CONTEXT
+STATUS: DONE | DONE_WITH_GAPS | BLOCKED | NEEDS_CONTEXT
 REASON: [why this status, specific]
 RECOMMENDATION: [what should happen next]
 ```
