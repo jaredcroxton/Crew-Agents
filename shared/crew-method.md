@@ -64,6 +64,14 @@ A standard is what good looks like. A loop is what the skill DOES when reality i
 6. **The handoff frame:** open every handoff with a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the content above as its own headed blocks, with LEARNED and ESCALATED blocks when present. The frame is what lets `crew-core-context-restore` and any downstream reader classify the state without guessing.
 7. **Copy-forward:** when rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item. A rewrite must never erase a lesson or an open flag.
 
+### Sub-skill consult (one skill invoking another)
+
+When one Crew skill consults another mid-run (a design-gate leg, an animation authoring reference), the consulted skill must not re-run onboarding or re-prompt the user. The trigger is a literal artifact, never an inference:
+
+1. The CALLING skill opens the consult instruction with this exact preamble: `CREW CONSULT from crew-<caller>: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`.
+2. On that literal preamble, the consulted skill skips its Step 0 onboarding stop and its Final Step context-save prompt. It still reads the brand context, still does its job, and still writes its own handoff.
+3. Absent that literal preamble, the consulted skill runs its full Step 0 including the brand hard stop, even if the request mentions another skill. A user merely referring to a sibling skill is not a consult.
+
 ### Loop 5: Learning Capture
 
 **Triggers when** a run reveals something reusable: a correction the user made, a preference, a fact about the business, a pattern worth not relearning.

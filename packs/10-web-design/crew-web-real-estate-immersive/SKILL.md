@@ -411,7 +411,7 @@ The assembly contract, condensed into a checklist every build must satisfy:
 8. **Run the design review gate.** Per the Design review gate section, hand the built file and the live local URL to the reviewers. Fix all Criticals and Majors. A fail blocks the ship.
 9. **Deploy only after the user approves a live test.** Per the Deploy pathway section, show a local preview, let the user approve it, then deploy to Vercel. Patch the OG alias if it differs from the guess, and verify the live site serves the frames, the photos, and the floorplan while the source video stays private.
 
-**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` with: the build report produced, decisions made (the property and address, the title choice, the number of room chapters, the frame count `N`, the brand assets generated or pending, the deploy target and URL), unfinished work (footage owed by the user, photos not yet supplied, the OG patch, a design fix not yet applied, the agency sign-off on attribution), what the Design review gate (crew-design-quality (binding) plus the pack-12/13/14 skills it enumerates) needs next (the built file and the live local URL), and any "Learned" note (an agency register, a buyer feeling, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` with: the build report produced, decisions made (the property and address, the title choice, the number of room chapters, the frame count `N`, the brand assets generated or pending, the deploy target and URL), unfinished work (footage owed by the user, photos not yet supplied, the OG patch, a design fix not yet applied, the agency sign-off on attribution), what the Design review gate (crew-design-quality (binding) plus the Gate roster in `crew-design-quality`) needs next (the built file and the live local URL), and any "Learned" note (an agency register, a buyer feeling, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -458,6 +458,24 @@ Design review gate: crew-design-quality pass (Revise then fixed) + crew-design-c
 What the reviewer needs next: the built file and the live local URL. Agency attribution sign-off still pending; footer carries the concept-demonstration note.
 ```
 
+## Animation injection
+
+This is the build step that produces the motion the design review gate scores. The gate's Motion dimension (`crew-design-quality`) assumes a page that already moves; until this layer is in the single-file site, the output is laid out, not finished. Stay subordinate to the integrity rules: the scrub is the property's real footage revealing itself, and no motion may dramatise, extend, or misrepresent a room.
+
+The motion budget is three required layers, no more.
+
+1. **Entrance reveals.** Scroll-triggered, one-shot, transform and opacity only. The elements this skill reveals: each chapter's oversized serif title and its room copy (fade-up with a small translateY as the chapter's scroll zone begins), the gallery grid (staggered 60 to 90ms per tile), the floorplan block, the listing-facts row, and the agent CTA card. An IntersectionObserver adds the reveal class once and `unobserve`s the element, so a re-scroll never re-fires.
+2. **Micro-interactions.** Hover, press, and focus on the real interactive elements: gallery tiles (a restrained scale and shadow lift), the floorplan zoom affordance, the enquire and call CTAs (`:hover` lift, `:active` press, a visible `:focus-visible` ring), and the chapter nav if present. Transform and opacity only, short and legible, never a layout shift.
+3. **The signature moment.** The frame scrub itself: the listing's own walkthrough painted frame-for-frame on the canvas by the existing rAF loop, chapter typography crossfading at each room boundary as a scene cut. The scrub is already locked engineering; this layer's job is that the chapter title reveal lands WITH its room's frames, so the room and its name arrive as one.
+
+Stack rule, stated plainly. The animation layer is native only: CSS keyframes and transitions for reveals and hover, the Web Animations API (`element.animate()`) for any imperative one-off, and IntersectionObserver to trigger both, all inline in the single file beside the locked rAF canvas scrub. Forbidden, never reach for them: GSAP, ScrollTrigger, Motion or Framer Motion, Anime.js, Lottie, Locomotive Scroll, any smooth-scroll library, any animation library at all. The scrub stays hand-rolled rAF plus canvas; the named pack-14 skills are the discipline bar, not an import.
+
+Before writing the motion, read the matching spec-writers in pack 14: `crew-animation-scroll-reveal` for the IntersectionObserver one-shot entrance pattern (fade-up, stagger, unobserve), `crew-animation-css` for the keyframe, transition, and `element.animate()` idiom, and `crew-animation-gsap` for the scroll-linked scrub discipline only (scrollbar-tied, never a scroll-listener animation; the bar the canvas scrub is held to, not an engine to add). They emit a spec, not a verdict.
+
+Reduced-motion and performance guardrails are non-negotiable. Under `prefers-reduced-motion: reduce` the existing path already paints the representative still and never starts the rAF loop; this layer follows it: reveals become instant (content visible with no transition), no stagger, no parallax, nothing scroll-linked. Animate transform and opacity only, never layout properties. Observers are one-shot and `unobserve` after first fire. The whole layer stays inside the single-file budget and holds 60fps beside the scrub (no per-frame layout reads).
+
+This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`) then scores, with `crew-animation-scroll-reveal`, `crew-animation-css`, and `crew-animation-gsap` as the authoring references behind it. Ship the motion, then run the gate.
+
 ## Print and PDF
 
 When PDF delivery is chosen, add a `@media print` block to the output:
@@ -471,6 +489,8 @@ When PDF delivery is chosen, add a `@media print` block to the output:
 - The reduced-motion path already serves as the print-appropriate layout
 
 ## Design review gate
+
+Invoke every leg with the consult preamble: `CREW CONSULT from crew-web-real-estate-immersive: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md` (per the Crew Method, Sub-skill consult), so a consulted leg never re-runs onboarding or re-prompts mid-gate.
 
 Before ship, the build MUST pass the Design Standards gate. This gate is required, not optional, and a fail blocks the deploy. Run the reviewers against the BUILT site (the `index.html` and the live local URL), never against a non-existent artifact. Brief each with the buyer feeling, the style and mood register, the real-footage rule, and the no-em-dash rule.
 
@@ -550,7 +570,7 @@ House style:
 
 ## Handoffs
 
-- Run the Design review gate before the build ships: hand the built file plus the live local URL to `crew-design-quality` (binding) plus the pack-12, pack-13, and pack-14 skills it enumerates, here `crew-design-composition`, `crew-design-patterns`, the register-conditional pack-13 lens (`crew-design-soft`, `crew-design-minimalist`, or `crew-design-brutalist`), and the authoring references `crew-animation-gsap` and `crew-animation-locomotive`. Fix all Criticals and Majors before deploy.
+- Run the Design review gate before the build ships: hand the built file plus the live local URL to `crew-design-quality` (binding) plus the legs in the Gate roster in `crew-design-quality`, here `crew-design-composition`, `crew-design-patterns`, the register-conditional pack-13 lens (`crew-design-soft`, `crew-design-minimalist`, or `crew-design-brutalist`), and the authoring references `crew-animation-gsap` and `crew-animation-locomotive`. Fix all Criticals and Majors before deploy.
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker` (pack 01 core, advisory). Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
