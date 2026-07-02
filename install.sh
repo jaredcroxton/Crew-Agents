@@ -93,8 +93,18 @@ for packdir in "${PACKDIRS[@]}"; do
   done
 done
 
+# install the Crew Method doc beside the skills: every skill references it by name,
+# so the buyer's machine must actually hold it.
+if [ "$DRY" != 1 ] && [ -f "$HERE/shared/crew-method.md" ]; then
+  cp "$HERE/shared/crew-method.md" "$DEST/crew-method.md"
+  echo "  ok    crew-method.md (the Crew Method, referenced by every skill)"
+fi
+
 # prune: remove crew-* dirs in the target that have no source folder in packs/.
-# Scoped to the crew-* prefix so no other skill (flow-*, gsap, hyperframes, ...) is ever touched.
+# Scoped to the crew-* prefix so no other skill (flow-*, gsap, hyperframes, ...) is
+# ever touched, AND ownership-validated: a dir whose SKILL.md frontmatter name does
+# not match its folder is not a Crew-shipped skill (a buyer-authored crew-acme-*
+# variant stays put); it is reported and left in place.
 PRUNED=0
 if [ "$PRUNE" = 1 ] && [ -d "$DEST" ]; then
   for td in "$DEST"/crew-*/; do
@@ -105,6 +115,27 @@ if [ "$PRUNE" = 1 ] && [ -d "$DEST" ]; then
       [ -d "${d%/}/$tname" ] && found=1 && break
     done
     if [ "$found" = 0 ]; then
+      # ownership test 1: the name must sit in a family THIS product ships
+      # (the crew-<family>- prefixes derived from the shipped skill names, e.g.
+      # crew-web-, crew-design-, crew-core-). A buyer-authored crew-acme-* is
+      # not ours; leave it.
+      tfam="$(printf '%s' "$tname" | cut -d- -f1-2)-"
+      fam=0
+      for sd2 in "$PACKS_DIR"/*/crew-*/; do
+        sfam="$(basename "${sd2%/}" | cut -d- -f1-2)-"
+        [ "$sfam" = "$tfam" ] && fam=1 && break
+      done
+      if [ "$fam" = 0 ]; then
+        echo "  keep  $tname (not in any Crew pack family; buyer skill, left in place)"
+        continue
+      fi
+      # ownership test 2: frontmatter name must match the folder (a malformed or
+      # foreign dir that merely shares the prefix is reported, never deleted)
+      nm="$(awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{exit} f&&/^name:/{sub(/^name: */,"");print;exit}' "$td/SKILL.md" 2>/dev/null)"
+      if [ "$nm" != "$tname" ]; then
+        echo "  keep  $tname (frontmatter name '$nm' != folder; not a Crew-shipped skill, left in place)"
+        continue
+      fi
       if [ "$DRY" = 1 ]; then echo "  would prune  $tname (no source in packs/)"
       else echo "  prune $tname (no source in packs/)"; rm -rf "$td"; fi
       PRUNED=$((PRUNED+1))

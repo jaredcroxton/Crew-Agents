@@ -36,13 +36,19 @@ ok()   { printf '  ok    %s\n' "$1"; }
 BAN='Brock|Bob|Lara|Neo|gstack|gbrain|PerformOS|Hermes|NemoClaw'
 
 echo "== em-dash check (all .md except none; em dashes banned everywhere) =="
-if grep -rlP '[\x{2014}\x{2013}\x{2015}]' --include='*.md' . 2>/dev/null | grep .; then
-  note "em/en dashes found in the files above"; else ok "no em dashes"; fi
+# perl, not grep -P: BSD/macOS grep has no -P, which made the old check a silent
+# no-op that never matched anything.
+DASHED="$(find . -name '*.md' -type f ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' -exec perl -ne 'if (/[\x{2014}\x{2013}\x{2015}]/) { print "$ARGV\n"; last }' {} \; 2>/dev/null | sort -u)"
+if [ -n "$DASHED" ]; then
+  echo "$DASHED"; note "em/en dashes found in the files above"
+else ok "no em dashes"; fi
 
-echo "== ban-list check (shipped .md only; skips CREDITS.md, README.md, and runtime state under .claude/) =="
+# LICENSE is deliberately exempt from the ban list: a licence naming the licensor
+# is normal commercial practice, not a white-label leak.
+echo "== ban-list check (shipped .md only; skips CREDITS.md, README.md, LICENSE, and runtime state under .claude/) =="
 BANHIT=0
 while IFS= read -r f; do
-  case "$f" in */CREDITS.md|./CREDITS.md|*/README.md|./README.md|*/.claude/*|./.claude/*) continue ;; esac
+  case "$f" in */CREDITS.md|./CREDITS.md|*/README.md|./README.md|*/LICENSE|./LICENSE|*/.claude/*|./.claude/*) continue ;; esac
   if grep -iwnE "$BAN" "$f" >/dev/null 2>&1; then note "banned name in $f"; BANHIT=1; fi
 done < <(find . -name '*.md' -type f)
 [ "$BANHIT" = 0 ] && ok "no banned names in shipped files"
@@ -120,6 +126,34 @@ for d in "$PACKS_DIR"/*/; do
   done
 done
 echo "  checked $SKILL_COUNT skills"
+
+# full-run-only checks (skipped under --pack so per-pack QA stays fast)
+if [ -z "$PACK_FILTER" ]; then
+  # README truth: the headline skill count must equal the disk count
+  DISK_COUNT=$(find "$PACKS_DIR" -mindepth 2 -maxdepth 2 -type d -name 'crew-*' | wc -l | tr -d ' ')
+  if [ -f README.md ]; then
+    grep -q "SKILLS-$DISK_COUNT-" README.md \
+      && ok "README skill count matches disk ($DISK_COUNT)" \
+      || note "README badge count does not match disk count ($DISK_COUNT skills on disk)"
+  fi
+  # parity: the plugin route must ship byte-identical skills. Generate a fresh
+  # comparison copy to .tmp (never touching ./plugins in place), hash-compare
+  # every crew-full skill against its packs/ source, then delete the temp copy.
+  if [ -f build-plugins.sh ]; then
+    echo "== plugin parity check (generated to .tmp, packs/ is the source of truth) =="
+    PARITY_OUT=".tmp/parity-plugins"
+    bash build-plugins.sh --out "$PARITY_OUT" >/dev/null 2>&1
+    PARITY_FAIL=0
+    for sd in "$PACKS_DIR"/*/crew-*/; do
+      s="$(basename "${sd%/}")"
+      src="$sd/SKILL.md"; gen="$PARITY_OUT/crew-full/skills/$s/SKILL.md"
+      if [ ! -f "$gen" ]; then note "parity: $s missing from generated crew-full"; PARITY_FAIL=1; continue; fi
+      if ! cmp -s "$src" "$gen"; then note "parity: $s differs between packs/ and the generated plugin"; PARITY_FAIL=1; fi
+    done
+    rm -rf "$PARITY_OUT"
+    [ "$PARITY_FAIL" = 0 ] && ok "plugin parity: all skills byte-identical to packs/"
+  fi
+fi
 
 if [ "$SMOKE" = 1 ]; then
   echo "== functional smoke pass (claude -p, clean case per skill) =="

@@ -37,7 +37,12 @@ done
 if [ -n "$TARGET" ]; then DEST="$TARGET"
 elif [ "$GLOBAL" = 1 ]; then DEST="$HOME/.claude/skills"
 else DEST="$PWD/.claude/skills"; fi
-STATE_BASE="$(dirname "$DEST")/crew-state"
+# Skills write their handoffs to the home-global store regardless of where they
+# were installed, so purge targets it unconditionally. Purge is the buyer's
+# accumulated MEMORY: it is always backed up to a tar before anything is deleted.
+STATE_BASE="$HOME/.claude/crew-state"
+PURGE_BACKUP="$HOME/.claude/crew-state-backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+PURGED_ANY=0
 
 # which packs
 declare -a PACKDIRS=()
@@ -69,11 +74,37 @@ for packdir in "${PACKDIRS[@]}"; do
     fi
   done
   if [ "$PURGE" = 1 ] && [ -d "$STATE_BASE/$packid" ]; then
-    if [ "$DRY" = 1 ]; then echo "  would purge   crew-state/$packid"; else rm -rf "$STATE_BASE/$packid"; echo "  purged   crew-state/$packid"; fi
+    if [ "$DRY" = 1 ]; then
+      echo "  would purge   $STATE_BASE/$packid (these handoff files):"
+      find "$STATE_BASE/$packid" -type f | sed 's/^/                  /'
+    else
+      # back the memory up before deleting anything; one tar covers the whole run
+      if [ "$PURGED_ANY" = 0 ]; then
+        tar -czf "$PURGE_BACKUP" -C "$(dirname "$STATE_BASE")" "$(basename "$STATE_BASE")" 2>/dev/null \
+          && echo "  backup   full crew-state saved to $PURGE_BACKUP"
+      fi
+      echo "  purging  $STATE_BASE/$packid:"
+      find "$STATE_BASE/$packid" -type f | sed 's/^/                  /'
+      rm -rf "$STATE_BASE/$packid"
+      echo "  purged   $STATE_BASE/$packid"
+      PURGED_ANY=1
+    fi
   fi
 done
+
+# with --all and every crew-* skill gone, remove the installed Crew Method doc too
+if [ "$ALL" = 1 ] && [ "$DRY" != 1 ] && [ -f "$DEST/crew-method.md" ]; then
+  remaining=$(find "$DEST" -maxdepth 1 -type d -name 'crew-*' 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$remaining" = 0 ]; then rm -f "$DEST/crew-method.md"; echo "  removed  crew-method.md (no Crew skills remain)"; fi
+fi
 
 echo "------------------------------------------------------------"
 IDS=""; for p in "${PACKDIRS[@]}"; do b="$(basename "$p")"; IDS="$IDS${b#*-} "; done
 echo "Removed: $REMOVED   Not present: $ABSENT   Packs: $IDS"
-[ "$PURGE" = 1 ] && echo "Handoff state purged for the above packs." || echo "Saved handoffs under crew-state were left in place (use --purge to clear)."
+if [ "$PURGE" = 1 ]; then
+  if [ "$DRY" = 1 ]; then echo "Dry run: the handoff state listed above would be purged (after a tar backup)."
+  elif [ "$PURGED_ANY" = 1 ]; then echo "Handoff state purged for the above packs (backup: $PURGE_BACKUP)."
+  else echo "Nothing to purge: no handoff state found for the above packs under $STATE_BASE."; fi
+else
+  echo "Saved handoffs under crew-state were left in place (use --purge to clear; a purge always tars a backup first)."
+fi
