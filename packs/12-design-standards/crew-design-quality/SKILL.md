@@ -37,7 +37,7 @@ All three modes run silent by default. The agent suppresses progress, confirmati
 
 Do not run this skill to check copy or content correctness (that is a writing pass), to run an accessibility audit on its own (use a dedicated accessibility check), to review backend or non-visual code, or when a locked brand playbook already dictates the look and the user only wants it applied, not judged.
 
-This skill also injects animation into the build output once the verdict passes (see Animation injection). If the build already carries its own animation (a fly-through scrub, a spotlight cursor, a webcam shatter), the injection is skipped.
+This skill also verifies the build's motion layer after the verdict (see Motion verification and routing). A missing or wrong layer routes back to the owning build skill's own Animation injection section; the reviewer injects directly only into an orphan artifact with no owning crew skill, and never with an engine the artifact's stack forbids.
 
 ## How the quality reviewer thinks
 
@@ -160,7 +160,7 @@ The condensed checklist a design gate embeds. Run it as the last filter before a
 
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the dashboard, typography failed, awaiting the font swap"). If it does not exist, state "No prior context, first run." When a handoff was recovered, state its date; if it is older than the artifacts it references, treat it as possibly stale and verify against the live files before relying on it. In Governed mode, also scan the other handoffs in that folder for the project standard. (Loop 4, Context Change.) If this run was chained from an upstream skill, also read only the handoffs of the skills this skill's Handoffs section names as sources, at most two files; state what was inherited, and record "Consumed: [upstream skill] handoff dated [date]" in this run's own handoff. If a named upstream handoff does not exist, proceed without comment. Never scan the folder outside Governed mode.
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/design-standards/crew-design-quality-handoff.md`. If it exists, load it and state what was recovered (for example, "Recovered: a prior review of the dashboard, typography failed, awaiting the font swap"). If it does not exist, state "No prior context, first run." When a handoff was recovered, state its date; if it is older than the artifacts it references, treat it as possibly stale and verify against the live files before relying on it. In Governed mode, also scan the other handoffs in that folder for the project standard. (Loop 4, Context Change.) If this run was chained from an upstream skill, also read only the handoffs of the skills this skill's Handoffs section names as sources, at most two files; state what was inherited, and record "Consumed: [upstream skill] handoff dated [date]" in this run's own handoff. If a named upstream handoff does not exist, proceed without comment. Never scan the folder outside Governed mode. Sub-skill consult: if the instruction opens with the literal preamble "CREW CONSULT from crew-<caller>: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md", skip this step's onboarding stop and the Final Step context-save prompt (still read the brand context and still write this skill's own handoff); absent that literal preamble, run the full Step 0 including the brand hard stop, even if the request mentions another skill (per the Crew Method, Sub-skill consult).
 
 1. **Establish the dials and the context.** State the product type, audience, and brand or playbook, and the three dial targets (or the baseline 8 / 6 / 4). If no artifact is present, ask for it now; do not review what you cannot see.
 2. **Sweep each dimension** per The quality framework. For each, decide Premium, Mixed, or Slop, with one concrete reason tied to what is on screen.
@@ -195,10 +195,12 @@ Dimension scores:
 AI tells caught:
 - [the specific tell and where it is]
 
-Ranked fixes (highest impact first):
-1. [specific change]
-2. [specific change]
+Ranked fixes (highest impact first, each tagged with a severity):
+1. [Critical / Major / Minor] [specific change]
+2. [Critical / Major / Minor] [specific change]
 ```
+
+Severity vocabulary, the same words every consumer's pass condition uses: **Critical** breaks credibility or function (an AI tell a client would spot, a broken interactive state, an accessibility failure) and always blocks ship. **Major** visibly cheapens the build (a dated pattern, a dimension scored Slop) and blocks ship until addressed. **Minor** is polish (a spacing nudge, a wording trim), never blocks, noted for the next pass.
 
 Example (filled):
 ```
@@ -223,11 +225,11 @@ AI tells caught:
 - h-screen on the hero (use min-h-[100dvh]).
 - John Doe avatars with round 50% stats (use realistic names and organic numbers).
 
-Ranked fixes (highest impact first):
-1. Replace the centered hero with a left-aligned split, text left and a faded asset right.
-2. Swap Inter for Geist, drop the H1 to text-5xl with heavier weight and tight tracking.
-3. Remove the purple glow; use one desaturated accent (deep emerald) on a zinc base.
-4. Rebuild the feature row as a bento grid; replace placeholder names and stats with organic data.
+Ranked fixes (highest impact first, each tagged with a severity):
+1. Critical  Replace the centered hero with a left-aligned split, text left and a faded asset right.
+2. Major  Swap Inter for Geist, drop the H1 to text-5xl with heavier weight and tight tracking.
+3. Major  Remove the purple glow; use one desaturated accent (deep emerald) on a zinc base.
+4. Minor  Rebuild the feature row as a bento grid; replace placeholder names and stats with organic data.
 ```
 
 ## Decision briefs
@@ -255,10 +257,22 @@ Typical calls that warrant a brief: bold and expressive versus restrained and qu
 - Never use em dashes. Use commas, periods, or parentheses.
 - If a project playbook exists (a brand system, approved fonts and colours, an escalation rule), it is the authority. Follow it over these defaults.
 
+## Gate roster
+
+When a build skill says "the Gate roster in `crew-design-quality`", it means exactly this list. The roster is the one place the review chain is enumerated; consumers point here instead of carrying their own copy.
+
+- **Binding verdict:** this skill. Pass / Revise / Fail over the nine dimensions in the Output format. A Fail blocks ship. A Revise blocks until every ranked fix tagged Critical or Major is addressed and re-reviewed.
+- **Arrangement leg:** `crew-design-composition`. Its verdict ladder is Composed / Arranged / Flat: Flat blocks ship, Arranged is the Revise-equivalent (blocks only while its highest-impact move is unaddressed), Composed clears.
+- **Currency leg:** `crew-design-patterns`. Its verdict ladder is Current / Refresh / Dated: Dated blocks ship, Refresh is the Revise-equivalent (blocks only while the named swaps are unaddressed), Current clears.
+- **Style lens, register-conditional, exactly ONE per build:** pick by the build's register, never all three and never a fixed default: `crew-design-soft` when the register is warm and premium, `crew-design-minimalist` when it is clean and composed, `crew-design-brutalist` when it is raw and bold. The lens holds the build to its own register; it is not a hard gate on every brand.
+- **Motion authoring references, STATUS not verdicts:** the pack-14 animation skills (`crew-animation-gsap`, `crew-animation-scroll-reveal`, `crew-animation-css`, `crew-animation-motion`, and their siblings) are spec-writers that emit STATUS, never Pass or Fail. They shape the motion before it is written; the binding motion verdict is this skill's Motion dimension.
+
+Invoke the gate in the same mode the build runs in: a Governed build implies a Governed gate (the ship gate, nothing waived).
+
 ## Handoffs
 
-- Embed the Application rules into the design-review gates of `crew-web-slide-deck-builder`, `crew-web-fly-through-builder`, and `crew-web-lead-dashboard-builder`, so each build is judged against the same standard before it ships.
-- Hand a failing verdict back to the building skill with the ranked fixes, and re-review after they are applied.
+- Any build skill whose Design review gate names this skill as the binding verdict embeds the Application rules by reference; the Gate roster above is the authoritative list of legs, so a consumer never carries its own copy of the chain.
+- Hand a failing verdict back to the building skill with the ranked fixes, and re-review after they are applied. The handoff records the artifact path or URL reviewed, the building skill the Fail returns to, and a review-round counter; after three rounds without a Pass, produce a Decision brief for the owner instead of looping again.
 - Send a brand exception or a deliberate off-spec choice to the owner via `crew-support-escalation-review` style routing if a sign-off is needed before publish.
 - Before any design goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Review before shipping".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
@@ -281,31 +295,34 @@ Before the run is marked done, confirm:
 [ ] A deliberate brand choice is marked "Brand-lock, not a tell"; the playbook won over the defaults
 [ ] No redesign from scratch, no invented brand, no fabricated score
 [ ] No AI-slop, no emoji, no em dashes in the review
-[ ] Animation profile matched to the style pole and injected
-[ ] Reduced-motion disables all animation
-[ ] No external CDN unless GSAP is required
+[ ] Every ranked fix carries a severity tag (Critical / Major / Minor)
+[ ] Motion verified: the layer exists, matches the style pole, and reduced-motion disables it
+[ ] A missing or wrong motion layer was routed to the owning skill's Animation injection section, not written by the reviewer
+[ ] Direct injection only on an orphan artifact with no owning crew skill, never a forbidden engine, no external CDN unless GSAP
 [ ] The handoff was written to ~/.claude/crew-state/design-standards/
 ```
 
-## Animation injection
+## Motion verification and routing
 
-After the quality verdict passes and before handoff, give the build its motion. The review skill is the one place that sees the verdict and the style pole together, so it injects the animation profile that matches the build, rather than leaving a passing page static.
+After the quality verdict and before handoff, verify the build's motion; the reviewer scores and routes, it does not write motion into a build another skill owns. Every crew build skill carries its own Animation injection section that authors the motion in its own stack; the gate's job is to confirm that layer exists and fits.
 
-1. Read the build's style pole from discovery (minimal, soft, bold, authority, or cinematic).
-2. Select the matching animation profile:
-   - **Minimal:** IntersectionObserver fade-in, 300ms, no movement. A one-liner, no library.
-   - **Soft:** IntersectionObserver fade plus a 6px translateY, 400ms ease-out.
-   - **Bold:** IntersectionObserver scale 0.97 to 1 plus fade, 350ms. A slight presence.
-   - **Authority:** IntersectionObserver fade plus a 2px translateY, 500ms. Restrained weight.
-   - **Cinematic:** GSAP ScrollTrigger scrub when a canvas or a video is present. Otherwise staggered IntersectionObserver reveals with a 100ms stagger.
-3. Inject the matching code as a single self-contained `<script>` block, no external file.
-4. Re-verify: the page loads, the animation fires, and reduced-motion disables everything.
+1. Read the build's style pole from discovery (minimal, soft, bold, authority, or cinematic) and identify the owning build skill from the handoff or the artifact.
+2. **Verify:** the motion layer exists in the artifact, matches the style pole's weight, fires correctly, and `prefers-reduced-motion: reduce` disables it. A build with no motion layer, or motion that fights its register, fails the Motion dimension.
+3. **Route, never overwrite:** when the artifact has an owning crew build skill, a missing or wrong motion layer is a Fail with a ranked fix that names the owning skill's own Animation injection section as the place to write it. The builder implements in its own locked stack; the reviewer never injects an engine into a build whose skill forbids it.
+4. **Inject only for orphans:** only when the artifact has NO owning crew skill (an external or legacy file brought in for review) may the gate inject directly, as a single self-contained `<script>` block chosen from the profile table below, and never with an engine the artifact's own stack rules forbid.
 
-Constraints:
-- No external CDN import unless GSAP is required (cinematic builds only).
+Fallback profile table (orphan artifacts only):
+- **Minimal:** IntersectionObserver fade-in, 300ms, no movement. A one-liner, no library.
+- **Soft:** IntersectionObserver fade plus a 6px translateY, 400ms ease-out.
+- **Bold:** IntersectionObserver scale 0.97 to 1 plus fade, 350ms. A slight presence.
+- **Authority:** IntersectionObserver fade plus a 2px translateY, 500ms. Restrained weight.
+- **Cinematic:** GSAP ScrollTrigger scrub when a canvas or a video is present. Otherwise staggered IntersectionObserver reveals with a 100ms stagger.
+
+Constraints (orphan injection):
+- No external CDN import unless GSAP is required (cinematic orphans only).
 - Sub-2KB for the non-GSAP profiles, sub-5KB when GSAP is used.
 - `prefers-reduced-motion: reduce` disables all animation.
-- The injection never overrides an existing animation. If the build already has GSAP or its own IntersectionObserver, skip the injection.
+- Never override an existing animation: if the artifact already has GSAP or its own IntersectionObserver, verify it instead of injecting.
 
 ## Completion
 

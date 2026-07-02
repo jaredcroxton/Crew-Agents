@@ -228,6 +228,8 @@ When PDF delivery is chosen, add a `@media print` block to the output:
 
 ## Design review gate
 
+Invoke every leg with the consult preamble: `CREW CONSULT from crew-web-slide-deck-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md` (per the Crew Method, Sub-skill consult), so a consulted leg never re-runs onboarding or re-prompts mid-gate.
+
 Before the deck ships, it passes the Design Standards review. Every reviewer judges the BUILT deck, the rendered slides as they actually look and move, not a spec or a non-existent artifact. The reviewing skills live in three packs: `packs/12-design-standards`, `packs/13-design-styles`, and `packs/14-animation`.
 
 From pack 12 (design-standards), the binding verdict. `crew-design-quality` runs its nine dimensions (Typography, Motion, Interactive-states, and the rest) over the rendered deck and returns Pass, Revise, or Fail. A Fail, or a Revise the build does not address, blocks ship. Alongside it, `crew-design-composition` checks that each slide resolves to one clear focal point and a legible reading order, and `crew-design-patterns` checks that no slide leans on a dated or slop pattern. Pass condition: `crew-design-quality` returns Pass (or a Revise whose notes are all addressed), composition resolves cleanly on every slide, and patterns are clean.

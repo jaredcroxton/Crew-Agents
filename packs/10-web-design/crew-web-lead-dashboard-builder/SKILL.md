@@ -172,6 +172,8 @@ Run this checklist in Step 10, before delivery. It is the in-build gate that emi
 
 If the dashboard shows anything not in scrape.json, remove it (Loop 3, Escalation). Emit **DESIGN REVIEW PASS** or **DESIGN REVIEW FAIL** with the fix list.
 
+The checklist above is the in-build functional gate; the BINDING design verdict is `crew-design-quality`, run over the rendered dashboard after the checklist passes (its Motion dimension is what scores the Animation injection layer this skill authors). The authoritative list of legs is the Gate roster in `crew-design-quality`. Invoke it with the consult preamble: `CREW CONSULT from crew-web-lead-dashboard-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`. Pass condition: a Pass verdict, or a Revise with every ranked fix tagged Critical or Major applied and re-reviewed. A Fail blocks delivery.
+
 ## Output format
 
 The report carries every field the dashboard renders per lead, so the dashboard step needs nothing extra.

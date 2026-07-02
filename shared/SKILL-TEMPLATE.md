@@ -13,6 +13,7 @@ Catalogue conventions (carried by every shipped skill; include them when the ski
 - **Silent mode** (in `## Modes and when to use them`, after the mode bullets): "All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time."
 - **Silent principle** (the LAST numbered principle in `## How the <role> thinks`): "**Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak."
 - The brand hard gate and the context-save prompt are baked into Step 0 and the Final Step in the skeleton below; copy them as written.
+- **Sub-skill consult** (skills that other skills consult, review legs and authoring references): honour the literal `CREW CONSULT from crew-<caller>:` preamble per the Crew Method's Sub-skill consult rule: skip the onboarding stop and the context-save prompt, still write your own handoff. Absent the literal preamble, run the full Step 0 including the brand hard stop.
 
 ---
 

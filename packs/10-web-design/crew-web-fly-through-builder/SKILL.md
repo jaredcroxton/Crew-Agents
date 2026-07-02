@@ -351,6 +351,8 @@ When PDF delivery is chosen, add a `@media print` block to the output:
 
 ## Design review gate
 
+Invoke every leg with the consult preamble: `CREW CONSULT from crew-web-fly-through-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md` (per the Crew Method, Sub-skill consult), so a consulted leg never re-runs onboarding or re-prompts mid-gate.
+
 Before ship, the built site MUST pass the Design Standards review. This gate is required, not optional, and a fail blocks the deploy. Run every reviewer against the BUILT site (the `index.html` and the live local URL), never against a non-existent artifact. The gate draws on three packs: `packs/12-design-standards`, `packs/13-design-styles`, and `packs/14-animation`. Brief each check with the journey intent, the brand carrier, and the no-em-dash rule.
 
 **From pack 12, design-standards (the binding verdicts):**
@@ -431,7 +433,7 @@ House style:
 ## Handoffs
 
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
-- Hand the built file plus the live local URL to `crew-design-quality` for the brand, taste, accessibility, and console gate (Step 8). Fix all Criticals and Majors before deploy.
+- Hand the built file plus the live local URL to `crew-design-quality` for the brand, taste, accessibility, and console gate (Step 9). Fix all Criticals and Majors before deploy.
 - Take the `:root` brand block from `crew-web-website-architect` if it ran earlier, so the descent carries the same brand as the rest of the site.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 

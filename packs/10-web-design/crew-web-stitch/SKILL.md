@@ -402,6 +402,8 @@ When PDF delivery is chosen, add a `@media print` block to the output:
 
 ## Design review gate
 
+Invoke every leg with the consult preamble: `CREW CONSULT from crew-web-stitch: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md` (per the Crew Method, Sub-skill consult), so a consulted leg never re-runs onboarding or re-prompts mid-gate.
+
 Before the DESIGN.md is handed to Stitch, the contract MUST pass the Design Standards stack. This gate is required, not optional, and a fail blocks handing the DESIGN.md to Stitch. It draws on two reviewing packs (pack 12 design-standards at `packs/12-design-standards`, pack 13 design-styles at `packs/13-design-styles`) plus pack 14 animation at `packs/14-animation` as authoring cross-references. Brief each check with the reference, the dials, and the no-em-dash rule.
 
 **Wrapper instruction (read first).** The artifact is a `DESIGN.md` text spec, not a rendered screen. Pass the DESIGN.md to each reviewer as the code-block or description artifact and instruct it to judge the CONTRACT'S ENCODED RULES, not a rendered screen. No reviewer traces an eye path on pixels or scores a live render here; each one scores the rules, values, and bans the contract encodes.
