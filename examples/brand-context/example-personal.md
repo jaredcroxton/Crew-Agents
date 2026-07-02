@@ -1,0 +1,18 @@
+# Mel Tran, Pricing Advisor (Personal Brand Example)
+
+*This is a fictional example of a personal brand context file. Copy it, replace every field with your own answers, and delete this note.*
+
+BRAND CONTEXT FILE
+Brand: Mel Tran, a pricing advisor who spent twelve years as a CFO inside regional construction firms and now helps Australian trade and service business owners charge what the work is actually worth. Most owners price on gut feel and bleed margin for years without noticing. Mel is the person who says the real number out loud.
+Product: One-day pricing overhaul ($4,500), monthly advisory retainer ($1,200 per month, capped at eight clients), The Margin Note paid newsletter ($15 per month), keynote speaking ($6,000 plus travel)
+Customer: Owners of trade and service businesses, 5 to 40 staff, $1M to $15M revenue, mostly Queensland and NSW | Also influences: their bookkeepers and accountants, industry association event bookers, and the two or three mates at the pub they repeat her lines to
+Why they pick us: Mel names the price they were too scared to charge, then shows the maths that proves it, in plain English, from someone who has sat in their chair | Why they leave: they want the pricing changes implemented for them, and Mel only advises. She hands you the plan, you have to do the work.
+Voice: A straight-talking mate who happens to have read your P&L. First person, always "I", never "we" (there is no we, it is just Mel). Warm, a bit dry, happy to disagree with the room. Short sentences. Real numbers. Will tell you when you are the problem. | Always say: "your margin", "charge for the judgement, not the hours", "the number", "I reckon" | Never say: "we" when meaning the business, "synergy", "thought leader", "solutions", "leverage" as a verb, "hustle"
+Always get right: Clients say she makes the numbers feel simple without ever making them feel stupid. Every post, every talk, every reply must pass that test.
+Where we fall short: No recordings of past keynotes exist, so event bookers have to take her on referral alone. The retainer waitlist is opaque, nobody can see where they sit on it, and some give up and leave. She replies reliably on LinkedIn and almost nowhere else. There is no done-for-you service, which loses some buyers.
+Never claim: Guaranteed profit increases, or that any client result is typical. Never share a client's numbers without written permission, even anonymised. Mel is not a registered tax agent or financial adviser and never gives personal financial or tax advice.
+Goals (6 months): 2,000 paid newsletter subscribers, retainer waitlist of ten or more, one keynote booked every month, and the confidence to turn down every engagement under $4,500 without flinching
+Found online: meltran.com.au, LinkedIn (linkedin.com/in/meltranpricing), The Margin Note at meltran.com.au/newsletter, testimonials page on the website, occasional guest spots on trade industry podcasts
+Visual identity (optional, reference only): Colours: #16161A primary (near-black ink), #E4572E accent (burnt orange), #FFFFFF background (plain white, nothing warm) | Fonts: one typeface everywhere, IBM Plex Sans, weight does all the work | Logo: her name set lowercase in IBM Plex Sans bold with a short burnt-orange underline stroke
+Must know: Mel cannot give financial product advice (no AFSL) or tax agent services (not TASA registered), so all content stays at business pricing strategy. Client work sits under NDA by default. Her first consultancy folded publicly in 2016; she tells that story herself, on her own terms, and it must never be used as a throwaway hook.
+Updated: 2026-07-02
