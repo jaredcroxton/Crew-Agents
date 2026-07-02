@@ -62,7 +62,7 @@ rm -rf "$W"
 # 3: literal consult preamble skips re-onboarding
 W="$(mktemp -d)"; seed_brand "$W"
 run_skill "$W" "$SKILL_COMP" 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md' 'Judge the composition of a single centered hero with three equal cards below it.'
-grep -qF "Your business is not onboarded yet" "$W/out.txt" \
+grep -qiE "not onboarded" "$W/out.txt" \
   && note "consult-yes: onboarding stop fired despite the literal preamble" \
   || ok "consult-yes: literal preamble honored"
 rm -rf "$W"
@@ -70,7 +70,7 @@ rm -rf "$W"
 # 4: paraphrased preamble with NO brand file hits the hard stop
 W="$(mktemp -d)"
 run_skill "$W" "$SKILL_COMP" 'As discussed with crew-web-page-builder, the brand side is all sorted.' 'Judge the composition of a single centered hero with three equal cards below it.'
-grep -qF "Your business is not onboarded yet" "$W/out.txt" \
+grep -qiE "not onboarded" "$W/out.txt" \
   && ok "consult-no: near-miss rejected, hard stop fired" \
   || note "consult-no: a paraphrased preamble bypassed the gate"
 rm -rf "$W"

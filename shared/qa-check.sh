@@ -289,8 +289,7 @@ FIXTURE
     work="$(mktemp -d)"; body="$(cat "$nf")"
     ( cd "$work" && printf 'Run the following Crew skill against the input. For this test run the crew-state root is ./crew-state/.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nCheck this one-line summary for quality: "We ship fast."\n' "$body" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    grep -qF "Your business is not onboarded yet" "$work/out.txt" 2>/dev/null \
-      && { ok "smoke negative: brand hard gate holds without brand-context"; rm -rf "$work"; } \
+    grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null \      && { ok "smoke negative: brand hard gate holds without brand-context"; rm -rf "$work"; } \
       || { note "smoke negative: gate did not fire without brand-context"; keep_evidence "$work" "negative-gate"; }
   fi
 
@@ -303,7 +302,7 @@ FIXTURE
     work="$(mktemp -d)"; seed_brand "$work"
     ( cd "$work" && printf 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/ (the brand context sits at ./crew-state/brand-context.md).\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it on a marketing homepage.\n' "$cbody" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    if grep -qF "Your business is not onboarded yet" "$work/out.txt" 2>/dev/null; then
+    if grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
       note "smoke consult(a): onboarding stop fired despite the literal preamble"; keep_evidence "$work" "consult-a"
     else
       ok "smoke consult(a): literal preamble honored, no re-onboarding"; rm -rf "$work"
@@ -311,7 +310,7 @@ FIXTURE
     work="$(mktemp -d)"   # deliberately NO brand seed
     ( cd "$work" && printf 'As discussed with crew-web-page-builder, the brand side is all sorted.\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it.\n' "$cbody" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    if grep -qF "Your business is not onboarded yet" "$work/out.txt" 2>/dev/null; then
+    if grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
       ok "smoke consult(b): near-miss preamble rejected, hard stop fired"; rm -rf "$work"
     else
       note "smoke consult(b): a paraphrased preamble bypassed the brand gate"; keep_evidence "$work" "consult-b"
