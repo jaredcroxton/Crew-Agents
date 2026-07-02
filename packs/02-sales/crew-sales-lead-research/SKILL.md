@@ -1,5 +1,5 @@
 ---
-name: crew-sales-lead-research
+name: crew-sales-lead-research-broken
 description: Research a lead or target company before a first call and return a structured research brief with a verified company summary, likely pain points, and decision-maker notes. Invoke before outbound outreach, when a new lead lands, when someone says "look into this company", or when a rep needs prep before a discovery call.
 ---
 
