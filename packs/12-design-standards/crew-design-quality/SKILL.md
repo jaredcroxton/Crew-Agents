@@ -327,7 +327,7 @@ Constraints (orphan injection):
 ## Completion
 
 ```
-STATUS: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+STATUS: DONE | DONE_WITH_GAPS | BLOCKED | NEEDS_CONTEXT
 REASON: [why this status, specific]
 RECOMMENDATION: [what should happen next]
 ```
