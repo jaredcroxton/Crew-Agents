@@ -52,7 +52,8 @@ fi
 
 if [ -z "$PACK_FILTER" ]; then
   rm -f dist/crew-full-bundle.zip
-  zip -rq dist/crew-full-bundle.zip . -x 'dist/*' '*/.DS_Store' '*/crew-state/*'
+  # exclude the git store (ships every historical version), generated trees, and local state
+  zip -rq dist/crew-full-bundle.zip . -x 'dist/*' '.git/*' 'plugins/*' '.claude/*' '.claude-plugin/*' '.tmp/*' '*/.DS_Store' '*/crew-state/*'
   printf "  %-26s %s\n" "crew-full-bundle.zip" "$(du -h dist/crew-full-bundle.zip | cut -f1)"
 fi
 echo "done -> dist/"
