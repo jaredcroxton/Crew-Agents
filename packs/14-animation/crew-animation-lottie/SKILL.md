@@ -33,7 +33,7 @@ If there is no asset and no description of the designer animation, ask once for 
 - **Careful mode (default):** the full spec, the player and format and renderer choice, the implementation, the interactivity, the performance handling (lazy-load, renderer, file budget), the cleanup, and the reduced-motion path. Use before shipping a Lottie animation.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (a file-size budget, dotLottie, lazy-load, the renderer, a worker for a heavy animation), and the accessibility floor (a reduced-motion path and a static fallback for an animation that carries meaning). Use for a production animation.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for code-authored motion (a UI transition, a sequence, or a stagger is cheaper and more flexible in `crew-animation-gsap`, `crew-animation-motion`, or `crew-animation-anime` than a JSON asset), for scroll-scrubbed timeline choreography (GSAP), or when there is no After Effects asset to render. Lottie is for designer-made vector animations shipped as a file; if the motion is better authored in code, name the better tool.
 
@@ -45,7 +45,7 @@ Do not run this skill for code-authored motion (a UI transition, a sequence, or 
 4. **Control playback, do not autoplay everything.** Default to autoplay off and loop off unless the brief wants them; an autoplaying looping animation is a distraction and a battery cost. Play on interaction or when in view.
 5. **The export is half the battle.** The file size and what renders correctly are decided in After Effects (the Bodymovin export), not in the code. Effects, blend modes, 3D, and expressions do not survive export; test the file in a browser before shipping.
 6. **Light, lazy, and clean.** Keep the file small, lazy-load it below the fold, pick the renderer for the complexity, and destroy the instance on unmount. And honor reduced-motion.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Lottie core
 

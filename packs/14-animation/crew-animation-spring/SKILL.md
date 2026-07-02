@@ -33,7 +33,7 @@ If the brief is too vague to spec, ask once what should animate, why, and on wha
 - **Careful mode (default):** the full spec, the config form (object versus function plus api), the interpolation, the gesture or advanced hooks, the velocity handling, the performance, and the reduced-motion path. Use before building an interactive React animation.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (precision, batching, transform and opacity, on-demand rendering), and the accessibility floor (Globals.skipAnimation under prefers-reduced-motion, mandatory). Use for a production React app.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a precise, timeline-choreographed sequence where the marks must hit at exact times (that is `crew-animation-gsap`), for declarative variants, layout, or exit animation where React idiom matters more than physics accuracy (`crew-animation-motion` is often simpler), for a non-React project, or for a fixed-timeline designer asset (`crew-animation-lottie`). React Spring is for physics-accurate, gesture-driven, velocity-preserving React motion; name the better tool when the work is exact-timed or purely declarative.
 
@@ -45,7 +45,7 @@ Do not run this skill for a precise, timeline-choreographed sequence where the m
 4. **Object config is declarative, function config is imperative.** The object form auto-updates when props change; the function form returns an `api` for `api.start()` and needs a deps array (an empty `[]`) so it is not recreated each render.
 5. **Physics where it pays, a duration where it does not.** Springs shine for natural, gesture-driven, interruptible motion. For a precise timed sequence or a one-shot fade, a duration is simpler and a spring is overkill; know when the physics earns its place.
 6. **Native, precise, and accessible.** Render on demand, keep the precision suited to the value range (the default 0.01 suits most), batch with `useSprings`, and honor reduced-motion with `Globals.skipAnimation`.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Spring core
 

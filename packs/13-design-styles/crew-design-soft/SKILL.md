@@ -33,7 +33,7 @@ If no artifact is supplied, or the register goal is unclear, ask once what is be
 - **Careful mode (default):** the full review across typography, colour, layout, motion, and imagery, plus the warmth-versus-sugar judgment and the contrast floor, with the fix for each. Use before a soft design ships.
 - **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the warmth holds across pages, the brand playbook enforced, a stricter saccharine check, and a credibility-and-accessibility floor (soft pastels and warm grays must stay readable). Use for a multi-page soft build.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a brand that must read authoritative and serious (a bank, a law firm, route to `crew-design-authority`), for a product that needs urgency or a hard conversion edge, for a tough, raw, or technical brand (that is `crew-design-brutalist`), or to score broad visual quality regardless of style. Soft is wrong where the brand must read serious, fast, or tough; name the mismatch rather than rounding the corners on a register that needs edges.
 
@@ -45,7 +45,7 @@ Do not run this skill for a brand that must read authoritative and serious (a ba
 4. **Motion has mass and spring.** Nothing snaps. Gentle spring physics, slow eases, a heavy fade-up. Soft motion settles like a held breath, never a hard click.
 5. **Space is generous and unhurried.** Macro-whitespace, components that float and breathe, no cramped hard grid. The pace is calm and welcoming.
 6. **Warm is not the same as sweet.** The failure mode is saccharine: too round, too pastel, too bouncy, infantilizing. Soft must stay credible and grown-up; the fix for sweet is to mature the warmth, not remove it. And soft is the wrong register when a brand needs authority, urgency, or a raw edge.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Soft typography
 

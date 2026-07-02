@@ -33,7 +33,7 @@ If the brief is too vague to spec, or it is unclear whether the cinematic feel i
 - **Careful mode (default):** the full spec, the container and data attributes, the parallax, the scroll events, the lifecycle, the GSAP integration if needed, and the disable path. Use before building a smooth-scroll experience.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the scroll behaviour stays consistent, the brand playbook enforced, a stricter performance audit (sections, parallax limit, mobile disable), and the accessibility floor (a reduced-motion fallback to native scroll, mandatory). Use for a production smooth-scroll site.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a standard content or documentation site where native scroll is better (smooth scroll hijacks it for no gain), for a React-state or gesture animation (that is `crew-animation-motion`), for a scroll-scrubbed timeline that does not need smooth scroll (GSAP ScrollTrigger on native scroll is often the better and lighter choice), or when accessibility and scannability are paramount. Smooth scroll is the wrong call when the cost outweighs the cinematic gain; say so.
 
@@ -45,7 +45,7 @@ Do not run this skill for a standard content or documentation site where native 
 4. **Sections and limits keep it at 60fps.** `data-scroll-section` segments the page so only what is near the viewport recalculates; too many parallax elements thrash. Performance is a budget.
 5. **The lifecycle is the bug surface.** Init once, update after DOM changes, destroy on route change. An un-destroyed instance leaks in a single-page app; a stale instance after dynamic content has the wrong positions.
 6. **Disable on mobile and reduced-motion.** Smooth scroll feels wrong on touch and fails accessibility; gate it by device and by prefers-reduced-motion, with native scroll as the honest fallback.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Locomotive core
 

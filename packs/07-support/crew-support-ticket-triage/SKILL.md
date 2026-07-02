@@ -31,7 +31,7 @@ If the ticket text is missing or unreadable, you cannot triage. Ask once for the
 - **Careful mode (default):** the full triage card, every field, including pattern detection across this session. Use for normal daily operation.
 - **Governed mode:** the full card, plus a cross-reference against prior triage handoffs in `~/.claude/crew-state/support/`, plus automatic escalation for any ticket matching a legal, safety, fraud, or discrimination pattern. Use for high-risk queues or regulated work.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill when there is a single ticket whose severity is obvious (a clear "your product charged my card twice" is P2 with no ceremony), when the queue was already triaged this session, or when the request is to draft a reply (that is `crew-support-reply-builder`) or to check one ticket's factual accuracy.
 
@@ -42,7 +42,7 @@ Do not run this skill when there is a single ticket whose severity is obvious (a
 3. **Topic uses the customer's language.** If they say "I was charged twice", the topic is Billing, not Service. Do not reframe the problem into the business's preferred categories.
 4. **Priority is time-to-respond, not importance.** Severity sets the clock. A P1 needs a response now; a P4 joins the normal queue.
 5. **Honesty is the only useful output.** The triage card is internal. Softening severity to protect the business helps nobody and hides the real risk.
-6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Severity ladder (defaults; a playbook overrides)
 

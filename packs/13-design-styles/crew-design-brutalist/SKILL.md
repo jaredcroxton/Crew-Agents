@@ -33,7 +33,7 @@ If no artifact is supplied, or it is unclear whether brutalist is even the goal,
 - **Careful mode (default):** the full review across typography, colour, layout, and interactions, plus the right-call judgment and the accessibility floor, with the raw fix for each leak. Use before a brutalist design ships.
 - **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the chosen mode holds across pages, the brand playbook enforced, and a stricter accessibility-floor pass (brutalist often breaks contrast and focus, which must still be flagged). Use for a multi-page brutalist build.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a commercial product that must read trustworthy and safe (use `crew-design-authority`), to score broad visual quality regardless of style (that is `crew-design-quality`), to build the token system (that is `crew-design-language`), or for a brand that should read warm, friendly, or accessibility-first. Brutalist is a deliberate, narrow register; name the mismatch rather than forcing it.
 
@@ -45,7 +45,7 @@ Do not run this skill for a commercial product that must read trustworthy and sa
 4. **Subtract the commercial defaults.** No gradient, no soft shadow, no rounded corner, no easing curve. Each removal is deliberate; brutalism is defined by what it refuses.
 5. **The grid is visible and rigid.** Ninety-degree corners, hairline dividers, explicit compartments. Mathematically engineered, anchored to grid tracks, never floating.
 6. **Raw is a choice, not an excuse.** A real brutalist site is more controlled than a polished one, not less. And it is the wrong choice for most commercial work, so the first judgment is always whether it earns its place at all.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Brutalist typography
 

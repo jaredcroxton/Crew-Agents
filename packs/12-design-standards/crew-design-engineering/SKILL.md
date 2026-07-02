@@ -32,7 +32,7 @@ If no artifact is supplied, ask once for the component or the interaction, becau
 - **Careful mode (default):** the full pass, the animation decision framework, the component polish rules, performance and accessibility, the complete Before, After, Why table, and a verdict. Use before a component ships.
 - **Governed mode:** the ship gate. Every check run, the project's motion system enforced over the defaults, a hard Ship, Polish, or Rework verdict, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so motion stays consistent across the product. Use as the last polish gate.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for the broad dimensional sweep (typography, colour, layout, that is `crew-design-quality`), for copy or content correctness, for backend or non-visual code, or to design a component from scratch (this polishes what exists).
 
@@ -42,7 +42,7 @@ Do not run this skill for the broad dimensional sweep (typography, colour, layou
 2. **Unseen details compound.** Most polish is never consciously noticed, and that is the point. When a feature behaves exactly as a user assumes it should, they proceed without a second thought. The aggregate of invisible correctness is what makes an interface feel loved. (Paul Graham described this as many barely noticeable correct details combining into something stunning.)
 3. **Beauty is leverage.** People pick tools on the whole experience, not function alone. Good defaults and good motion are real differentiators, and they are underused in software. Use them to stand out.
 4. **Specify, never hand-wave.** A craft review names the exact property, the exact curve, and the exact duration. "Make it feel nicer" is not a review; "transition transform 200ms with cubic-bezier(0.23, 1, 0.32, 1)" is.
-5. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+5. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## The animation decision framework
 

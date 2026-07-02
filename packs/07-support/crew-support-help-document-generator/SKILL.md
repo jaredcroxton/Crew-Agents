@@ -32,7 +32,7 @@ If the verified answer is missing, ask once for the correct resolution or its so
 - **Careful mode (default):** the full doc-type classification, the answer-first lead, numbered steps walked as the customer, a worked example, troubleshooting from real tickets, deflection metadata, and the verify pass. Use for any article that will be published.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/support/` so a confirmed label or a prior draft carries forward, every Assumed step confirmed before publish, and a stricter no-fabrication audit on every label and path. Use for a doc tied to billing, security, or a policy.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to write a one-off reply (that is `crew-support-reply-builder`), to write a short FAQ entry (that is `crew-support-faq-builder`), to produce marketing or feature copy, or to document a step you cannot confirm exists (ask, or mark it Assumed).
 
@@ -44,7 +44,7 @@ Do not run this skill to write a one-off reply (that is `crew-support-reply-buil
 4. **One doc, one issue.** Two tangled questions get split. A doc that tries to cover everything helps with nothing.
 5. **Real labels, real paths, the customer's vocabulary.** "Settings" then "Billing" then the "Auto-Renew" toggle, in quotes, not "adjust your settings". Define a term the first time it appears.
 6. **Stop at the policy line.** A price, a refund rule, a legal statement, a "is this officially supported" call: mark it Escalated and name the owner. The skill writes how-to, it does not set policy.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Document types
 
