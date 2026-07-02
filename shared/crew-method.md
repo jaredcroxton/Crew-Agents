@@ -57,8 +57,12 @@ A standard is what good looks like. A loop is what the skill DOES when reality i
 **Triggers** at the start and end of every single run. This is the mandatory Context Loop, realised as Step 0 and the Final Step of every skill.
 
 1. **On start (Step 0):** read this skill's handoff file at `~/.claude/crew-state/<pack>/<skill>-handoff.md`. The state root is always the home-global `~/.claude/crew-state/`, never a project-relative path; a relative path forks the memory into a second store the other skills never read. If the handoff exists, load it and state what was recovered ("Recovered: a research brief for Northwind from 2026-06-17, conversation angle still open"). If it does not exist, state "No prior context, first run."
-2. Use recovered context to avoid repeating work or contradicting an earlier decision.
-3. **On finish (Final Step):** write the handoff file with what was produced, what was decided, what is unfinished, and what the next skill needs. Always write it, even if the run produced nothing ("No output, run completed [date]").
+2. **Staleness:** when a handoff was recovered, state its date; if it is older than the artifacts it references, treat it as possibly stale and verify against the live files before relying on it.
+3. **Upstream read (the chain):** if this run was chained from an upstream skill, also read only the handoffs of the skills this skill's Handoffs section names as sources, at most two files. State what was inherited, and record "Consumed: [upstream skill] handoff dated [date]" in this run's own handoff. If a named upstream handoff does not exist, proceed without comment. Never scan the folder outside Governed mode.
+4. Use recovered context to avoid repeating work or contradicting an earlier decision.
+5. **On finish (Final Step):** write the handoff file with what was produced, what was decided, what is unfinished, and what the next skill needs. Always write it, even if the run produced nothing ("No output, run completed [date]").
+6. **The handoff frame:** open every handoff with a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the content above as its own headed blocks, with LEARNED and ESCALATED blocks when present. The frame is what lets `crew-core-context-restore` and any downstream reader classify the state without guessing.
+7. **Copy-forward:** when rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item. A rewrite must never erase a lesson or an open flag.
 
 ### Loop 5: Learning Capture
 
