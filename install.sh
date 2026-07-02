@@ -13,6 +13,7 @@
 #   ./install.sh --force              overwrite skills that already exist
 #   ./install.sh --prune              remove crew-* skills in the target that no longer exist in packs/
 #                                     (crew-* prefixed dirs only; never touches any other skill; prints before deleting)
+#   ./install.sh --doctor             check the health of an existing install (nothing is changed)
 #   ./install.sh --dry-run            show what would happen, copy nothing
 #   ./install.sh --list               list available packs and exit
 
@@ -26,6 +27,7 @@ ALL=0
 FORCE=0
 DRY=0
 PRUNE=0
+DOCTOR=0
 PICKED=()
 
 while [ $# -gt 0 ]; do
@@ -36,6 +38,7 @@ while [ $# -gt 0 ]; do
     --target) TARGET="$2"; shift 2 ;;
     --force) FORCE=1; shift ;;
     --prune) PRUNE=1; shift ;;
+    --doctor) DOCTOR=1; shift ;;
     --dry-run) DRY=1; shift ;;
     --list)
       echo "Available packs:"
@@ -53,6 +56,60 @@ done
 if [ -n "$TARGET" ]; then DEST="$TARGET"
 elif [ "$GLOBAL" = 1 ]; then DEST="$HOME/.claude/skills"
 else DEST="$PWD/.claude/skills"; fi
+
+# --doctor: report the health of an existing install, change nothing, exit.
+if [ "$DOCTOR" = 1 ]; then
+  echo "Crew doctor -> $DEST"
+  DOCFAIL=0
+  dnote() { printf '  FAIL  %s\n' "$1"; DOCFAIL=$((DOCFAIL+1)); }
+  dok()   { printf '  ok    %s\n' "$1"; }
+  V="$(cat "$HERE/VERSION" 2>/dev/null | tr -d ' \n')"
+  echo "  info  source version: ${V:-unknown}"
+  if [ ! -d "$DEST" ]; then
+    dnote "no skills directory at $DEST (nothing installed here)"
+  else
+    NINST=0; NBAD=0
+    for td in "$DEST"/crew-*/; do
+      [ -d "$td" ] || continue
+      NINST=$((NINST+1))
+      tname="$(basename "${td%/}")"
+      nm="$(awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{exit} f&&/^name:/{sub(/^name: */,"");print;exit}' "$td/SKILL.md" 2>/dev/null)"
+      [ "$nm" = "$tname" ] || { dnote "$tname: frontmatter name '$nm' != folder (corrupt or foreign)"; NBAD=$((NBAD+1)); }
+    done
+    if [ "$NINST" = 0 ]; then dnote "no crew-* skills installed in $DEST"
+    else [ "$NBAD" = 0 ] && dok "$NINST crew skills installed, all frontmatter valid"; fi
+    # orphans: installed Crew-family skills with no source in packs/
+    NORPH=0
+    for td in "$DEST"/crew-*/; do
+      [ -d "$td" ] || continue
+      tname="$(basename "${td%/}")"
+      found=0
+      for d in "$PACKS_DIR"/*/; do [ -d "${d%/}/$tname" ] && found=1 && break; done
+      if [ "$found" = 0 ]; then
+        tfam="$(printf '%s' "$tname" | cut -d- -f1-2)-"
+        for sd2 in "$PACKS_DIR"/*/crew-*/; do
+          sfam="$(basename "${sd2%/}" | cut -d- -f1-2)-"
+          [ "$sfam" = "$tfam" ] && { echo "  warn  orphan: $tname (no source in packs/; --prune removes it)"; NORPH=$((NORPH+1)); break; }
+        done
+      fi
+    done
+    [ "$NORPH" = 0 ] && dok "no orphaned Crew skills"
+    [ -f "$DEST/crew-method.md" ] && dok "crew-method.md installed (every skill references it)" \
+      || dnote "crew-method.md missing from $DEST (rerun install to place it)"
+  fi
+  STATE="$HOME/.claude/crew-state"
+  if [ -d "$STATE" ] && [ -w "$STATE" ]; then dok "state root writable: $STATE"
+  elif mkdir -p "$STATE" 2>/dev/null; then dok "state root created and writable: $STATE"
+  else dnote "state root not writable: $STATE (the Context Loop cannot save)"; fi
+  if [ -f "$STATE/brand-context.md" ]; then
+    bn="$(grep -m1 -E '^Brand:|^- \*\*Name:\*\*|^# ' "$STATE/brand-context.md" 2>/dev/null | head -1 | cut -c1-70)"
+    dok "brand onboarded: ${bn:-brand-context.md present}"
+  else
+    echo "  info  onboarding pending: no brand-context.md yet (run crew-core-brand-context first)"
+  fi
+  echo "------------------------------------------------------------"
+  if [ "$DOCFAIL" = 0 ]; then echo "DOCTOR: healthy"; exit 0; else echo "DOCTOR: $DOCFAIL problem(s)"; exit 1; fi
+fi
 
 # resolve pack list
 declare -a PACKDIRS=()
