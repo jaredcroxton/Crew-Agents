@@ -46,7 +46,7 @@ If the asset route is unresolved, ask for it once, because it decides the entire
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill when the user wants a multi-page marketing site (that is `crew-web-landing-page-builder`), a CSS-only parallax with no real footage (this skill will not fake the journey), a slideshow of discrete images (that is `crew-web-slide-deck-builder`), or an editable video file (this ships a website, not an MP4).
+Do not run this skill when the user wants a multi-page marketing site (that is `crew-web-page-builder`), a CSS-only parallax with no real footage (this skill will not fake the journey), a slideshow of discrete images (that is `crew-web-slide-deck-builder`), or an editable video file (this ships a website, not an MP4).
 
 Do not run this skill expecting a canvas frame-scrub descent when the user only has still images. Clarify in discovery: still images produce Route D (a cinematic stage-switcher), not a frame-scrub descent. The distinction matters; a client shown a stage-switcher who expected continuous camera motion will notice.
 

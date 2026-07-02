@@ -51,7 +51,7 @@ If any required input is missing, ask once in a single message listing only the 
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-landing-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative).
+Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative).
 
 ## How the deck builder thinks
 
@@ -124,7 +124,7 @@ Inline `<span>` with classes `.kw` (keywords), `.str` (strings), `.fn` (function
 6. **Quality check.** Run the full checklist below before output.
 7. **Deliver.** Output the complete HTML file in a single fenced code block. After it, one sentence on how to open it, for example "Save as `deck.html` and open in any browser." Add no warnings, disclaimers, or extra notes after that line.
 
-**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md` with: the deck produced (filename, slide count, brand used, preset or custom), decisions made (animation intensity, background, layout, auto-advance), unfinished work (slides the user will fill later, open branding questions), what the next skill needs (if a matching landing page is wanted, pass the `:root` brand block to `crew-web-landing-page-builder`), and a "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state/web-design`, then write `~/.claude/crew-state/web-design/crew-web-slide-deck-builder-handoff.md` with: the deck produced (filename, slide count, brand used, preset or custom), decisions made (animation intensity, background, layout, auto-advance), unfinished work (slides the user will fill later, open branding questions), what the next skill needs (if a matching landing page is wanted, pass the `:root` brand block to `crew-web-page-builder`), and a "Learned" note (a correction or preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ### File architecture (Step 4)
 
@@ -265,8 +265,8 @@ Typical calls that warrant a brief: auto-advance versus manual for the venue, Dr
 
 ## Handoffs
 
-- Take the `:root` brand block from `crew-web-landing-page-builder` or `crew-web-website-architect` if either ran earlier, so one brand carries across assets.
-- After delivery, hand the `:root` block and approved slide content to `crew-web-landing-page-builder` for a matching landing page.
+- Take the `:root` brand block from `crew-web-page-builder` or `crew-web-website-architect` if either ran earlier, so one brand carries across assets.
+- After delivery, hand the `:root` block and approved slide content to `crew-web-page-builder` for a matching landing page.
 - Before a deck is sent to a client or shown publicly, run `crew-core-quality-checker`. Pairs with the Crew Method standards "Verify before claiming done" and "Review before shipping".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`. The deck itself references no skill at runtime; it is a standalone HTML file.
 

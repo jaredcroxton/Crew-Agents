@@ -48,7 +48,7 @@ If the scrape target is missing, ask once. If the brand profile is missing, defa
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill to send the outreach (it drafts only, a human reviews and sends), to push leads into a CRM (it produces a page and JSON, not an import), to build a multi-page marketing site (that is `crew-web-landing-page-builder`), or to buy or enrich contact data from a paid source (it works from public evidence only).
+Do not run this skill to send the outreach (it drafts only, a human reviews and sends), to push leads into a CRM (it produces a page and JSON, not an import), to build a multi-page marketing site (that is `crew-web-page-builder`), or to buy or enrich contact data from a paid source (it works from public evidence only).
 
 ## How the lead dashboard builder thinks
 

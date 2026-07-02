@@ -113,4 +113,4 @@ INPUT: <a required input absent>
 EXPECT: <Loop 1 behaviour: names the gap, asks once or marks "Not provided", invents nothing>
 ```
 
-The smoke test in `qa-check.sh` feeds each case to the skill and asserts the EXPECT markers appear and that the handoff file was written.
+The smoke test in `qa-check.sh` (run with `--smoke`) seeds a synthetic brand fixture, feeds Case A to the skill with a sanctioned test state root, and asserts the Output-format header appears in the reply and the handoff file was written. A separate negative case runs one skill with no brand fixture and asserts the brand hard gate fires. Cases B and C document the messy and missing-input behaviour for authoring and review; the harness does not execute them.
