@@ -65,7 +65,7 @@ claw skills import ./packs/               # OpenClaw
 
 **Runs best on:** a Sonnet-class model or better. Smaller models hold the skill discipline less reliably; the status vocabulary, the run receipt, and the onboarding gate degrade first.
 
-**Updating:** `git pull && bash install.sh --all --global --force --prune` (prune removes renamed or retired Crew skills, never anything else). Zip buyers: see `shared/INSTALL.md`.
+**Updating:** `git pull && bash install.sh --all --global --force --prune` (prune removes renamed or retired Crew skills, never anything else). Zip buyers: see `shared/INSTALL.md`. After any install or update, `bash install.sh --doctor --global` checks the install is healthy.
 
 **QA smoke suite:** `bash shared/qa-check.sh --smoke` invokes the Claude CLI roughly once per skill (about 98 metered calls on the full catalogue). Use `--pack <id>` to narrow it. The structural pass (`bash shared/qa-check.sh`) is free.
 

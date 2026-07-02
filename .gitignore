@@ -33,3 +33,7 @@ Thumbs.db
 # Local state
 .claude/crew-state/
 .claude-plugin/
+
+# Python bytecode
+__pycache__/
+*.pyc

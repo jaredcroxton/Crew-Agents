@@ -1,0 +1,31 @@
+name: QA
+
+# The structural QA gate on every push and PR: Markdown shape, cross-skill
+# reference integrity, path anchoring, ban list, STATUS vocabulary, README
+# count truth, and plugin parity (generated to .tmp, packs/ is the source of
+# truth). Zero API cost: the metered smoke pass (--smoke) stays local and
+# consent-gated. A clean-clone install dry-run proves a buyer's first command
+# works from exactly what is on GitHub.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Structural QA gate
+        run: bash shared/qa-check.sh .
+      - name: Clean-clone install dry-run
+        run: bash install.sh --all --dry-run
+      - name: Installer puts the catalogue down (temp target)
+        run: |
+          T="$(mktemp -d)"
+          bash install.sh --all --target "$T" | tail -3
+          N="$(find "$T" -maxdepth 1 -type d -name 'crew-*' | wc -l)"
+          test "$N" -ge 90 || { echo "expected 90+ skills, got $N"; exit 1; }
+          test -f "$T/crew-method.md" || { echo "crew-method.md missing from install"; exit 1; }
