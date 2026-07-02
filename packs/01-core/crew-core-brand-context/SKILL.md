@@ -63,7 +63,7 @@ Ask these eleven, in order, in plain language. Capture the answer in the owner's
 ## Application rules
 
 - Capture answers verbatim where the wording carries voice (question 5, the always-use and never-use words, and question 8). Paraphrase only where the answer is a plain fact.
-- Do NOT ask about colours, fonts, visual style, or imagery. Those come from the design skills at build time, or from the website in question 10. Keep this conversation jargon-free so any owner can finish it.
+- Do NOT ask about colours, fonts, visual style, or imagery. Those come from the design skills at build time, or from the website in question 10. Keep this conversation jargon-free so any owner can finish it. BUT if a brand guide, the website, or the owner supplies colours, fonts, or a logo unprompted, record them in the file's optional Visual identity line (reference only) so the design skills read facts instead of re-deriving the look; never ask a non-designer for a hex code.
 - Always fill the never-say words (question 5) and the never-claim (question 8). If the owner has nothing, prompt with the obvious risks for their space (a claim they cannot substantiate, a competitor's name, a tone that is off-brand).
 - Capture both sides of question 4: why customers pick them and why they leave. A one-sided answer is half the value to a sales, marketing, or support skill.
 - Record regulations, sensitive topics, and hard facts (question 11) in their own block so a skill reads a fact, not a guess.
@@ -116,7 +116,7 @@ When the user asks to switch (for example "switch to [brand]"):
 10. Ask question 11 (anything else to get right: regulations, sensitive topics, and what you should have asked).
 11. Read the answers back to the owner in the file's shape and get a yes before writing.
 
-**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state`, then write the completed `~/.claude/crew-state/brand-context.md` (the deliverable, in the Output format below). Then run `mkdir -p ~/.claude/crew-state/core` and write `~/.claude/crew-state/core/crew-core-brand-context-handoff.md` with: that the brand context was captured, the brand name, any question left unanswered, any contradiction flagged in Governed mode, and a "Learned" note for any preference the owner gave. Always write the handoff, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag.
+**Final Step: Handoff Save.** Run `mkdir -p ~/.claude/crew-state`, then write the completed `~/.claude/crew-state/brand-context.md` (the deliverable, in the Output format below). Then run `mkdir -p ~/.claude/crew-state/core` and write `~/.claude/crew-state/core/crew-core-brand-context-handoff.md` with: that the brand context was captured, the brand name, any question left unanswered, any contradiction flagged in Governed mode, and a "Learned" note for any preference the owner gave. Always write the handoff, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing handoff, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag.
 
 ## Output format
 
@@ -134,9 +134,12 @@ Where we fall short: [the gap]
 Never claim: [the line we will not cross]
 Goals (6 months): [what winning looks like]
 Found online: [website, socials, review pages]
+Visual identity (optional, reference only): Colours: [primary hex, accent hex, background hex] | Fonts: [heading font, body font] | Logo: [one line describing the mark]
 Must know: [regulations, sensitive topics, history]
 Updated: [date]
 ```
+
+The Visual identity line is optional and is never asked for in the conversation. Fill it only when a brand guide, the website itself, or a designer-savvy owner SUPPLIES the values unprompted; otherwise write "read from the website at build time" and the design skills derive the look from question 10's URL. When filled, downstream design and web skills read these values as facts instead of re-deriving the look each build.
 
 Return a short confirmation to the owner: the file written, the brand named, and any field left as "Not provided" so a later run can fill it.
 
