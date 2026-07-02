@@ -56,7 +56,7 @@ A standard is what good looks like. A loop is what the skill DOES when reality i
 
 **Triggers** at the start and end of every single run. This is the mandatory Context Loop, realised as Step 0 and the Final Step of every skill.
 
-1. **On start (Step 0):** read this skill's handoff file at `.claude/crew-state/<pack>/<skill>-handoff.md`. If it exists, load it and state what was recovered ("Recovered: a research brief for Northwind from 2026-06-17, conversation angle still open"). If it does not exist, state "No prior context, first run."
+1. **On start (Step 0):** read this skill's handoff file at `~/.claude/crew-state/<pack>/<skill>-handoff.md`. The state root is always the home-global `~/.claude/crew-state/`, never a project-relative path; a relative path forks the memory into a second store the other skills never read. If the handoff exists, load it and state what was recovered ("Recovered: a research brief for Northwind from 2026-06-17, conversation angle still open"). If it does not exist, state "No prior context, first run."
 2. Use recovered context to avoid repeating work or contradicting an earlier decision.
 3. **On finish (Final Step):** write the handoff file with what was produced, what was decided, what is unfinished, and what the next skill needs. Always write it, even if the run produced nothing ("No output, run completed [date]").
 

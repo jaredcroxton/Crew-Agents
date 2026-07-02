@@ -11,6 +11,8 @@
 #   ./install.sh --global             install into ~/.claude/skills
 #   ./install.sh --target DIR         install into DIR
 #   ./install.sh --force              overwrite skills that already exist
+#   ./install.sh --prune              remove crew-* skills in the target that no longer exist in packs/
+#                                     (crew-* prefixed dirs only; never touches any other skill; prints before deleting)
 #   ./install.sh --dry-run            show what would happen, copy nothing
 #   ./install.sh --list               list available packs and exit
 
@@ -23,6 +25,7 @@ GLOBAL=0
 ALL=0
 FORCE=0
 DRY=0
+PRUNE=0
 PICKED=()
 
 while [ $# -gt 0 ]; do
@@ -32,6 +35,7 @@ while [ $# -gt 0 ]; do
     --global) GLOBAL=1; shift ;;
     --target) TARGET="$2"; shift 2 ;;
     --force) FORCE=1; shift ;;
+    --prune) PRUNE=1; shift ;;
     --dry-run) DRY=1; shift ;;
     --list)
       echo "Available packs:"
@@ -89,8 +93,27 @@ for packdir in "${PACKDIRS[@]}"; do
   done
 done
 
+# prune: remove crew-* dirs in the target that have no source folder in packs/.
+# Scoped to the crew-* prefix so no other skill (flow-*, gsap, hyperframes, ...) is ever touched.
+PRUNED=0
+if [ "$PRUNE" = 1 ] && [ -d "$DEST" ]; then
+  for td in "$DEST"/crew-*/; do
+    [ -d "$td" ] || continue
+    tname="$(basename "${td%/}")"
+    found=0
+    for d in "$PACKS_DIR"/*/; do
+      [ -d "${d%/}/$tname" ] && found=1 && break
+    done
+    if [ "$found" = 0 ]; then
+      if [ "$DRY" = 1 ]; then echo "  would prune  $tname (no source in packs/)"
+      else echo "  prune $tname (no source in packs/)"; rm -rf "$td"; fi
+      PRUNED=$((PRUNED+1))
+    fi
+  done
+fi
+
 echo "------------------------------------------------------------"
-echo "Installed: $INSTALLED   Skipped (already present): $SKIPPED   Failed validation: $BAD"
+echo "Installed: $INSTALLED   Skipped (already present): $SKIPPED   Failed validation: $BAD   Pruned: $PRUNED"
 IDS=""; for p in "${PACKDIRS[@]}"; do b="$(basename "$p")"; IDS="$IDS${b#*-} "; done
 echo "Packs: $IDS"
 [ "$DRY" = 1 ] || echo "Reload skills in Claude Code to pick them up."

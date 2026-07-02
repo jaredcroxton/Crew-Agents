@@ -13,6 +13,7 @@ There are two states, and one overlay that applies to either:
 
 - **No brand context yet, a fresh business.** No `brand-context.md` exists. Run the conversation (Careful mode, the eleven questions) and write the file for the first time. Do not scan the repo, README, or any other file for business clues. Do not guess. The only source of brand truth is brand-context.md or the answers the user gives you. The repo you are installed in is not evidence of who the business is.
 - **A brand context already on file, an update.** A `brand-context.md` exists. Read it, confirm what is still true, and amend what changed (note what changed), do not overwrite blind.
+- **Switching to a different brand.** The user says "switch to [brand]" or asks to work on a different business. Do not overwrite the active brand: follow Switching brands below, which archives the active brand's whole state and swaps the other in.
 - **Overlay, a website or guide to read from.** Whichever state you are in, if a site, social page, or brand guide is available, pre-fill what you can from it FIRST and reserve the questions for what the source does not answer, rather than asking cold.
 
 Before the conversation, confirm who can answer for the brand (or that a site or guide is readable); if no one can answer and there is no source to read, ask once (Loop 1).
@@ -87,9 +88,21 @@ How to tell a finished file is good versus thin (the checks a reviewer runs on t
 
 The file is only as good as its weakest field, because the weakest field is the one some skill will lean on.
 
+## Switching brands
+
+One machine can serve more than one business, but the live store at `~/.claude/crew-state/` always holds exactly ONE active brand: its `brand-context.md` plus every pack's handoffs are that brand's memory. Switching is an operation on the store, never a change to any other skill; every skill keeps reading the same fixed paths and simply finds the newly active brand there.
+
+When the user asks to switch (for example "switch to [brand]"):
+
+1. **Name the slug.** Derive a lowercase-dashes slug for the target brand. If the target is ambiguous or unnamed, ask once (Loop 1).
+2. **Archive the active brand, whole.** Read the active `brand-context.md` for its brand name and slug. Run `mkdir -p ~/.claude/crew-state/brands/<active-slug>` and move the ENTIRE contents of `~/.claude/crew-state/` into it: `brand-context.md` and every pack directory (`core/`, `sales/`, `web-design/`, all of them). Nothing is deleted; the archive IS that brand's complete memory. Never archive the `brands/` directory into itself.
+3. **Swap the target in.** If `~/.claude/crew-state/brands/<target-slug>/` exists, move its entire contents back into `~/.claude/crew-state/` (the archive directory becomes empty and is removed). If it does not exist, the target is a new business: run the full onboarding conversation (Careful mode, the eleven questions) and write its fresh `brand-context.md`.
+4. **State what is active.** Say: "Active brand is now [brand]. [N] pack handoff folders restored." Every skill's next Step 0 reads the switched-in brand automatically.
+5. **Round-trip integrity.** A switch away and back must restore the brand's handoffs exactly as they were. Never merge two brands' stores, never copy a handoff across brands, and never leave the live store holding files from two businesses.
+
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, the business is already onboarded: load it, state "Working with [brand]. [Product]. [Audience]. Voice: [tone]," and ask whether the owner wants to update it or start fresh. If it does not exist, state "No brand context yet. A few quick questions and every skill you run will know who you are." Then read this skill's own handoff at `~/.claude/crew-state/core/crew-core-brand-context-handoff.md`. If it exists, load it and state what was recovered. If it does not exist, state "No prior context, first run."
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, the business is already onboarded: load it, state "Working with [brand]. [Product]. [Audience]. Voice: [tone]," and ask whether the owner wants to update it or start fresh. If the user is asking to work on a DIFFERENT business, do not overwrite: follow Switching brands above. If it does not exist, state "No brand context yet. A few quick questions and every skill you run will know who you are." Then read this skill's own handoff at `~/.claude/crew-state/core/crew-core-brand-context-handoff.md`. If it exists, load it and state what was recovered. If it does not exist, state "No prior context, first run."
 
 1. Confirm who is answering for the brand, or read the website and socials and pre-fill what you can.
 2. Ask question 1 (what they do and why it matters) and question 2 (the main product and its price); capture both.
