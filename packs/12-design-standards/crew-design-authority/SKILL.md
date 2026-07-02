@@ -33,7 +33,7 @@ If no artifact is supplied, or the register goal is unclear, ask once what is be
 - **Careful mode (default):** the full authority sweep across typography, colour, layout, and imagery, plus the anti-SaaS playbook, each element marked establishes or undercuts, with the establishing fix. Use before a credibility-critical design ships.
 - **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the authority register holds across the whole property, the brand playbook enforced, and a stricter "would a sceptical buyer trust this" pass. Use for regulated, financial, legal, or luxury work where credibility carries real money.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill when the brief genuinely wants to read as a fresh modern startup (use `crew-design-quality` and `crew-design-patterns` for that register), for a playful consumer brand, or for an internal tool where trust is assumed. Authority is the wrong lens for a product that should feel young and energetic; gravity would make it read stiff and old. Name that mismatch rather than forcing serifs and navy onto a brand that needs lift.
 
@@ -45,7 +45,7 @@ Do not run this skill when the brief genuinely wants to read as a fresh modern s
 4. **Gravity over energy.** Deep muted tones, a serious typeface, slow deliberate pacing. Authority is heavy and still, not bright and bouncy. Stillness reads as gravitas.
 5. **Real over rendered.** Real photography of real people, buildings, and materials, not illustration and not AI imagery. Credibility cannot be faked with a gradient, and a sceptical premium audience reads the fake.
 6. **The audience is sceptical.** A board, a regulator, a high-net-worth client reads design for risk. Anything cheap, trendy, or templated is a reason to doubt. Authority design is the removal of reasons to doubt, one element at a time.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Authority typography
 

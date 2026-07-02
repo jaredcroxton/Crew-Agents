@@ -33,7 +33,7 @@ If no artifact is supplied, or it is unclear what the content is, ask once for t
 - **Careful mode (default):** the full review across typography, colour, layout, and imagery, plus the reduction discipline and the barren check, with the fix for each. Use before a minimalist design ships.
 - **Governed mode:** the full review, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-styles/` so the restraint holds across pages, the brand playbook enforced, a stricter minimal-versus-barren judgment, and a content-density check (does the content actually suit reduction, or is density the real need). Use for a multi-page minimalist build.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a content-dense product that needs information density (a dashboard, a data tool, a marketplace), where reduction starves the content (use `crew-design-quality` or a density-led review), for a brand that should read warm, playful, or energetic, or to score broad visual quality regardless of style. Minimalism is a narrow register; name the mismatch rather than forcing reduction onto a page that needs substance.
 
@@ -45,7 +45,7 @@ Do not run this skill for a content-dense product that needs information density
 4. **Restraint, not absence.** A minimal page is full of considered decisions, just not of elements. A barren page is the failure mode: whitespace that became emptiness, "clean" that became "nothing here".
 5. **Type and space do the work ornament does elsewhere.** Contrast of weight and scale, a serif against a clean sans, tight tracking on a heading. No gradient, no heavy shadow, no rounded-pill flourish is needed to make it feel finished.
 6. **Quiet is a choice, not a default.** Minimalism is exacting, harder than decoration because there is nothing to hide behind. It is the wrong call when the content needs density or warmth; reduction then starves the page rather than refining it.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Minimalist typography
 

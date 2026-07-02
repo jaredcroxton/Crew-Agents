@@ -32,7 +32,7 @@ If you are handed feedback with no count or no source, ask once for the source a
 - **Careful mode (default):** the full summary, ranked themes, named root causes, recommended actions, impact estimates, and confidence per theme. Use for normal operation.
 - **Governed mode:** the full summary, plus a cross-reference against prior feedback handoffs in `~/.claude/crew-state/support/` to mark each pattern New, recurring, or resolved, plus a short trend read. Use when the same corpus is reviewed on a cadence.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill when there are fewer than two items sharing the same complaint (one item is a data point, not a pattern), when the items share no common topic, when the request is to draft a reply (that is `crew-support-reply-builder`), or when the request is about a single item's root cause (that is closer to triage, not pattern analysis).
 
@@ -43,7 +43,7 @@ Do not run this skill when there are fewer than two items sharing the same compl
 3. **Impact estimates must be honest.** If a pattern generates three complaints a month and the fix might cut it to one, say so. Do not claim a fix eliminates a pattern unless that is realistic.
 4. **Patterns decay.** A pattern detected six months ago that has not recurred is not an active problem. The summary should say when a pattern looks resolved.
 5. **Not every pattern needs a fix.** Some complaints are about deliberate business decisions (pricing, policy, product scope). If the complaint is about a choice the business made on purpose, the recommendation is "review the policy decision", not "change the policy".
-6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Root cause taxonomy
 

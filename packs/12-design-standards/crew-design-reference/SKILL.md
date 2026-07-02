@@ -33,7 +33,7 @@ If the problem is too vague to match (no category, no goal, no artifact), ask on
 - **Careful mode (default):** the full match, three to five references each with the principle, the why-premium, and the what-AI-gets-wrong lesson, plus a short reference brief on what to emulate and what to avoid. Use before a real build.
 - **Governed mode:** the full match, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the references stay consistent across a project, and the project's own brand playbook enforced over the library (the playbook wins). Use when the references feed a client deliverable.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to score an existing design (that is `crew-design-quality`), to do pixel and motion polish (that is `crew-design-engineering`), to write copy, or to fetch and reproduce a brand's exact design tokens (a separate brand-extraction job). This skill points at references and names the lesson; it does not build.
 
@@ -44,7 +44,7 @@ Do not run this skill to score an existing design (that is `crew-design-quality`
 3. **Specificity over praise.** "Looks clean" is useless. "One typeface, generous leading, a single gradient as the only flourish, everything else black on white" is a brief. Every entry earns its place with a concrete reason.
 4. **What AI gets wrong is the real lesson.** Each reference is paired with the slop an AI would ship instead (centered hero, Inter, gradient glow, equal cards). The gap between the two is the teaching.
 5. **Honesty over coverage.** Forty real references beat fifty with filler. If a site cannot be explained on both counts, it does not belong in the library.
-6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## The reference library
 

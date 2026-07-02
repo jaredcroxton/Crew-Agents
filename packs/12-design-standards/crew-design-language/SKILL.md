@@ -33,7 +33,7 @@ If the brand basis is missing (no accent, no neutrals, no type direction), ask o
 - **Careful mode (default):** the full token system across all seven families, the naming conventions, and a coherence pass. Use when standing up or auditing a real project's language.
 - **Governed mode:** the full system, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the language carries across every page and build, the project brand playbook enforced as the primitive source of truth, and the full drift audit. Use for a multi-page product or a system handed to a team.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to score a single screen's quality (that is `crew-design-quality`), to polish pixels and motion (that is `crew-design-engineering`), to find reference sites (that is `crew-design-reference`), or to judge whether patterns are current (that is `crew-design-patterns`). This skill builds and maintains the token system itself.
 
@@ -45,7 +45,7 @@ Do not run this skill to score a single screen's quality (that is `crew-design-q
 4. **Name by role, not by value.** `--color-accent`, not `--color-green`. When the brand swaps green for blue, the name still fits. A value-named token lies the moment the value changes.
 5. **Constrain to a scale.** A spacing scale of eight steps beats infinite freedom. Constraint is what makes a system coherent and a page feel composed rather than improvised.
 6. **The load-bearing choices are invisible.** An optical-size axis, a weight between the named steps, pixel line-heights. These are what make a language feel considered, and they are exactly what an AI build skips. Name them so they survive.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Colour tokens
 

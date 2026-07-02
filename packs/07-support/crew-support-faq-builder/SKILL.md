@@ -33,7 +33,7 @@ If you have a product but no real questions, ask once for the question source, b
 - **Careful mode (default):** the full sourcing, intent grouping with near-duplicate merge, sourced answers or Needs-answer flags, the order-and-trim pass, and the approval flags. Use for any FAQ that will be published.
 - **Governed mode:** the full flow, plus a cross-reference against prior handoffs in `~/.claude/crew-state/support/` so a confirmed answer carries forward and a Needs-answer is not re-asked, every price or policy entry flagged for owner sign-off, and a stricter no-fabrication audit. Use for a pricing, legal, or compliance FAQ.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to write a full help article (that is `crew-support-help-document-generator`), to produce marketing copy, to set a policy or a price (those are Escalated to an owner), or to build an FAQ with no real question source (ask for one, do not invent questions).
 
@@ -45,7 +45,7 @@ Do not run this skill to write a full help article (that is `crew-support-help-d
 4. **Every fact has a source or a flag.** A price, a window, a policy comes from a named doc, or the entry reads "Needs answer". A flagged blank beats a confident fabrication.
 5. **Stop at the policy line.** The skill drafts up to a price, a guarantee, or a legal call; it never sets one. Those get "Escalated" and an owner.
 6. **Cut ruthlessly.** Eight true questions beat twenty padded ones. Marketing dressed as a question gets cut and named, not quietly kept.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Question sourcing
 

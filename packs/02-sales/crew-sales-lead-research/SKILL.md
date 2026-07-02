@@ -42,7 +42,7 @@ If the offer is missing, ask for it once, because "likely needs" and "conversati
 - **Careful mode (default):** the full brief, every section, the full source sweep, ranked pain points, the strongest angle, and the decision-maker map. Use for normal prep on a lead that matters.
 - **Governed mode:** the full brief, plus a cross-reference against prior sales handoffs in `~/.claude/crew-state/sales/` so the account view stays consistent (you do not contradict a fact a teammate already verified, and you do not re-research what is settled), plus a stricter source-and-freshness audit (every time-sensitive fact dated, every band's basis named). Use for a key account, a multi-touch pursuit, or any brief that several reps will rely on.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to WRITE the outreach (that is `crew-sales-outreach-draft`), to run a pipeline or deal review (the account stage and forecast are not this skill's job), or to enrich a brief that is already detailed and current (re-running adds noise, not signal). If the ask is a first-touch message, route to `crew-sales-outreach-draft`; if it is call-ready talking points, route to `crew-sales-prospect-brief`.
 
@@ -54,7 +54,7 @@ Do not run this skill to WRITE the outreach (that is `crew-sales-outreach-draft`
 4. **Freshness carries a date and a threshold.** Anything time-sensitive (funding, headcount, leadership, a recent launch) carries the date you found it, so the rep can judge whether it still holds. A fact without a date ages silently. Treat time-sensitive facts (funding, headcount, leadership, launches) older than about 12 months as stale: still usable, but label them [as of DATE, may be stale] and do not lead the angle with them. A news item or trigger older than about 90 days is not a current hook.
 5. **The angle must be impossible to send to a competitor unchanged.** If the opener would land just as well at any company in the sector, it is not an angle, it is a template. Tie a current, specific observation to a specific outcome the offer delivers.
 6. **Never fabricate.** "Not found" is the honest answer for a number, a name, or an email you could not verify. A blank field beats a fabricated one, every time.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Research sources
 

@@ -44,7 +44,7 @@ If the URL is missing, ask once and stop, because there is nothing to study with
 - **Careful mode (default):** the full report. The five-dimension read in depth, the chosen lens applied with specific examples, the complete fill-in kit with every slot evidenced or marked null, and the quality gate before the report ships. Use for any real study that feeds a client-facing build.
 - **Governed mode:** the full report, plus a cross-reference against `~/.claude/crew-state/brand-context.md` and the prior handoffs in `~/.claude/crew-state/web-design/` so the read respects your existing brand and prior studies, a stricter accessibility and performance read of the reference, and the design-standards cross-reference (pack 12) made mandatory. Use when the extracted kit will drive a public launch and the brand carries reputational weight.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to build a website (that is `crew-web-page-builder`), to build a slide deck (that is `crew-web-slide-deck-builder`), to stand up or audit a token system for your own project (that is `crew-design-language`), or to score the quality of a screen you already built (that is `crew-design-quality`). This skill reads a site that already exists and hands back the system inside it. It produces a report and a kit, never a built page.
 
@@ -62,7 +62,7 @@ Do not run this skill to build a website (that is `crew-web-page-builder`), to b
 
 6. **Accessibility and performance are part of the read.** A reference that looks gorgeous and fails contrast, traps keyboard focus, ships a four-megabyte hero, or blocks paint behind a spinner is teaching a lesson worth recording: this is what they got wrong. The read includes the contrast ratios at the key pairings, the rough page weight, and whether the motion respects reduced-motion, because a kit that copies a pretty accessibility failure is a liability.
 
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Scrape fallback chain
 

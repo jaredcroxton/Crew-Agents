@@ -33,7 +33,7 @@ If the brief is too vague to spec, or it is unclear whether the site is a multi-
 - **Careful mode (default):** the full spec, the DOM structure, the hooks, the sync-or-async choice, the transition rules, the GSAP integration, the script re-init, and the accessibility fallback. Use before building a transition site.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the transition language stays consistent, the brand playbook enforced, a stricter audit (promise returns, no-JS fallback, meta and title update, focus management, scroll reset), and the accessibility floor (graceful degradation and a route-change announcement, mandatory). Use for a production transition site.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a React or Vue single-page app whose router already owns transitions (use the framework's route transitions, or `crew-animation-motion` with AnimatePresence), for in-page element animation (that is `crew-animation-gsap`, `crew-animation-motion`, or `crew-animation-anime`), for scroll motion (GSAP or `crew-animation-locomotive`), or for a single-page site with no navigation to transition. Barba is for multi-page-site page transitions specifically; name the better tool when the site is a SPA.
 
@@ -45,7 +45,7 @@ Do not run this skill for a React or Vue single-page app whose router already ow
 4. **The container swaps, the wrapper persists.** Only the container changes. Page-specific setup lives in views keyed by namespace, initialized on enter and torn down on leave.
 5. **No flash, no jump.** Set the enter state before it shows (in `beforeEnter`), reserve the container height to prevent a layout jump, and for a sync crossfade position both containers absolutely so they do not stack.
 6. **Re-init what the swap killed.** After a swap, the third-party scripts, analytics, and lazy images on the new page must be re-run; markup inserted via the swapped HTML does not run its script tags (inserted scripts are inert per the HTML spec), so the new page's scripts did not execute.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Barba core
 

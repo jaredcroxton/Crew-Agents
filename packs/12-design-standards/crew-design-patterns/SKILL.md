@@ -33,7 +33,7 @@ If no artifact or pattern description is supplied, ask once for the design or th
 - **Careful mode (default):** the full sweep across every pattern category, each marked fresh, current, tired, or timeless, with the current replacement for every dated one. Use before a build ships.
 - **Governed mode:** the full sweep, plus a cross-reference against prior handoffs in `~/.claude/crew-state/design-standards/` so the pattern language stays consistent across a product, and the project's brand playbook enforced over these defaults (a deliberate retro choice is kept, not flagged). Use for a client deliverable.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to score broad visual quality (that is `crew-design-quality`), to do pixel and motion polish (that is `crew-design-engineering`), to find reference sites (that is `crew-design-reference`), or to write copy. This skill judges whether the patterns are current and names the swap.
 
@@ -44,7 +44,7 @@ Do not run this skill to score broad visual quality (that is `crew-design-qualit
 3. **Name the swap, not just the flaw.** A review that says "the carousel is dated" is half a review. "Replace the testimonial carousel with a static two-column grid or a bento of quotes" is the whole one.
 4. **New is not the same as good.** A trend used everywhere for a year is on its way to tired. Recommend what is current and durable, not what is merely trending.
 5. **Respect the brand.** A deliberate retro, brutalist, or brand-locked pattern is a decision, not a dated mistake. Mark it kept; the playbook is the authority.
-6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+6. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Layout patterns
 

@@ -33,7 +33,7 @@ If the brief is too vague to spec (no idea what moves or why), ask once what sho
 - **Careful mode (default):** the full spec, the timeline structure, the scroll triggers, the eases and durations, the cleanup, and the reduced-motion and mobile handling. Use before building a scroll experience.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity only, no scroll-jacking, mobile disable), and the accessibility floor (reduced-motion path mandatory). Use for a production scroll site.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for a simple CSS-only micro-interaction that needs no library (a hover, a press, that is `crew-design-engineering`), for a different animation library, for non-web motion, or to choose the aesthetic (the style skills). This skill specs GSAP and ScrollTrigger motion specifically; if the motion does not need GSAP, say so.
 
@@ -45,7 +45,7 @@ Do not run this skill for a simple CSS-only micro-interaction that needs no libr
 4. **Scrub ties motion to scroll, never a scroll listener.** ScrollTrigger reads the scrollbar; a raw `scroll` event listener thrashes the main thread. For scroll-linked motion the answer is always ScrollTrigger.
 5. **Register, scope, and clean up.** Plugins are registered once; triggers and tweens are killed when the element leaves or the component unmounts. An un-killed ScrollTrigger is a memory leak and a bug after a refresh.
 6. **Respect the user and the device.** `matchMedia` gates motion by viewport and honors `prefers-reduced-motion`; heavy scroll effects disable on mobile. Motion that ignores reduced-motion is an accessibility failure, not a style choice.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## GSAP core
 

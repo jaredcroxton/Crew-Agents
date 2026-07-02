@@ -44,7 +44,7 @@ Before profiling, check for any do-not-contact, opt-out, existing-customer, or o
 - **Careful mode (default):** the full brief, every field, the buyer-type classification, the why-they-care chain, the opener with its strength line, two or three mapped objections with backable responses, and the one next step. Use for normal prep on a call that matters.
 - **Governed mode:** the full brief, plus a cross-reference against prior sales handoffs in `~/.claude/crew-state/sales/` so the account view stays consistent across reps (you do not contradict a fact a teammate already verified, and you do not re-derive what is settled), and honor any upstream eligibility flag (a do-not-contact, opt-out, or open-opportunity block stops the brief). Use for a key account or a brief several reps will rely on.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill to do the RESEARCH (that is `crew-sales-lead-research`, which builds the company facts and decision-maker map), to WRITE the outreach copy (that is `crew-sales-outreach-draft`, which turns the opener and angle into first-touch message), or for a pipeline or deal review (the account stage and forecast are not this skill's job). If the ask is to look into a company, route to `crew-sales-lead-research`; if it is to write the first-touch message, route to `crew-sales-outreach-draft`.
 
@@ -56,7 +56,7 @@ Do not run this skill to do the RESEARCH (that is `crew-sales-lead-research`, wh
 4. **Label every claim Evidence or Inference.** Mark each claim Evidence (you can cite it) or Inference (you reasoned it). Buyer type is itself an inference from title, so label it. The rep needs to know which is which before they say it out loud on a call.
 5. **The opener must be un-sendable to a competitor.** If the opener would land just as well at any company in the sector, it is not an opener, it is a template. Tie a current, specific observation to a specific outcome the offer delivers, or name it Weak and say what is missing.
 6. **Never script a response on a claim the rep cannot back.** If an objection response needs a case study, a price, or a reference the rep does not have, mark it "Needs: [the proof]" rather than inventing the stat. A response the rep cannot stand behind on the call is worse than no response.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Prospect profile anatomy
 

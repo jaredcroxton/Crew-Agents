@@ -33,7 +33,7 @@ If the brief is too vague to spec (no idea what animates or why), ask once what 
 - **Careful mode (default):** the full spec, the variants and propagation, the gestures, the layout and exit animations, the spring config, and the reduced-motion path. Use before building an interactive component or a page transition.
 - **Governed mode:** the full spec, plus a cross-reference against prior handoffs in `~/.claude/crew-state/animation/` so the motion language stays consistent, the brand playbook enforced, a stricter performance audit (transform and opacity, layout and layoutId used sparingly), and the accessibility floor (reduced-motion mandatory). Use for a production React app.
 
-All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
+All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
 Do not run this skill for vanilla JS or a non-React project (use `crew-animation-gsap`), for a complex scroll-scrubbed pinned timeline (GSAP owns imperative scroll choreography), for a CSS-only micro-interaction that needs no library, or to choose the aesthetic (the style skills). This skill specs Motion in React; if the motion does not fit Motion, name the better tool.
 
@@ -45,7 +45,7 @@ Do not run this skill for vanilla JS or a non-React project (use `crew-animation
 4. **Spring for anything physical.** Gestures, drags, layout shifts, anything that should feel alive uses spring physics (stiffness, damping, mass), not a linear duration. Reserve duration tweens for a simple fade.
 5. **AnimatePresence owns exits, keys own identity.** A component leaving the tree only animates inside AnimatePresence with a stable `key`. Forget either and the exit silently does nothing.
 6. **Respect reduced-motion.** `useReducedMotion` gates or zeroes motion. Declarative does not excuse ignoring the accessibility floor.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak.
+7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Motion core
 
