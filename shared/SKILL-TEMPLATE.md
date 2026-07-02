@@ -7,6 +7,12 @@ Hard rules:
 - No em dashes anywhere (use commas, periods, or parentheses). No AI-slop. Specific nouns over adjectives.
 - Never ship a brand name other than Crew. No internal names.
 - Every skill has a fixture at `packs/<NN-pack>/tests/<skill>.fixture.md` covering three cases: clean, messy, missing-input.
+- The state root is always the home-global `~/.claude/crew-state/`, never a project-relative path. A relative path forks the memory into a second store the other skills never read.
+
+Catalogue conventions (carried by every shipped skill; include them when the skill has the section they live in):
+- **Silent mode** (in `## Modes and when to use them`, after the mode bullets): "All three modes run silent by default. The agent suppresses progress, confirmation, and status lines. Only the deliverable and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time."
+- **Silent principle** (the LAST numbered principle in `## How the <role> thinks`): "**Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates, confirmations, and handoff confirmations stay internal. Loops always speak."
+- The brand hard gate and the context-save prompt are baked into Step 0 and the Final Step in the skeleton below; copy them as written.
 
 ---
 
@@ -48,14 +54,14 @@ If <a required input> is missing, <ask once / proceed and mark the gap> followin
 
 ## Workflow
 
-**Step 0: Context Recovery.** Read `.claude/crew-state/<pack>/<skill>-handoff.md`. If it exists, load it and state what was recovered. If not, state "No prior context, first run." (Loop 4.)
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. If the brand context exists but this skill's handoff directory is empty, state: "Brand context found but no prior handoffs. First run in this location. If you expected prior work, check your crew-state path." Then read this skill's own handoff at `~/.claude/crew-state/<pack>/<skill>-handoff.md`. If it exists, load it and state what was recovered. If not, state "No prior context, first run." (Loop 4.)
 
 1. **<First real step>.** <Sub-steps: a taxonomy/enum with definitions, or a decision fork, or a forcing question asked one at a time.>
 2. **<Second step>.** <...>
 3. **<...expand the catalogue's 6 bullets into a deterministic process. Where you summarise or recommend, name the specific mechanism, not the category.>**
 N. **Verify before emitting.** Re-read the inputs and confirm every requirement is covered. If a gap remains, follow Loop 2 (Quality Failure) before continuing. If a decision is beyond this skill, follow Loop 3 (Escalation).
 
-**Final Step: Handoff Save.** Write `.claude/crew-state/<pack>/<skill>-handoff.md` (mkdir -p first) with: output produced, decisions made, unfinished work, what the next skill needs, and any "Learned" note (Loop 5). Always write it, even with no output ("No output, run completed [date]"). (Loop 4.)
+**Final Step: Handoff Save.** Write `~/.claude/crew-state/<pack>/<skill>-handoff.md` (mkdir -p first) with: output produced, decisions made, unfinished work, what the next skill needs, and any "Learned" note (Loop 5). Always write it, even with no output ("No output, run completed [date]"). (Loop 4.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
