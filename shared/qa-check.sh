@@ -203,9 +203,10 @@ if [ "$SMOKE" = 1 ]; then
 
   QUOTA_DEAD=0
   quota_check() { # $1 = out.txt path; a plan-limit message is not a skill failure
+    [ "$QUOTA_DEAD" = 1 ] && return 0
     if grep -qi "hit your session limit" "$1" 2>/dev/null; then
       QUOTA_DEAD=1
-      echo "  STOP  Claude plan session limit reached mid-run; remaining smoke cases skipped."
+      echo "  STOP  Claude plan session limit reached mid-run; all remaining smoke cases skipped."
       echo "        This is quota, not a skill failure. Rerun after the limit resets."
       return 0
     fi
@@ -231,7 +232,7 @@ FIXTURE
   }
   check_handoff_frame() { # $1 = handoff path, $2 = skill label; asserts the P2 frame
     frameok=1
-    head -1 "$1" | grep -qE '^# .*handoff' || { note "smoke $2: handoff missing '# <skill> handoff' title line"; frameok=0; }
+    awk 'NF && $0 != "---" {print; exit}' "$1" | grep -qE '^# .*handoff' || { note "smoke $2: handoff missing '# <skill> handoff' title line"; frameok=0; }
     grep -qE '^Date:' "$1" || { note "smoke $2: handoff missing Date: line"; frameok=0; }
     grep -qE "^STATUS: ($FRAME_ENUM)" "$1" || { note "smoke $2: handoff STATUS missing or off the frame enum"; frameok=0; }
     return $((1 - frameok))
@@ -242,6 +243,7 @@ FIXTURE
   # root for the test run. acceptEdits lets the skill write its handoff without
   # disabling permissions.
   for d in "$PACKS_DIR"/*/; do
+    [ "$QUOTA_DEAD" = 1 ] && break
     packdir="${d%/}"; packid="$(basename "$packdir")"; packid="${packid#*-}"
     [ -n "$PACK_FILTER" ] && [ "$packid" != "$PACK_FILTER" ] && continue
     for sd in "$packdir"/crew-*/; do
@@ -262,7 +264,8 @@ FIXTURE
       if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
       hp="$work/crew-state/$packid/$skill-handoff.md"
       okrun=1
-      grep -qiE "^$header" "$work/out.txt" 2>/dev/null || { note "smoke $skill: output missing header line '$header'"; okrun=0; }
+      awk -v h="$header" 'BEGIN{h=tolower(h)} index(tolower($0),h)==1{f=1} END{exit !f}' "$work/out.txt" 2>/dev/null \
+        || { note "smoke $skill: output missing header line '$header'"; okrun=0; }
       if [ -f "$hp" ]; then
         check_handoff_frame "$hp" "$skill" || okrun=0
         grep -qF "crew-state/$packid/$skill-handoff.md" "$work/out.txt" 2>/dev/null \
@@ -282,7 +285,7 @@ FIXTURE
         if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
         hp="$work/crew-state/$packid/$skill-handoff.md"
         okrun=1
-        if grep -qiE "^$header" "$work/out.txt" 2>/dev/null; then
+        if awk -v h="$header" 'BEGIN{h=tolower(h)} index(tolower($0),h)==1{f=1} END{exit !f}' "$work/out.txt" 2>/dev/null; then
           # header alone is not damning IF every required field is marked, but a full
           # artifact on missing input is the fabrication the fixtures forbid
           note "smoke $skill: Case C emitted the full artifact header on missing input"; okrun=0
@@ -297,7 +300,7 @@ FIXTURE
   # A pass here proves the gate survives a plain run instruction; the harness never
   # instructs around it.
   nf="$PACKS_DIR/01-core/crew-core-quality-checker/SKILL.md"
-  if [ -f "$nf" ] && command -v claude >/dev/null; then
+  if [ "$QUOTA_DEAD" != 1 ] && [ -f "$nf" ] && command -v claude >/dev/null; then
     work="$(mktemp -d)"; body="$(cat "$nf")"
     ( cd "$work" && printf 'Run the following Crew skill against the input. For this test run the crew-state root is ./crew-state/, and for EVERY check in this run (including the Sub-skill consult file check and the brand gate) the brand-context path is ./crew-state/brand-context.md; no other location exists for this test.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nCheck this one-line summary for quality: "We ship fast."\n' "$body" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
@@ -313,7 +316,7 @@ FIXTURE
   # (a) the exact literal preamble with the brand seeded: no onboarding stop.
   # (b) a paraphrased near-miss with NO brand file: the full hard stop fires.
   cf="$PACKS_DIR/12-design-standards/crew-design-composition/SKILL.md"
-  if [ -f "$cf" ] && { [ -z "$PACK_FILTER" ] || [ "$PACK_FILTER" = "design-standards" ]; }; then
+  if [ "$QUOTA_DEAD" != 1 ] && [ -f "$cf" ] && { [ -z "$PACK_FILTER" ] || [ "$PACK_FILTER" = "design-standards" ]; }; then
     cbody="$(cat "$cf")"
     work="$(mktemp -d)"; seed_brand "$work"
     ( cd "$work" && printf 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/ (the brand context sits at ./crew-state/brand-context.md).\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it on a marketing homepage.\n' "$cbody" \
