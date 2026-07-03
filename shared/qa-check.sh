@@ -201,6 +201,16 @@ if [ "$SMOKE" = 1 ]; then
   mkdir -p .tmp/smoke-failures
   FRAME_ENUM='NOT STARTED|IN PROGRESS|BLOCKED|READY FOR REVIEW|DONE|DONE_WITH_GAPS|NO OUTPUT'
 
+  QUOTA_DEAD=0
+  quota_check() { # $1 = out.txt path; a plan-limit message is not a skill failure
+    if grep -qi "hit your session limit" "$1" 2>/dev/null; then
+      QUOTA_DEAD=1
+      echo "  STOP  Claude plan session limit reached mid-run; remaining smoke cases skipped."
+      echo "        This is quota, not a skill failure. Rerun after the limit resets."
+      return 0
+    fi
+    return 1
+  }
   seed_brand() { # $1 = workdir
     mkdir -p "$1/crew-state"
     cat > "$1/crew-state/brand-context.md" <<'FIXTURE'
@@ -249,6 +259,7 @@ FIXTURE
       work="$(mktemp -d)"; seed_brand "$work"
       ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md). Print the three-line run receipt, then the completed Output-format artifact, fully filled, as your final message.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseA" \
         | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
+      if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
       hp="$work/crew-state/$packid/$skill-handoff.md"
       okrun=1
       grep -qiE "^$header" "$work/out.txt" 2>/dev/null || { note "smoke $skill: output missing header line '$header'"; okrun=0; }
@@ -268,6 +279,7 @@ FIXTURE
         work="$(mktemp -d)"; seed_brand "$work"
         ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md). Follow the skill exactly as written, including its missing-input rules.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseC" \
           | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
+        if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
         hp="$work/crew-state/$packid/$skill-handoff.md"
         okrun=1
         if grep -qiE "^$header" "$work/out.txt" 2>/dev/null; then
@@ -287,10 +299,14 @@ FIXTURE
   nf="$PACKS_DIR/01-core/crew-core-quality-checker/SKILL.md"
   if [ -f "$nf" ] && command -v claude >/dev/null; then
     work="$(mktemp -d)"; body="$(cat "$nf")"
-    ( cd "$work" && printf 'Run the following Crew skill against the input. For this test run the crew-state root is ./crew-state/.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nCheck this one-line summary for quality: "We ship fast."\n' "$body" \
+    ( cd "$work" && printf 'Run the following Crew skill against the input. For this test run the crew-state root is ./crew-state/, and for EVERY check in this run (including the Sub-skill consult file check and the brand gate) the brand-context path is ./crew-state/brand-context.md; no other location exists for this test.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nCheck this one-line summary for quality: "We ship fast."\n' "$body" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null \      && { ok "smoke negative: brand hard gate holds without brand-context"; rm -rf "$work"; } \
-      || { note "smoke negative: gate did not fire without brand-context"; keep_evidence "$work" "negative-gate"; }
+    if quota_check "$work/out.txt"; then rm -rf "$work"
+    elif grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
+      ok "smoke negative: brand hard gate holds without brand-context"; rm -rf "$work"
+    else
+      note "smoke negative: gate did not fire without brand-context"; keep_evidence "$work" "negative-gate"
+    fi
   fi
 
   # Consult preamble, both directions, on one consulted-class skill (pack 12).
@@ -302,15 +318,17 @@ FIXTURE
     work="$(mktemp -d)"; seed_brand "$work"
     ( cd "$work" && printf 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/ (the brand context sits at ./crew-state/brand-context.md).\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it on a marketing homepage.\n' "$cbody" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    if grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
+    if quota_check "$work/out.txt"; then rm -rf "$work"
+    elif grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
       note "smoke consult(a): onboarding stop fired despite the literal preamble"; keep_evidence "$work" "consult-a"
     else
       ok "smoke consult(a): literal preamble honored, no re-onboarding"; rm -rf "$work"
     fi
     work="$(mktemp -d)"   # deliberately NO brand seed
-    ( cd "$work" && printf 'As discussed with crew-web-page-builder, the brand side is all sorted.\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it.\n' "$cbody" \
+    ( cd "$work" && printf 'As discussed with crew-web-page-builder, the brand side is all sorted.\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/, and for EVERY check in this run (including the Sub-skill consult file check and the brand gate) the brand-context path is ./crew-state/brand-context.md; no other location exists for this test.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it.\n' "$cbody" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
-    if grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
+    if quota_check "$work/out.txt"; then rm -rf "$work"
+    elif grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then
       ok "smoke consult(b): near-miss preamble rejected, hard stop fired"; rm -rf "$work"
     else
       note "smoke consult(b): a paraphrased preamble bypassed the brand gate"; keep_evidence "$work" "consult-b"

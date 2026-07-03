@@ -42,7 +42,7 @@ FIXTURE
 }
 run_skill() { # $1 workdir, $2 skill file, $3 preamble ('' for none), $4 input
   local body; body="$(cat "$2")"
-  ( cd "$1" && printf '%sRun the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there%s). Print the three-line run receipt, then your output.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' \
+  ( cd "$1" && printf '%sRun the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there%s), and for EVERY check in this run (including the Sub-skill consult file check and the brand gate) the brand-context path is ./crew-state/brand-context.md; no other location exists for this test. Print the three-line run receipt, then your output.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' \
       "${3:+$3$'\n\n'}" "$( [ -f "$1/crew-state/brand-context.md" ] && printf '; the brand context already sits at ./crew-state/brand-context.md')" "$body" "$4" \
     | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
 }
