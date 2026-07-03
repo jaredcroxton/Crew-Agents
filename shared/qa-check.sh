@@ -249,6 +249,9 @@ FIXTURE
     for sd in "$packdir"/crew-*/; do
       [ -d "$sd" ] || continue
       skill="$(basename "${sd%/}")"; f="$sd/SKILL.md"
+      # the BLAST-protocol exception has no fixture by design; skip it here as the
+      # structural loop does
+      case "$skill" in crew-web-app-builder) continue ;; esac
       fx="$packdir/tests/$skill.fixture.md"
       [ -f "$f" ] && [ -f "$fx" ] || { note "smoke $skill: missing skill or fixture"; continue; }
       header="$(awk '/^## Output format/{o=1} o&&/^```/{b++} o&&b==1&&!/^```/{print;exit}' "$f")"
