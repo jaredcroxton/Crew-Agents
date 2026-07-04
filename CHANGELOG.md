@@ -2,6 +2,24 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.4.0 (2026-07-03)
+
+### Changed
+- crew-web-learning-experience v2, from live pilot feedback: the learning is
+  the hero. Calm editorial content steps (keynote-slide test, one accent, 10
+  percent imagery ceiling) with the cinematic treatment demoted to five-second
+  module openers only. The manifest becomes a block spine (steps of typed
+  blocks: heading, text, script, whiteboard, discussion, media, split) borrowed
+  as structure only from block-based course tools, still no LMS. Edit mode is a
+  first-class contract: sidebar sequence editor, inline edits, pasted media
+  URLs, course.json as the live read-and-write data file, presenter-side only,
+  with a COURSE message replicating settled edits to the wall in dual mode.
+  Whiteboard captures export as rendered session notes (held to
+  crew-design-documents). Full-guide coverage is a hard rule: every run-of-show
+  segment becomes a step, a coverage table proves it, any gap is a build
+  failure. Engine: DOM-slide steps with a block renderer, rAF canvas scrub at
+  openers only, deck-style one-shot reveals.
+
 ## 1.3.0 (2026-07-03)
 
 ### Added
