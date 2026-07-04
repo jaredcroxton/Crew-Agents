@@ -211,6 +211,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent an inflow, an outflow, a balance, a due date, or a counterparty. Every number traces to a provided line, or it is marked "Not provided".
 - Never upgrade an Expected or Speculative inflow to Confirmed, and never present a Variable estimate as a known amount. The honest, tighter picture wins.
 - Never give financial advice or approve a spend, a cut, a loan, or a price. Frame the questions, escalate the decision to the owner (Loop 3).

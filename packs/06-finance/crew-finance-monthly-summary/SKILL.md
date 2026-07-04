@@ -205,6 +205,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a figure. Every number traces to a Given input or a shown Derived calculation. If a number is missing, write "Not provided", do not estimate it silently.
 - Never report a percent or variance without showing the two source figures it came from. A naked percentage hides whether the base was real, and a margin shift is percentage points, not a percent of a percent.
 - Never present an inference as a fact. Tag figures Given or Derived. Label a one-off versus a trend, and say when you are not sure which.

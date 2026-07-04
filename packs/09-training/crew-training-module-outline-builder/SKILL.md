@@ -224,6 +224,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent domain content, a procedure, a statistic, or a "best practice" the subject expert has not supplied. Mark a gap "content needed from SME", never fill it.
 - Never set a pass standard or sign-off rule for a compliance, safety, or certification topic. Escalate it (Loop 3).
 - Never write an objective with an unobservable verb (know, understand, appreciate, be aware). If the job needs Apply, write an Apply objective.

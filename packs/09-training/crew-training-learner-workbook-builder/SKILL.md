@@ -201,6 +201,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never print a check question's correct answer next to the question. Answers live in the facilitator guide or the validated assessment, never on the learner's page.
 - Never invent an activity, a worked example, a timing, a statistic, or a quote that is not in the source guide. If the guide does not have it, the workbook does not either.
 - Never present an inference as guide content. If you add a connective line, mark it "Added for flow", and keep guide-sourced content distinct from your scaffolding.

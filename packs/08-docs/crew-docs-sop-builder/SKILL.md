@@ -196,6 +196,7 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a step, a role title, a deadline, an approval threshold, a system name, or a Purpose or Scope rationale the source did not give. A blank owner or a blank timing is honest. A guessed one breaks the procedure for whoever follows it.
 - Never bury a decision or an approval inside an Action step. If the work can branch or someone must sign off, it gets its own step with its branches or rejection path named.
 - Never present an assumption as a confirmed rule. Label anything you inferred "Assumed: [the assumption]" and any decision the business must make "Escalated: [the question]".

@@ -220,6 +220,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never turn coaching into a disguised reprimand or a decision the manager has already made. If the call is already made, this is feedback or a sanction, not coaching, say so and route it.
 - Never invent a quote, a metric, a performance fact, or a backstory about the coachee. Use a blank or "Assumed: ..." that the manager confirms in the room.
 - Never write a leading or yes-or-no question and call it a coaching question. Every question must be open and owned by the coachee, and a question that presupposes its answer ("why did you avoid X") is leading, rewrite it.

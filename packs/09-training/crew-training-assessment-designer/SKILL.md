@@ -209,6 +209,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never write an item that maps to no stated outcome. Every question checks one named outcome, or it gets cut.
 - Never write an item whose type does not match its outcome's level. A recall multiple choice for an Apply outcome is invalid, it proves naming when the outcome asked for doing.
 - Never invent a correct answer, a passing score, a regulation number, or a quoted figure that is not in the source. Mark "answer pending source" instead.

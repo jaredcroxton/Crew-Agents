@@ -231,6 +231,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - The guide must be runnable cold by a non-expert. A move a non-expert could not perform from the page is not written yet: mark the beat unwritten rather than leaving a gap, because a gap a confident writer would fill in their head fails the facilitator who cannot.
 - For a role-play or a sensitive activity, script the psychological-safety frame: volunteers not victims, confidentiality, no surprise hot-seating. An unsafe activity empties the room, so the frame is on the page, not assumed.
 - Check every activity and handout for a learner who cannot see fine print, cannot hear an audio-only demo, or cannot perform a physical or spoken task. Name an equivalent alternative (a board read aloud, a large-print card, an observer seat, a narrated demo) or flag the accommodation as a pre-session check. Never script an activity that silently excludes; in many jurisdictions that also brushes local law (jurisdiction from brand-context.md), which the business owns.

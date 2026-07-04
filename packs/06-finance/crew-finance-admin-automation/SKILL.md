@@ -202,6 +202,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never automate a step that needs human judgement (approving spend, replying to a customer, overriding a number). Mark it a review gate and keep the person in it.
 - Any money-out, customer-facing, or irreversible step carries an approval gate, an audit trail, segregation of duties (the step that creates a payment is not the one that releases it), and an idempotent guard, by default, because a finance automation with no controls is just a faster way to lose money.
 - An idempotent guard (a processed marker that is a genuinely unique composite key, not a supplier-namespaced number alone, claimed atomically before the action) prevents a retry, a double-fire, a re-arrived email, or two simultaneous arrivals from double-paying or double-posting, paired with a reconciliation that the output matches the source. This is the single most dangerous bug in a money flow, so it is named on every money or message action, never assumed.

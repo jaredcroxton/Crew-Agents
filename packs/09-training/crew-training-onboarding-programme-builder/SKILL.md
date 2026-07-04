@@ -241,6 +241,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a system name, a tool, a person's name or title, a policy, a probation period, or a specific calendar date the inputs did not supply. Write "[not named]" or escalate.
 - Never put a competency in a phase before the access or prerequisite it depends on exists. Sequence by dependency, always.
 - Equipment and access are ordered in pre-start, before day one, never assumed to appear on day one. Provisioning is preboarding work, and a hire with no laptop and no login on day one is the most common onboarding failure.

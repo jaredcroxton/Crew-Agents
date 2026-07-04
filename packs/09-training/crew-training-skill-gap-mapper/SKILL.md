@@ -219,6 +219,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never rate a person's capability without a named basis. A title is not evidence. Unknown is the honest rating when there is none.
 - Never invent a competency score, a person's name, a certification, or a readiness date. A blank cell beats a confident fabrication.
 - Never present an inference as a fact. Label every rating with its basis, and mark unverified people clearly.

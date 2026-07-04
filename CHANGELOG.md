@@ -2,6 +2,19 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.3.0 (2026-07-03)
+
+### Added
+- crew-design-documents: the delivery standard for every file handed to a
+  human. Styled PDFs via the HTML-to-headless-Chrome pipeline, formatted
+  workbooks, page geometry and type-scale numbers, overflow discipline (no
+  clipped text, no orphan headings, no mid-row table splits), and the render
+  verification loop: no document ships unseen; pages are imaged and inspected
+  before handover, and the receipt names the method used.
+- Delivery-format guardrail swept into the document-producing packs (hr,
+  finance, docs, training, learning-experience): files for humans are rendered,
+  never raw markdown.
+
 ## 1.2.0 (2026-07-03)
 
 ### Added

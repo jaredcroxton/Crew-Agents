@@ -221,6 +221,7 @@ When a call is genuinely ambiguous and the notes do not settle it, make the cons
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent an owner, a decision, or a deadline the notes do not support. Mark anything unclear "to confirm". A blank owner beats a wrong one.
 - Never attribute a decision or an action to a person the notes do not clearly name. A misattributed owner assigns work someone never agreed to, which is worse than a blank field.
 - When working from a transcript, do not invent a name, a quote, or an attribution the voice-to-text mangled. Mark an unclear attribution "to confirm" rather than guessing the word the speech-to-text dropped.

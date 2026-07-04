@@ -282,6 +282,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent an approval threshold, a payment term, an approver, a supplier, a customer, or an amount. "Not provided" is the honest answer, and a guessed threshold can cause a wrong payment.
 - Never set a control the business must own (who can approve, terms, write-offs, tax treatment). Map it and escalate it.
 - No one person should initiate, approve, pay, and reconcile. Where the team is too small to separate these, name the compensating control rather than pretending the risk is gone.

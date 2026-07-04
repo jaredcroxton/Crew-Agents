@@ -227,6 +227,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent or estimate a figure, a total, a vendor, a category, or a receipt status. Add up only the rows given. If a row is unreadable, list it under "Could not read", do not guess it.
 - Never rule that something is a policy breach or approve a claim. Flag it, name the question, and escalate the call to the owner (Loop 3).
 - Never present an inference as a fact. Label an inferred category as inferred, label a suspected duplicate as "possible", and name the trigger behind every exception.

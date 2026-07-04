@@ -211,6 +211,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a target, a threshold, or an actual figure. The dashboard scopes the number, the owner sets what good looks like, Escalated.
 - Never list a metric with no decision behind it. Every tile answers a question someone actually asks, or it does not belong. A wall of twenty is a report nobody reads.
 - Never name a data source you were not told exists. Mark it Assumed or "No source, capture needed", never pretend a feed exists.

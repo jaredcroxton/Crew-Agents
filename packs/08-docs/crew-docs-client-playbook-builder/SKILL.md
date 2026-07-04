@@ -243,6 +243,7 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a price, a turnaround time, a guarantee, an SLA, a refund or cancellation policy, or a named team member. Show the structure and mark amounts and policies "To be confirmed".
 - Never promise an outcome the business did not confirm. A playbook is a contract in the client's mind. Overstate nothing.
 - The playbook is client-facing published content, so any outcome, turnaround, or capability claim is a representation the client relies on and is subject to consumer law (in Australia, the Australian Consumer Law ss18 and 29 on misleading or deceptive conduct). Never overstate a result or imply a guarantee the business did not make.

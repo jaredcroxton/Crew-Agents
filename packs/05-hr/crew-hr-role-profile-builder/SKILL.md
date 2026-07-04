@@ -203,6 +203,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a salary, pay band, or job grade. That is the manager's and HR's call, mark it "Escalated". Pay-transparency and pay-equity obligations vary by jurisdiction, so keep any pay or disclosure note jurisdiction-neutral ("under the rules the business operates under", "as local law requires"), never name a national statute or agency, and never assume a currency or a market pay figure.
 - Never inflate seniority or pad the must-have skills list to make the role look attractive. An honest profile hires the right person.
 - Never add a years-of-experience bar, a degree, or a certification the business did not state. An inflated or unjustified requirement narrows the candidate pool and can screen out capable and diverse candidates on something not genuinely job-related (an adverse-impact risk), so mark it "Proposed" or "Not provided" and name the underlying capability instead.

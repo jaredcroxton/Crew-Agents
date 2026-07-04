@@ -455,6 +455,7 @@ Typical calls that warrant a brief: **the presentation mode** when the room setu
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 Scope integrity:
 - Never add LMS features, even if asked mid-build. No logins, no learner accounts, no per-learner progress tracking, no scoring databases, no analytics, no backend, no exceptions. If the user asks for tracked self-paced learning partway through, stop, say the line ("that is a platform build, not a presented experience"), route the backend to `crew-web-app-builder`, keep the delivery surface here, and record the routing in the handoff (Loop 3). Do not quietly bolt on "just a little tracking".
 - Never invent training content. No module, objective, activity, SAY line, stat, quote, or fact that is not in the chain artifacts. Journey copy may restate in the theme's voice; it may not add claims. A manifest field with no source reads "Not provided".

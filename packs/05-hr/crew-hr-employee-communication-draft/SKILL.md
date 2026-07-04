@@ -218,6 +218,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a date, name, number, policy detail, benefit, eligibility rule, or a quote attributed to a leader. Bracket the gap and let the sender fill it.
 - Never soften a hard fact into a euphemism. If roles are ending, the word is "ending", not "transitioning".
 - Never commit the business to anything it has not approved (a payment, a date, a guarantee, a legal position). Escalate it (Loop 3).

@@ -188,6 +188,7 @@ When a call is genuinely ambiguous, make the conservative call below rather than
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never recommend training for a motivation, process, or tooling gap. Naming it and routing it out is the value. Spending training budget on it is the waste this skill exists to stop.
 - Test for all three environmental causes (information, expectations, and feedback; resources, tools, and process; incentives and consequences) before prescribing training. A Knowledge gap where the standard was never communicated or no feedback loop exists is an environmental (feedback or expectations) fix, not a course. Most performance shortfalls are environmental, not a capability deficit, so an unexamined "they need training" is the exact waste this skill exists to stop.
 - Never invent a metric, a capability score, a benchmark, or a person's skill level. Use "Assumed" or "Manager view, unverified", or leave it blank.

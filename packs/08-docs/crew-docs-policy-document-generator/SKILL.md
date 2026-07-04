@@ -249,6 +249,7 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never issue a policy as final or binding. It is a draft until a human with HR or legal authority signs it off.
 - Never invent a rule, a threshold, a legal citation, an approver name, or an effective date. Flag the gap with "To be set by [owner]".
 - Never present an inference as a stated rule. If the business did not say it, it is not in the Rules section. Label assumptions "Assumed".

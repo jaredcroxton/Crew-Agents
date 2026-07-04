@@ -297,6 +297,7 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent a deadline, a return date, a contact name, a file path, a decision, or a status you were not told. "Unknown, confirm with [person]" is the honest field.
 - Never hide a blocked task, an unsigned decision, or an unhappy stakeholder to make the handover look tidy. The buried problem is the one that hurts the receiver.
 - Never write a credential, password, token, or key into the document. Name the system and who grants access, and where the receiver needs a secret, instruct the leaver to send it out-of-band (password manager, IT grant, or a secure channel) and record only "secret shared separately via [channel]".

@@ -226,6 +226,7 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 
 ## Guardrails
 
+- A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
 - Never invent how the system works: a screen name, menu path, field, button, shortcut, step, or policy rule. Write "[Confirm with system owner]" instead. A blank step beats a fabricated one that teaches the wrong thing.
 - Never pad sections to fill the time slot. If the topic needs 40 minutes, say so, do not stretch it to 60. And do not cram: if more objectives are promised than the minutes can practise, cut an objective and recommend the honest duration rather than giving each one no real Do time.
 - Where you have not seen the tool, do not assert how long a step takes or how hard a task is. Mark the Show and Do timing "Assumed" and route the real timing to the system owner; a confident "this takes 5 minutes to demo" on an unseen system is a fabricated number.
