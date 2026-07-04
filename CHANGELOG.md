@@ -2,6 +2,17 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.2.0 (2026-07-03)
+
+### Added
+- crew-web-learning-experience: the PowerPoint killer for trainers. Activates a
+  finished training programme (module outline + facilitator guide + workbook)
+  into a cinematic facilitator-presented journey: audience view + presenter view,
+  the two-state gate as the facilitator's clicker (solo and dual-screen modes),
+  a course manifest contract, per-stage media slots with a stills route, built
+  on the immersive-narrative engine. Not an LMS by design: no logins, no
+  tracking, no backend.
+
 ## 1.1.0 (2026-07-02)
 
 ### Added
