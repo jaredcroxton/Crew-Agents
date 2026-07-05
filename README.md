@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.4.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.4.0">
+  <img src="https://img.shields.io/badge/CREW-v1.5.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.5.0">
   <img src="https://img.shields.io/badge/SKILLS-99-333333?style=for-the-badge&labelColor=lime&color=333333" alt="99 Skills">
   <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">

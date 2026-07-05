@@ -2,6 +2,31 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.5.0 (2026-07-05)
+
+### Changed
+- crew-web-learning-experience v3.1, rebuilt to the field-proven master
+  specification distilled from a complete live pilot (three build generations,
+  every feature verified in a running room). The engine is one monolithic
+  index.html (no framework, no build step, no animation libraries). Plain
+  typographic module openers are now the locked default with the cinematic
+  scrub demoted to an explicit opt-in when footage exists and the theme allows.
+  The block union grows to eight types (poll joins with live tally bars). Four
+  roles: solo, presenter, audience, and a phone remote over an SSE relay
+  (serve.py, stdlib only, mandatory no-cache headers) with authority never
+  leaving the presenter tab. One nextAction() path drives all five inputs
+  (drawer, edge chevrons, keyboard, swipe, remote) under the same gate. The
+  presenter drawer gains live plan-vs-actual clocks with an auto-surfacing cut
+  line and a draggable width grip. Edit mode is complete: click-to-edit on
+  canvas, add-a-tile, remove chips on the tile wrapper, a collapsible sidebar
+  with the canvas reflowing beside it, and settled-commit broadcast semantics.
+  Themes ship as four CSS-var token presets. Timing intelligence lands
+  (per-step timelog, rehearsal mode with a plan-vs-actual report, a styled
+  recap export), plus a print handout and an offline single-file bundler.
+  Eighteen numbered engineering scars and the full pre-ship verification
+  battery are encoded in the skill. The crew-state ceremony (Step 0, handoff
+  frame, loops, receipts) is preserved verbatim from v2.
+
 ## 1.4.0 (2026-07-03)
 
 ### Changed
