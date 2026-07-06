@@ -2,6 +2,22 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.5.1 (2026-07-06)
+
+### Fixed
+- crew-web-fly-through-builder: the arrival was a desktop-only lock that
+  black-outs on iOS. The reference template now ships the continuous-flow
+  arrival proven live on two builds: the listing sits in flow below the runway
+  with no display:none gate, two ScrollTriggers stage the hand-off (covering at
+  top 92 percent fades only the ENTER panel and hint, past-cine at top top
+  retires the canvas) so the arrival frame is held underneath until the section
+  fully covers and there is no black in either direction, ENTER and HOME are
+  native smooth-scroll glides, and html carries overscroll-behavior-y none to
+  kill the iOS rubber-band black at the page edges. The SKILL prose, failure
+  modes, and verification battery were rewritten to teach the continuous-flow
+  arrival and to document the old display:none lock as a superseded scar (do
+  not restore it). The locked scrub, loader, and frame engine are unchanged.
+
 ## 1.5.0 (2026-07-05)
 
 ### Changed

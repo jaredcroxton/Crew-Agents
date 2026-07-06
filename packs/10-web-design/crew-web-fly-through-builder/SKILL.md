@@ -55,7 +55,7 @@ Do not run this skill expecting a canvas frame-scrub descent when the user only 
 1. **The descent is a frame sequence on a canvas, never a `<video>` element.** Frame scrubbing is the only technique that lets scroll position drive the camera frame-for-frame, forward and backward, with no buffering, no play/pause jank, and a perfect hold on any frame. Every engineering decision in this skill exists to make that one effect flawless.
 2. **Footage is generated or filmed, never faked with CSS.** If the user has neither an API key nor their own clips, the skill cannot fabricate the journey. Route them to a third-party generator (route C) and resume when they bring the MP4s back.
 3. **One arrival, not a site.** Every frame serves a single payoff moment. The page does one thing unforgettably and then stops; it is not a scrolling brochure. If the brief wants many sections and messages, that is a landing page, not a fly-through.
-4. **The locked engineering is scar tissue, not preference.** The load gate, the arrival lock, the no-smooth-scroll-library rule, the spaced-retry `jumpTo`, each one fixed a real production bug (see Failure modes). Ripping one out to "simplify" re-breaks it. Change a locked block only with a reason that survives the failure-modes table.
+4. **The locked engineering is scar tissue, not preference.** The load gate, the continuous-flow arrival, the no-smooth-scroll-library rule, the canvas held painting underneath until the listing fully covers, each one fixed a real production bug (see Failure modes). Ripping one out to "simplify" re-breaks it. Change a locked block only with a reason that survives the failure-modes table.
 5. **Truth over spectacle.** Never present AI imagery of a real property as filmed, never invent a spec or a price. A "Concept demonstration only" footer rides until the owner signs off. The effect is the sell; the facts stay honest.
 6. **Never wait for all frames.** Paint after the gate (48 frames) plus a progress bar, release scroll, and background-load the rest. A descent that blocks on a full preload feels broken before it begins.
 7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
@@ -102,7 +102,7 @@ The descent is a sequence of still frames painted on a `<canvas>`, with scroll p
 
 **The load gate (never wait for all frames).** `GATE=48`: paint after the first 48 frames plus a thin progress bar, release scroll, then background-load the rest in two passes (stride-4 for a fast skeleton, then a gap-fill). First paint stays under 2s. `render()` uses a `nearestLoaded()` fallback and `drawCover` cover-fit so the canvas is never blank or stretched, and a deterministic `starfield()` backdrop (LCG, no `Math.random`) covers the moment before frame one.
 
-**Stage structure.** Three stages is the sweet spot. The indicator (`01 // ...`, `02 // ...`, `03 // ...`) and the stage overlays swap at progress thresholds tied to the scrub. The warm accent blooms in for the final stage only, so the arrival reads as a destination. The arrival itself is a hard-stop frame (the arrival lock, in Step 6) so the viewer cannot scroll past the descent into blank.
+**Stage structure.** Three stages is the sweet spot. The indicator (`01 // ...`, `02 // ...`, `03 // ...`) and the stage overlays swap at progress thresholds tied to the scrub. The warm accent blooms in for the final stage only, so the arrival reads as a destination. The arrival frame is held on screen while the listing slides up over it (the continuous-flow arrival, in Step 6), so the descent reads as a destination and never black-outs on mobile.
 
 **Stage panels must crossfade with the background layers.** The `.active` class controls visibility, not just pointer-events: `.stage-panel { opacity: 0; transition: opacity 0.5s ease; }` and `.stage-panel.active { opacity: 1; }`. Never gate visibility on `pointer-events` alone. If you do, every panel stays painted at full opacity stacked on top of each other, so the first stage's copy stays stuck over every later stage while only the background swaps underneath, and the page reads as a black void below the hero. The panel fade and the background-layer crossfade (opacity 0 to 1) run together so content and image arrive as one.
 
@@ -224,15 +224,15 @@ Clone `fly-through-reference.html` (in this skill folder) as `index.html` and re
 - `prefers-reduced-motion`: scrub snaps, reveals are instant.
 - Mobile loads `frames/m/` when `innerWidth < 768`.
 - `history.scrollRestoration='manual'` plus `scrollTo(0,0)` so reload never lands mid-scrub.
-- **No smooth-scroll library.** The reference build removed Lenis twice: its cached scroll-limit fights the display:none lock/unlock AND its UMD build auto-inits inertia that makes the page phantom-scroll on its own. Native scroll plus ScrollTrigger scrub is the smoothing. If you see the page scrolling untouched, a smooth-scroll library snuck back in.
+- **No smooth-scroll library.** The reference build removed Lenis twice: its UMD build auto-inits inertia that makes the page phantom-scroll on its own, and its cached scroll-limit fought the arrival transition. Native scroll plus ScrollTrigger scrub is the smoothing (the ENTER and HOME glides use the browser-native `scrollTo({behavior:'smooth'})`, not a library). If you see the page scrolling untouched, a smooth-scroll library snuck back in.
 
-**Locked arrival lock (the hard-stop, do not loosen):**
-- `#listing{display:none}` until `body.entered`. This is what hard-stops the page scroll at the arrival frame so the viewer cannot scroll into blank. ENTER is the only way forward.
-- `enterResidence()` adds `body.entered`, then `jumpTo(listing.offsetTop)`.
-- `jumpTo(target, done)` is a spaced-timer retry (`scrollTo` every 100ms until `scrollY` sticks, then run `done`). A freshly un-hidden section needs a renderer-dependent moment before its scroll range is usable, and continuous rAF scrolling starves that layout. Snap, not glide, but works in every renderer. The cross-fade covers the cut. Do not replace it with a single `scrollTo` or a smooth-scroll call.
-- `overflow-x:hidden` lives on `html`, never `body`. Body as the scroll container leaves a stale scroll-range after the display:none to block flip.
-- `body.past-cine` retires the canvas, glow, scrim, and ENTER once the listing scrolls in (ScrollTrigger on `#listing` `top 92%`).
-- Home / reset button: `resetLoop()` calls `jumpTo(0)` and only then removes `entered`/`past-cine` and re-locks. Removing the classes before reaching the top clamps scroll back down.
+**Locked continuous-flow arrival (mobile-safe, do not re-lock):**
+- `#listing` is always in flow, directly below the 500vh `#cine` runway. There is no `display:none` and no `body.entered` gate. The listing slides up over the held arrival frame; that held-frame beat is the stop, in place of a hard lock.
+- Two ScrollTriggers on `#listing` stage the hand-off. `top 92%` adds `body.covering`, which fades only the ENTER panel and hint. `top top` adds `body.past-cine`, which retires the canvas, glow, and scrim. The canvas keeps painting the arrival frame underneath until the listing fully covers the screen, so there is no black in either direction (scrolling down into the listing, or back up out of it).
+- `enterResidence()` and `resetLoop()` are plain `window.scrollTo({ top, behavior: 'smooth' })` glides. The scrub plays the descent forward on ENTER and in reverse on HOME. No `jumpTo`, no re-lock, no class bookkeeping.
+- `overflow-x:hidden` and `overscroll-behavior-y:none` live on `html`, never `body`. The overscroll rule kills the iOS rubber-band black at the top and bottom page edges.
+- Home / reset button shows via `body.covering` or `body.past-cine`, and glides back to the top.
+- WHY this replaced the old lock (do not restore it): the previous pattern hid the listing with `display:none` until a `body.entered` class flipped it on, then a spaced-retry `jumpTo` snapped to it. That was a desktop pattern. On iOS it produced black at both edges of the gate: overscrolling past the runway end hit nothing, and scrolling back up hid the canvas the instant the section edge appeared. The continuous-flow arrival (section in flow, canvas held underneath until full cover) is the mobile-safe replacement, verified pixel-by-pixel at 375x812 in both directions. Never re-introduce the `display:none` lock.
 
 **Locked scroll cue:** the scroll hint bar is oversized and self-flashing (2px wide, 63px tall, white-to-platinum gradient, box-shadow glow, a `drop` keyframe that pulses opacity and scaleY). It must read instantly on the first screen so the viewer knows to scroll. It fades the moment scroll starts (`progress > 0.05`).
 
@@ -243,7 +243,7 @@ Copy rules: no em dashes anywhere (commas, periods, parentheses). Quiet-luxury t
 **Step 8: Verify.**
 
 - Serve from a `/tmp` copy. TCC blocks preview servers reading Desktop. `rsync` the project to `/tmp/<name>` excluding `pipeline`, `assets`, `.tmp`, then serve with a tiny `http.server` script that `chdir`s in (the `--directory` flag triggers a getcwd permission error under TCC).
-- Reload, then check: loader completes and releases scroll, first paint under 2s (gate works, not waiting for all frames), scroll scrubs the descent, the three stage overlays fire and swap, the accent glow blooms on the final stage, the descent hard-stops at the arrival frame with no black below, ENTER unlocks and lands on the arrival section, the home button returns to top and re-locks, console clean.
+- Reload, then check: loader completes and releases scroll, first paint under 2s (gate works, not waiting for all frames), scroll scrubs the descent, the three stage overlays fire and swap, the accent glow blooms on the final stage, the descent flows into the held arrival frame with no black in either direction, ENTER glides down to the arrival section, the home button glides back to the top, console clean.
 - Preview-harness quirks carried over from the reference build: rAF throttles in the preview tab so the scrub lags evals (not a site bug), and screenshots at manually overridden viewports can show a black canvas while the page is fine. Force `state.frame` via the `window.__FLYTHROUGH.f = N` debug hook to verify a specific frame, or read center-pixel luminance via `getImageData` in preview_eval.
 - The reference build leaves a `window.__FLYTHROUGH` debug hook in place. Harmless, but strip it for a clean production ship if asked.
 
@@ -270,7 +270,7 @@ Frames: [N] desktop (frames/d) + [N] mobile portrait (frames/m)   FRAME_COUNT: [
 
 Verified:
 - [loader releases / first paint <2s / scrub forward+back / stage overlays fire /
-   arrival hard-stop, no black / ENTER unlocks / home reset re-locks / console clean]
+   arrival held, no black either direction / ENTER glides down / home glides to top / console clean]
 Review gate: [crew-design-quality verdict, Criticals and Majors fixed]
 Deploy checks: [index 200 / frames/d 200 / frames/m 200 / listing 200 / assets-video 404]
 
@@ -289,8 +289,8 @@ Frames: 406 desktop (frames/d) + 406 mobile portrait (frames/m)   FRAME_COUNT: 4
 
 Verified:
 - Loader releases scroll, first paint under 2s, descent scrubs forward and back, three stage
-  overlays fire, accent glow blooms on Sanctuary, scroll hard-stops at arrival with no black,
-  ENTER unlocks the listing, home button returns to top and re-locks, console clean.
+  overlays fire, accent glow blooms on Sanctuary, the listing flows up over the held arrival with no
+  black in either direction, ENTER glides to the listing, home button glides back to the top, console clean.
 Review gate: crew-design-quality pass after legibility fixes.
 Deploy checks: index 200, frames/d and frames/m 200, listing images 200, assets/video 404.
 
@@ -299,7 +299,7 @@ Open / handed off: __FLYTHROUGH debug hook left in (harmless). OG tags patched t
 
 ## Animation injection
 
-This is the build step that produces the motion the review gate scores. The descent scrub is already engineered (Route architecture, the load gate, the arrival lock), but the typography, the interactive UI, and the arrival bloom do not animate until you author them here. The design review gate names the pack 14 animation skills as motion reviewers; they have nothing to review until this layer exists in the file. The output is not complete until all three layers below are present in `index.html`.
+This is the build step that produces the motion the review gate scores. The descent scrub is already engineered (Route architecture, the load gate, the continuous-flow arrival), but the typography, the interactive UI, and the arrival bloom do not animate until you author them here. The design review gate names the pack 14 animation skills as motion reviewers; they have nothing to review until this layer exists in the file. The output is not complete until all three layers below are present in `index.html`.
 
 **Motion budget (three required layers).** Every fly-through ships exactly these, no more:
 
@@ -307,7 +307,7 @@ This is the build step that produces the motion the review gate scores. The desc
 - **Micro-interactions.** Hover, press, and focus on the actual interactive elements: the ENTER / arrival button, the home / reset control, and any listing CTA or nav. Transform and opacity transitions, 120 to 220ms, a visible focus ring. No layout-shifting hover, no decorative idle loop.
 - **The one signature moment.** The warm champagne accent bloom on the final stage only. As the scrub crosses into stage 03 (the arrival), the stage headline's `<em>` accent word ignites with a keyed glow and the arrival ENTER panel resolves, so the descent reads as landing at a destination rather than just stopping. The text reveals are scrubbed and pinned typography that crossfades in lockstep with the underlying frame crossfade, not a separate flourish. One moment, on one stage. Do not bloom the earlier stages.
 
-**Stack rule (locked).** The library is GSAP + ScrollTrigger and nothing else. It lives in the single `index.html`: GSAP and ScrollTrigger registered once at the top of the inline `<script>`, the descent scrub tied to the `#cine` 500vh runway, every reveal authored as a ScrollTrigger inside that same block. The scrub IS the smoothing. Forbidden, never reach for them: Lenis or any smooth-scroll / inertia library (it fights the lock and phantom-scrolls), a `<video>` element for the descent, any JS UI framework or componentized frontend (one monolithic file only), and any reveal driven by a raw scroll listener or `scrollY / maxScroll` fraction math. Do not rip out the load gate, the arrival lock, or the `jumpTo` spaced-retry to make a reveal land.
+**Stack rule (locked).** The library is GSAP + ScrollTrigger and nothing else. It lives in the single `index.html`: GSAP and ScrollTrigger registered once at the top of the inline `<script>`, the descent scrub tied to the `#cine` 500vh runway, every reveal authored as a ScrollTrigger inside that same block. The scrub IS the smoothing. Forbidden, never reach for them: Lenis or any smooth-scroll / inertia library (it phantom-scrolls and fought the arrival transition), a `<video>` element for the descent, any JS UI framework or componentized frontend (one monolithic file only), and any reveal driven by a raw scroll listener or `scrollY / maxScroll` fraction math. Do not rip out the load gate or the continuous-flow arrival to make a reveal land.
 
 One correct pattern, scroll-driven idiom, transform and opacity only:
 
@@ -427,7 +427,7 @@ Evidence and honesty:
 House style:
 - Never use em dashes. Use commas, periods, or parentheses.
 - Single monolithic `index.html`. Never componentise the frontend.
-- Do not redesign the locked DNA or rip out the locked engineering and arrival lock. They are scar tissue from real production bugs (see Failure modes).
+- Do not redesign the locked DNA or rip out the locked engineering or the continuous-flow arrival. They are scar tissue from real production bugs (see Failure modes).
 - If a project brand playbook exists, it is the authority over the default minimal-luxe DNA.
 
 ## Handoffs
@@ -452,8 +452,8 @@ Before the run is marked done, confirm:
 [ ] The descent is a canvas frame sequence, not a <video>; FRAME_COUNT set from to_webp.py
 [ ] Desktop and portrait-mobile frame sets both built (frames/d and frames/m)
 [ ] Loader releases scroll, first paint under 2s, scrub runs forward and back
-[ ] Stage overlays fire and swap, arrival hard-stops with no black, ENTER unlocks, home resets and re-locks
-[ ] Locked engineering and arrival lock intact (no smooth-scroll library, jumpTo spaced-retry, display:none lock)
+[ ] Stage overlays fire and swap, arrival flows in with no black either direction, ENTER glides down, home glides to top
+[ ] Locked engineering and continuous-flow arrival intact (no smooth-scroll library, no display:none re-lock, canvas held underneath until fully covered, overscroll-behavior-y:none on html)
 [ ] No invented specs or claims for a real product or property; "Concept demonstration only" footer until sign-off
 [ ] assets/video and pipeline excluded from deploy; console clean
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
@@ -478,8 +478,8 @@ RECOMMENDATION: [what should happen next]
 | zoompan explodes to 12k frames | stills fallback without trim | `trim=end_frame=120,setpts=N/30/TB` per zoompan clip |
 | Listing images load black in preview | `loading="lazy"` never fires in headless preview | Remove `loading="lazy"` from listing imgs |
 | nano-banana returns E005 NSFW on an interior | bedroom/bath prompt tripped the filter | Reword "empty, unoccupied, no people" |
-| Scroll clamps mid-page after ENTER | display:none to block leaves a stale scroll range; or `overflow-x` on body | `jumpTo` spaced-retry; move `overflow-x` to `html` |
-| Home button clamps scroll back down | classes removed before reaching the top | `jumpTo(0, () => remove classes)` |
+| Black screen at the arrival on mobile, either direction | the old display:none arrival lock, a desktop pattern (overscroll past the runway hits nothing; the canvas hides the instant the section edge appears) | listing always in flow, canvas held underneath until `top top`, `overscroll-behavior-y:none` on `html` |
+| ENTER or HOME snaps instead of gliding | a smooth-scroll library crept back, or `behavior:'smooth'` dropped | native `window.scrollTo({ top, behavior: 'smooth' })`, no library |
 | Script silently dead, no handlers | `function enter()` collided with `const enter = getElementById('enter')` | Rename to `enterResidence()` / `resetLoop()` |
 | Arrival label flickers back to a stage | `overlays()` keeps writing the indicator at progress 1 | Guard the write with `!body.classList.contains('past-cine')` |
 | `Unknown encoder 'libwebp'` | Homebrew ffmpeg build | Pillow WebP (`to_webp.py`) |
