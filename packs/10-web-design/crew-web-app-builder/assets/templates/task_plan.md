@@ -8,7 +8,7 @@
 
 Phase 1: Blueprint
 
-## BLAST Checklist
+## Express Checklist
 
 ### Phase 1: Blueprint
 - [ ] Memory files initialised (claude.md, task_plan.md, findings.md, progress.md)

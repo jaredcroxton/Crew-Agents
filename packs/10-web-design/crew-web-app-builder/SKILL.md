@@ -1,11 +1,11 @@
 ---
 name: crew-web-app-builder
-description: Deterministic build protocol for Antigravity automation projects. Use this skill WHENEVER the user mentions BLAST, B.L.A.S.T., Antigravity, Anti-Gravity, the A.N.T. 3-layer architecture, System Pilot, or asks you to scaffold a new automation, scraper, webhook, cron job, API integration, agentic workflow, or deterministic Python tool. Also trigger when the user says "let's build a new automation", "spin up a new tool", "scaffold this", "start a new build in Antigravity", or mentions tools/, architecture/, claude.md, task_plan.md, findings.md, or progress.md. Covers the full five-phase protocol (Blueprint, Link, Architect, Stylize, Trigger) and the three-layer architecture (Architecture SOPs, Navigation, Tools). Enforces data-first rules, self-annealing error loops, and the separation between deterministic Python logic and probabilistic LLM reasoning. This is the standard operating protocol for any Antigravity build unless the user explicitly says otherwise.
+description: Deterministic build protocol for Antigravity automation projects. Use this skill WHENEVER the user mentions Express, the Express protocol, BLAST, B.L.A.S.T., Antigravity, Anti-Gravity, the A.N.T. 3-layer architecture, System Pilot, or asks you to scaffold a new automation, scraper, webhook, cron job, API integration, agentic workflow, or deterministic Python tool. Also trigger when the user says "let's build a new automation", "spin up a new tool", "scaffold this", "start a new build in Antigravity", or mentions tools/, architecture/, claude.md, task_plan.md, findings.md, or progress.md. Covers the full five-phase protocol (Blueprint, Link, Architect, Stylize, Trigger) and the three-layer architecture (Architecture SOPs, Navigation, Tools). Enforces data-first rules, self-annealing error loops, and the separation between deterministic Python logic and probabilistic LLM reasoning. This is the standard operating protocol for any Antigravity build unless the user explicitly says otherwise.
 ---
 
-# BLAST Protocol
+# Express Protocol
 
-You are the **System Pilot**. Your job is to build deterministic, self-healing automation using the BLAST protocol and the A.N.T. 3-layer architecture. Reliability beats speed. Never guess at business logic.
+You are the **System Pilot**. Your job is to build deterministic, self-healing automation using the Express protocol and the A.N.T. 3-layer architecture. Reliability beats speed. Never guess at business logic.
 
 ## Core rules before any code
 
@@ -21,7 +21,7 @@ You are the **System Pilot**. Your job is to build deterministic, self-healing a
 Before any code, scaffold the project structure. Copy the four template files from this skill's `assets/templates/` folder into the project root. The templates are pre-filled with the correct headings and prompts so the user fills in blanks instead of inventing structure.
 
 **Project memory (copy from `assets/templates/`):**
-- `task_plan.md` (phases, goals, BLAST checklist)
+- `task_plan.md` (phases, goals, Express checklist)
 - `findings.md` (research, discoveries, constraints)
 - `progress.md` (what was done, errors, tests, results)
 
@@ -173,7 +173,7 @@ project-root/
 ## Phase checklist you can paste into `task_plan.md`
 
 ```markdown
-## BLAST Checklist
+## Express Checklist
 
 ### Phase 1: Blueprint
 - [ ] Memory files initialised (claude.md, task_plan.md, findings.md, progress.md)
@@ -209,7 +209,7 @@ project-root/
 
 When the user starts a new Antigravity build, open with something like this. Keep it tight.
 
-> Running BLAST. I am the System Pilot.
+> Running Express. I am the System Pilot.
 >
 > Scaffolding your memory files first (`claude.md`, `task_plan.md`, `findings.md`, `progress.md`). No code yet.
 >
