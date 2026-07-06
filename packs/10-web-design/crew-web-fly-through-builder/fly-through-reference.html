@@ -27,11 +27,14 @@
   /* transparent scroll runway that drives the cinematic descent */
   #cine{height:500vh;position:relative;z-index:5;pointer-events:none}
   /* the listing begins to cover the viewport: fade only the ENTER panel and hint,
-     keep the canvas painting the arrival frame underneath (no black in either direction) */
-  .covering #enter,.covering .hint{opacity:0!important;visibility:hidden;transition:opacity .4s ease}
+     keep the canvas painting the arrival frame underneath (no black in either direction).
+     visibility is !important because overlays() sets an inline visibility:visible on #enter
+     at the arrival (p>.90); without !important that inline would win and leave the invisible
+     ENTER button clickable and Tab-focusable over the whole proof section. */
+  .covering #enter,.covering .hint{opacity:0!important;visibility:hidden!important;transition:opacity .4s ease}
   /* once the listing fully covers the screen, retire the cinematic layers */
   .past-cine #scroller-canvas,.past-cine .glow,.past-cine .scrim,
-  .past-cine #enter,.past-cine .hint{opacity:0!important;visibility:hidden;transition:opacity .6s ease}
+  .past-cine #enter,.past-cine .hint{opacity:0!important;visibility:hidden!important;transition:opacity .6s ease}
 
   /* ---------- fixed cinematic layers ---------- */
   #scroller-canvas{
@@ -122,7 +125,7 @@
 
   /* ---------- ENTER endpoint ---------- */
   #enter{
-    position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;
+    position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;visibility:hidden;
     display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:30px;
   }
   #enter::before{content:"";position:absolute;inset:0;z-index:-1;
@@ -495,6 +498,7 @@ function overlays(p){
   setStage(s2, win(p, .34, .40, .56, .64));
   setStage(s3, win(p, .68, .74, .85, .91));
   enter.style.opacity = p > .90 ? Math.min(1, (p - .90) / .06) : 0;
+  enter.style.visibility = p > .90 ? 'visible' : 'hidden';
   glow.style.opacity = Math.max(0, Math.min(1, (p - .58) / .27));
   if (!document.body.classList.contains('past-cine'))
     indicator.textContent = p < .33 ? '01 // Orbit' : p < .68 ? '02 // Stratosphere' : '03 // Sanctuary';

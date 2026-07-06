@@ -2,6 +2,21 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.5.2 (2026-07-06)
+
+### Fixed
+- crew-web-fly-through-builder: the arrival ENTER panel was hidden by opacity
+  alone, but its child button keeps pointer-events auto, so an invisible,
+  Tab-focusable ENTER button rode the whole descent and a mid-flight click
+  smooth-scrolled past the journey. The base #enter now carries
+  visibility:hidden and overlays() toggles it visible only at the arrival
+  (p greater than .90). On the continuous-flow arrival that inline
+  visibility:visible outlives the arrival, so the .covering #enter and
+  .past-cine #enter rules use visibility:hidden!important (a non-important
+  class rule loses to the inline, which would leave the button clickable over
+  the whole proof section). Fix verified by computed-style resolution and
+  documented in the failure-modes table.
+
 ## 1.5.1 (2026-07-06)
 
 ### Fixed
