@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.5.2-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.5.2">
+  <img src="https://img.shields.io/badge/CREW-v1.6.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.6.0">
   <img src="https://img.shields.io/badge/SKILLS-99-333333?style=for-the-badge&labelColor=lime&color=333333" alt="99 Skills">
   <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
@@ -65,6 +65,8 @@ claw skills import ./packs/               # OpenClaw
 
 **First run:** Run any skill. It asks 11 questions about your business (or run `crew-core-brand-context` directly). After that, every skill knows who you are. Worked example brand files live under `examples/brand-context/`.
 
+**Every run after that:** new work just needs a project name ("call it websites") and goes. Continuing something? Say "where were we" (`crew-core-context-restore`), pick the project, carry on exactly where it stopped.
+
 **Runs best on:** a Sonnet-class model or better. Smaller models hold the skill discipline less reliably; the status vocabulary, the run receipt, and the onboarding gate degrade first.
 
 **Updating:** `git pull && bash install.sh --all --global --force --prune` (prune removes renamed or retired Crew skills, never anything else). Zip buyers: see `shared/INSTALL.md`. After any install or update, `bash install.sh --doctor --global` checks the install is healthy.
@@ -100,16 +102,16 @@ Every skill follows the same disciplined path:
                                │
                                ▼
                     ┌──────────────────────────┐
-                    │   DISCOVERY               │
-                    │   fresh / continuing /    │
-                    │   existing brand          │
+                    │   PROJECT                 │
+                    │   new build, or continue  │
+                    │   one via context restore │
                     └──────────┬───────────────┘
                                │
                                ▼
                     ┌──────────────────────────┐
-                    │   BUILD → GATE → OUTPUT   │
-                    │   Design review cross-    │
-                    │   references packs 12-14  │
+                    │   BUILD → GATE → RECORD   │
+                    │   Design review, then the │
+                    │   record saves to project │
                     └──────────────────────────┘
 ```
 
@@ -135,8 +137,25 @@ A standard is what good looks like. A loop is what the skill does when reality i
 | **Missing Input** | A required input is absent or contradictory | Name what is missing. Ask once. If unavailable, proceed and mark every affected field. Never fabricate. |
 | **Quality Failure** | Verification finds output does not meet the brief | Stop. Name the specific gap. Fix or route. Re-verify. Record what failed. |
 | **Escalation** | Work needs a decision this skill cannot make | Stop at the boundary. Produce everything up to it. Name who must decide. Never guess. |
-| **Context Change** | Start and end of every run | Step 0: read the handoff. Final Step: write what was done, what was decided, what remains. |
-| **Learning Capture** | A correction, preference, or fact surfaces | Record it in the handoff. An unrecorded lesson is a repeated mistake. |
+| **Context Change** | Start and end of every run | Step 0: brand context + lessons, then new project or continue one. Final Step: write the record into the project. |
+| **Learning Capture** | A correction, preference, or fact surfaces | Record it in the project record. Durable lessons: "save this so it never happens again?" writes it locally, permanently. |
+
+### Projects: how the memory is organised
+
+Every piece of work lives in a named project. Ten websites from one skill are ten projects, all kept, all restorable:
+
+```
+~/.claude/crew-state/
+├── brand-context.md        # who you are (onboard once)
+├── projects/
+│   ├── learnos/            # every skill's records for this project
+│   ├── websites/
+│   └── client-acme/
+├── lessons/                # per-skill "never again" notes, read at every start
+└── active-project          # what we are working on right now
+```
+
+A new session starts light: brand context plus lessons, nothing else. Continuing earlier work? Run `crew-core-context-restore` first ("where were we"), pick the project, and every skill works inside it. New build? Just name it and go. Nothing is ever overwritten by other projects, and running multiple businesses stays one command away (switch brands, each with its own complete cabinet).
 
 ### Design system: Bedrock / Fuel / Engine
 

@@ -38,6 +38,10 @@ Eleven plain-language questions, one file written, and every skill you run from
 then on knows who you are. To run more than one brand, see the examples under
 `examples/brand-context/` and switch anytime with "switch to [brand]".
 
+From then on, work lives in projects: name a new one ("call it websites") and
+build, or say "where were we" to list your projects and continue one exactly
+where it stopped. Every project is kept; nothing overwrites anything.
+
 ## Updating later
 
 Download the newer zip (the version is in the filename, and CHANGELOG.md says

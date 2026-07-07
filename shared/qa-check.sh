@@ -41,8 +41,10 @@ BAN='Brock|Bob|Lara|Neo|gstack|gbrain|PerformOS|Hermes|NemoClaw'
 
 echo "== em-dash check (all .md except none; em dashes banned everywhere) =="
 # perl, not grep -P: BSD/macOS grep has no -P, which made the old check a silent
-# no-op that never matched anything.
-DASHED="$(find . -name '*.md' -type f ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' -exec perl -ne 'if (/[\x{2014}\x{2013}\x{2015}]/) { print "$ARGV\n"; last }' {} \; 2>/dev/null | sort -u)"
+# no-op that never matched anything. -CSD is load-bearing: without it perl reads
+# raw bytes and \x{2014} never matches the three UTF-8 bytes of an em dash, the
+# same silent-no-op failure all over again.
+DASHED="$(find . -name '*.md' -type f ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' -exec perl -CSD -ne 'if (/[\x{2014}\x{2013}\x{2015}]/) { print "$ARGV\n"; last }' {} \; 2>/dev/null | sort -u)"
 if [ -n "$DASHED" ]; then
   echo "$DASHED"; note "em/en dashes found in the files above"
 else ok "no em dashes"; fi
@@ -111,8 +113,12 @@ for d in "$PACKS_DIR"/*/; do
       || note "$skill: missing role-opening paragraph"
     # Context Loop
     grep -qE 'Step 0: Context Recovery' "$f" || note "$skill: missing Step 0 Context Recovery"
-    grep -qE 'Final Step: Handoff Save' "$f" || note "$skill: missing Final Step Handoff Save"
-    grep -qF "~/.claude/crew-state/$packid/$skill-handoff.md" "$f" || note "$skill: handoff path not ~/.claude/crew-state/$packid/$skill-handoff.md"
+    grep -qE 'Final Step: (Handoff|Record) Save' "$f" || note "$skill: missing Final Step (Handoff|Record) Save"
+    if [ "$skill" = "crew-core-brand-context" ]; then
+      grep -qF "~/.claude/crew-state/crew-core-brand-context-handoff.md" "$f" || note "$skill: cabinet record path missing"
+    else
+      grep -qF "~/.claude/crew-state/projects/<project>/$skill-handoff.md" "$f" || note "$skill: record path not ~/.claude/crew-state/projects/<project>/$skill-handoff.md"
+    fi
     # the state root is home-global; a bare relative .claude/crew-state forks the memory
     perl -ne 'exit 1 if /(?<!~\/)\.claude\/crew-state/' "$f" || note "$skill: bare relative .claude/crew-state path (must be ~/.claude/crew-state)"
     # output fenced block present
@@ -213,7 +219,8 @@ if [ "$SMOKE" = 1 ]; then
     return 1
   }
   seed_brand() { # $1 = workdir
-    mkdir -p "$1/crew-state"
+    mkdir -p "$1/crew-state/projects/smoketest"
+    printf "smoketest" > "$1/crew-state/active-project"
     cat > "$1/crew-state/brand-context.md" <<'FIXTURE'
 # Brand Context: Harbourline Studio (synthetic QA fixture)
 - Name: Harbourline Studio
@@ -232,7 +239,9 @@ FIXTURE
   }
   check_handoff_frame() { # $1 = handoff path, $2 = skill label; asserts the P2 frame
     frameok=1
-    awk 'NF && $0 != "---" {print; exit}' "$1" | grep -qE '^# .*handoff' || { note "smoke $2: handoff missing '# <skill> handoff' title line"; frameok=0; }
+    # append-only records (context-save) prepend dated entries, so the title may
+    # not be the first non-separator line; fall back to a file-wide title check.
+    { awk 'NF && $0 != "---" {print; exit}' "$1" | grep -qE '^# .*handoff' || grep -qE '^# .*handoff' "$1"; } || { note "smoke $2: handoff missing '# <skill> handoff' title line"; frameok=0; }
     grep -qE '^Date:' "$1" || { note "smoke $2: handoff missing Date: line"; frameok=0; }
     grep -qE "^STATUS: ($FRAME_ENUM)" "$1" || { note "smoke $2: handoff STATUS missing or off the frame enum"; frameok=0; }
     return $((1 - frameok))
@@ -262,16 +271,16 @@ FIXTURE
       # receipt, and a framed handoff.
       caseA="$(awk '/^## Case A/{a=1;next} a&&/^## Case/{exit} a&&/^INPUT:/{p=1;next} a&&/^EXPECT:/{exit} p{print}' "$fx")"
       work="$(mktemp -d)"; seed_brand "$work"
-      ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md). Print the three-line run receipt, then the completed Output-format artifact, fully filled, as your final message.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseA" \
+      ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md, and the active project is already set: ./crew-state/active-project contains "smoketest", so do not ask the project question). Print the three-line run receipt, then the completed Output-format artifact, fully filled, as your final message.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseA" \
         | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
       if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
-      hp="$work/crew-state/$packid/$skill-handoff.md"
+      hp="$work/crew-state/projects/smoketest/$skill-handoff.md"
       okrun=1
       awk -v h="$header" 'BEGIN{h=tolower(h)} index(tolower($0),h)==1{f=1} END{exit !f}' "$work/out.txt" 2>/dev/null \
         || { note "smoke $skill: output missing header line '$header'"; okrun=0; }
       if [ -f "$hp" ]; then
         check_handoff_frame "$hp" "$skill" || okrun=0
-        grep -qF "crew-state/$packid/$skill-handoff.md" "$work/out.txt" 2>/dev/null \
+        grep -qF "crew-state/projects/smoketest/$skill-handoff.md" "$work/out.txt" 2>/dev/null \
           || { note "smoke $skill: run receipt does not name the handoff path"; okrun=0; }
       else
         note "smoke $skill: handoff file not written"; okrun=0
@@ -283,10 +292,10 @@ FIXTURE
       if [ "$NCASES" = 2 ]; then
         caseC="$(awk '/^## Case C/{a=1;next} a&&/^## Case/{exit} a&&/^INPUT:/{p=1;next} a&&/^EXPECT:/{exit} p{print}' "$fx")"
         work="$(mktemp -d)"; seed_brand "$work"
-        ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md). Follow the skill exactly as written, including its missing-input rules.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseC" \
+        ( cd "$work" && printf 'Run the following Crew skill exactly against the input. Perform its full Context Loop. For this test run the crew-state root is ./crew-state/ (read and write every crew-state file there; the brand context already sits at ./crew-state/brand-context.md, and the active project is already set: ./crew-state/active-project contains "smoketest", so do not ask the project question). Follow the skill exactly as written, including its missing-input rules.\n\n--- SKILL ---\n%s\n\n--- INPUT ---\n%s\n' "$body" "$caseC" \
           | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
         if quota_check "$work/out.txt"; then rm -rf "$work"; break 2; fi
-        hp="$work/crew-state/$packid/$skill-handoff.md"
+        hp="$work/crew-state/projects/smoketest/$skill-handoff.md"
         okrun=1
         if awk -v h="$header" 'BEGIN{h=tolower(h)} index(tolower($0),h)==1{f=1} END{exit !f}' "$work/out.txt" 2>/dev/null; then
           # header alone is not damning IF every required field is marked, but a full
@@ -322,7 +331,7 @@ FIXTURE
   if [ "$QUOTA_DEAD" != 1 ] && [ -f "$cf" ] && { [ -z "$PACK_FILTER" ] || [ "$PACK_FILTER" = "design-standards" ]; }; then
     cbody="$(cat "$cf")"
     work="$(mktemp -d)"; seed_brand "$work"
-    ( cd "$work" && printf 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/ (the brand context sits at ./crew-state/brand-context.md).\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it on a marketing homepage.\n' "$cbody" \
+    ( cd "$work" && printf 'CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md\n\nRun the following Crew skill against the input. For this test run the crew-state root is ./crew-state/ (the brand context sits at ./crew-state/brand-context.md, and the active project is already set: ./crew-state/active-project contains "smoketest", so do not ask the project question).\n\n--- SKILL ---\n%s\n\n--- INPUT ---\nJudge the composition of a single centered hero with three equal cards below it on a marketing homepage.\n' "$cbody" \
       | claude -p --permission-mode acceptEdits >out.txt 2>err.txt )
     if quota_check "$work/out.txt"; then rm -rf "$work"
     elif grep -qiE "not onboarded" "$work/out.txt" 2>/dev/null; then

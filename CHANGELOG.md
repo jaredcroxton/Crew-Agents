@@ -2,6 +2,37 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.6.0 (2026-07-07)
+
+### Changed
+- PROJECTS: the memory model. Inside the brand's state root, every piece of
+  work now lives in a named project folder (`~/.claude/crew-state/projects/
+  <name>/`) and each skill keeps one record per project: ten websites from one
+  skill are ten projects, all kept, all restorable, never overwritten by each
+  other. A session starts light, brand context plus the skill's lessons file
+  and nothing else; continuing earlier work goes through
+  `crew-core-context-restore` (the front door: lists projects, loads the
+  chosen one, sets the active-project pointer), and chained skills read their
+  upstream records from the same project. The record file name and frame are
+  unchanged (`<skill>-handoff.md`, `# <skill> handoff`), so every record ever
+  written still parses. Records from before this model are listed by restore
+  as legacy and can be moved into a project on request; nothing is deleted.
+- THE LESSON OFFER (Loop 5): when a run captures a durable way-of-working
+  correction, the skill offers once, "Want me to save this lesson so it never
+  happens again?" On yes it is appended to that skill's local lessons file,
+  read at every future start, survives every product update, and never leaves
+  the machine.
+- All 96 work skills swept to the new Step 0 / Final Step (four verified
+  passes, zero old-path references remain); the four cabinet-level core
+  skills (brand-context, context-save, context-restore, using-crew)
+  hand-rewritten for their roles; template updated and its section order made
+  to match the shipped shape.
+- Harness: structural QA asserts the project record path (mutant-verified),
+  the smoke seam seeds and asserts a project, and the loop-regression suite
+  grows to nine scenarios including project creation, the first scripted
+  multi-hop chain test (upstream record consumed from the same project), and
+  the lessons-file read. 33 adversarial-review findings fixed before landing.
+
 ## 1.5.2 (2026-07-06)
 
 ### Fixed

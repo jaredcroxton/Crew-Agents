@@ -23,6 +23,7 @@ jobs:
       - name: Clean-clone install dry-run
         run: bash install.sh --all --dry-run
       - name: Installer puts the catalogue down (temp target)
+        shell: bash
         run: |
           T="$(mktemp -d)"
           bash install.sh --all --target "$T" | tail -3
