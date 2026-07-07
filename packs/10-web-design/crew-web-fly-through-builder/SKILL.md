@@ -154,7 +154,8 @@ Branch on the Step 1 answer (see Route architecture for the trade-offs). All thr
 1. Confirm the key. Copy `.env.example` to `.env` and paste `KIE_API_KEY=`, or reuse a working key already in another project's `.env`. Verify with `python3 pipeline/generate_assets.py --handshake` (one cheap nano-banana, confirms the link before spending on video).
 2. Edit `pipeline/keyframes.json`: one prompt per stage boundary (A start, B and C mid-stages, D arrival). Compose each so its framing flows into the next clip's motion. Photoreal, 8k, "no text, no watermark" on every prompt.
 3. Edit `pipeline/clips.json`: one clip per gap (A to B, B to C, C to D), each prompt describing a continuous downward camera move. Model `bytedance/v1-lite-image-to-video`, resolution `1080p`, duration 5.
-4. Run `python3 pipeline/generate_assets.py --keyframes` then `--clips` (or `--all`). Keyframe anchor URLs cache to `.tmp/keyframe_urls.json` for about 24h so clips can re-run without re-painting.
+4. **The settle clip (when the arrival payoff matters, budget for it).** The budget model has no end-frame anchor, so the final gap clip will NOT land on keyframe D; the descent drifts past its own arrival. The proven fix: one extra clip seeded FROM keyframe D with a prompt like "very slow dolly push, camera settles calmly at the end", appended after the last gap clip with the standard 0.75s crossfade. Both ends share the arrival grade, so the seam reads clean. Total budget on this route: 4 keyframes, 4 clips (3 gaps plus the settle). Skip the settle clip only for an ambient endpoint where the exact arrival frame is not the payoff. (Models that accept a start AND end image anchor the final clip directly and need no settle clip.)
+5. Run `python3 pipeline/generate_assets.py --keyframes` then `--clips` (or `--all`). Keyframe anchor URLs cache to `.tmp/keyframe_urls.json` for about 24h so clips can re-run without re-painting.
 
 ### Route B: bring your own footage
 
@@ -164,7 +165,7 @@ Branch on the Step 1 answer (see Route architecture for the trade-offs). All thr
 ### Route C: no assets yet
 
 1. Still edit `pipeline/keyframes.json` and `clips.json` so the prompts exist.
-2. Hand the user the four keyframe prompts and three clip prompts as paste-ready text, with the instruction: generate each stage in your chosen app, export 1080p MP4 in descent order, send them back. Name the apps (Runway Gen-3, Kling 1.6, Sora, Pika, Veo 3, Luma Dream Machine).
+2. Hand the user the four keyframe prompts and the clip prompts as paste-ready text: the three gap clips PLUS the settle clip (seeded from the arrival keyframe, "very slow dolly push, camera settles calmly at the end") whenever the arrival payoff matters, with the instruction: generate each stage in your chosen app, export 1080p MP4 in descent order, send them back. Name the apps (Runway Gen-3, Kling 1.6, Sora, Pika, Veo 3, Luma Dream Machine). If their app accepts a start AND end image per clip, they can anchor the final clip to the arrival keyframe instead of generating the settle clip.
 3. Pause. When the MP4s arrive, switch to route B.
 
 ### Route D: still-image stage-switcher
@@ -213,7 +214,7 @@ Clone `fly-through-reference.html` (in this skill folder) as `index.html` and re
 
 **Brand and design DNA:** apply the carrier's `:root` per Brand carrier. Do not redesign the locked default DNA.
 
-**Locked legibility kit (do not strip):** radial scrim behind every stage block and the ENTER panel, dual-layer text shadows on headlines and labels, the accent glow keyed to the final stage only, the indicator guarded so it does not clobber the arrival label.
+**Locked legibility kit (do not strip):** radial scrim behind every stage block and the ENTER panel, dual-layer text shadows on headlines and labels, the accent glow keyed to the final stage only, the indicator guarded so it does not clobber the arrival label. The ENTER arrival scrim alpha is .55 by default, which holds only on dark or dusk arrival footage; when the held arrival frame is bright (daylight, white architecture, sky), raise it to about .72 or the ENTER copy washes out. Judge it on the actual arrival frame, not the average of the descent.
 
 **Locked engineering (already in template, do not rip out):**
 - Load gate and two-pass frame loading: see Frame pipeline. Never wait for all frames.
@@ -483,6 +484,8 @@ RECOMMENDATION: [what should happen next]
 | Invisible ENTER button clickable and Tab-focusable during the descent or over the proof section | `#enter` is hidden by `opacity:0` only (container `pointer-events:none`), but the child `.ghost` sets `pointer-events:auto`, so an unseen centred button rides the descent and, on the continuous-flow arrival, keeps riding over the proof section; a click on it silently smooth-scrolls the page | add `visibility:hidden` to the base `#enter` CSS block, and in `overlays()` set `enter.style.visibility = p > .90 ? 'visible' : 'hidden'` right after the opacity line. Then, because that inline `visibility:visible` set at the arrival outlives it, the `.covering #enter` and `.past-cine #enter` rules must use `visibility:hidden!important` (a non-important class rule loses to the inline, leaving the button clickable over the whole proof section) |
 | Script silently dead, no handlers | `function enter()` collided with `const enter = getElementById('enter')` | Rename to `enterResidence()` / `resetLoop()` |
 | Arrival label flickers back to a stage | `overlays()` keeps writing the indicator at progress 1 | Guard the write with `!body.classList.contains('past-cine')` |
+| Final clip drifts past the arrival keyframe | the budget video model has no end-frame anchor, so the last gap clip cannot be told where to land | append a settle clip seeded from the arrival keyframe ("very slow dolly push, camera settles calmly at the end"), standard 0.75s crossfade; or use a model that accepts start AND end images |
+| ENTER copy washes out on a bright arrival | scrim alpha .55 tuned for dark footage | raise the arrival scrim to about .72; judge on the actual arrival frame |
 | `Unknown encoder 'libwebp'` | Homebrew ffmpeg build | Pillow WebP (`to_webp.py`) |
 | Mobile scrub a blurry sliver | landscape frames cover-fit portrait | Portrait 720x1080 center-crop set |
 | Preview screenshot all black, page fine | viewport-override capture artifact | Pixel readback via getImageData, or the `__FLYTHROUGH.f` hook |

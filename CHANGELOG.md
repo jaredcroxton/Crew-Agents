@@ -2,6 +2,24 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.6.1 (2026-07-08)
+
+### Fixed
+- Four field-proven lessons promoted from live-build records into the shipped
+  skills. crew-design-documents: footers are set in flow, never via @page
+  margin boxes (headless Chrome, the pipeline's own renderer, silently ignores
+  the @bottom-* boxes; the proven pattern is a flex-column .page with an
+  explicit min-height and a margin-top auto footer). crew-web-fly-through-
+  builder: the budget video route gains the settle clip (the budget model has
+  no end-frame anchor, so the arrival needs a fourth clip seeded from the
+  arrival keyframe; the prompts handed out on the no-key route include it),
+  and the arrival scrim rule (alpha .55 holds only on dark footage, raise to
+  about .72 on a bright arrival frame). crew-web-slide-deck-builder: entrance
+  reveals fire synchronously in the navigation function with the
+  IntersectionObserver kept as backstop only (a transformed slide track
+  reports the observer late and embedded contexts throttle it, leaving slides
+  invisible). Two failure-modes rows added to the fly-through table.
+
 ## 1.6.0 (2026-07-07)
 
 ### Changed
