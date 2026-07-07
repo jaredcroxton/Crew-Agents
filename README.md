@@ -43,8 +43,8 @@ CREW gives your AI agents the skills to operate as a full business team. Not one
 
 ```bash
 # Clone
-git clone https://github.com/jaredcroxton/crew-skill-packs.git
-cd crew-skill-packs
+git clone https://github.com/jaredcroxton/Crew-Agents.git
+cd Crew-Agents
 
 # Route A (recommended): direct install into ~/.claude/skills
 bash install.sh --all --global
@@ -58,6 +58,8 @@ bash build-plugins.sh
 cp -r packs/* ~/.hermes/skills/crew/      # Hermes Agent
 claw skills import ./packs/               # OpenClaw
 ```
+
+**Windows:** install [Git for Windows](https://git-scm.com/download/win) and run every command above in **Git Bash**, not PowerShell. Claude Code itself runs natively on Windows; only the install scripts need bash. (Line endings are pinned LF by `.gitattributes`, so any git configuration clones cleanly.) WSL works too if you already run Claude Code inside it.
 
 **Then restart your Claude session.** Skills load at session start; after any install or update, a fresh session is what makes them visible.
 

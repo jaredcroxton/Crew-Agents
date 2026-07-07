@@ -1,0 +1,16 @@
+# Line-ending discipline. The installers are bash: if a Windows clone converts
+# them to CRLF (Git for Windows defaults to core.autocrlf=true), bash dies with
+# "$'\r': command not found" on the first line. Forcing LF here overrides any
+# local autocrlf setting, so every clone runs on macOS, Linux, WSL, and Git Bash.
+*.sh   text eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.env.example text eol=lf
+
+# Binary assets, never touched
+*.png  binary
+*.jpg  binary
+*.webp binary
+*.zip  binary

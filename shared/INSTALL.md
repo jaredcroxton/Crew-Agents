@@ -15,6 +15,12 @@ Drop `--global` to install into the current project only (`.claude/skills`).
 If this zip is a single pack, the same command installs that pack (core is always
 included; it is the floor the other packs stand on).
 
+**Windows:** install [Git for Windows](https://git-scm.com/download/win) and run
+the commands above in **Git Bash**, not PowerShell (the installer is a bash
+script; Claude Code itself runs natively on Windows). Unzipping with Explorer is
+fine, the files inside are untouched. WSL also works if you run Claude Code
+inside it.
+
 ## 2. Restart your Claude session
 
 Skills load when a session starts. After any install or update, start a fresh
