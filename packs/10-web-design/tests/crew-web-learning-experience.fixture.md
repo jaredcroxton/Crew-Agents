@@ -35,7 +35,7 @@ EXPECT:
 - Output begins with the literal line "LEARNING EXPERIENCE PLAN".
 - The Design review gate is run with a binding verdict from crew-design-quality, and Criticals and Majors are fixed before deploy.
 - No em dashes anywhere in the output.
-- Handoff file `~/.claude/crew-state/web-design/crew-web-learning-experience-handoff.md` was written, naming the upstream artifacts consumed (the module outline, the facilitator guide, and the workbook).
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-web-learning-experience-handoff.md` was written, naming the upstream artifacts consumed (the module outline, the facilitator guide, and the workbook).
 
 ## Case B: messy
 INPUT:
@@ -56,7 +56,7 @@ EXPECT:
 - Workbook cues are absent, because no workbook was provided.
 - The handoff records the gaps (three missing timings, the activity-less module) and names the facilitator guide skill as the routing target for the next run.
 - No em dashes anywhere in the output.
-- Handoff file `~/.claude/crew-state/web-design/crew-web-learning-experience-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-web-learning-experience-handoff.md` was written.
 
 ## Case C: missing-input
 INPUT:
@@ -69,4 +69,4 @@ EXPECT:
 - It routes content creation to the training pack: the programme must be written by crew-training-module-outline-builder and crew-training-facilitator-guide-creator before this skill can activate it.
 - The BLOCKED handoff is written BEFORE pausing for the answer, recording the missing chain outputs as the blocker, with nothing assumed.
 - No LEARNING EXPERIENCE PLAN report is produced for a build that did not happen.
-- Handoff file `~/.claude/crew-state/web-design/crew-web-learning-experience-handoff.md` was written with STATUS: BLOCKED.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-web-learning-experience-handoff.md` was written with STATUS: BLOCKED.

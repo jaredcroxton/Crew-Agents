@@ -2,6 +2,28 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.7.0 (2026-07-08)
+
+### Added
+- crew-web-slide-deck-mobile: skill 100, the vertical story deck for the phone
+  in the hand. Full-screen 9:16 panels advanced by the thumb's downward flick
+  (scroll-snap on a fixed wrapper, so browser chrome never shifts the snap
+  points and pull-to-refresh cannot kill the deck), one idea per panel, a
+  stories-style progress rail, and the Mobile Quote template for sending a
+  priced proposal as a link in a text: hook, problem, the work, the price
+  huge, guarantee, one thumb-reach action. Media is generated vertical at the
+  source (1080x1920), never cropped down from widescreen. The animation layer
+  ships staggered entrance reveals fired synchronously with an observer
+  backstop, one signature count-up with a spring settle, and full
+  reduced-motion collapse. Sent-link engineering is honest: OG preview
+  requires a hosted absolute image, so the workflow carries a deploy step and
+  a real-scraper preview check; the file itself stays self-contained with
+  sibling media. Safe areas are real (viewport-fit=cover mandated, dvh
+  everywhere, nothing in the notch or home-bar bands). 18 adversarial-review
+  findings fixed before landing, including three Criticals from the mobile
+  lens. The horizontal sibling and the mobile deck now route to each other.
+  The catalogue reaches 100 skills.
+
 ## 1.6.1 (2026-07-08)
 
 ### Fixed

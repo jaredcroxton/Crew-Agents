@@ -51,7 +51,7 @@ If any required input is missing, ask once in a single message listing only the 
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative).
+Do not run this skill when the user wants an editable PowerPoint or Google Slides file (this builds HTML only, say so), when they want a multi-page website (that is `crew-web-page-builder`), or when the request is to write the messaging itself (this presents content the user provides, it does not invent a narrative), or when the deck is for a phone in the hand rather than a laptop or projector (a 9:16 vertical story sent as a link is `crew-web-slide-deck-mobile`). Route to the mobile skill when the deck travels as a link opened on a phone; keep decks emailed to an audience that reads primarily on desktop here.
 
 ## How the deck builder thinks
 
