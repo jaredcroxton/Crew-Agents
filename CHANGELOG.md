@@ -2,6 +2,26 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.8.0 (2026-07-08)
+
+### Added
+- crew-docs-research-notebooklm: skill 101, deep research and multimodal
+  briefings over your own sources through NotebookLM. A bridge skill: it drives
+  the community notebooklm-py CLI that the user installs and logs in to once
+  (the invoke-once, connect step), one NotebookLM notebook bound to each Crew
+  project via a local notebooklm.json, every artifact (the audio overview, the
+  video, the report, the deck, quizzes, mind maps) downloaded into the project
+  folder. Grounded, cited answers only; the notebook is the authority and an
+  ungrounded question gets "the sources do not cover this", never a training
+  guess. Honest about the dependency by design: the undocumented-API risk is
+  stated up front with a Crew-native fallback, the data boundary (sources go to
+  Google, the one Crew skill where work leaves the machine) is stated before
+  the first source and re-flagged for sensitive material, and the skill never
+  touches the Google password or runs the login itself. 10 adversarial-review
+  findings fixed before landing, including a CLI-correctness pass against the
+  real command surface and an auth-safety Critical. The catalogue reaches 101
+  skills; the Docs pack grows to 8.
+
 ## 1.7.0 (2026-07-08)
 
 ### Added
