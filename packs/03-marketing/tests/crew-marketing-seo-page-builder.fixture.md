@@ -24,6 +24,7 @@ EXPECT:
 - No fabricated search volume, difficulty, or ranking position anywhere.
 - Asks (in this default Careful mode, not only Governed) whether an existing page already targets "best project management software for agencies" or a close variant, so it does not build a rival that cannibalizes it.
 - Writes the copy in the audience's market English rather than defaulting to US English (matching the brand-context audience loaded at Step 0).
+- No live domain was supplied, so the Technical pre-flight block is marked "skipped, no domain supplied"; no robots.txt, sitemap, rendering, llms.txt, or PageSpeed result is guessed or invented.
 - Handoff written to `~/.claude/crew-state/marketing/crew-marketing-seo-page-builder-handoff.md` naming the intent decision and what `crew-marketing-landing-page-review` needs next.
 
 ## Case B: messy

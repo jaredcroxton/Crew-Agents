@@ -1,6 +1,6 @@
 ---
 name: crew-marketing-seo-page-builder
-description: Turn a target keyword into a structured, search-intent-matched web page draft with outline, copy, metadata, and FAQ. Invoke when someone wants an SEO page, asks to rank for a keyword, says "write a page for [term]", needs a landing or pillar page draft, or hands over a keyword to build content around.
+description: Turn a target keyword into a structured, search-intent-matched web page draft with outline, copy, metadata, and FAQ, grounded by a technical pre-flight (robots, sitemap, SSR, llms.txt, PageSpeed) when a live domain is supplied. Invoke when someone wants an SEO page, asks to rank for a keyword, says "write a page for [term]", needs a landing or pillar page draft, or hands over a keyword.
 ---
 
 # Crew: SEO Page Builder
@@ -23,6 +23,7 @@ Then confirm the pre-work in one line each, so the marketer can correct you befo
 - **Whether the top-ranking results were supplied.** The pages currently ranking for the keyword, or "none supplied". Without them, the gap is built to intent and marked "Not assessed against current results".
 - **The internal pages available to link to.** The real pages on the site you may link to, or "none confirmed". You link only to pages the user confirmed exist, never an invented URL.
 - **Whether an existing page already targets this keyword.** A live page on the site already ranking for this term or a close variant, or "none known". Two pages targeting one query split the signal and rank neither, so if one exists you strengthen it rather than building a rival (see Decision briefs). Ask this in every mode, not only Governed.
+- **The live domain, if the site exists.** The domain (and target path if known) the page will ship on, or "none, new site". A supplied domain unlocks the Technical pre-flight, which replaces guesses with fetched facts: crawlability, existing sitemap URLs, SSR vs CSR, llms.txt, and a measured page-speed score.
 
 If the keyword or the offer is missing, ask once, plainly, before you build (Loop 1, Missing Input). Then proceed.
 
@@ -35,14 +36,15 @@ You need:
 - The audience: the specific person searching the term, not "everyone".
 - Optionally, the top results currently ranking for the keyword (or "none supplied"), the brand voice rules, and the internal pages confirmed to exist that the page may link to.
 - Whether an existing page on the site already targets this keyword or a close variant (or "none known"), so you do not build a rival that cannibalizes it.
+- Optionally, the live domain the page will ship on (or "none, new site"), which unlocks the Technical pre-flight.
 - The mode, if specified (Fast, Careful, or Governed). Default is Careful.
 
 If the target keyword is missing, ask for it once, plainly, because intent and structure cannot be derived without the query (Loop 1, Missing Input). If the offer is missing, ask once, because a page with no conversion goal is an article, not an SEO page. If you cannot obtain an input, proceed and mark every affected field "Not provided" or "Assumed: [the assumption]". Never invent a search volume, a keyword difficulty score, a ranking position, a competitor's word count, a statistic, or a customer quote. A blank field beats a fabricated metric.
 
 ## Modes and when to use them
 
-- **Fast mode:** one page, fast. Confirm the keyword and the offer, classify the one primary intent with its evidence, produce the page structure (H1, H2, H3) and the copy, write the metadata, and write three snippet-shaped FAQ. Skip the deep gap analysis against the current top results (mark it "Not assessed against current results") and the longer FAQ set. The integrity checks survive Fast mode and are never lighter: no-fabrication (no invented volume, difficulty, position, competitor word count, statistic, or quote), schema-honesty (markup only for content actually on the page), alt-text-honesty (only for images that exist), the "[insert verified figure]" rule for any number the user did not supply, and the escalation gate (a price, a guarantee, a legal or compliance claim, or an unsubstantiated superlative is flagged and routed, not decided). Use when the marketer needs a working draft fast.
-- **Careful mode (default):** the full build and verify. Confirm the keyword, the offer, and the audience, classify intent with evidence, map the page architecture, write the copy, write the metadata and the full FAQ, cover what ranks plus the named gap, run the verify pass, then emit and write the handoff. Use for any page that will actually be published.
+- **Fast mode:** one page, fast. Confirm the keyword and the offer, classify the one primary intent with its evidence, produce the page structure (H1, H2, H3) and the copy, write the metadata, and write three snippet-shaped FAQ. When a live domain is supplied, still run the four quick pre-flight fetches (robots.txt, sitemap, SSR check, llms.txt) but skip the PageSpeed call (mark it "skipped in Fast mode"). Skip the deep gap analysis against the current top results (mark it "Not assessed against current results") and the longer FAQ set. The integrity checks survive Fast mode and are never lighter: no-fabrication (no invented volume, difficulty, position, competitor word count, statistic, or quote), schema-honesty (markup only for content actually on the page), alt-text-honesty (only for images that exist), the "[insert verified figure]" rule for any number the user did not supply, and the escalation gate (a price, a guarantee, a legal or compliance claim, or an unsubstantiated superlative is flagged and routed, not decided). Use when the marketer needs a working draft fast.
+- **Careful mode (default):** the full build and verify. Confirm the keyword, the offer, and the audience, run the full Technical pre-flight when a live domain is supplied, classify intent with evidence, map the page architecture, write the copy, write the metadata and the full FAQ, cover what ranks plus the named gap, run the verify pass, then emit and write the handoff. Use for any page that will actually be published.
 - **Governed mode:** the full build, plus a cross-reference against prior records in this project (`~/.claude/crew-state/projects/<project>/`) so you can see what other skills already built. Enforce the project playbook (target keywords, banned phrases, brand voice, fixed CTAs) as the authority, check for keyword cannibalization against pages other skills already built (if a brand page already targets this term, flag it rather than building a second page that competes with the first), and apply stricter escalation: a price, a guarantee, a compliance claim, or a superlative is routed for sign-off, never assumed. Use for a page several teams must stay consistent with, or a site where two pages must not fight for the same term.
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
@@ -57,7 +59,8 @@ Do not run this skill to SCORE a finished page for conversion (that is `crew-mar
 4. **Never fabricate a metric.** Search volume, keyword difficulty, ranking position, a competitor's word count, a statistic, a quote: if a source did not supply it, it does not exist. A blank field beats a number you made up, because a fabricated metric breaks trust the moment it is checked.
 5. **Earn the gap, do not pad to a word count.** You beat the current top results by answering something they miss, not by writing more words than they did. Name the specific gap and fill it. Length is a byproduct of covering the intent, never a target.
 6. **Schema honesty.** Only mark up content that is actually on the page. Structured data describes what is visible, not what you wish were there. Marking up content that is not present is spam Google penalizes, so the schema follows the copy, never the other way around.
-7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
+7. **Fetch, do not assume.** When the live site exists, a two-second read-only fetch beats an assumption. Crawlability, the existing sitemap, whether the served HTML carries the tags, llms.txt, and page speed are all checkable facts, so check them (the Technical pre-flight) instead of writing "probably fine" or "outside this draft" for things a curl can answer.
+8. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
 ## Keyword-intent mapping
 
@@ -126,7 +129,38 @@ What actually moves a page up the results, separated honestly into what this ski
 - Crawl and index health (robots, sitemaps, canonicals, server response).
 - Freshness over time (the page has to be maintained after it ships).
 
-A strong page draft is necessary for a ranking, not sufficient for one. A draft alone does not guarantee a ranking, and ranking is never promised. Say so plainly in the output so the marketer knows the draft is the on-page half of the job, not the whole job.
+A strong page draft is necessary for a ranking, not sufficient for one. A draft alone does not guarantee a ranking, and ranking is never promised. Say so plainly in the output so the marketer knows the draft is the on-page half of the job, not the whole job. When a live domain is supplied, the Technical pre-flight below measures the biggest of the uncontrolled factors (crawl basics, rendering, page speed) so they are reported as facts the business can act on, even though the draft still cannot fix them.
+
+## Technical pre-flight (live domain)
+
+When the page will ship on a site that already exists, ground the draft in the site's real technical state instead of assuming it. With a domain supplied in Discovery, run these read-only fetches from the shell before the architecture is locked. Every field is a fetched fact or a marked gap, never a guess: a failed fetch is "Not checked (unreachable)", and no domain means the whole block is "skipped, no domain supplied".
+
+```bash
+# Crawlability: does robots.txt exist, and is the target path disallowed?
+curl -s "https://DOMAIN/robots.txt"
+
+# Existing URLs: the evidence half of the cannibalization check
+curl -s "https://DOMAIN/sitemap.xml" | head -100
+
+# SSR vs CSR: does the served HTML already carry the tags, or does JS render them?
+curl -s "https://DOMAIN/TARGET-PAGE" | grep -E "<title>|<meta|<h1|<h2|schema|llms"
+
+# AI-search readiness: does the site publish llms.txt?
+curl -o /dev/null -s -w "%{http_code}" "https://DOMAIN/llms.txt"
+
+# Mobile performance score via the public PageSpeed API (can take up to a minute)
+curl -s "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://DOMAIN&strategy=mobile" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Performance:', d['lighthouseResult']['categories']['performance']['score']*100)"
+```
+
+What each result changes in the draft:
+
+- **robots.txt.** If the target path (or the whole site) is disallowed, flag it in Open items as a blocker for the developer: the strongest draft on a blocked path ranks nothing. A missing robots.txt is a note, not a blocker.
+- **sitemap.xml.** Scan the URLs for the keyword and its close variants. A match is live cannibalization evidence: route it to the Decision briefs (strengthen the existing page rather than build a rival) even if the user answered "none known". Sitemap URLs also inform the internal-linking plan, but a sitemap can be stale, so the user still confirms a page exists before it is linked.
+- **SSR vs CSR.** If the served HTML comes back without the title, meta, and h1 (client-side rendered), the metadata and schema in this draft may never reach a crawler as written. Flag "site appears client-side rendered" in Open items and route it to the developer. Do not silently assume the tags will be seen.
+- **llms.txt.** A 200 means the site already publishes an AI-readable index, so note that this page should be added to it. A 404 is an optional gap worth noting, since AI search surfaces increasingly read it. Neither result blocks the draft.
+- **PageSpeed (mobile).** Report the performance score as a measured fact for the business. Speed still sits outside what a draft can fix, but a measured 40 beats "page speed is outside this draft". If the API call fails or times out, mark "Not checked", never estimate a score.
+
+Run all five checks in Careful and Governed mode when a domain is supplied. In Fast mode run the four quick fetches and skip the PageSpeed call (mark it "skipped in Fast mode").
 
 ## Workflow
 
@@ -134,19 +168,21 @@ A strong page draft is necessary for a ranking, not sufficient for one. A draft 
 
 1. **Confirm the keyword and the offer.** Restate both in one line each, plus the audience, so the marketer can correct you before you build. If either the keyword or the offer is missing, ask for it now (Loop 1, Missing Input). Also ask whether an existing page already targets this keyword or a close variant; if one does, flag potential cannibalization now (see Decision briefs) before building a rival.
 
-2. **Classify search intent.** First check the query for a geo modifier ("near me", a city or suburb, "in [place]"): a geo-modified query is a local query, route it to a local page with LocalBusiness schema and a NAP plus service-area section per the Page architecture section. Then, per the Keyword-intent mapping section, pick exactly one primary intent and name the evidence. If two intents compete, name the dominant one and note the secondary, and do not merge them silently.
+2. **Run the Technical pre-flight (when a live domain is supplied).** Per the Technical pre-flight section, fetch robots.txt, the sitemap, the served HTML of the target or closest existing page, llms.txt, and the PageSpeed mobile score (PageSpeed is skipped in Fast mode). Use the sitemap result as evidence in the cannibalization question from step 1, and flag a blocked path or a client-side-rendered site in Open items. If no domain was supplied, mark the block "skipped, no domain supplied" and move on.
 
-3. **Choose the page type and primary CTA.** Per the Keyword-intent mapping section, map the intent to the page type and the one primary CTA, and state both in plain words. If the intent and the offer pull in different directions (the keyword is informational but the offer demands a hard sell), do not force it, flag the mismatch per the Decision briefs and recommend the honest path.
+3. **Classify search intent.** First check the query for a geo modifier ("near me", a city or suburb, "in [place]"): a geo-modified query is a local query, route it to a local page with LocalBusiness schema and a NAP plus service-area section per the Page architecture section. Then, per the Keyword-intent mapping section, pick exactly one primary intent and name the evidence. If two intents compete, name the dominant one and note the secondary, and do not merge them silently.
 
-4. **Build the page architecture.** Per the Page architecture section, produce the H1/H2/H3 outline in the order this intent needs, structure the answer-first and snippet-eligible blocks, and write the internal-linking plan pointing only to confirmed pages. Cover what the current top results cover plus the named gap, or mark the gap "Not assessed against current results".
+4. **Choose the page type and primary CTA.** Per the Keyword-intent mapping section, map the intent to the page type and the one primary CTA, and state both in plain words. If the intent and the offer pull in different directions (the keyword is informational but the offer demands a hard sell), do not force it, flag the mismatch per the Decision briefs and recommend the honest path.
 
-5. **Draft the copy and design the content.** Per the Content design section, write the section copy plain and concrete, answer the query above the fold, place the CTA to match the intent, and write the FAQ from real questions. Use the keyword and close variants only where they read naturally. Use a user-supplied figure (labelled) or "[insert verified figure]" for any number, never a fabricated one.
+5. **Build the page architecture.** Per the Page architecture section, produce the H1/H2/H3 outline in the order this intent needs, structure the answer-first and snippet-eligible blocks, and write the internal-linking plan pointing only to confirmed pages. Cover what the current top results cover plus the named gap, or mark the gap "Not assessed against current results".
 
-6. **Write the on-page SEO.** Per the On-page SEO section, write the title tag, the meta description, and the URL slug, note the schema type and the on-page content it describes (schema only for content present), and write image alt text only for images that exist (or mark "none, no images on the page").
+6. **Draft the copy and design the content.** Per the Content design section, write the section copy plain and concrete, answer the query above the fold, place the CTA to match the intent, and write the FAQ from real questions. Use the keyword and close variants only where they read naturally. Use a user-supplied figure (labelled) or "[insert verified figure]" for any number, never a fabricated one.
 
-7. **Verify before emitting.** Re-read the draft against one test: would the person who typed this keyword get what they came for faster here than on the pages that rank now? Run the Verification checklist: one primary intent named with evidence, the H1 carries the keyword naturally, every metadata field filled or marked, the FAQ answers real questions and is snippet-shaped, no fabricated metric, schema only for on-page content, alt text only for real images, internal links only to confirmed pages, and the "ranking is not promised" honesty kept. If a section is thin or the intent is unmet, fix it before emitting (Loop 2, Quality Failure). If a claim needs a price, a legal or compliance line, a guarantee, or any figure only the business can set or verify, or a superlative or comparative claim sits in the copy, a title tag, or the meta description with no on-page substantiation, mark it "Escalated: [what is needed, who decides]" rather than guessing (Loop 3, Escalation). Only then emit.
+7. **Write the on-page SEO.** Per the On-page SEO section, write the title tag, the meta description, and the URL slug, note the schema type and the on-page content it describes (schema only for content present), and write image alt text only for images that exist (or mark "none, no images on the page").
 
-**Final Step: Handoff Save.** Confirm the active project: read `~/.claude/crew-state/active-project`; if no project was named this run, ask for a short name now and write the pointer. Run `mkdir -p ~/.claude/crew-state/projects/<project>`, then write `~/.claude/crew-state/projects/<project>/crew-marketing-seo-page-builder-handoff.md` with: the page draft produced, decisions made (intent classification, page type, primary CTA), unfinished work (sections marked "[insert verified figure]", anything escalated), what `crew-marketing-landing-page-review` and `crew-marketing-brand-voice-check` need next, and any "Learned" note (a correction or preference the user gave, such as a banned phrase or a fixed CTA). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing record in the same project, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. Records in other projects are other work: never merged into this one and never overwritten by it. If the handoff write is denied or fails, retry once; if it still fails, do not fake success: print the full handoff body inline in the run receipt under the literal heading "STAGED HANDOFF (write denied)" so the user can save it, and mark STATUS: BLOCKED. After a successful write, re-read the file and confirm the frame is present (the title line, the Date line, and a STATUS from the sanctioned list); fix it before finishing if not. If this run captured a durable way-of-working lesson (not a project or brand fact), offer once: "Want me to save this lesson so it never happens again?" On yes, append one dated bullet (what went wrong, what to do instead) to `~/.claude/crew-state/lessons/crew-marketing-seo-page-builder-lessons.md`, creating the file if absent; it is read at every Step 0 and never leaves this machine (Loop 5, the lesson offer). A Loop 1 or Loop 3 pause counts as finishing for the Context Loop: write the handoff FIRST (STATUS: BLOCKED, the gap or escalation named), then ask and wait. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
+8. **Verify before emitting.** Re-read the draft against one test: would the person who typed this keyword get what they came for faster here than on the pages that rank now? Run the Verification checklist: one primary intent named with evidence, the H1 carries the keyword naturally, every metadata field filled or marked, the FAQ answers real questions and is snippet-shaped, no fabricated metric, every pre-flight field a fetched fact or a marked gap, schema only for on-page content, alt text only for real images, internal links only to confirmed pages, and the "ranking is not promised" honesty kept. If a section is thin or the intent is unmet, fix it before emitting (Loop 2, Quality Failure). If a claim needs a price, a legal or compliance line, a guarantee, or any figure only the business can set or verify, or a superlative or comparative claim sits in the copy, a title tag, or the meta description with no on-page substantiation, mark it "Escalated: [what is needed, who decides]" rather than guessing (Loop 3, Escalation). Only then emit.
+
+**Final Step: Handoff Save.** Confirm the active project: read `~/.claude/crew-state/active-project`; if no project was named this run, ask for a short name now and write the pointer. Run `mkdir -p ~/.claude/crew-state/projects/<project>`, then write `~/.claude/crew-state/projects/<project>/crew-marketing-seo-page-builder-handoff.md` with: the page draft produced, decisions made (intent classification, page type, primary CTA), the Technical pre-flight findings (or "skipped, no domain supplied"), unfinished work (sections marked "[insert verified figure]", anything escalated), what `crew-marketing-landing-page-review` and `crew-marketing-brand-voice-check` need next, and any "Learned" note (a correction or preference the user gave, such as a banned phrase or a fixed CTA). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing record in the same project, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. Records in other projects are other work: never merged into this one and never overwritten by it. If the handoff write is denied or fails, retry once; if it still fails, do not fake success: print the full handoff body inline in the run receipt under the literal heading "STAGED HANDOFF (write denied)" so the user can save it, and mark STATUS: BLOCKED. After a successful write, re-read the file and confirm the frame is present (the title line, the Date line, and a STATUS from the sanctioned list); fix it before finishing if not. If this run captured a durable way-of-working lesson (not a project or brand fact), offer once: "Want me to save this lesson so it never happens again?" On yes, append one dated bullet (what went wrong, what to do instead) to `~/.claude/crew-state/lessons/crew-marketing-seo-page-builder-lessons.md`, creating the file if absent; it is read at every Step 0 and never leaves this machine (Loop 5, the lesson offer). A Loop 1 or Loop 3 pause counts as finishing for the Context Loop: write the handoff FIRST (STATUS: BLOCKED, the gap or escalation named), then ask and wait. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -170,6 +206,13 @@ H1: [keyword-bearing headline]
 FAQ:
 Q: [real question]
 A: [direct 2 to 3 sentence answer]
+
+Technical pre-flight: [run on DOMAIN / skipped, no domain supplied]
+  robots.txt: [ok, target path crawlable / blocked by: <rule> / Not checked (unreachable)]
+  sitemap: [existing URL matching the keyword, or "no match, no cannibalization"]
+  Rendering: [SSR, tags in served HTML / CSR risk: title, meta, h1 absent from served HTML]
+  llms.txt: [200 present / 404 absent]
+  PageSpeed (mobile): [score / skipped in Fast mode / Not checked]
 
 Internal links: [only pages the user confirmed exist, or "none confirmed"]
 Alt text: [for images that exist, or "none, no images on the page"]
@@ -203,6 +246,13 @@ A: Pricing depends on volume, temperature range, and coverage area, so most prov
 Q: What SLA should a cold chain 3PL offer?
 A: Look for a stated on-time and in-temperature percentage plus a defined exception process. A provider that will not commit to numbers is a risk.
 
+Technical pre-flight: run on the supplied domain
+  robots.txt: ok, /cold-chain-3pl not disallowed
+  sitemap: no existing URL targets "cold chain 3pl", no cannibalization
+  Rendering: SSR, title and h1 present in the served HTML
+  llms.txt: 404 absent, optional gap noted for the developer
+  PageSpeed (mobile): 62, reported for the business, outside this draft's control
+
 Internal links: /services/temperature-controlled-warehousing and /contact, both confirmed to exist by the user. No others invented.
 Alt text: facility-photo alt "temperature-controlled warehouse aisle" only if that image is placed; none invented for images not on the page.
 Gap covered vs current top results: top three results omit contract minimums and exception handling.
@@ -215,7 +265,7 @@ Open items: response-time figure, pricing range both marked for the business to 
 When a call is genuinely ambiguous and the inputs do not settle it, make the conservative call below rather than guessing.
 
 - **Intent vs offer mismatch.** The keyword is informational ("how to choose X") but the offer demands a hard sell (a checkout page). Do not force the informational query into a transactional page. Build to the real intent, teach first, and recommend the honest path (a soft CTA now, the sell on a separate transactional page targeting the buying query). Flag the mismatch, do not paper over it.
-- **Keyword cannibalization.** A live page on the site already targets this term or a close variant. Ask whether one exists in every mode, not only when a prior handoff or the playbook names it, because the clash is usually against the user's own existing site, not another skill's output. Do not build a second page that competes with the first for the same query, since two pages fighting for one term split the signal and rank neither. Flag it and recommend strengthening the existing page or targeting a distinct, more specific query instead.
+- **Keyword cannibalization.** A live page on the site already targets this term or a close variant. Ask whether one exists in every mode, not only when a prior handoff or the playbook names it, because the clash is usually against the user's own existing site, not another skill's output. When a domain was supplied, the sitemap fetch in the Technical pre-flight is the first evidence: an existing URL matching the keyword or a close variant counts as a live clash even if the user answered "none known". Do not build a second page that competes with the first for the same query, since two pages fighting for one term split the signal and rank neither. Flag it and recommend strengthening the existing page or targeting a distinct, more specific query instead.
 - **Thin or no SERP supplied.** The top-ranking results were not provided, or are too thin to assess. Build to intent, and mark the gap "Not assessed against current results" rather than inventing a competitor's coverage or word count to measure against. A marked gap is honest, a guessed one is worse than none.
 - **A claim or figure only the business can verify.** A price, a response time, a result, a guarantee, or any number only the business can set or stand behind. Write "[insert verified figure]" or mark it "Escalated: [what is needed, who decides]", and never fabricate the figure to make the copy land.
 - **A superlative or comparative claim in copy, a title tag, or the meta description.** A "best", a "#1", a "twice as fast", a results figure, or a guarantee in the body copy, the title tag, or the meta description with no on-page substantiation. The meta description is SERP-visible and drives the click, so a claim there is equally actionable. This is Australian Consumer Law exposure (see Guardrails), not just bold copy. Flag it as a compliance risk, route it for substantiation or removal, and do not ship it unsubstantiated.
@@ -230,7 +280,8 @@ When a call is genuinely ambiguous and the inputs do not settle it, make the con
 - For an Australian or APAC target market, write in the locale's English (Australian English by default for an AU audience): local spelling (optimise, colour, organise), local units and currency context (AUD, GST-inclusive where relevant), local date format, and local examples. Do not assume US English by default. If the target locale is unknown, ask once. Take the audience and market from the brand context loaded in Step 0.
 - Never emit schema markup for content that is not on the page. Fabricated structured data is spam Google penalizes, so schema describes only what is visible on the page.
 - Never invent image alt text for an image the page does not have. Alt text describes images that actually exist, or it is marked "none, no images on the page".
-- Never promise a ranking. A strong on-page draft is necessary, not sufficient. Backlinks, authority, domain history, page speed, and index health sit outside this draft.
+- Never promise a ranking. A strong on-page draft is necessary, not sufficient. Backlinks, authority, domain history, page speed, and index health sit outside this draft (though the Technical pre-flight measures the checkable ones when a domain is supplied).
+- Never guess a Technical pre-flight result. Every field is a fetched fact, "Not checked (unreachable)", or "skipped, no domain supplied". A pre-flight block filled from assumption is a fabricated metric.
 - No AI-slop: no "in today's digital landscape", no "unlock", no hollow superlatives. Specific nouns, the searcher's real question, current facts.
 - Never use em dashes. Use commas, periods, or parentheses.
 - If a project playbook exists (target keywords, banned phrases, brand voice rules, fixed CTAs), it is the authority. Follow it over these defaults.
@@ -256,6 +307,7 @@ Before the run is marked done, confirm:
 [ ] Every metadata field (title tag, meta description, URL slug) is filled or marked "Not provided"
 [ ] The FAQ answers real "People also ask" style questions and each answer is snippet-shaped (2 to 3 sentences, answer first)
 [ ] No fabricated metric: no invented search volume, keyword difficulty, ranking position, or competitor word count
+[ ] With a live domain supplied, the Technical pre-flight ran (robots.txt, sitemap, SSR check, llms.txt, PageSpeed) and every field is a fetched fact, "Not checked (unreachable)", or a marked skip; no result is guessed
 [ ] Schema is noted only for content that is actually on the page; none for absent content
 [ ] Alt text is written only for images that exist, or marked "none, no images on the page"
 [ ] Any superlative, comparative, results, or guarantee claim in the copy, a title tag, or the meta description with no on-page substantiation is flagged as a compliance risk and Escalated, not shipped

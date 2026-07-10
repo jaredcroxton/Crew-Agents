@@ -2,6 +2,24 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.8.1 (2026-07-11)
+
+### Changed
+- crew-marketing-seo-page-builder: the Technical pre-flight. When the page will
+  ship on a site that already exists, the skill now grounds the draft in five
+  read-only fetches instead of assumptions: robots.txt (is the target path
+  crawlable), sitemap.xml (live cannibalization evidence that overrides a
+  "none known" answer), the served HTML (SSR vs CSR, will the metadata and
+  schema ever reach a crawler as written), llms.txt (AI-search readiness), and
+  the PageSpeed API mobile score (a measured number instead of "page speed sits
+  outside this draft"). Wired end to end: discovery asks for the domain, a new
+  workflow step runs the checks, the output format and the filled example carry
+  the pre-flight block, Fast mode keeps the quick fetches and skips the slow
+  PageSpeed call, and the handoff records the findings. The no-fabrication rule
+  extends to it: every field is a fetched fact, "Not checked (unreachable)", or
+  "skipped, no domain supplied", and a guessed result counts as a fabricated
+  metric.
+
 ## 1.8.0 (2026-07-08)
 
 ### Added
