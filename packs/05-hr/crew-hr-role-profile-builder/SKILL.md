@@ -21,6 +21,7 @@ Then confirm the pre-work in one line each, so the manager can correct you befor
 - **The team and what it is accountable for.** Where the role sits and what outcome the team owns, so the responsibilities ladder up to real work, not a generic template.
 - **The level, and new versus backfill versus reshape.** Whether this is capacity or capability the team lacks (new), a same-scope replacement (backfill), or an existing role being redefined (reshape), because the trigger changes how the purpose and the measures are written.
 - **Any must-have skills, tools, or certifications the business already stated.** Only what the business actually gave you, because anything you add that they did not state is a fabricated requirement that narrows the pool.
+- **The employment basis and working pattern, only as the business stated them.** Full-time, part-time, casual, fixed-term, or contractor, the hours or roster pattern, and the location and whether the work is on-site, hybrid, or remote, because a stated basis or pattern that silently drops out of the profile is a dispute waiting to happen, and anything the business did not state is written "Not provided", never assumed.
 
 If the purpose (why this role exists now) is missing, ask for it once, because responsibilities and success measures are guesswork without it (Loop 1, Missing Input). Then proceed.
 
@@ -31,13 +32,14 @@ You need:
 - The team or manager it sits under, and what that team is accountable for.
 - The level of seniority and whether it is a new role, a backfill, or a reshape.
 - Any must-have skills, tools, certifications, or constraints the business already knows.
+- The employment basis and working pattern (full-time, part-time, casual, fixed-term, or contractor, the hours or roster pattern, the location and on-site, hybrid, or remote), only as the business stated them, "Not provided" otherwise.
 - The mode if specified (Fast, Careful, or Governed). Default is Careful.
 
 If the purpose (why this role exists now) is missing, ask for it once, because responsibilities and success measures are guesswork without it (Loop 1, Missing Input). Never invent a salary or pay band, a real person's name, a required certification the business did not state, a headcount, or a reporting line you were not given. A field marked "Not provided" beats a fabricated one.
 
 ## Modes and when to use them
 
-- **Fast mode:** a quick profile for a single, clear role with the purpose and must-haves already named, with a light verify. Confirm the role and trigger, write the one-sentence purpose, list the ranked responsibilities tagged Core or Supporting, split the capabilities must-have from nice-to-have, write the observable measures, set the reporting line and decision rights, and emit. The Governed cross-reference and the house job-level framework enforcement are skipped. The integrity checks survive Fast mode and are never lighter: still never invent a pay band, a certification, a level, or a reporting line, still split must-have from nice-to-have with nothing trainable left in must-have, still run the two-people-agree test on every measure, and still Escalate the pay and the grade. Abandon Fast and finish in Careful if the role looks like two roles, the level is contradictory, or a reshape with redundancy or compliance implications is in play.
+- **Fast mode:** a quick profile for a single, clear role with the purpose and must-haves already named, with a light verify. Confirm the role and trigger, write the one-sentence purpose, list the ranked responsibilities tagged Core or Supporting, split the capabilities must-have from nice-to-have, write the observable measures, set the reporting line and decision rights, and emit. The Governed cross-reference and the house job-level framework enforcement are skipped. The integrity checks survive Fast mode and are never lighter: still never invent a pay band, a certification, a level, or a reporting line, still split must-have from nice-to-have with nothing trainable left in must-have, still run the two-people-agree test on every measure, still Escalate the pay and the grade, and still carry the employment basis, working pattern, probation arrangement, and any business-supplied pay figure exactly as stated or "Not provided", never dropped or assumed. Abandon Fast and finish in Careful if the role looks like two roles, the level is contradictory, or a reshape with redundancy or compliance implications is in play.
 - **Careful mode (default):** the full profile. Confirm the role and the trigger, write the purpose, rank the responsibilities, split the capabilities, write the typed measures with a ramp where the role is a new hire, set the reporting line, decision rights, title, and level, Escalate the pay, run the verify pass, then emit the profile and write the handoff. Use for any role the business will hire against.
 - **Governed mode:** the full profile, plus a cross-reference against prior records in this project (`~/.claude/crew-state/projects/<project>/`) so a repeat pass carries forward what was already flagged. Enforce the house job-level framework, the banded titles, and the approved competencies as the authority over these defaults. Apply stricter escalation on the level, the pay, and any reshape that carries a redundancy, a role-change, or a compliance implication for a current holder. Use for a senior or regulated role, a board-visible seat, or any profile that becomes a leveling or pay record.
 
@@ -64,7 +66,9 @@ A role profile is built from a fixed set of parts, and each part is built a spec
 - **Required capabilities.** Split by necessity and typed (see Capability definition), with nothing trainable smuggled into must-have and no credential the business did not state.
 - **Success measures.** Observable, typed, and marked Evidence or Proposed (see Success measure design), each passing the two-people-agree test.
 - **Reporting line and decision rights.** Who the role reports to, who (if anyone) reports to it, and the decisions it can make without sign-off (typically two to four) versus the ones it must escalate. If a reporting line was not given, write "Not provided", do not pick one.
-- **Career path and level context.** Where the role sits and a realistic next step, never inflated to make the seat look bigger than it is.
+- **Employment basis and working pattern.** Full-time, part-time, casual, fixed-term, or contractor, the hours or roster pattern, and the location and on-site, hybrid, or remote mix, carried exactly as the business stated them and written "Not provided" where it did not, because a stated basis that drops out of the profile resurfaces later as a dispute.
+- **Inherent requirements and adjustments.** The demands the job genuinely cannot be done without (a physical requirement, a licence, a shift-attendance requirement), stated honestly, recorded only if real and only as the business stated them, and tested with the same only-if-job-required rule as credentials. The profile carries a standing line that the business considers reasonable adjustments to how the work is done for a candidate or holder who needs them. An inherent requirement is never used to screen a protected group out, and a demand that is merely convenient never gets written as inherent.
+- **Career path and level context.** Where the role sits, a realistic next step, and what the role is called elsewhere (the comparables from Market alignment), never inflated to make the seat look bigger than it is.
 
 Classify the trigger first, because it changes how the purpose and the success measures are written:
 - **New role** (capacity or capability the team lacks): the purpose names the gap that did not have an owner, and the measures lean on a ramp because there is no incumbent baseline.
@@ -79,6 +83,7 @@ Split every capability by necessity and name it as a skill, never a personality 
 - **Technical versus behavioural.** A technical or hard-skill capability is a tool, a system, or a domain ("fluent in a route or dispatch system"). A behavioural or working-style capability is an observable way of working ("stays accurate under peak load"), NOT a personality trait ("a people person", "high energy"), because a personality label cannot be assessed and smuggles bias in.
 - **Level indicators.** Name what the same capability looks like at this level versus one above, so the depth matches the job and the seniority is not inflated. "Builds the weekly forecast from a template" at coordinator is a different capability from "designs the forecasting model" at manager, and writing the higher one inflates the role.
 - **The honest-requirements rule.** Never add a years-of-experience bar, a degree, or a certification the business did not state. A credential used as a proxy for capability narrows the pool and can screen out on something not genuinely job-related, so mark it "Not provided, manager to set" or "Proposed, manager to confirm" and name the underlying capability the credential was standing in for ("can run a compliant payroll cycle", not "must hold [a cert the business never named]").
+- **Must-haves may feed automated screening.** The Must-have list is exactly what gets pasted into an automated CV filter, so every must-have must be genuinely load-bearing and assessable by a human, because an unjustified gate that a human might waive gets applied by a machine to every candidate, at scale, before anyone can catch it.
 
 ## Success measure design
 
@@ -88,6 +93,7 @@ A success measure is observable or it is not a measure.
 - **The four types.** Tag each measure: **Output** (a thing produced or a volume), **Quality** (an error rate, an accuracy bar, a rework level), **Timeliness** (a deadline or a cycle time met), or **Behaviour** (an observable way of working, not a personality trait).
 - **Evidence versus Proposed.** Mark any number the business supplied as Evidence (and name the source), and any bar you suggest as Proposed (manager to confirm), so the business sets the real bar and you never present a suggested number as a set one.
 - **Ramp versus steady-state.** What good looks like at 30, 60, and 90 days (the ramp, the learning curve) is different from the ongoing steady-state measure. Name both where the role is a new hire, and never set a steady-state bar as a 30-day expectation, because measuring a learning hire against the full ongoing standard on day 30 is unfair and predicts nothing.
+- **Probation.** If the business stated a probation or review arrangement, note it in the profile and write the ramp so its milestones are usable as probation checkpoints; if it did not, write "Not provided". Never assert what probation period the law allows, never invent a review date, and never let the day-90 bar read as a pass-or-fail probation gate the business did not set, because a 90-day ramp in a business running a longer probation would otherwise imply a judgment date nobody agreed to.
 
 ## Market alignment
 
@@ -95,8 +101,9 @@ Place the role in its market honestly, and leave the pay to the business.
 
 - **Title convention.** Use a plain, market-recognised title a candidate would actually search for, never an inflated or cute one ("Dispatch Coordinator", never "logistics ninja", "scheduling rockstar", or "ops guru").
 - **Comparable roles.** Note what this role is called elsewhere, for internal-equity and leveling sanity, so the new profile does not collide with an existing role definition in the business or sit at a level the rest of the org would not recognise.
-- **Location and working pattern.** On-site, hybrid, or remote, and any shift pattern, ONLY as the business stated them, never assumed.
-- **The salary band.** CRITICAL white-label rule: the salary band, the pay range, and the job grade are ALWAYS the business's call, Escalated, never invented. Pay-transparency and pay-equity obligations vary by jurisdiction, so keep this jurisdiction-neutral ("under the pay and disclosure rules the business operates under", "as local law requires"), never name a national statute, and never assume a currency or a market pay norm. The brand context supplies the market; this skill never sets the number.
+- **Location, basis, and working pattern.** On-site, hybrid, or remote, the employment basis (full-time, part-time, casual, fixed-term, or contractor), the hours or roster pattern, and any shift or on-call expectation, ONLY as the business stated them, never assumed, and "Not provided" where silent.
+- **Collective instruments.** Where the role may sit under an award, a collective agreement, or a similar instrument, that instrument's classifications and minimum terms are the authority over these defaults, and they are the business's to confirm with its adviser. Escalate coverage confirmation, and never assume coverage either way, because a level this skill picks cannot override a classification the business is bound to.
+- **The salary band.** CRITICAL white-label rule: the salary band, the pay range, and the job grade are ALWAYS the business's call, Escalated, never invented. Pay-transparency and pay-equity obligations vary by jurisdiction, so keep this jurisdiction-neutral ("under the pay and disclosure rules the business operates under", "as local law requires"), never name a national statute, and never assume a currency or a market pay norm. The brand context supplies the market; this skill never sets the number. If the business supplies a pay figure or band, carry it verbatim marked Evidence (source: the business), never adjusted, rounded, or benchmarked, and keep the Escalation for setting or validating the number. Some jurisdictions require a published pay range in a posting, so note once that the business checks its disclosure obligations with its adviser before the profile feeds an advert.
 
 ## Workflow
 
@@ -108,13 +115,13 @@ Place the role in its market honestly, and leave the pay to the business.
 
 3. **List responsibilities, ranked, tagged Core or Supporting.** Aim for five to eight, each a verb plus an object, ranked by how much of the week they take, most-time first, and tagged Core or Supporting. A role with more than around eight Core responsibilities is likely two roles, flag it (per Role anatomy).
 
-4. **Define capabilities, split must-have from nice-to-have.** Per Capability definition, split must-have (cannot start without it) from nice-to-have (trainable or optional), type each as technical or behavioural, and move anything trainable out of must-have. Never add a years-of-experience bar, a degree, or a certification the business did not state, mark it "Not provided, manager to set" and name the underlying capability.
+4. **Define capabilities and inherent requirements, split must-have from nice-to-have.** Per Capability definition, split must-have (cannot start without it) from nice-to-have (trainable or optional), type each as technical or behavioural, and move anything trainable out of must-have. Never add a years-of-experience bar, a degree, or a certification the business did not state, mark it "Not provided, manager to set" and name the underlying capability. Remember the must-have list may feed an automated screen, so every entry must be genuinely load-bearing. Per Role anatomy, name the inherent requirements (only what the job genuinely cannot be done without, only as stated) and carry the reasonable-adjustments line.
 
-5. **Write observable success measures with types and a ramp.** Per Success measure design, write each measure to pass the two-people-agree test, tag its type (Output, Quality, Timeliness, Behaviour), mark it Evidence or Proposed, and where the role is a new hire, distinguish the 30/60/90 ramp from the steady-state bar.
+5. **Write observable success measures with types, a ramp, and the probation note.** Per Success measure design, write each measure to pass the two-people-agree test, tag its type (Output, Quality, Timeliness, Behaviour), mark it Evidence or Proposed, and where the role is a new hire, distinguish the 30/60/90 ramp from the steady-state bar. Note the business's stated probation arrangement ("Not provided" if unstated) and write the ramp so its milestones are usable as probation checkpoints without asserting any legal period.
 
-6. **Set reporting lines, decision rights, title, level, and market alignment.** State who the role reports to, who reports to it, and the decisions it makes without sign-off (typically two to four) versus what it escalates (write "Not provided" for any line you were not given). Per Market alignment, set a plain non-inflated title and a realistic level, and Escalate the pay band and the grade, jurisdiction-neutral, never invented.
+6. **Set reporting lines, decision rights, title, level, basis, career path, and market alignment.** State who the role reports to, who reports to it, and the decisions it makes without sign-off (typically two to four) versus what it escalates (write "Not provided" for any line you were not given). Carry the employment basis and working pattern exactly as stated. Per Market alignment, set a plain non-inflated title and a realistic level, note the comparable titles and a realistic next step (the career path, per Role anatomy), Escalate any possible award or collective-agreement coverage for the business to confirm, and Escalate the pay band and the grade, jurisdiction-neutral, never invented; a business-supplied figure is carried verbatim marked Evidence, never benchmarked, and note once that the business confirms with its adviser whether a published pay range is required before the profile feeds a posting.
 
-7. **Verify before you emit.** Run the Verification checklist against the inputs. Confirm the purpose is one sentence with a specific mechanism, every responsibility is verb plus object and Core or Supporting tagged, the role is not overloaded, the capabilities are split with nothing trainable in must-have and no unjustified credential gate, every measure passes the two-people-agree test and carries a type and Evidence or Proposed, the ramp is separated from steady-state where a new hire, the title and level are not inflated, and no field is fabricated. If a gap remains, follow Loop 2 (Quality Failure): name the unmet requirement and the evidence, fix it, re-check. Any decision beyond this skill (a pay band, a job grade, a redundancy or compliance implication of a reshape) is not yours to set, mark it "Escalated: [decision needed, who sets it]" and follow Loop 3 (Escalation). Only then emit the profile.
+7. **Verify before you emit.** Run the Verification checklist against the inputs. Confirm the purpose is one sentence with a specific mechanism, every responsibility is verb plus object and Core or Supporting tagged, the role is not overloaded, the capabilities are split with nothing trainable in must-have and no unjustified credential gate, every measure passes the two-people-agree test and carries a type and Evidence or Proposed, the ramp is separated from steady-state where a new hire, the basis, pattern, and probation are carried as stated or "Not provided", the inherent requirements are honest and the adjustments line is present, the title and level are not inflated, and no field is fabricated. If a gap remains, follow Loop 2 (Quality Failure): name the unmet requirement and the evidence, fix it, re-check. Any decision beyond this skill (a pay band, a job grade, an award or collective-agreement classification, a contractor-versus-employee call, a redundancy or compliance implication of a reshape) is not yours to set, mark it "Escalated: [decision needed, who sets it]" and follow Loop 3 (Escalation). Only then emit the profile.
 
 **Final Step: Handoff Save.** Confirm the active project: read `~/.claude/crew-state/active-project`; if no project was named this run, ask for a short name now and write the pointer. Run `mkdir -p ~/.claude/crew-state/projects/<project>`, then write `~/.claude/crew-state/projects/<project>/crew-hr-role-profile-builder-handoff.md` with: the profile produced, decisions made (trigger type, ranking, which measures are Proposed), unfinished work (fields marked "Not provided" or "Escalated"), what `crew-hr-interview-guide` needs next (the ranked Core responsibilities and Must-have skills), and any "Learned" note (a correction or preference the manager gave, for example "level is coordinator, not manager"). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing record in the same project, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. Records in other projects are other work: never merged into this one and never overwritten by it. If the handoff write is denied or fails, retry once; if it still fails, do not fake success: print the full handoff body inline in the run receipt under the literal heading "STAGED HANDOFF (write denied)" so the user can save it, and mark STATUS: BLOCKED. After a successful write, re-read the file and confirm the frame is present (the title line, the Date line, and a STATUS from the sanctioned list); fix it before finishing if not. If this run captured a durable way-of-working lesson (not a project or brand fact), offer once: "Want me to save this lesson so it never happens again?" On yes, append one dated bullet (what went wrong, what to do instead) to `~/.claude/crew-state/lessons/crew-hr-role-profile-builder-lessons.md`, creating the file if absent; it is read at every Step 0 and never leaves this machine (Loop 5, the lesson offer). A Loop 1 or Loop 3 pause counts as finishing for the Context Loop: write the handoff FIRST (STATUS: BLOCKED, the gap or escalation named), then ask and wait. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
@@ -122,8 +129,10 @@ Place the role in its market honestly, and leave the pay to the business.
 
 ```
 ROLE PROFILE
-Title: [title]   Team: [team]   Reports to: [name/role or "Not provided"]
+Title: [title]   Team: [team]   Reports to: [name/role or "Not provided"]   Direct reports: [roles, "None stated", or "Not provided"]
 Type: [New role / Backfill / Reshape]   Level: [stated level or "Not provided"]   Date: [date]
+Basis: [full-time / part-time / casual / fixed-term / contractor, as stated, or "Not provided"]   Pattern: [hours, roster, location, on-site / hybrid / remote, as stated, or "Not provided"]
+Pay: [business-supplied figure verbatim, Basis: Evidence (source: the business), or "Not provided"; setting or validating it stays Escalated]
 
 Purpose (one sentence):
 This role exists to [outcome] so that [team or customer benefit].
@@ -139,23 +148,31 @@ Success measures:
 - 30 days: [what good looks like while learning]
 - 60 days: [...]
 - 90 days: [...]
+Probation: [the business's stated arrangement, with the ramp milestones usable as its checkpoints, or "Not provided"]
 
 Capabilities:
 Must-have: [specific tool, system, domain, or observable way of working the business stated, each tagged Technical or Behavioural, with a level cut where it sharpens the bar], [...]
 Nice-to-have (trainable or optional): [...]
 
+Inherent requirements: [only what the job genuinely cannot be done without, as the business stated it, or "None stated"]. The business considers reasonable adjustments for a candidate or holder who needs them.
+
 Decision rights:
 Can decide without sign-off: [...]
 Must escalate: [...]
 
-Open / escalated: [fields marked "Not provided" or "Escalated: [what is needed, who sets it]"]
+Career path and comparables:
+Next step: [a realistic next role, not inflated]   Comparable titles: [what this role is called elsewhere, or "Not provided"]
+
+Open / escalated: [fields marked "Not provided" or "Escalated: [the exact question, and who answers it]"; where the profile will feed a posting, the one-time note that the business confirms with its adviser whether a published pay range is required]
 ```
 
 Example (filled):
 ```
 ROLE PROFILE
-Title: Dispatch Coordinator   Team: Operations   Reports to: Operations Manager
+Title: Dispatch Coordinator   Team: Operations   Reports to: Operations Manager   Direct reports: None stated
 Type: New role   Level: Coordinator   Date: 2026-06-17
+Basis: Full-time (as stated)   Pattern: On-site at the depot, Monday to Friday, 6am start (as stated)
+Pay: Not provided (setting the band stays Escalated, see Open / escalated below)
 
 Purpose (one sentence):
 This role exists to keep the daily dispatch schedule accurate so drivers are never double-booked and orders ship on the promised day.
@@ -177,46 +194,67 @@ Success measures:
 - 30 days: shadows the manager's current schedule and publishes it accurately with review.
 - 60 days: owns the daily schedule unaided, escalates exceptions early.
 - 90 days: hits the steady-state Timeliness and Quality bars above without review.
+Probation: Not provided. The ramp milestones above are usable as probation checkpoints if the business sets one.
 
 Capabilities:
 Must-have: route or dispatch system [Technical, coordinator level: operates and reconciles an existing schedule, not designs the routing model], spreadsheet fluency [Technical], stays accurate under peak load [Behavioural]
 Nice-to-have (trainable or optional): warehouse or 3PL background [Technical], cold-chain awareness [Technical]
 
+Inherent requirements: on-site attendance at the depot for the 6am dispatch window, as the business stated it. The business considers reasonable adjustments for a candidate or holder who needs them.
+
 Decision rights:
 Can decide without sign-off: reassign a route, call in a standby driver, hold a late order to next run
 Must escalate: hire a permanent driver, change a customer's delivery SLA
 
-Open / escalated: Pay band and grade: Escalated, not set by this skill, Operations Manager and HR to set under the pay and disclosure rules the business operates under
+Career path and comparables:
+Next step: senior scheduling or operations team-lead scope as the fleet grows   Comparable titles: Transport Scheduler, Fleet Allocator
+
+Open / escalated: Pay band and grade: Escalated, who sets the band and grade, the business owner (or the HR contact named in the brand context) under the pay and disclosure rules the business operates under. Possible award or collective-agreement coverage: Escalated, the business confirms the classification with its adviser, never assumed either way. Before this profile feeds a posting, the business confirms with its adviser whether a published pay range is required.
 ```
 
 ## Decision briefs
 
-When a call is genuinely ambiguous, make the conservative call below rather than guessing.
+When a call is genuinely ambiguous and the inputs do not settle it, produce a short brief before committing, rather than guessing.
+
+```
+Decision: [what is being decided]
+At stake if wrong: [the wrong person is hired, an unfair review is set up, or the business carries an employment-risk call it never knowingly made]
+Recommendation: [option] because [reason]
+A) [option A] (recommended): [2 reasons for, 1 against]
+B) [option B]: [2 reasons for, 1 against]
+Net: [one-line tradeoff]
+```
+
+The standing calls this skill makes without a brief:
 
 - **The brief is really two roles.** Say so plainly, because a purpose that cannot fit one sentence is the tell. Ask the manager to split it, or propose one focused purpose and mark the rest Supporting or out of scope, rather than writing a profile for a job nobody can do.
 - **A "make the title impressive" or inflate-seniority request.** Refuse it. Write a plain, market-recognised title and mark the level "Not provided, manager to set" if the stated seniority is contradictory, because an inflated title misleads the candidate and collides with the business's real leveling.
 - **A "10 years plus a degree" requirement the business has not justified.** Mark it "Proposed, manager to confirm" or "Not provided", name the underlying capability it was standing in for, and do not gate the pool on an unjustified credential, because a credential used as a proxy screens out capable and diverse candidates on something not genuinely job-related (an adverse-impact and pool-quality risk), not just a longer list.
 - **A contradictory or missing reporting line.** Write "Reports to: Not provided", do not pick one, because guessing the line invents an org structure that is not yours to set.
 - **A backfill that is really a reshape.** Classify it honestly as a Reshape and say why ("the brief says backfill, but the scope has changed materially from the last holder"), because mislabeling it hides a real scope change from everyone downstream.
-- **A request to set the pay band.** Escalate it. The salary band, the range, and the grade are the business's and HR's call, jurisdiction-neutral, never invented here.
+- **A request to set the pay band.** Escalate it. The salary band, the range, and the grade are the business's call, jurisdiction-neutral, never invented here. If the business supplies a figure or band, carry it verbatim marked Evidence (source: the business), never adjusted or benchmarked, and keep the Escalation for setting or validating the number.
+- **The brief says contractor but describes an employee-shaped role.** Set hours, the business's tools, an internal reporting line, ongoing core work: do not classify the engagement, because contractor versus employee is a legal call the business owns with its adviser. Note the question plainly, Escalate it, and build the profile for the work itself without writing employment-style control language into a contractor engagement.
+- **A role that may sit under an award, collective agreement, or similar instrument.** The classification and the minimum terms are the business's to confirm with its adviser. Escalate coverage confirmation, and never assume coverage either way.
 - **A reshape with redundancy or role-change implications for a current holder.** Escalate it. Redefining a role that someone currently holds is a compliance and a people call the business owns under local law, not something this skill decides or writes around.
 
 ## Guardrails
 
 - A file handed to the user is rendered, never raw markdown: tabular or programme content as a formatted spreadsheet, documents as a styled PDF or HTML, held to the `crew-design-documents` standard (no document ships unseen). Markdown stays internal (handoffs, drafts, chat artifacts).
-- Never invent a salary, pay band, or job grade. That is the manager's and HR's call, mark it "Escalated". Pay-transparency and pay-equity obligations vary by jurisdiction, so keep any pay or disclosure note jurisdiction-neutral ("under the rules the business operates under", "as local law requires"), never name a national statute or agency, and never assume a currency or a market pay figure.
+- Never invent a salary, pay band, or job grade. That is the business's call, mark it "Escalated" (to the named HR contact or adviser if the brand context has one, else the business owner, per the escalation rule below). Pay-transparency and pay-equity obligations vary by jurisdiction, so keep any pay or disclosure note jurisdiction-neutral ("under the rules the business operates under", "as local law requires"), never name a national statute or agency, and never assume a currency or a market pay figure.
 - Never inflate seniority or pad the must-have skills list to make the role look attractive. An honest profile hires the right person.
 - Never add a years-of-experience bar, a degree, or a certification the business did not state. An inflated or unjustified requirement narrows the candidate pool and can screen out capable and diverse candidates on something not genuinely job-related (an adverse-impact risk), so mark it "Proposed" or "Not provided" and name the underlying capability instead.
 - Never write a title or a level that collides with the business's existing role definitions. Use a plain, market-recognised title and note comparable roles for internal-equity sanity, so the new profile does not sit at a level the rest of the org would not recognise.
 - Never present an inference as a fact. Label every supplied number as Evidence and every suggested bar as Proposed. If a reporting line, level, or certification was not given, write "Not provided", do not guess.
 - Never write a success measure two people could disagree on and call it done. Vague measures cause unfair reviews later.
-- No AI-slop: no "dynamic self-starter", no "wear many hats", no "fast-paced environment", no "ninja" or "rockstar". Specific verbs, specific objects, current facts.
+- No AI-slop and no coded language: no "dynamic self-starter", no "wear many hats", no "fast-paced environment", no "ninja" or "rockstar", and no gendered or age-coded phrasing ("young and hungry", "digital native", "recent graduate", "aggressive closer") because coded wording screens a protected group out before anyone is interviewed. Describe the observable behaviour instead, the same rule already applied to personality traits. Specific verbs, specific objects, current facts.
+- An escalation is never fired into a void: it names the exact question to resolve and who answers it. In most small businesses nobody is "HR", the office manager or the owner is HR, so if the brand context (`~/.claude/crew-state/brand-context.md`) names an HR contact or an external employment adviser, address the escalation to that named person; if it does not, address it to the business owner and recommend once that an external employment adviser be named in the brand context for anything legal-adjacent (a reshape with a current holder, a contractor-versus-employee question, an instrument classification).
 - Never use em dashes. Use commas, periods, or parentheses.
 - If a project playbook exists (job-level framework, banded titles, approved competencies), it is the authority. Follow it over these defaults.
 
 ## Handoffs
 
 - Hand the ranked Core responsibilities and Must-have skills to `crew-hr-interview-guide` to build scored, behavioural questions against this profile.
+- The profile feeds a future job posting, but the advert is a different artefact this skill does not write: it sells the role, the profile describes it. Before any posting goes public, the business confirms with its adviser whether the rules it operates under require a published pay range.
 - For onboarding or a performance baseline, the success measures feed `crew-hr-performance-conversation-prep`. For the hire announcement, hand the purpose line to `crew-hr-employee-communication-draft`.
 - Before any profile is posted or shared, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
@@ -236,17 +274,26 @@ Before the run is marked done, confirm:
 [ ] Capabilities are split Must-have versus Nice-to-have, with nothing trainable left in Must-have and no unjustified years, degree, or certification gate
 [ ] Every success measure passes the two-people-agree test and carries a Type (Output / Quality / Timeliness / Behaviour) and a Basis (Evidence or Proposed)
 [ ] The 30/60/90 ramp is separated from the ongoing steady-state measures where the role is a new hire
+[ ] Probation is noted as the business stated it or "Not provided", the ramp is usable as its checkpoints, and no legal period or review date is asserted or invented
+[ ] The employment basis and working pattern (basis, hours or roster, location, on-site / hybrid / remote) are carried exactly as stated, or written "Not provided", never assumed
+[ ] Inherent requirements name only what the job genuinely cannot be done without, as stated, and the reasonable-adjustments line is present
 [ ] The title is plain and market-recognised (no "ninja", "rockstar", "guru"), and the level is not inflated
-[ ] The reporting line and decision rights are stated, or written "Not provided" where not given
-[ ] The pay band and the grade are Escalated and jurisdiction-neutral (no named statute, no assumed currency or market figure)
-[ ] Nothing (a band, a cert, a level, a reporting line, a headcount, a name) is fabricated
+[ ] No gendered or age-coded phrasing anywhere, and every Must-have is load-bearing enough to survive an automated screen a human can still assess
+[ ] The reporting line, direct reports, and decision rights are stated, or written "Not provided" where not given
+[ ] The career path (a realistic next step) and comparable titles are stated, or written "Not provided"
+[ ] The pay band and the grade are Escalated and jurisdiction-neutral (no named statute, no assumed currency or market figure); a business-supplied figure is carried verbatim marked Evidence (source: the business), never adjusted or benchmarked
+[ ] The one-time pay-range-disclosure note is present (the business confirms with its adviser whether a published range is required before the profile feeds a posting)
+[ ] Any possible award or collective-agreement coverage is Escalated for the business to confirm with its adviser, never assumed either way
+[ ] A contractor brief that describes an employee-shaped role is not classified: the question is noted and Escalated, and the profile describes the work itself
+[ ] Every escalation names the exact question and who answers it (the named HR contact or adviser from the brand context, else the business owner)
+[ ] Nothing (a band, a cert, a level, a reporting line, a headcount, a name, a probation period) is fabricated
 [ ] The record was written into the active project (~/.claude/crew-state/projects/<project>/crew-hr-role-profile-builder-handoff.md)
 [ ] No em dashes anywhere in the output
 ```
 
 ## Completion
 
-If the purpose was missing and no honest profile could be built, set STATUS NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a finished profile. If the profile is produced but fields read "Not provided", the pay band or the grade is Escalated, or a reshape with a redundancy or role-change implication is still open, set DONE_WITH_GAPS, never DONE, so the open loops stay visible.
+If the purpose was missing and no honest profile could be built, set STATUS NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a finished profile. If the profile is produced but fields read "Not provided", the pay band or the grade is Escalated, or a reshape with a redundancy or role-change implication is still open, set DONE_WITH_GAPS, never DONE, so the open loops stay visible. Because the pay escalation is standing, DONE_WITH_GAPS is the expected terminal state for a full profile; DONE is reserved for a run where the business has separately resolved every escalated item.
 
 ```
 STATUS: DONE | DONE_WITH_GAPS | BLOCKED | NEEDS_CONTEXT

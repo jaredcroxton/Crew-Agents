@@ -2,6 +2,54 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.10.0 (2026-07-13)
+
+### Changed
+- HR pack (05) upgraded to gold standard: all five skills expert-reviewed and
+  rewritten under the ultracode campaign loop (author, three-lens review, fix,
+  verified gate per skill).
+  - Pack-wide: every fixture now asserts the Projects-model handoff path
+    (crew-state/projects/<project>/), replacing the stale crew-state/hr/ paths
+    that failed compliant runs; every Decision briefs section gained the
+    structured brief template (Decision / At stake if wrong / Recommendation /
+    A / B / Net); every escalation now lands somewhere real (the named HR
+    contact or external employment adviser from brand context, else the
+    business owner, with a once-only nudge to name an adviser).
+  - crew-hr-employee-communication-draft: departure and individual-circumstance
+    announcements carry neutral facts only (stating or implying a reason is
+    refused and escalated); redundancy and restructure comms gain a
+    consultation-status gate (proposal framing until consultation is confirmed
+    complete); formal employment instruments (termination letters, warnings,
+    redundancy notices) added to the NOT-list; sequencing now covers staff on
+    leave, off-shift casuals, deskless workers, and union or elected
+    representatives; hard news must name real support and sane timing.
+  - crew-hr-interview-guide: solo-interviewer degraded mode for the buyer who
+    interviews alone; right-to-work uniform-question carve-out; volunteered
+    protected-information rule; sexual orientation, gender identity, and union
+    membership added to every protected-characteristic list; recording and
+    AI-in-hiring disclosure rules; remote-interview parity; the broken offer
+    handoff fixed (offer letter is the business's instrument, welcome
+    announcement stays with communication-draft).
+  - crew-hr-performance-conversation-prep: discovery now asks whether the issue
+    was raised before and the person's employment context (probation, casual,
+    contractor); protected-timing trigger in the escalation gate (conversation
+    near a complaint, disclosure, adjustment request, or protected leave);
+    "if the conversation turns" playbook (health disclosure, counter-allegation,
+    support person, distress); 24-hour contemporaneous file-note template;
+    logistics block (privacy, notice, time, remote handling).
+  - crew-hr-policy-summary: Consequence rules now land in the employee guide
+    ("what happens if") and manager checklist; never-cut rubric (consequences,
+    deadlines, procedural rights always survive summarisation); document-
+    completeness gate before summarising; worker-type and overriding-instrument
+    scope checks; delta path and guardrail-pressure fixture cases.
+  - crew-hr-role-profile-builder: employment basis and working pattern now
+    asked, carried, emitted, and verified; contractor-vs-employee decision
+    brief (classification escalated, never made); collective-instrument
+    guardrail; probation-aware 30/60/90 ramp; inherent-requirements and
+    reasonable-adjustments lines; supplied pay figures carried verbatim as
+    Evidence; orphaned anatomy parts (career path, decision rights,
+    comparables) wired through output and verification.
+
 ## 1.9.0 (2026-07-12)
 
 ### Added
