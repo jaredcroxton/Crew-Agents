@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Fly Through Route D Reference</title>
 
 <!--
@@ -10,19 +10,42 @@
   LOCKED architecture. Brand neutral. Swap the placeholder slots, do not change the wiring.
 
   ARCHITECTURE SUMMARY:
-  - One pinned .scene (position: sticky, 100vh) inside a 500vh .runway.
+  - One pinned .scene (position: sticky, 100svh) inside a 500vh .runway.
   - 4 stages, each a full bleed .bg-layer backdrop plus a .stage-panel of copy.
-  - Backdrop crossfade is GSAP-scrubbed: each backdrop animates opacity 0→1→0
+  - Backdrop crossfade is GSAP-scrubbed: each backdrop animates opacity 0 to 1 to 0
     continuously across the runway scroll. No hard cuts. No CSS transitions.
+  - Safety floor: the first backdrop starts at opacity 1 and the last holds opacity 1
+    to the end of the runway, so no scroll position ever paints a black frame.
   - Panel switching: clean binary swap at stage markers, sits above the crossfade.
   - Per element reveals use their own ScrollTrigger (once: true, start: top 80%).
+  - Reduced motion (or the ?reduced-motion=1 test hook, web-standards Gate 6): the
+    scrubbed crossfade timelines are NEVER created; backdrops swap as instant binary
+    states with the panels, and reveals are simply shown.
 
   HOW TO USE THIS FILE:
   1. Drop four still images into images/stage-1.jpg through images/stage-4.jpg.
-  2. Replace the placeholder copy inside each .stage-panel.
-  3. Adjust the :root brand tokens if a different palette is required.
+  2. Replace the placeholder copy inside each .stage-panel, the sr-only h1, and the head block.
+  3. Adjust the :root brand tokens if a different palette is required. A carrier swap
+     edits ONLY :root, never a selector.
   Everything else stays as is.
 -->
+
+<!-- Locked head block (web-standards Head 1 to Head 7). Replace the copy, never delete a line.
+     og:image and og:url need absolute public URLs: patch both after the first deploy and ship
+     a designed 1200x630 card at /og.webp (web-standards Head 5). -->
+<meta name="description" content="REPLACE: 150 to 160 characters selling this journey, containing the brand and the offer." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="REPLACE: the experience name" />
+<meta property="og:description" content="REPLACE: one shareable line on the journey." />
+<meta property="og:url" content="https://REPLACE-WITH-DEPLOY-ALIAS/" /><!-- TODO: patch to the live alias after deploy -->
+<meta property="og:image" content="https://REPLACE-WITH-DEPLOY-ALIAS/og.webp" /><!-- TODO: 1200x630 hero card, built in Step 6 -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050505'/%3E%3Cpath d='M32 13v27M20 30l12 12 12-12' stroke='%23e3c79a' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACxElEQVR42u3dwU3rQBSG0YkVN5JC0lDqoSEKoRYW2SCEFAnH9tz/nm8HLB7JPW9inNhzWdd1SH+1eAoEh+AQHIJDcAgOwSE4BIfgkOAQHIJDcAgOwaEpunoKnn19fvz88nZ/eE4urpX9xQIRLyuvZbz8KRx9ZfDhgFRwbFgS2i4eVg7BITgEh+DYM+dA4RAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcGjYqWnYQ6n9Y7mW29jg+c1yRCo+lsUeSh5LMRxJeyjVfSwOSFUKR9IeSqUfy9JnNy6/W8eXlTlnELAz3NJtNz8yOh6QzjOPmN0kl6Q9lGaYyr9/hwlPhS1td4u1ZlTFseW/0VkT2vLvznkGfYncoO94H3kyZn9Zud0fJY4/thxnzPwO4hK8x+cxPpKOQEsekE7rI1hGpb9WJvSRLaPYn7JT+YiXUe88xyQ+OsgoeRLsdB9NZFQ9Q3qijz4yCp8+P8VHKxm131s52Ec3GeXfeDvMR0MZY4zLuq5jeCd2ureHrBzJM6guI+fzHLNNIkBG1Id95plHhoy0T4LNMJUYGYEfEzx3NkkyMi+HPGtCYTJir5U9fk55MpIvpD5yWpEywq+yP2ZmqTLyb8Gw9+SCZbS4P8d+88uW0eXmLXtMMV5Gozv7vHeWHWT0uu3TuybaREa7e4Jtn2sfGR1vGLdluq1kuJug4BAcu746dHtNsXIIjs3LQMNlw8ohOLYtBj2XjZFx3crY7bKXtizgiN0PCg455hAcgkNwCA7BITgkOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7Boff3DfBy03wTpmUtAAAAAElFTkSuQmCC" />
+
+<!-- Preload the first backdrop so the opening stage paints before script executes. -->
+<link rel="preload" as="image" href="images/stage-1.jpg" />
 
 <!-- Inter, weights 100 to 400, for the minimal luxe label and headline DNA. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,20 +53,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet" />
 
 <style>
-  /* ----- LOCKED BRAND DNA: minimal luxe ----- */
+  /* Metric-tuned fallback so the pre-Inter paint does not shift the stage typography
+     (web-standards Type 4). For a client ship, self-host the subset woff2 instead. */
+  @font-face {
+    font-family: 'Inter Fallback';
+    src: local('Helvetica Neue'), local('Arial');
+    size-adjust: 107%; ascent-override: 90.2%; descent-override: 22.48%; line-gap-override: 0%;
+  }
+
+  /* ----- LOCKED BRAND DNA: minimal luxe. A carrier swap edits ONLY this block. ----- */
   :root {
     --ink: #050505;            /* base black, never shows raw because gradients sit behind images */
     --ivory: #f5f4f1;          /* primary type */
     --platinum: #b9c4d0;       /* cold support tone */
     --champagne: #e3c79a;      /* warm accent, blooms in for the final stage only */
-    --label-track: 0.42em;     /* letter spacing on labels, lives in the 0.2 to 0.6em band */
+    --font-display: "Inter", "Inter Fallback", system-ui, sans-serif;
+    --font-body: var(--font-display);
+    /* fluid type scale (web-standards Type 1) */
+    --step--1: clamp(0.625rem, 0.58rem + 0.25vw, 0.8125rem);  /* tags, indicator */
+    --step-0: clamp(0.95rem, 0.9rem + 0.3vw, 1.15rem);        /* stage sub lines */
+    --step-4: clamp(2.4rem, 1.6rem + 4vw, 5.4rem);            /* stage headlines */
+    /* tracking: labels live in the .2 to .6em band; mixed-case display tracks
+       -0.01 to -0.02em (web-standards Type 2). Weight floor: Inter 100 only at
+       display sizes (1.5rem rendered and up). */
+    --track-label: 0.42em;
+    --track-display: -0.01em;
+    /* leading bands (web-standards Type 3) */
+    --leading-display: 1.04;
+    --leading-body: 1.7;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   /*
-    PIN SAFETY (do not change):
+    PIN SAFETY (do not change), web-standards Mobile 6:
     html and body use overflow-x: clip, NOT overflow-x: hidden and NOT overflow: hidden.
     overflow-x: hidden silently forces overflow-y: auto, which turns html or body into a
     scroll container and breaks position: sticky on the scene (it unpins into a black void).
@@ -55,10 +99,22 @@
     overflow-x: clip;
     background: var(--ink);
     color: var(--ivory);
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: var(--font-body);
     font-weight: 200;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+  html { scrollbar-color: rgba(245, 244, 241, 0.25) transparent; }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(245, 244, 241, 0.25); border-radius: 5px; }
+  ::selection { background: var(--champagne); color: var(--ink); }
+
+  /* ----- locked accessibility kit (do not strip) ----- */
+  :focus-visible { outline: 2px solid var(--champagne); outline-offset: 3px; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
   }
 
   /* ----- PROGRESS BAR (thin, top) ----- */
@@ -80,7 +136,8 @@
   /*
     The .runway is 500vh tall. The .scene is sticky inside it, so the scene stays fixed
     on screen (pinned) while the runway scrolls past underneath. That scroll distance is
-    what the stage markers live in.
+    what the stage markers live in. 100svh per web-standards Mobile 5 (100vh is the
+    legacy fallback line only).
   */
   .runway {
     position: relative;
@@ -90,20 +147,26 @@
     position: sticky;
     top: 0;
     height: 100vh;
+    height: 100svh;
     overflow: hidden;
   }
 
   /* ----- BACKDROP LAYERS (full bleed images) ----- */
   /*
-    Opacity and visibility are now driven by GSAP ScrollTrigger scrub,
-    not by a CSS transition and .active class. Do not add an opacity
-    or visibility transition here: it fights the scrub.
+    Opacity and visibility are driven by GSAP ScrollTrigger scrub (or, under reduced
+    motion, by the binary .active swap). Do not add an opacity or visibility transition
+    here: it fights the scrub.
   */
   .bg-layer {
     position: absolute;
     inset: 0;
     opacity: 0;
     visibility: hidden;
+  }
+  /* pre-JS and reduced-motion base state: the active backdrop is simply visible */
+  .bg-layer.active {
+    opacity: 1;
+    visibility: visible;
   }
 
   /*
@@ -178,19 +241,20 @@
 
   .stage-tag {
     display: inline-block;
-    font-size: clamp(10px, 1.1vw, 13px);
+    font-size: var(--step--1);
     font-weight: 400;
-    letter-spacing: var(--label-track);
+    letter-spacing: var(--track-label);
     text-transform: uppercase;
     color: var(--platinum);
     margin-bottom: 1.6rem;
   }
   .stage-headline {
-    font-size: clamp(2.4rem, 6.4vw, 5.4rem);
+    font-size: var(--step-4);
     font-weight: 100;
-    line-height: 1.04;
-    letter-spacing: -0.01em;
+    line-height: var(--leading-display);
+    letter-spacing: var(--track-display);
     color: var(--ivory);
+    text-wrap: balance;
   }
   .stage-headline em {
     font-style: normal;
@@ -199,27 +263,28 @@
   }
   .stage-sub {
     margin-top: 1.8rem;
-    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-size: var(--step-0);
     font-weight: 200;
-    line-height: 1.7;
+    line-height: var(--leading-body);
     letter-spacing: 0.04em;
     color: var(--platinum);
   }
 
-  /* Per element reveal initial state (GSAP animates these in). */
-  .reveal { opacity: 0; will-change: transform, opacity; }
+  /* Per element reveal: the hidden initial state is set by JS (gsap.set), never by CSS,
+     so the page is complete without JS and never blank if a script fails. */
+  .reveal { will-change: transform, opacity; }
 
-  /* ----- FIXED STAGE INDICATOR (bottom left) ----- */
+  /* ----- FIXED STAGE INDICATOR (bottom left, clear of the home indicator) ----- */
   .indicator {
     position: fixed;
-    left: clamp(1.4rem, 3vw, 3rem);
-    bottom: clamp(1.4rem, 3vw, 2.4rem);
+    left: max(clamp(1.4rem, 3vw, 3rem), env(safe-area-inset-left));
+    bottom: max(clamp(1.4rem, 3vw, 2.4rem), env(safe-area-inset-bottom));
     z-index: 50;
     display: flex;
     align-items: baseline;
     gap: 0.9rem;
-    font-size: clamp(10px, 1vw, 12px);
-    letter-spacing: var(--label-track);
+    font-size: var(--step--1);
+    letter-spacing: var(--track-label);
     text-transform: uppercase;
     color: var(--platinum);
   }
@@ -232,17 +297,20 @@
   .indicator .name { font-weight: 300; }
 
   /* ----- DOT NAV (right side) ----- */
+  /* 9px visual dots, 45px hit areas via ::after, and a gap wide enough that the hit
+     areas never overlap (web-standards Mobile 7: 44px minimum tap targets). */
   .dots {
     position: fixed;
-    right: clamp(1.2rem, 2.6vw, 2.4rem);
+    right: max(clamp(1.2rem, 2.6vw, 2.4rem), env(safe-area-inset-right));
     top: 50%;
     transform: translateY(-50%);
     z-index: 50;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 2.2rem;
   }
   .dot {
+    position: relative;
     width: 9px; height: 9px;
     border-radius: 50%;
     border: 1px solid var(--platinum);
@@ -251,6 +319,7 @@
     padding: 0;
     transition: background 0.5s var(--ease), transform 0.5s var(--ease), border-color 0.5s var(--ease);
   }
+  .dot::after { content: ""; position: absolute; inset: -18px; }
   .dot:hover { transform: scale(1.25); }
   .dot.active {
     background: var(--ivory);
@@ -258,24 +327,27 @@
     transform: scale(1.18);
   }
 
-  /* ----- REDUCED MOTION ----- */
+  /* ----- REDUCED MOTION (web-standards Motion 10) ----- */
   /*
-    Reveals and stage swaps become instant. ScrollTrigger still toggles .active, but the
-    transitions drop to zero so nothing animates and nothing scrubs.
+    The designed twin: JS stamps html.rm (for both the media query and the
+    ?reduced-motion=1 test hook) and never creates the scrubbed crossfade timelines.
+    Backdrops and panels swap as instant binary states at the markers, reveals are
+    simply shown. The media block is the no-JS safety net; the html.rm block keeps
+    the test hook byte-identical with the real media query path (web-standards Gate 6).
   */
   @media (prefers-reduced-motion: reduce) {
-    .bg-layer,
-    .stage-panel,
-    .progress-fill,
-    .dot,
-    .reveal {
-      transition: none !important;
-    }
-    .reveal { opacity: 1 !important; transform: none !important; }
+    .bg-layer, .stage-panel, .progress-fill, .dot, .reveal { transition: none !important; }
   }
+  html.rm .bg-layer, html.rm .stage-panel, html.rm .progress-fill,
+  html.rm .dot, html.rm .reveal { transition: none !important; }
 </style>
 </head>
 <body>
+
+  <!-- REPLACE: the page's single h1 and the journey description, for screen readers
+       (web-standards A11y 3 and A11y 5). The visible stage headlines are h2. -->
+  <h1 class="sr-only">REPLACE: the experience name, one line naming the journey.</h1>
+  <p class="sr-only">REPLACE: one sentence describing the four stages this page moves through, in order.</p>
 
   <!-- thin progress bar, top -->
   <div class="progress-track" aria-hidden="true">
@@ -308,38 +380,39 @@
     <div class="scene">
 
       <!-- ===== BACKDROP LAYERS ===== -->
+      <!-- Backdrop images are decorative (the panels carry the copy), so alt is empty. -->
 
       <!-- STAGE 1 backdrop -->
       <div class="bg-layer active" data-bg="0">
         <div class="bg-fill stage-1"></div>
         <!-- REPLACE src WITH YOUR STILL IMAGE -->
-        <img class="bg-img" src="images/stage-1.jpg" alt="Stage one backdrop" fetchpriority="high" loading="eager" onerror="this.style.display='none'" />
+        <img class="bg-img" src="images/stage-1.jpg" alt="" fetchpriority="high" loading="eager" onerror="this.style.display='none'" />
       </div>
 
       <!-- STAGE 2 backdrop -->
       <div class="bg-layer" data-bg="1">
         <div class="bg-fill stage-2"></div>
         <!-- REPLACE src WITH YOUR STILL IMAGE -->
-        <img class="bg-img" src="images/stage-2.jpg" alt="Stage two backdrop" loading="eager" onerror="this.style.display='none'" />
+        <img class="bg-img" src="images/stage-2.jpg" alt="" loading="eager" onerror="this.style.display='none'" />
       </div>
 
       <!-- STAGE 3 backdrop -->
       <div class="bg-layer" data-bg="2">
         <div class="bg-fill stage-3"></div>
         <!-- REPLACE src WITH YOUR STILL IMAGE -->
-        <img class="bg-img" src="images/stage-3.jpg" alt="Stage three backdrop" loading="eager" onerror="this.style.display='none'" />
+        <img class="bg-img" src="images/stage-3.jpg" alt="" loading="eager" onerror="this.style.display='none'" />
       </div>
 
       <!-- STAGE 4 backdrop -->
       <div class="bg-layer" data-bg="3">
         <div class="bg-fill stage-4"></div>
         <!-- REPLACE src WITH YOUR STILL IMAGE -->
-        <img class="bg-img" src="images/stage-4.jpg" alt="Stage four backdrop" loading="eager" onerror="this.style.display='none'" />
+        <img class="bg-img" src="images/stage-4.jpg" alt="" loading="eager" onerror="this.style.display='none'" />
       </div>
 
       <!-- shared atmosphere over every backdrop -->
-      <div class="scrim"></div>
-      <div class="grain"></div>
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
 
       <!-- ===== STAGE PANELS (copy) ===== -->
       <div class="stage-deck">
@@ -378,7 +451,7 @@
 
     <!-- ===== INVISIBLE STAGE MARKERS ===== -->
     <!-- Direct children of .runway (position: relative, 500vh) so top percentages -->
-    <!-- resolve against the full runway, not the 100vh sticky .scene. ScrollTrigger uses each as a trigger. -->
+    <!-- resolve against the full runway, not the sticky .scene. ScrollTrigger uses each as a trigger. -->
     <div class="stage-marker" data-marker="0" style="position:absolute; top:0%;   height:1px; width:1px;"></div>
     <div class="stage-marker" data-marker="1" style="position:absolute; top:25%;  height:1px; width:1px;"></div>
     <div class="stage-marker" data-marker="2" style="position:absolute; top:50%;  height:1px; width:1px;"></div>
@@ -386,160 +459,190 @@
 
   </main>
 
-  <!-- GSAP 3 core and ScrollTrigger from cdnjs. These are the only external scripts. -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- GSAP 3 core and ScrollTrigger from cdnjs, SRI-pinned. These are the only external
+       scripts. If they fail, the guard below leaves the page as a static stage one
+       (backdrop and panel visible), never a blank screen. For a fully offline client
+       ship, inline both libraries into this file instead. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
-    gsap.registerPlugin(ScrollTrigger);
+    /* boot guard: without GSAP the page stays a designed static stage one, never blank */
+    if (window.gsap && window.ScrollTrigger) (function () {
+      "use strict";
+      gsap.registerPlugin(ScrollTrigger);
 
-    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      /* reduced motion, plus the ?reduced-motion=1 test hook (web-standards Gate 6).
+         html.rm applies the exact same CSS the media query applies. */
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        || new URLSearchParams(window.location.search).has("reduced-motion");
+      if (reduceMotion) document.documentElement.classList.add("rm");
 
-    var bgLayers = document.querySelectorAll(".bg-layer");
-    var panels  = document.querySelectorAll(".stage-panel");
-    var dots    = document.querySelectorAll(".dot");
+      var bgLayers = document.querySelectorAll(".bg-layer");
+      var panels  = document.querySelectorAll(".stage-panel");
+      var dots    = document.querySelectorAll(".dot");
 
-    var indNum      = document.getElementById("indNum");
-    var indName     = document.getElementById("indName");
-    var progressFill = document.getElementById("progressFill");
+      var indNum      = document.getElementById("indNum");
+      var indName     = document.getElementById("indName");
+      var progressFill = document.getElementById("progressFill");
 
-    var stageNames = ["Stage One", "Stage Two", "Stage Three", "Stage Four"];
-    var stageNums  = ["01", "02", "03", "04"];
+      var stageNames = ["Stage One", "Stage Two", "Stage Three", "Stage Four"];
+      var stageNums  = ["01", "02", "03", "04"];
 
-    /* ----- STAGE SWITCHING: scrubbed crossfade -----
-       Each backdrop gets a ScrollTrigger that animates its opacity from 0→1→0
-       across the runway. The old backdrop fades out while the new fades in,
-       and the crossfade is tied to scroll position (scrub: true), so it is never
-       a hard cut. Panels and dots still use setStage for a clean binary switch
-       at the marker, because they sit on top of the crossfaded backdrop.
-    */
-    var totalStages = bgLayers.length;
-    var segment     = 1 / totalStages;    // e.g. 0.25 for 4 stages
+      var totalStages = bgLayers.length;
+      var segment     = 1 / totalStages;    // e.g. 0.25 for 4 stages
 
-    bgLayers.forEach(function (layer, i) {
-      var fadeInStart  = i * segment;              // start fading in at this fraction
-      var fadeInEnd    = fadeInStart + segment * 0.6; // fully visible by 60% into its segment
-      var fadeOutStart = (i + 1) * segment - segment * 0.4; // start fading out 40% before next segment
-      var fadeOutEnd   = (i + 1) * segment;
+      /* ----- STAGE SWITCHING: scrubbed crossfade (full motion only) -----
+         Each backdrop gets a ScrollTrigger timeline that animates its opacity across
+         the runway. The old backdrop fades out while the new fades in, tied to scroll
+         position (scrub), so it is never a hard cut. SAFETY FLOOR: the first layer
+         starts at opacity 1 and the last layer holds opacity 1 to the end, so no
+         scroll position ever paints black. Under reduced motion these timelines are
+         NEVER created; setStage swaps the backdrops as instant binary states instead.
+      */
+      if (!reduceMotion) {
+        bgLayers.forEach(function (layer, i) {
+          var isFirst = i === 0;
+          var isLast  = i === totalStages - 1;
+          var fadeInStart  = i * segment;                       // start fading in at this fraction
+          var fadeInEnd    = fadeInStart + segment * 0.6;       // fully visible by 60% into its segment
+          var fadeOutStart = (i + 1) * segment - segment * 0.4; // start fading out 40% before next segment
+          var fadeOutEnd   = (i + 1) * segment;
 
-      // Build an opacity keyframe array tied to runway progress
-      var tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#runway",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.8
+          var tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#runway",
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 0.8
+            }
+          });
+
+          if (isFirst) {
+            // safety floor: the opening backdrop is lit from the first pixel of scroll
+            gsap.set(layer, { opacity: 1, visibility: "visible" });
+            tl.to(layer, { opacity: 1, duration: fadeOutStart, ease: "none" }, 0);
+          } else {
+            // 0 -> fadeInStart: opacity 0
+            tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeInStart, ease: "none" }, 0);
+            // fadeInStart -> fadeInEnd: opacity 0 -> 1
+            tl.to(layer, { opacity: 1, visibility: "visible", duration: fadeInEnd - fadeInStart, ease: "power2.inOut" }, fadeInStart);
+            // fadeInEnd -> fadeOutStart: hold at opacity 1
+            tl.to(layer, { opacity: 1, duration: fadeOutStart - fadeInEnd, ease: "none" }, fadeInEnd);
+          }
+
+          if (isLast) {
+            // safety floor: the arrival backdrop holds to the very end of the runway
+            tl.to(layer, { opacity: 1, duration: 1 - fadeOutStart, ease: "none" }, fadeOutStart);
+          } else {
+            // fadeOutStart -> fadeOutEnd: opacity 1 -> 0
+            tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeOutEnd - fadeOutStart, ease: "power2.inOut" }, fadeOutStart);
+            // fadeOutEnd -> 1: hold at opacity 0
+            if (fadeOutEnd < 1) {
+              tl.to(layer, { opacity: 0, duration: 1 - fadeOutEnd, ease: "none" }, fadeOutEnd);
+            }
+          }
+        });
+      }
+
+      /* Panel and dot switching: a clean binary switch at each marker. Under reduced
+         motion the backdrops join this binary swap (instant, no transitions). */
+      function setStage(i) {
+        for (var p = 0; p < panels.length; p++) {
+          panels[p].classList.toggle("active", p === i);
         }
-      });
-
-      // 0 → fadeInStart: opacity 0
-      if (fadeInStart > 0) {
-        tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeInStart, ease: "none" }, 0);
-      }
-      // fadeInStart → fadeInEnd: opacity 0 → 1
-      tl.to(layer, { opacity: 1, visibility: "visible", duration: fadeInEnd - fadeInStart, ease: "power2.inOut" }, fadeInStart);
-      // fadeInEnd → fadeOutStart: hold at opacity 1
-      tl.to(layer, { opacity: 1, duration: fadeOutStart - fadeInEnd, ease: "none" }, fadeInEnd);
-      // fadeOutStart → fadeOutEnd: opacity 1 → 0
-      tl.to(layer, { opacity: 0, visibility: "hidden", duration: fadeOutEnd - fadeOutStart, ease: "power2.inOut" }, fadeOutStart);
-      // fadeOutEnd → 1: hold at opacity 0
-      if (fadeOutEnd < 1) {
-        tl.to(layer, { opacity: 0, duration: 1 - fadeOutEnd, ease: "none" }, fadeOutEnd);
-      }
-    });
-
-    /* Panel and dot switching: still a clean binary switch at each marker.
-       Panels sit above the crossfaded backdrop so a crisp swap is the right call. */
-    function setStage(i) {
-      for (var p = 0; p < panels.length; p++) {
-        panels[p].classList.toggle("active", p === i);
-      }
-      for (var d = 0; d < dots.length; d++) {
-        dots[d].classList.toggle("active", d === i);
-      }
-      indNum.textContent  = stageNums[i];
-      indName.textContent = stageNames[i];
-    }
-
-    // Stage markers: one per segment, placed at each segment boundary
-    var runway = document.getElementById("runway");
-    // Generate markers dynamically
-    var existingMarkers = document.querySelectorAll(".stage-marker");
-    existingMarkers.forEach(function (m) { m.remove(); });
-    for (var s = 0; s < totalStages; s++) {
-      var mk = document.createElement("div");
-      mk.className = "stage-marker";
-      mk.setAttribute("data-marker", s);
-      mk.style.cssText = "position:absolute; top:" + (s * segment * 100) + "%; height:1px; width:1px;";
-      runway.appendChild(mk);
-    }
-    var markers = document.querySelectorAll(".stage-marker");
-
-    markers.forEach(function (marker, i) {
-      ScrollTrigger.create({
-        trigger: marker,
-        start: "top center",
-        onEnter:     function () { setStage(i); },
-        onEnterBack: function () { setStage(i); }
-      });
-    });
-
-    /*
-      PROGRESS BAR: driven by ScrollTrigger's own progress on the runway, not by scroll math.
-      ScrollTrigger reports a 0 to 1 progress for the pinned span. We map it to a width.
-      The accent blooms into the bar near the end to echo the final stage.
-    */
-    ScrollTrigger.create({
-      trigger: "#runway",
-      start: "top top",
-      end: "bottom bottom",
-      onUpdate: function (self) {
-        var pct = Math.round(self.progress * 100);
-        progressFill.style.width = pct + "%";
-        progressFill.style.background = self.progress > 0.78 ? "var(--champagne)" : "var(--platinum)";
-      }
-    });
-
-    /*
-      CONTENT REVEALS: each .reveal element gets its OWN ScrollTrigger, once: true,
-      start tied to the element (top 80%), not a fraction. Each animates opacity and a small
-      translateY in, one time. Under reduced motion the elements are simply shown.
-    */
-    var reveals = document.querySelectorAll(".reveal");
-    reveals.forEach(function (el) {
-      if (reduceMotion) {
-        gsap.set(el, { opacity: 1, y: 0 });
-        return;
-      }
-      gsap.set(el, { opacity: 0, y: 26 });
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 80%",
-        once: true,
-        onEnter: function () {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" });
+        for (var d = 0; d < dots.length; d++) {
+          dots[d].classList.toggle("active", d === i);
         }
-      });
-    });
+        if (reduceMotion) {
+          for (var b = 0; b < bgLayers.length; b++) {
+            bgLayers[b].classList.toggle("active", b === i);
+          }
+        }
+        indNum.textContent  = stageNums[i];
+        indName.textContent = stageNames[i];
+      }
 
-    /*
-      DOT NAV: clicking a dot scrolls to that stage's marker using gsap.to with the ScrollTo
-      behaviour via scrollIntoView. No smooth scroll library is used. Reduced motion jumps
-      instantly, otherwise the browser's own smooth behaviour carries it.
-    */
-    dots.forEach(function (dot) {
-      dot.addEventListener("click", function () {
-        var i = parseInt(dot.getAttribute("data-dot"), 10);
-        markers[i].scrollIntoView({
-          behavior: reduceMotion ? "auto" : "smooth",
-          block: "center"
+      // Stage markers: one per segment, placed at each segment boundary
+      var runway = document.getElementById("runway");
+      // Generate markers dynamically
+      var existingMarkers = document.querySelectorAll(".stage-marker");
+      existingMarkers.forEach(function (m) { m.remove(); });
+      for (var s = 0; s < totalStages; s++) {
+        var mk = document.createElement("div");
+        mk.className = "stage-marker";
+        mk.setAttribute("data-marker", s);
+        mk.style.cssText = "position:absolute; top:" + (s * segment * 100) + "%; height:1px; width:1px;";
+        runway.appendChild(mk);
+      }
+      var markers = document.querySelectorAll(".stage-marker");
+
+      markers.forEach(function (marker, i) {
+        ScrollTrigger.create({
+          trigger: marker,
+          start: "top center",
+          onEnter:     function () { setStage(i); },
+          onEnterBack: function () { setStage(i); }
         });
       });
-    });
 
-    /* Make sure stage one is correct on first paint. */
-    setStage(0);
-    ScrollTrigger.refresh();
+      /*
+        PROGRESS BAR: driven by ScrollTrigger's own progress on the runway, not by scroll math.
+        ScrollTrigger reports a 0 to 1 progress for the pinned span. We map it to a width.
+        The accent blooms into the bar near the end to echo the final stage.
+      */
+      ScrollTrigger.create({
+        trigger: "#runway",
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: function (self) {
+          var pct = Math.round(self.progress * 100);
+          progressFill.style.width = pct + "%";
+          progressFill.style.background = self.progress > 0.78 ? "var(--champagne)" : "var(--platinum)";
+        }
+      });
+
+      /*
+        CONTENT REVEALS: each .reveal element gets its OWN ScrollTrigger, once: true,
+        start tied to the element (top 80%), not a fraction. Each animates opacity and a small
+        translateY in, one time. Under reduced motion the elements are simply shown.
+        The hidden initial state is set HERE, not in CSS, so a script failure never blanks copy.
+      */
+      var reveals = document.querySelectorAll(".reveal");
+      reveals.forEach(function (el) {
+        if (reduceMotion) {
+          gsap.set(el, { opacity: 1, y: 0 });
+          return;
+        }
+        gsap.set(el, { opacity: 0, y: 26 });
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 80%",
+          once: true,
+          onEnter: function () {
+            gsap.to(el, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" });
+          }
+        });
+      });
+
+      /*
+        DOT NAV: clicking a dot scrolls to that stage's marker with the browser's own
+        smooth behaviour. No smooth scroll library is used. Reduced motion jumps instantly.
+      */
+      dots.forEach(function (dot) {
+        dot.addEventListener("click", function () {
+          var i = parseInt(dot.getAttribute("data-dot"), 10);
+          markers[i].scrollIntoView({
+            behavior: reduceMotion ? "auto" : "smooth",
+            block: "center"
+          });
+        });
+      });
+
+      /* Make sure stage one is correct on first paint. */
+      setStage(0);
+      ScrollTrigger.refresh();
+    })();
   </script>
 
 </body>

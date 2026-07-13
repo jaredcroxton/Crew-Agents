@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  CREW WEB BOOKING SITE BUILDER  ::  LOCKED ROUTE REFERENCE TEMPLATE
+  ============================================================================
+  One self-contained HTML file whose whole job is getting a visitor to BOOK
+  or CALL. Built for the local service business: trades, salons, clinics,
+  studios, tutors. Renders immediately in any browser with placeholder
+  content. Zero dependencies except the Google Fonts CDN link below.
+
+  HOW THE SKILL USES THIS FILE:
+    1. Copy this whole file.
+    2. Swap the brand tokens in :root (oklch slots) and the light block.
+    3. Swap the font pairing and retune the metric-tuned fallback @font-face.
+    4. Replace every REPLACE block with the business's REAL content.
+    5. Every phone number is a real tel: link. Every price is the user's own
+       ("from" pricing allowed, invented numbers never). Reviews and ratings
+       ship only when real: the DELETE-UNLESS-REAL blocks are removed, not
+       faked.
+    6. Keep the engineering intact: click-to-call, the booking embed slot
+       with its tel/mailto fallback, head hygiene, focus management, the
+       reduced-motion twin, overflow safety.
+
+  ANTI-FABRICATION (the whole point of this skill):
+    A local business site is a legal and reputational surface. Never invent a
+    price, a review, a star rating, a licence number, a service area, a
+    guarantee, or an hours block. Missing facts are asked for or marked "Not
+    provided", never filled in. The REPLACE and DELETE-UNLESS-REAL markers are
+    the safety net.
+
+  BOOKING CTA STRATEGY (progressive enhancement, web-standards Tiers 1):
+    The single file must WORK OFFLINE and with no third-party service. So the
+    baseline booking path is always a real tel: link and a mailto: link that
+    function from a double-click on disk. A Calendly / Square / Cal.com embed
+    is layered ON TOP as an enhancement: if the business supplies one, the
+    iframe fills the booking slot; if it fails or is absent, the tel/mailto
+    fallback beneath it is the working path. The embed is never the only way
+    to book.
+
+  LOCKED ENGINEERING (do not remove):
+    - All brand values live in CSS custom properties. oklch base + color-mix
+      ramp (web-standards Color 1). Nothing hardcoded in a selector.
+    - Head hygiene complete (web-standards Head 1 to 7).
+    - Mobile-first. This traffic is overwhelmingly phones. A fixed bottom
+      action bar (Call + Book) rides above the home indicator on mobile.
+    - Click-to-call is prominent: tel: in the header, the hero, the contact
+      block, and the mobile action bar.
+    - Skip link first in tab order; :focus-visible ring on every control.
+    - Dark and light mode. color-scheme per theme. Choice persists.
+    - Subtle one-shot reveals; honours prefers-reduced-motion (the twin).
+    - LocalBusiness JSON-LD, built ONLY from user-supplied facts.
+    - Overflow safety: nothing clips under the sticky header; no sideways
+      scroll at any width.
+  ============================================================================
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- REPLACE: title (web-standards Head 2, under 60 chars) and description
+       (Head 3, 150 to 160 chars, written for the click, name + service +
+       area + the booking ask). -->
+  <title>Harbourline Plumbing :: Book a plumber in Brisbane</title>
+  <meta name="description" content="Licensed Brisbane plumbers for blocked drains, hot water, and leaks. Same-day callouts across the north side. Book online or call for a fast quote today." />
+
+  <!-- theme-color (Head 6). ONE non-media tag, because this site drives the
+       theme with data-theme plus localStorage, not the OS media query. The
+       pre-paint init script below and the toggle both update this tag's
+       content, so the browser chrome tracks the user's manual choice in both
+       directions (a media-scoped tag would resolve by OS preference and fight
+       the toggle). REPLACE the two backgrounds in the init script and the
+       toggle THEME_BG map to match --bg per theme. -->
+  <meta name="theme-color" content="#f6f7f9" />
+
+  <!-- THEME INIT (runs before first paint, so no flash). Saved choice, else
+       prefers-color-scheme, else light (a local trades site reads brighter
+       by default; flip to dark for a salon or studio brand). REPLACE the two
+       backgrounds to match --bg in each theme. -->
+  <script>
+    (function () {
+      try {
+        var THEME_BG = { light: "#f6f7f9", dark: "#0e1116" };
+        var saved = localStorage.getItem("crew-theme");
+        var theme = (saved === "light" || saved === "dark")
+          ? saved
+          : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta && THEME_BG[theme]) meta.setAttribute("content", THEME_BG[theme]);
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- FAVICON (Head 4): an inline SVG mark for modern browsers, a base64 PNG
+       fallback rel="icon" for legacy, and a real 180x180 apple-touch-icon for
+       home-screen saves. REPLACE the SVG fill and letter, and regenerate the
+       two PNGs to match the brand mark at build time. -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1116'/%3E%3Ctext x='32' y='45' font-family='Arial, sans-serif' font-weight='700' font-size='36' fill='%232f7d6b' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC20lEQVR42sWXv24cVRTGf9+du2tjB2+ykTdEshANUBFSIjoEItDQUJMCiRfgBXgDXgCJNkVEQxlh0aVGaQISIZYVhbArBTas483OzP0oZtZxHMz+YXdzpJFmdO/c853v/L2ikgCkzc3OhazBl4hPgDcBsRgx8Avm+zLn64OD7h9jnRq/bLW3P8T6RtKr9vifRYqQwPY+8hePHvZuAEEArVbnfTL9AGC7rEFpwQgMJEkZAKU/6Pe7uzpz5pXtENNPiItAAjKWK5WB5vdUhMvZ2sbGVyHooxUpP4o3BbWQrZfPbf8WFF6z7XpxFZIkKTntaetcZ7po07GQsOffc0JiHRwTA85FgctU6YkRhRO/2KRRARiFgOJU3nScqFzgMtFst4hbmwCMen9RPB4+BWGjRmRjp4NCoBw+YdT981lGTjk9TmZepLxg6/LrtN95C6fE/e9+JP95D601a3ZKGu0NLn76HvGldQZ37nH/2g3UbEx0RZw6iYtEGuU4pX8/1MajnJRlOC9mSolpC1lF6X/ROl7X9DUszldVTyiaUen/BuCiII1yVCtNeTET7fMDkHBR0n73Eq233xi3kqMsGAPS8gCAS7O+0yHE+EzHdDLlweGSGTAoE8N7XcqD4XMMrF9oLxuAUcx4ePMWf9/eI6vrQMoL1rbPsvPZx8w6ScwVhIqR0GxUhQYIEmrE1WUB9tPn+PecvfmFSpwlBRVCHYmnbAn1nmVUQucF5eEQp3TUlk+6pTwcASKN8untmnYgUcxQlh2BcUrPMRSadXdPiTRlZZx+IMmL2jJVFU+nMeB6XQsaSI7HwIRDqwFlpqakYHxXkuupmBUOpTa+G7Cu17C9QgCV263rL/xiEgaDBz2Zq6okqzd4SVaXkjJJkrk6GDzoBSD0+91dk67Y3q9ASIvXXxloe9+kK/1+dxcIWY0sPDl8/GvMNq8pkBDngfNLuJ5/W+Z8PnjUuzW+ov0Dv+RDv/T9aQEAAAAASUVORK5CYII=" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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" />
+
+  <!-- OPEN GRAPH + TWITTER (Head 5). REPLACE title and description.
+       og:url and og:image need absolute public URLs, so they are deploy-time
+       TODOs; until then Gate 8 records "og:image deferred to deploy". -->
+  <meta property="og:title" content="Harbourline Plumbing: book a Brisbane plumber" />
+  <meta property="og:description" content="Licensed Brisbane plumbers for blocked drains, hot water, and leaks. Same-day callouts. Book online or call today." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- TODO at deploy (Mode 3):
+  <meta property="og:url" content="https://REPLACE.example/" />
+  <meta property="og:image" content="https://REPLACE.example/og.png" />
+  <link rel="canonical" href="https://REPLACE.example/" />
+  -->
+
+  <!-- Google Fonts CDN (the one external request). REPLACE the pairing. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- LOCALBUSINESS JSON-LD (web-standards Head, SEO). Uncomment ONLY with
+       facts the user supplied. Never invent an address, phone, hours, area,
+       or rating. Match the @type to the trade (Plumber, HairSalon,
+       MedicalClinic, Dentist, HealthClub, etc.). DELETE if facts are absent.
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Plumber",
+    "name": "REPLACE",
+    "image": "https://REPLACE.example/og.png",
+    "telephone": "REPLACE",
+    "email": "REPLACE",
+    "url": "https://REPLACE.example/",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "REPLACE",
+      "addressLocality": "REPLACE",
+      "addressRegion": "REPLACE",
+      "postalCode": "REPLACE",
+      "addressCountry": "AU"
+    },
+    "areaServed": ["REPLACE suburb", "REPLACE suburb"],
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "07:00", "closes": "17:00" }
+    ]
+  }
+  </script>
+  -->
+
+  <style>
+    /* ======================================================================
+       BRAND TOKENS  ::  the only place colour, type, spacing, and motion live
+       oklch base colours with a color-mix ramp (web-standards Color 1). Swap
+       the four *-h/-c/-l slots to rebrand; every state derives from them.
+       ====================================================================== */
+
+    /* Metric-tuned local fallbacks so the display=swap reflow is invisible
+       (web-standards Type 4). Retune when the pairing changes. */
+    @font-face {
+      font-family: "Manrope Fallback";
+      src: local("Arial");
+      size-adjust: 100%;
+      ascent-override: 96%;
+      descent-override: 24%;
+    }
+    @font-face {
+      font-family: "Inter Fallback";
+      src: local("Arial");
+      size-adjust: 107%;
+      ascent-override: 90%;
+      descent-override: 22.5%;
+    }
+
+    :root {
+      color-scheme: light;
+
+      /* Fonts (REPLACE the two families to rebrand). Two families maximum. */
+      --font-heading: "Manrope", "Manrope Fallback", system-ui, sans-serif;
+      --font-body: "Inter", "Inter Fallback", system-ui, -apple-system, sans-serif;
+
+      /* --- Brand colour, defined in oklch (web-standards Color 1) ---------
+         REPLACE --brand and --ground. Every hover, border, tint, and surface
+         derives from them with color-mix, so the palette stays harmonious. */
+      --brand: oklch(0.52 0.09 172);        /* the one accent (a deep teal). L=0.52 keeps --on-brand button text at ~5.1:1, clear of the 4.5 floor */
+      --brand-strong: color-mix(in oklch, var(--brand), black 14%);
+      --brand-tint: color-mix(in oklch, var(--brand), white 86%);
+      --brand-ink: color-mix(in oklch, var(--brand), black 34%);
+
+      /* Light theme surfaces and ink */
+      --bg: oklch(0.98 0.004 250);
+      --surface: oklch(1 0 0);
+      --surface-2: oklch(0.965 0.005 250);
+      --ink: oklch(0.22 0.02 250);
+      --ink-muted: oklch(0.44 0.02 250);       /* verified >= 4.5:1 on --bg */
+      --line: oklch(0.9 0.01 250);
+      --on-brand: oklch(0.99 0 0);             /* text on the accent button */
+
+      /* Fluid type scale (web-standards Type 1). Body 17px default. */
+      --step-hero: clamp(2.4rem, 1.7rem + 3.4vw, 4rem);
+      --step-h2: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+      --step-h3: clamp(1.2rem, 1.1rem + 0.5vw, 1.4rem);
+      --step-body: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+      --step-lead: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+      --step-small: 0.875rem;
+      --step-eyebrow: 0.8rem;
+
+      /* Tracking tightens as size grows (web-standards Type 2). Never one
+         blanket letter-spacing across all sizes. */
+      --track-hero: -0.02em;
+      --track-h2: -0.012em;
+      --track-h3: 0.01em;                   /* h3 is ~19 to 22px, below 24px, so tracking is POSITIVE on the curve (web-standards Type 2) */
+      --track-eyebrow: 0.08em;
+
+      /* Leading bands (web-standards Type 3) */
+      --leading-hero: 1.05;
+      --leading-h2: 1.15;
+      --leading-body: 1.55;
+
+      /* Spacing, radius, layout */
+      --gutter: clamp(1.15rem, 0.8rem + 1.6vw, 2.25rem);
+      --section-y: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+      --maxw: 1160px;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --header-h: 68px;
+      --bottombar-h: 64px;
+
+      /* Elevation ramp: one downward key light, two layered shadows a level */
+      --shadow-1: 0 1px 2px oklch(0.2 0.02 250 / 0.06), 0 2px 6px oklch(0.2 0.02 250 / 0.06);
+      --shadow-2: 0 2px 6px oklch(0.2 0.02 250 / 0.08), 0 10px 24px oklch(0.2 0.02 250 / 0.10);
+
+      /* Focus ring (A11y 1) and motion easing (Motion 2) */
+      --focus-ring: 0 0 0 3px var(--bg), 0 0 0 5.5px var(--brand);
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --brand: oklch(0.66 0.1 172);
+      --brand-strong: color-mix(in oklch, var(--brand), white 10%);
+      --brand-tint: color-mix(in oklch, var(--brand), black 68%);
+      --brand-ink: color-mix(in oklch, var(--brand), white 22%);
+      --bg: oklch(0.16 0.012 250);
+      --surface: oklch(0.2 0.014 250);
+      --surface-2: oklch(0.235 0.016 250);
+      --ink: oklch(0.95 0.006 250);
+      --ink-muted: oklch(0.74 0.012 250);       /* verified >= 4.5:1 on --bg */
+      --line: oklch(0.32 0.014 250);
+      --on-brand: oklch(0.15 0.01 250);
+      --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4), 0 2px 8px oklch(0 0 0 / 0.4);
+      --shadow-2: 0 2px 8px oklch(0 0 0 / 0.5), 0 12px 30px oklch(0 0 0 / 0.55);
+    }
+
+    /* ---------- Reset and base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; }
+    html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: var(--step-body);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3 { font-family: var(--font-heading); font-weight: 600; margin: 0; text-wrap: balance; }
+    p, li { text-wrap: pretty; }
+    p { margin: 0 0 1rem; }
+    a { color: var(--brand-ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    img { max-width: 100%; height: auto; display: block; }
+    ::selection { background: var(--brand-tint); color: var(--brand-ink); }
+    :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 6px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    /* ---------- Layout primitives ---------- */
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: max(var(--gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    }
+    section { padding-block: var(--section-y); }
+    /* Anchored sections clear the sticky header on a nav jump, so no eyebrow
+       or heading lands hidden under it (web-standards Mobile 6, Gate 2). */
+    section[id] { scroll-margin-top: var(--header-h); }
+    .eyebrow {
+      font-size: var(--step-eyebrow);
+      letter-spacing: var(--track-eyebrow);
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--brand-ink);
+      margin: 0 0 0.75rem;
+    }
+    h2 { font-size: var(--step-h2); letter-spacing: var(--track-h2); line-height: var(--leading-h2); }
+    h3 { font-size: var(--step-h3); letter-spacing: var(--track-h3); }
+    .lead { font-size: var(--step-lead); color: var(--ink-muted); max-width: 60ch; }
+    .muted { color: var(--ink-muted); }
+
+    /* ---------- Skip link (A11y 2) ---------- */
+    .skip {
+      position: absolute; left: 0; top: 0; transform: translateY(-120%);
+      background: var(--brand); color: var(--on-brand);
+      padding: 0.6rem 1rem; border-radius: 0 0 var(--radius-sm) 0;
+      z-index: 100; font-weight: 600; transition: transform 0.15s var(--ease-out-quart);
+    }
+    .skip:focus-visible { transform: translateY(0); }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      min-height: 44px; padding: 0.7rem 1.35rem;
+      border-radius: var(--radius-sm); border: 1px solid transparent;
+      font: inherit; font-weight: 600; line-height: 1; cursor: pointer;
+      text-decoration: none; white-space: nowrap;
+      transition: transform 0.18s var(--ease-out-quart), background-color 0.18s var(--ease-out-quart), box-shadow 0.18s var(--ease-out-quart);
+    }
+    .btn-primary { background: var(--brand); color: var(--on-brand); box-shadow: var(--shadow-1); }
+    .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
+    .btn-ghost { background: transparent; color: var(--brand-ink); }
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover { background: var(--brand-strong); transform: translateY(-1px); box-shadow: var(--shadow-2); }
+      .btn-secondary:hover { border-color: var(--brand); color: var(--brand-ink); }
+    }
+    .btn:active { transform: translateY(0) scale(0.98); }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+
+    /* ---------- Header ---------- */
+    header.site {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in oklch, var(--bg), transparent 12%);
+      -webkit-backdrop-filter: saturate(1.4) blur(10px);
+      backdrop-filter: saturate(1.4) blur(10px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart);
+    }
+    header.site[data-scrolled="true"] { border-bottom-color: var(--line); box-shadow: var(--shadow-1); }
+    .nav {
+      height: var(--header-h); display: flex; align-items: center; gap: 1rem;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-family: var(--font-heading); font-weight: 700; font-size: 1.15rem;
+      letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto;
+    }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 9px; flex: none;
+      display: grid; place-items: center;
+      background: var(--brand); color: var(--on-brand); font-weight: 700;
+    }
+    .nav-links { display: none; gap: 1.4rem; align-items: center; }
+    .nav-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; }
+    @media (hover: hover) { .nav-links a:hover { color: var(--ink); } }
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+    .icon-btn {
+      width: 44px; height: 44px; display: grid; place-items: center;
+      background: transparent; border: 1px solid var(--line); border-radius: var(--radius-sm);
+      color: var(--ink); cursor: pointer;
+    }
+    .icon-btn svg { width: 20px; height: 20px; }
+    .nav-call { display: none; }
+
+    /* Mobile menu via the Popover API (web-standards Tiers 4). Esc-close,
+       light dismiss, and focus handling are native, no JS bug surface. */
+    #menu {
+      margin: 0; inset: auto 0 0 0; width: 100%;
+      border: none; border-top: 1px solid var(--line);
+      background: var(--surface); color: var(--ink);
+      padding: 1rem var(--gutter) calc(1rem + env(safe-area-inset-bottom));
+      box-shadow: var(--shadow-2);
+    }
+    #menu:popover-open { display: grid; gap: 0.25rem; }
+    #menu a { padding: 0.85rem 0.25rem; text-decoration: none; color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--line); }
+    #menu a:last-of-type { border-bottom: none; }
+    #menu::backdrop { background: oklch(0 0 0 / 0.4); }
+
+    /* ---------- Hero ---------- */
+    .hero { padding-top: calc(var(--header-h) / 2 + var(--section-y)); }
+    .hero h1 {
+      font-size: var(--step-hero); letter-spacing: var(--track-hero);
+      line-height: var(--leading-hero); max-width: 16ch;
+    }
+    .hero .lead { margin-top: 1.15rem; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin-top: 1.75rem;
+      font-size: var(--step-small); color: var(--ink-muted); align-items: center;
+    }
+    .hero-trust span { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .hero-trust svg { width: 16px; height: 16px; color: var(--brand-ink); }
+
+    /* ---------- Trust strip (DELETE-UNLESS-REAL for rating) ---------- */
+    .trust-strip { background: var(--surface-2); border-block: 1px solid var(--line); }
+    .trust-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.25rem; text-align: center;
+    }
+    .trust-grid .stat { font-family: var(--font-heading); font-weight: 700; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+    .trust-grid .stat + span { font-size: var(--step-small); color: var(--ink-muted); }
+
+    /* ---------- Services grid ---------- */
+    .grid-services { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-1);
+      display: grid; grid-template-rows: auto auto 1fr auto; gap: 0.5rem;
+    }
+    .card .svc-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--brand-tint); color: var(--brand-ink); display: grid; place-items: center; margin-bottom: 0.4rem; }
+    .card .svc-icon svg { width: 22px; height: 22px; }
+    .card h3 { margin-bottom: 0.15rem; }
+    .card p { margin: 0; color: var(--ink-muted); font-size: 0.98rem; }
+    /* "from" pricing: honest range language, never an invented flat number */
+    .price-from { margin-top: 0.9rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .price-from small { color: var(--ink-muted); font-weight: 500; }
+
+    /* ---------- Booking section ---------- */
+    .booking { background: var(--surface-2); border-block: 1px solid var(--line); }
+    .booking-inner { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+    .book-embed {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      min-height: 260px; overflow: hidden; box-shadow: var(--shadow-1);
+    }
+    .book-embed iframe { width: 100%; height: 100%; min-height: 620px; border: 0; display: block; }
+    /* Fallback shown when no embed is wired. Always a working path. */
+    .book-fallback { padding: 1.75rem; display: grid; gap: 1rem; }
+    .book-fallback .row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .book-note { font-size: var(--step-small); color: var(--ink-muted); }
+
+    /* ---------- Service area + hours ---------- */
+    .area-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+    .area-list { columns: 2; column-gap: 1.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+    .area-list li { padding: 0.3rem 0; color: var(--ink-muted); break-inside: avoid; }
+    .hours { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    .hours th, .hours td { text-align: left; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.98rem; }
+    .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-muted); }
+    .hours th { font-weight: 500; color: var(--ink); }
+
+    /* ---------- Reviews (DELETE-UNLESS-REAL) ---------- */
+    .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+    .review { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-1); }
+    .review .stars { color: var(--brand-ink); letter-spacing: 2px; margin-bottom: 0.6rem; }
+    .review blockquote { margin: 0 0 0.9rem; font-size: 1.05rem; }
+    .review cite { font-style: normal; font-weight: 600; font-size: 0.95rem; }
+    .review cite span { display: block; font-weight: 400; color: var(--ink-muted); font-size: var(--step-small); }
+
+    /* ---------- Contact ---------- */
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+    address { font-style: normal; display: grid; gap: 0.75rem; }
+    .contact-line { display: flex; align-items: center; gap: 0.7rem; }
+    .contact-line svg { width: 20px; height: 20px; color: var(--brand-ink); flex: none; }
+    .contact-line a { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .contact-line a.tel { font-size: 1.2rem; font-weight: 700; }
+
+    /* ---------- Footer ---------- */
+    footer.site { background: var(--surface-2); border-top: 1px solid var(--line); padding-block: 2.5rem calc(2.5rem + var(--bottombar-h)); }
+    .foot { display: grid; gap: 1rem; }
+    .foot-nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .foot-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; }
+    .foot-legal { font-size: var(--step-small); color: var(--ink-muted); }
+    @media (min-width: 768px) { footer.site { padding-bottom: 2.5rem; } }
+
+    /* ---------- Mobile fixed action bar (Call + Book) ---------- */
+    .action-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+      padding: 0.5rem var(--gutter) calc(0.5rem + env(safe-area-inset-bottom));
+      background: color-mix(in oklch, var(--bg), transparent 6%);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      border-top: 1px solid var(--line);
+    }
+    .action-bar .btn { width: 100%; }
+    @media (min-width: 768px) { .action-bar { display: none; } }
+
+    /* ---------- Motion: one reveal primitive (web-standards Motion 5) ----------
+       The base state is COMPLETE and visible (web-standards Tiers 1). JS stamps
+       html.enhanced only after the other behaviours run and just before it arms
+       the reveals (Tiers 2), so a no-JS load or a script error earlier in the
+       block shows the full designed page, never a blank one. */
+    html.enhanced .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s var(--ease-out-quart) var(--reveal-delay, 0ms), transform 0.7s var(--ease-out-quart) var(--reveal-delay, 0ms); }
+    html.enhanced .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html.enhanced .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ---------- Responsive (mobile-first; add at breakpoints) ---------- */
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .nav-call { display: inline-flex; }
+      .menu-toggle { display: none; }
+      .trust-grid { grid-template-columns: repeat(4, 1fr); }
+      .grid-services { grid-template-columns: repeat(2, 1fr); }
+      .area-grid { grid-template-columns: 1.2fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+      .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+      .booking-inner { grid-template-columns: 1.1fr 0.9fr; }
+    }
+    @media (min-width: 1024px) {
+      .grid-services { grid-template-columns: repeat(3, 1fr); }
+      .reviews-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ---------- Aligned card footers (web-standards Slop 4) ----------
+       grid-auto-rows: 1fr stretches every card in a row to the same height,
+       and each card's internal 1fr spacer row (grid-template-rows on .card
+       above) drops its .price-from line to the bottom, so the price footers
+       line up across the row. Equal-height rows, not subgrid. */
+    .grid-services { grid-auto-rows: 1fr; }
+
+    /* ---------- Print ---------- */
+    @media print {
+      header.site, .action-bar, .menu-toggle, .skip, #theme-toggle { display: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      body { background: #fff; color: #111; }
+      section { padding-block: 1.5rem; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site" id="siteHeader">
+    <div class="wrap nav">
+      <!-- REPLACE brand name and mark initial -->
+      <a class="brand" href="#top" aria-label="Harbourline Plumbing home">
+        <span class="brand-mark" aria-hidden="true">H</span>
+        Harbourline Plumbing
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#booking">Book</a>
+        <a href="#area">Service area</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch colour theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <!-- REPLACE tel: number. Prominent click-to-call on desktop. -->
+        <a class="btn btn-secondary nav-call" href="tel:+61700000000">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+          07 0000 0000
+        </a>
+        <a class="btn btn-primary nav-call" href="#booking">Book now</a>
+        <button class="icon-btn menu-toggle" type="button" popovertarget="menu" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu (Popover API): native Esc-close and light dismiss -->
+    <nav id="menu" popover aria-label="Menu">
+      <a href="#services">Services</a>
+      <a href="#booking">Book</a>
+      <a href="#area">Service area</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+61700000000">Call 07 0000 0000</a>
+    </nav>
+  </header>
+
+  <span id="top"></span>
+  <!-- zero-height sentinel: flips the scrolled header state via observer -->
+  <div id="sentinel" style="position:absolute;top:0;height:1px;width:1px"></div>
+
+  <main id="main">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">REPLACE: Licensed and insured, since REPLACE</p>
+        <!-- REPLACE headline: the outcome + place. Keep it to one clear ask. -->
+        <h1 id="hero-title" class="reveal">Blocked drain or burst pipe? A Brisbane plumber at your door today.</h1>
+        <p class="lead reveal">REPLACE: One or two honest sentences. What you fix, where you work, and why booking is easy. No invented guarantees or awards.</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#booking">Book a callout</a>
+          <!-- REPLACE tel: real number. This is the highest-intent action. -->
+          <a class="btn btn-secondary" href="tel:+61700000000">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+            Call 07 0000 0000
+          </a>
+        </div>
+        <!-- REPLACE trust items with FACTS ONLY. Delete any you cannot back. -->
+        <div class="hero-trust reveal">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>REPLACE: Same-day callouts</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>REPLACE: Upfront fixed quotes</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>REPLACE: Licence no. 00000</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TRUST STRIP (facts only) ================= -->
+    <!-- DELETE-UNLESS-REAL: rating and review count ship ONLY if the business
+         has a real, verifiable Google rating. Never invent a number. -->
+    <section class="trust-strip" aria-label="At a glance">
+      <div class="wrap trust-grid">
+        <div><div class="stat">REPLACE</div><span>REPLACE: Years serving the area</span></div>
+        <div><div class="stat">REPLACE</div><span>REPLACE: Jobs completed</span></div>
+        <div><div class="stat">4.9<span aria-hidden="true">&#9733;</span></div><span>REPLACE: Google rating (REPLACE reviews). DELETE UNLESS REAL</span></div>
+        <div><div class="stat">REPLACE</div><span>REPLACE: Suburbs covered</span></div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section id="services" aria-labelledby="services-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">What we do</p>
+        <h2 id="services-title" class="reveal">Services and honest pricing</h2>
+        <p class="lead reveal">REPLACE: one line. Use "from" pricing only where a real starting price exists. Where none does, drop the price line, do not invent one.</p>
+
+        <div class="grid-services">
+          <!-- REPLACE each card. One service each. "from $X" is a real
+               starting figure; delete .price-from if there is no real price. -->
+          <article class="card reveal">
+            <div class="svc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+            <h3>REPLACE: Blocked drains</h3>
+            <p>REPLACE: one honest sentence describing the service and what is included.</p>
+            <p class="price-from">from $000 <small>REPLACE or delete</small></p>
+          </article>
+          <article class="card reveal">
+            <div class="svc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M8 8h8M6 22V12h12v10"/></svg></div>
+            <h3>REPLACE: Hot water systems</h3>
+            <p>REPLACE: one honest sentence.</p>
+            <p class="price-from">from $000 <small>REPLACE or delete</small></p>
+          </article>
+          <article class="card reveal">
+            <div class="svc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 2v20M17 2v20M2 7h20M2 17h20"/></svg></div>
+            <h3>REPLACE: Leak detection</h3>
+            <p>REPLACE: one honest sentence.</p>
+            <p class="price-from">from $000 <small>REPLACE or delete</small></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BOOKING (embed + always-working fallback) ================= -->
+    <section id="booking" class="booking" aria-labelledby="booking-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">Book</p>
+        <h2 id="booking-title" class="reveal">Book a time that suits you</h2>
+        <p class="lead reveal">REPLACE: one line. Prefer to talk it through? Call and we will sort it.</p>
+
+        <div class="booking-inner" style="margin-top:2rem">
+          <!-- BOOKING SLOT. Two states:
+               (1) Business supplies a scheduler (Calendly / Square / Cal.com /
+                   Acuity): paste the provider iframe INSIDE .book-embed,
+                   replacing the .book-fallback below with it, OR keep both and
+                   let the fallback show if the iframe is blocked.
+               (2) No scheduler: keep the fallback ONLY. It is a real, working
+                   path (tel + mailto) that functions offline from disk. -->
+          <div class="book-embed reveal">
+            <!-- REPLACE with the provider embed when supplied, e.g.:
+            <iframe src="https://calendly.com/REPLACE" title="Booking calendar" loading="lazy"></iframe>
+            -->
+            <div class="book-fallback">
+              <h3>Request a callout</h3>
+              <p class="muted">REPLACE: no online scheduler yet, so this books by phone or email. Both work instantly.</p>
+              <div class="row">
+                <a class="btn btn-primary" href="tel:+61700000000">Call to book</a>
+                <!-- mailto: subject and body prefilled; no backend needed -->
+                <a class="btn btn-secondary" href="mailto:REPLACE@example.com?subject=Booking%20request&amp;body=Name%3A%0APhone%3A%0ASuburb%3A%0AWhat%20you%20need%3A%0APreferred%20day%2Ftime%3A">Email a request</a>
+              </div>
+              <p class="book-note">REPLACE: mention your typical response time only if it is true (for example "we reply within the hour on weekdays").</p>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <h3>How it works</h3>
+            <ol class="muted" style="padding-left:1.1rem;line-height:1.9">
+              <li>REPLACE: Tell us the problem and your suburb.</li>
+              <li>REPLACE: We confirm a time and an upfront quote.</li>
+              <li>REPLACE: We arrive, fix it, and you pay on completion.</li>
+            </ol>
+            <p style="margin-top:1rem"><a href="tel:+61700000000" class="btn btn-ghost">Or just call 07 0000 0000</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICE AREA + HOURS ================= -->
+    <section id="area" aria-labelledby="area-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">Where we work</p>
+        <h2 id="area-title" class="reveal">Service area and hours</h2>
+        <div class="area-grid">
+          <div class="reveal">
+            <p class="muted">REPLACE: one line naming the region. List REAL suburbs you actually cover; do not pad the list.</p>
+            <ul class="area-list">
+              <!-- REPLACE with real suburbs / towns you serve -->
+              <li>REPLACE suburb</li><li>REPLACE suburb</li><li>REPLACE suburb</li>
+              <li>REPLACE suburb</li><li>REPLACE suburb</li><li>REPLACE suburb</li>
+            </ul>
+            <p class="book-note" style="margin-top:1rem">REPLACE: "Not sure if you are in our area? Call and ask." Only claim suburbs you truly cover.</p>
+          </div>
+          <div class="reveal">
+            <table class="hours">
+              <caption class="muted" style="text-align:left;margin-bottom:0.5rem">Opening hours</caption>
+              <tbody>
+                <!-- REPLACE with the real hours. Mark after-hours honestly. -->
+                <tr><th scope="row">Mon to Fri</th><td>REPLACE</td></tr>
+                <tr><th scope="row">Saturday</th><td>REPLACE</td></tr>
+                <tr><th scope="row">Sunday</th><td>REPLACE</td></tr>
+                <tr><th scope="row">Emergencies</th><td>REPLACE or delete</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REVIEWS (DELETE-UNLESS-REAL) ================= -->
+    <!-- This entire section ships ONLY with the business's real, attributed
+         reviews. If there are none, DELETE the section. Never invent a quote,
+         a name, or a star count. -->
+    <section id="reviews" aria-labelledby="reviews-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">What customers say</p>
+        <h2 id="reviews-title" class="reveal">Reviews</h2>
+        <div class="reviews-grid">
+          <figure class="review reveal">
+            <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a real customer quote, word for word.</blockquote>
+            <cite>REPLACE Name<span>REPLACE suburb, source (for example Google)</span></cite>
+          </figure>
+          <figure class="review reveal">
+            <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a real customer quote.</blockquote>
+            <cite>REPLACE Name<span>REPLACE suburb, source</span></cite>
+          </figure>
+          <figure class="review reveal">
+            <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>REPLACE: a real customer quote.</blockquote>
+            <cite>REPLACE Name<span>REPLACE suburb, source</span></cite>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <p class="eyebrow reveal">Get in touch</p>
+        <h2 id="contact-title" class="reveal">Contact</h2>
+        <div class="contact-grid">
+          <address class="reveal">
+            <!-- REPLACE all with real details. Every one is a working link. -->
+            <div class="contact-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+              <a class="tel" href="tel:+61700000000">07 0000 0000</a>
+            </div>
+            <div class="contact-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="m4 6 8 6 8-6"/></svg>
+              <a href="mailto:REPLACE@example.com">REPLACE@example.com</a>
+            </div>
+            <div class="contact-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span class="muted">REPLACE: service area or a real street address. Delete if mobile-only.</span>
+            </div>
+          </address>
+          <div class="reveal">
+            <h3>Ready when you are</h3>
+            <p class="muted">REPLACE: one closing line, honest and plain.</p>
+            <div class="row" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem">
+              <a class="btn btn-primary" href="#booking">Book online</a>
+              <a class="btn btn-secondary" href="tel:+61700000000">Call now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site">
+    <div class="wrap foot">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">H</span>
+        Harbourline Plumbing
+      </a>
+      <p class="foot-legal">REPLACE: one honest line about the business.</p>
+      <nav class="foot-nav" aria-label="Footer">
+        <a href="#services">Services</a>
+        <a href="#booking">Book</a>
+        <a href="#area">Service area</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <p class="foot-legal">REPLACE: Licence no. 00000 (delete if none). &copy; <span id="year">2026</span> Harbourline Plumbing.</p>
+    </div>
+  </footer>
+
+  <!-- ================= MOBILE ACTION BAR (Call + Book) ================= -->
+  <div class="action-bar" aria-label="Quick actions">
+    <a class="btn btn-secondary" href="tel:+61700000000">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+      Call
+    </a>
+    <a class="btn btn-primary" href="#booking">Book</a>
+  </div>
+
+  <script>
+    /* Five behaviours: theme toggle, header sentinel, reveal observer, footer
+       year, and closing the Popover menu when an in-page link in it is tapped
+       (a hash jump does not auto-dismiss a popover). The menu's open, Escape-
+       close, and light-dismiss are all the native Popover API. */
+    (function () {
+      "use strict";
+      var root = document.documentElement;
+      var THEME_BG = { light: "#f6f7f9", dark: "#0e1116" };
+
+      // Theme toggle: flip data-theme, persist, sync theme-color
+      var toggle = document.getElementById("theme-toggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("crew-theme", next); } catch (e) {}
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta && THEME_BG[next]) meta.setAttribute("content", THEME_BG[next]);
+        });
+      }
+
+      // Header sentinel: flip the scrolled state (no scroll listener)
+      var header = document.getElementById("siteHeader");
+      var sentinel = document.getElementById("sentinel");
+      if (header && sentinel && "IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          header.setAttribute("data-scrolled", (!entries[0].isIntersecting).toString());
+        }, { threshold: 0 }).observe(sentinel);
+      }
+
+      // Footer year
+      var yr = document.getElementById("year");
+      if (yr) yr.textContent = new Date().getFullYear();
+
+      // One-shot staggered reveals. Stamp .enhanced HERE (web-standards Tiers 2),
+      // after the behaviours above and just before arming, so a no-JS load or an
+      // earlier script error leaves the complete base state visible, not blank.
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var reveals = document.querySelectorAll(".reveal");
+      root.classList.add("enhanced");
+      if (reduced || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            var el = e.target;
+            var kin = Array.prototype.filter.call(el.parentElement.children, function (c) { return c.classList.contains("reveal"); });
+            var i = kin.indexOf(el);
+            if (i > 0) el.style.setProperty("--reveal-delay", Math.min(i * 70, 420) + "ms");
+            el.addEventListener("transitionend", function () { el.style.removeProperty("--reveal-delay"); }, { once: true });
+            el.classList.add("in");
+            obs.unobserve(el);
+          });
+        }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      // Close the popover menu when a link inside it is tapped
+      var menu = document.getElementById("menu");
+      if (menu && menu.hidePopover) {
+        menu.addEventListener("click", function (e) {
+          if (e.target.closest("a")) { try { menu.hidePopover(); } catch (err) {} }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

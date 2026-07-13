@@ -4,8 +4,8 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.9.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.9.0">
-  <img src="https://img.shields.io/badge/SKILLS-103-333333?style=for-the-badge&labelColor=lime&color=333333" alt="103 Skills">
+  <img src="https://img.shields.io/badge/CREW-v1.11.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.11.0">
+  <img src="https://img.shields.io/badge/SKILLS-104-333333?style=for-the-badge&labelColor=lime&color=333333" alt="104 Skills">
   <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
   <img src="https://img.shields.io/badge/LICENSE-MIT-333333?style=for-the-badge&labelColor=lime&color=333333" alt="License MIT">
@@ -19,13 +19,13 @@
 
 # CREW: World-Class AI Agent Skills
 
-> **The only agent skill pack with a built-in brand context system.** 103 gold-standard skills. 14 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
+> **The only agent skill pack with a built-in brand context system.** 104 gold-standard skills. 14 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
 
 ---
 
 ## What CREW is
 
-CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge: 103 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
+CREW gives your AI agents the skills to operate as a full business team. Not one agent with surface-level knowledge: 104 specialised skills that know their domain, reference each other, and produce premium output with built-in quality gates.
 
 **What makes CREW different:**
 
@@ -34,7 +34,7 @@ CREW gives your AI agents the skills to operate as a full business team. Not one
 | 11-question business onboarding, every skill knows your brand | Generic prompts, no business context |
 | Design review gates cross-reference 3 packs before output ships | No quality gates, output is whatever the model produces |
 | 3-lens adversarial review on every skill | No adversarial review, bugs ship to production |
-| Brand context persists across all 103 skills | Each skill is an island, no shared knowledge |
+| Brand context persists across all 104 skills | Each skill is an island, no shared knowledge |
 | Evidence/Inference discipline, nothing fabricated | No fabrication guardrails |
 
 ---
@@ -71,7 +71,7 @@ claw skills import ./packs/               # OpenClaw
 
 **Updating:** `git pull && bash install.sh --all --global --force --prune` (prune removes renamed or retired Crew skills, never anything else). Zip buyers: see `shared/INSTALL.md`. After any install or update, `bash install.sh --doctor --global` checks the install is healthy.
 
-**QA smoke suite:** `bash shared/qa-check.sh --smoke` invokes the Claude CLI roughly once per skill (about 103 metered calls on the full catalogue). Use `--pack <id>` to narrow it. The structural pass (`bash shared/qa-check.sh`) is free.
+**QA smoke suite:** `bash shared/qa-check.sh --smoke` invokes the Claude CLI roughly once per skill (about 104 metered calls on the full catalogue). Use `--pack <id>` to narrow it. The structural pass (`bash shared/qa-check.sh`) is free.
 
 ---
 
@@ -91,7 +91,7 @@ Every skill follows the same disciplined path:
                                ▼
                     ┌──────────────────────────┐
                     │   SKILL INVOKED           │
-                    │   103 skills, 14 packs    │
+                    │   104 skills, 14 packs    │
                     └──────────┬───────────────┘
                                │
                                ▼
@@ -218,7 +218,7 @@ Every skill is gold-standard. Here is what that means:
 | **3-lens adversarial review** | Harness check + white-label scan + senior domain expert before QA |
 | **Design review gates** | Build skills cross-reference packs 12-14, block output on failure |
 | **Fixtures** | Cases A, B, C per skill: clean, messy, and missing-input scenarios |
-| **0 em dashes** | Strict white-label discipline across all 103 skills |
+| **0 em dashes** | Strict white-label discipline across all 104 skills |
 | **0 banned terms** | No leaked internal names, no placeholder names |
 | **Evidence/Inference discipline** | Every claim labelled. Nothing fabricated. |
 | **AU-law jurisdiction-neutral** | Business sets jurisdiction once. Skills adapt. |

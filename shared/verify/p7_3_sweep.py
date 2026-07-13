@@ -18,7 +18,7 @@ ROOT = pathlib.Path("packs")
 if not ROOT.is_dir():
     sys.exit("run from the repo root (packs/ not found)")
 
-SKIP = {"crew-web-app-builder"}  # BLAST exception: no Step 0 / Final Step
+SKIP = set()
 
 ANCHOR1 = "a rewrite must never erase a lesson or an open flag."
 SENT1 = "STAGED HANDOFF (write denied)"

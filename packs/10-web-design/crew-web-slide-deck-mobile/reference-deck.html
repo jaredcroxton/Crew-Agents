@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--
+  crew-web-slide-deck-mobile reference deck (locked engine, worked example).
+  Start every build from this file: replace the theme tokens, the panels, and the
+  content (everything marked REPLACE), never re-derive the engine from scratch.
+  All content below is fictional placeholder. Harnesses: ?debug=safe overlays the
+  simulated notch and home-bar bands and overrides the safe-area tokens; ?panel=N
+  deep-links to panel N for review screenshots; ?reduced-motion=1 applies the same
+  rules as the prefers-reduced-motion media query (web-standards Gate 6 hook).
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A proposal for Harborview Cafe</title> <!-- REPLACE: reads like a message, "[Client] x [Brand]" -->
+<meta name="description" content="Your fit-out quote from Northline Electrical, ready to read in one minute and accept with one tap."> <!-- REPLACE -->
+<meta name="theme-color" content="#101418"> <!-- matches --bg; duplicate with a prefers-color-scheme media attribute if the theme has light and dark values -->
+<meta property="og:title" content="A proposal for Harborview Cafe"> <!-- REPLACE -->
+<meta property="og:description" content="Your quote from Northline Electrical, ready to accept."> <!-- REPLACE -->
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO after deploy (web-standards Head 5): absolute same-origin HTTPS URLs only.
+     Scrapers fetch og:image themselves; data URIs and relative paths are ignored. -->
+<meta property="og:image" content="https://TODO-deploy-url/og.png">
+<meta property="og:url" content="https://TODO-deploy-url/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101418'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='34' fill='%23e8a33d' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E"> <!-- REPLACE: wordmark initial on brand ground -->
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="> <!-- REPLACE: 180x180 brand PNG -->
+<style>
+/* ============ THEME (Brand variables doctrine) ============ */
+/* Theme: REPLACE from brand-context.md, a stated brand, or a preset file read from
+   packs/10-web-design/crew-web-slide-deck-builder/themes/. Placeholder tokens only. */
+:root {
+  --bg: #101418;
+  --surface: #1a2129;
+  --ink: #f4f1ea;
+  --ink-muted: color-mix(in oklch, var(--ink), transparent 35%);
+  --accent: #e8a33d;
+  --accent-deep: color-mix(in oklch, var(--accent), black 25%);
+  --on-accent: #171106;
+  --font-display: Georgia, 'Times New Roman', serif;               /* REPLACE: display slot */
+  --font-body: -apple-system, system-ui, 'Segoe UI', sans-serif;   /* REPLACE: body slot */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;     /* mono slot: tabular fallback */
+
+  /* The type system (locked): six-step scale, cqi middle terms so the desktop
+     phone frame sizes type to the column, never the viewport. */
+  --caption: 13px;
+  --body: 17px;
+  --lead: 21px;
+  --label: 14px;
+  --subhead: clamp(26px, 7cqi, 32px);
+  --display: clamp(40px, 12cqi, 64px);
+
+  /* Spacing tokens: consistent vertical rhythm, never improvised per panel. */
+  --space-panel: calc(24px + 4cqi);
+  --space-stack: 18px;
+
+  /* Motion tokens (web-standards Motion 2, Motion 3, Appendix A7). */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring-out: linear(0, 0.0714 4.2%, 0.2325 8.3%, 0.4232 12.5%, 0.6055 16.7%, 0.7594 20.8%, 0.8774 25%, 0.9596 29.2%, 1.0112 33.3%, 1.0387 37.5%, 1.0491 41.7%, 1.0486 45.8%, 1.042 50%, 1.0328 54.2%, 1.0233 58.3%, 1.015 62.5%, 1.0083 66.7%, 1.0035 70.8%, 1.0003 75%, 0.9985 79.2%, 0.9977 83.3%, 0.9975 87.5%, 0.9977 91.7%, 0.9982 95.8%, 1);
+  --dur-reveal: 560ms;
+  --dur-micro: 180ms;
+
+  /* Safe-area tokens: the layout consumes these, never env() directly, so the
+     ?debug=safe harness can override them off-device (web-standards Mobile 4). */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+/* Small phones: display floor relaxes to 34px below 375px width. */
+@media (max-width: 374px) { :root { --display: clamp(34px, 12cqi, 64px); } }
+/* Landscape guard: reduced type ceilings, layout survives, never a rotate nag. */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --display: clamp(28px, 9cqi, 40px);
+    --subhead: clamp(20px, 5cqi, 26px);
+    --space-panel: calc(14px + 2cqi);
+    --space-stack: 12px;
+  }
+}
+/* ?debug=safe: simulated 59px notch band and 34px home-bar band. */
+html[data-debug="safe"] { --safe-top: 59px; --safe-bottom: 34px; }
+
+/* ============ RESET AND GROUND ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { background: var(--bg); } /* rubber-band overscroll never flashes a foreign colour */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; } /* the document never scrolls */
+body { font-family: var(--font-body); color: var(--ink); }
+::selection { background: var(--accent); color: var(--on-accent); } /* ink-on-accent, passes 4.5:1 */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: fixed; top: 8px; left: 8px; z-index: 40; background: var(--accent); color: var(--on-accent); padding: 10px 16px; border-radius: 8px; text-decoration: none; transform: translateY(-200%); }
+.skip:focus-visible { transform: none; }
+
+/* ============ THE ENGINE (locked): fixed stage, framed column, absolute scroller ============ */
+.stage { position: fixed; inset: 0; display: grid; place-items: center; }
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100vh;   /* legacy fallback line */
+  height: 100dvh;  /* the frame is the fixed overlay case of web-standards Mobile 5 */
+  overflow: hidden;
+  background: var(--bg);
+  container-type: inline-size; /* cqi type sizing scopes to the column */
+}
+#deck {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: contain; /* kills pull-to-refresh and scroll chaining */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Polish kit: the rail communicates position */
+}
+#deck::-webkit-scrollbar { display: none; }
+.panel {
+  min-height: 100%; /* min-height, not height: font boost enlarges, never clips */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: var(--space-stack);
+  padding: calc(var(--safe-top) + var(--space-panel))
+           calc(var(--safe-right) + var(--space-panel))
+           calc(var(--safe-bottom) + var(--space-panel))
+           calc(var(--safe-left) + var(--space-panel));
+}
+/* Desktop fallback: centred phone frame on a dimmed ground, panels size to the frame. */
+@media (min-width: 521px) {
+  .stage { background: color-mix(in oklch, var(--bg), black 45%); }
+  .frame {
+    height: min(100dvh - 48px, 844px);
+    aspect-ratio: 9 / 16;
+    width: auto;
+    border-radius: 28px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .5);
+  }
+}
+
+/* ============ PROGRESS RAIL (stories bar) ============ */
+.rail {
+  position: absolute;
+  top: calc(var(--safe-top) + 8px); /* fixed elements ignore root padding; offset or hide under the notch */
+  left: calc(var(--safe-left) + 12px);
+  right: calc(var(--safe-right) + 12px);
+  display: flex; gap: 4px; z-index: 10; pointer-events: none;
+}
+.rail span { flex: 1; height: 3px; border-radius: 2px; background: color-mix(in oklch, var(--ink), transparent 78%); overflow: hidden; }
+.rail span::after {
+  content: ""; display: block; height: 100%; border-radius: inherit;
+  background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 300ms var(--ease-out-quart);
+}
+.rail span.done::after { transform: scaleX(1); transition-duration: 0ms; }
+.rail span.on::after { transform: scaleX(1); }
+
+/* ============ DEBUG BANDS (?debug=safe) ============ */
+.band { position: absolute; left: 0; right: 0; z-index: 30; display: none; pointer-events: none; background: rgba(255, 69, 58, .28); outline: 1px dashed rgba(255, 69, 58, .8); outline-offset: -1px; }
+html[data-debug="safe"] .band { display: block; }
+.band-top { top: 0; height: var(--safe-top); }
+.band-bottom { bottom: 0; height: var(--safe-bottom); }
+
+/* ============ TYPE ============ */
+h1, h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--display); line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
+.subhead { font-size: var(--subhead); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+p { font-size: var(--body); line-height: 1.5; text-wrap: pretty; } /* body is never tightened */
+.lead { font-size: var(--lead); line-height: 1.45; }
+.label { font-family: var(--font-body); font-size: var(--label); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.caption { font-size: var(--caption); line-height: 1.35; color: var(--ink-muted); }
+.accent-word { color: var(--accent); }
+
+/* ============ PANEL TYPES ============ */
+.panel-list ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-stack); }
+.panel-list li { display: flex; gap: 12px; align-items: baseline; font-size: var(--lead); line-height: 1.4; }
+.tick { flex: none; width: 18px; height: 18px; transform: translateY(2px); color: var(--accent); }
+
+.panel-media { justify-content: flex-end; }
+.media-frame { position: absolute; inset: 0; background: linear-gradient(160deg, #26343f, #17222b 55%, #0b0f13); } /* REPLACE with a real 9:16 <picture> or <video>, contract below */
+.media-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 8, 10, .15), rgba(6, 8, 10, .55) 65%, rgba(6, 8, 10, .72)); } /* .55 default, ~.72 on bright footage, judged on the real frame */
+.panel-media .over-media { position: relative; z-index: 1; }
+.over-media h2, .over-media .caption { text-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 28px rgba(0, 0, 0, .35); } /* dual-layer shadow on display-over-media */
+
+.panel-price { text-align: left; }
+.price-value {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums; /* animated numerals never jitter (web-standards Type 5) */
+  font-size: calc(var(--display) * 1.15);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.panel-price ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.panel-price li { display: flex; gap: 10px; align-items: baseline; font-size: var(--body); }
+
+.panel-cta { justify-content: flex-end; padding-bottom: calc(var(--safe-bottom) + 96px); } /* lower third, thumb reach */
+.cta {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 16px 28px; border-radius: 999px;
+  background: var(--accent); color: var(--on-accent);
+  font: 600 var(--body) / 1 var(--font-body);
+  text-decoration: none;
+  touch-action: manipulation; /* no double-tap delay where tap latency matters */
+  transition: transform var(--dur-micro) var(--ease-out-quart);
+}
+/* The glow is a pre-rendered ::after layer whose OPACITY transitions.
+   box-shadow and filter are never animated (web-standards Motion 1). */
+.cta::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 10px 30px color-mix(in oklch, var(--accent), transparent 45%); opacity: 0; transition: opacity var(--dur-micro) var(--ease-out-quart); }
+@media (hover: hover) {
+  .cta:hover { transform: translateY(-2px); }
+  .cta:hover::after { opacity: 1; }
+}
+.cta:active { transform: scale(.985); } /* the engineered press replaces the tap highlight */
+.cta-secondary { align-self: center; margin-top: 4px; color: var(--ink-muted); font-size: var(--caption); }
+
+.cue { width: 22px; height: 22px; color: var(--ink-muted); margin-top: var(--space-stack); animation: cue 1.6s ease-in-out infinite; }
+@keyframes cue { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+/* ============ REVEALS (one-shot, base state complete without JS) ============ */
+html.enhanced [data-reveal] { opacity: 0; transform: translateY(20px); }
+html.enhanced .panel.active [data-reveal] {
+  animation: rise var(--dur-reveal) var(--ease-out-quart) forwards;
+  animation-delay: calc(var(--i, 0) * 80ms); /* heading, then body, then accent */
+}
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+/* ============ REDUCED MOTION: the designed twin (web-standards Motion 10) ============ */
+@media (prefers-reduced-motion: reduce) {
+  html.enhanced [data-reveal] { opacity: 1; transform: none; animation: none; }
+  .cue { animation: none; }
+  .rail span::after { transition: none; }
+}
+html[data-reduced] [data-reveal] { opacity: 1 !important; transform: none !important; animation: none !important; }
+html[data-reduced] .cue { animation: none; }
+html[data-reduced] .rail span::after { transition: none; }
+
+/* ============ PRINT: one panel per page ============ */
+@media print {
+  .stage, .frame, #deck { position: static; height: auto; overflow: visible; aspect-ratio: auto; }
+  .panel { min-height: auto; page-break-after: always; padding: 20mm; }
+  .rail, .band, .skip, .cue { display: none; }
+  html.enhanced [data-reveal] { opacity: 1; transform: none; animation: none; }
+  .media-frame, .media-scrim { position: absolute; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#deck">Skip to content</a>
+
+<div class="stage">
+  <div class="frame">
+
+    <main id="deck" tabindex="0" aria-label="Story deck, 7 panels">
+
+      <!-- Panel 1: hook. REPLACE all copy. The hook line is the deck's only h1. -->
+      <section class="panel panel-hook">
+        <p class="label" data-reveal style="--i:0">Northline Electrical</p>
+        <h1 data-reveal style="--i:1">A proposal for<br>Harborview Cafe</h1>
+        <svg class="cue" data-reveal style="--i:2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </section>
+
+      <!-- Panel 2: statement. One sentence, display type. -->
+      <section class="panel panel-statement">
+        <h2 data-reveal style="--i:0">Your kitchen trips the moment the espresso machine and the ovens run <span class="accent-word">together</span>.</h2>
+      </section>
+
+      <!-- Panel 3: list. At most THREE items; a fourth item is a second panel. -->
+      <section class="panel panel-list">
+        <h2 class="subhead" data-reveal style="--i:0">What we will do</h2>
+        <ul>
+          <li data-reveal style="--i:1"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Rewire the kitchen circuit</li>
+          <li data-reveal style="--i:2"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Fit a new switchboard</li>
+          <li data-reveal style="--i:3"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Issue the safety certificate</li>
+        </ul>
+      </section>
+
+      <!-- Panel 4: media. Scrim mandatory. This CSS placeholder frame stands in for
+           a real 9:16 asset; REPLACE with the contract below and delete the div.
+           Poster: <picture><source type="image/avif" srcset="assets/site.avif">
+                     <img src="assets/site.jpg" alt="MEANINGFUL ALT" width="1080" height="1920"></picture>
+                   (at most 120KB per poster at 1080x1920, per the Weight budget)
+           Video:  <video muted playsinline loop poster="assets/site.jpg"
+                     preload="none" (every video, unconditional; nothing downloads until its panel arrives, Perf 4)
+                     src="assets/site.mp4"></video>
+                   (720x1280 H.264 around 2Mbps, audio stripped, at most 2.5MB per clip;
+                    the script below owns play and pause on panel enter and exit) -->
+      <section class="panel panel-media" data-bg="#26343f">
+        <div class="media-frame" role="img" aria-label="Placeholder gradient standing in for a 9:16 photograph of the site. REPLACE."></div>
+        <div class="media-scrim"></div>
+        <div class="over-media">
+          <h2 data-reveal style="--i:0">One day on site.</h2>
+          <p class="caption" data-reveal style="--i:1">Booked this week, done before Friday. (REPLACE)</p>
+        </div>
+      </section>
+
+      <!-- Panel 5: price. The money panel: total dominant, at most four ticks.
+           The count-up is the deck's ONE signature moment. The numeral ships its
+           final value in the HTML (complete without JS); the script width-reserves
+           the container, counts up on a non-overshooting curve, then springs the
+           TRANSFORM only. Every figure comes from the user, never invented. -->
+      <section class="panel panel-price">
+        <p class="label" data-reveal style="--i:0">Your investment</p>
+        <h2 data-reveal style="--i:1"><span class="price-value" data-final="6240" data-prefix="$">$6,240</span></h2>
+        <p class="caption" data-reveal style="--i:2">including GST (REPLACE)</p>
+        <ul>
+          <li data-reveal style="--i:3"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>All parts</li>
+          <li data-reveal style="--i:4"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>All labour</li>
+          <li data-reveal style="--i:5"><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>Safety certificate</li>
+        </ul>
+      </section>
+
+      <!-- Panel 6: statement. The guarantee, only if the user has one. Never invent one. -->
+      <section class="panel panel-statement">
+        <h2 data-reveal style="--i:0">If it trips again in 12 months, we come back <span class="accent-word">free</span>.</h2>
+      </section>
+
+      <!-- Panel 7: cta. ONE action, thumb height, lower third. -->
+      <section class="panel panel-cta">
+        <h2 class="subhead" data-reveal style="--i:0">Ready when you are.</h2>
+        <a class="cta" href="tel:+61400000000" data-reveal style="--i:1">Accept and book the day</a>
+        <a class="cta-secondary" href="sms:+61400000000" data-reveal style="--i:2">Or reply to the text</a>
+      </section>
+
+    </main>
+
+    <div class="rail" aria-hidden="true"></div>
+    <div class="band band-top"></div>
+    <div class="band band-bottom"></div>
+  </div>
+</div>
+
+<div class="sr-only" aria-live="polite" id="announcer"></div>
+
+<script>
+(() => {
+  'use strict';
+  /* Harness flags. ?debug=safe simulates the notch and home bar; ?reduced-motion=1
+     is the Gate 6 hook and applies the same rules as the media query. */
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('debug') === 'safe') document.documentElement.dataset.debug = 'safe';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || qs.has('reduced-motion');
+  if (qs.has('reduced-motion')) document.documentElement.dataset.reduced = '';
+  /* Capability stamp: the hidden reveal state only exists once JS runs, so the
+     no-JS page is a complete scrolling document (web-standards Tiers 1 and 2). */
+  document.documentElement.classList.add('enhanced');
+
+  const deck = document.getElementById('deck');
+  const panels = [...deck.querySelectorAll('.panel')];
+  const announcer = document.getElementById('announcer');
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  const rootBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+  const springOut = getComputedStyle(document.documentElement).getPropertyValue('--spring-out').trim();
+
+  /* Progress rail: built from the panel count at load, never hardcoded. */
+  const rail = document.querySelector('.rail');
+  const segs = panels.map(() => rail.appendChild(document.createElement('span')));
+
+  /* The signature count-up: width-reserve to the final value (tabular-nums plus a
+     locked min-width means nothing reflows), climb on a non-overshooting curve so a
+     price is never overshown, then spring the transform only, after the value lands. */
+  const outExpo = p => (p === 1 ? 1 : 1 - Math.pow(2, -10 * p));
+  function countUp(el) {
+    const final = parseInt(el.dataset.final, 10);
+    const prefix = el.dataset.prefix || '';
+    el.style.minWidth = el.getBoundingClientRect().width + 'px';
+    const t0 = performance.now();
+    const dur = 900;
+    const tick = now => {
+      const p = Math.min((now - t0) / dur, 1);
+      el.textContent = prefix + Math.round(final * outExpo(p)).toLocaleString('en-US');
+      if (p < 1) { requestAnimationFrame(tick); return; }
+      try { /* linear() spring on the settle; ancient browsers fall back below */
+        el.animate([{ transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 770, easing: 'linear(' + springOut.replace(/^linear\(|\)$/g, '') + ')' });
+      } catch (e) {
+        el.animate([{ transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+      }
+    };
+    requestAnimationFrame(tick);
+  }
+
+  /* One-shot reveal. will-change is applied just before the animation and removed
+     on animationend; nothing is permanently promoted (web-standards Motion 9). */
+  function reveal(panel) {
+    if (panel.classList.contains('active')) return;
+    if (!reduced) {
+      panel.querySelectorAll('[data-reveal]').forEach(el => {
+        el.style.willChange = 'transform, opacity';
+        el.addEventListener('animationend', () => { el.style.willChange = ''; }, { once: true });
+      });
+    }
+    panel.classList.add('active');
+    const numeral = panel.querySelector('.price-value');
+    if (numeral && !reduced && !numeral.dataset.counted) {
+      numeral.dataset.counted = '1';
+      countUp(numeral);
+    }
+  }
+
+  /* Active-panel setter: drives the rail, the announcer, theme-color, reveals, and
+     video playback. Fired synchronously by every programmatic navigation; the
+     IntersectionObserver below is the backstop, never the sole trigger. */
+  let active = -1;
+  function setActive(i) {
+    i = Math.max(0, Math.min(i, panels.length - 1));
+    if (i === active) return;
+    active = i;
+    segs.forEach((s, j) => { s.classList.toggle('done', j < i); s.classList.toggle('on', j === i); });
+    announcer.textContent = 'Panel ' + (i + 1) + ' of ' + panels.length;
+    themeMeta.setAttribute('content', panels[i].dataset.bg || rootBg); /* chrome morphs with the story */
+    reveal(panels[i]);
+    /* Video ownership: play on enter (rejection is a known non-failure under Low
+       Power Mode; the poster remains), pause on exit. Keep live srcs at 2 or fewer. */
+    panels.forEach((p, j) => p.querySelectorAll('video').forEach(v => {
+      if (j === i) { v.muted = true; v.play().catch(() => {}); } else { v.pause(); }
+    }));
+  }
+
+  /* Midline tracking: whichever panel crosses the frame's centre band is active,
+     regardless of panel height. A high fixed threshold freezes on tall panels. */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(panels.indexOf(e.target)); });
+  }, { root: deck, rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+  panels.forEach(p => io.observe(p));
+
+  /* Programmatic navigation: setActive fires synchronously (embedded previews
+     throttle IO), then the scroll follows, reduced-motion aware. */
+  function nav(i) {
+    i = Math.max(0, Math.min(i, panels.length - 1));
+    setActive(i);
+    panels[i].scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+  }
+
+  /* Keyboard at every width: the scroller holds focus and receives keys first. */
+  deck.addEventListener('keydown', e => {
+    if (e.target.closest('a, button, input, textarea')) return;
+    const down = ['ArrowDown', 'PageDown'].includes(e.key) || (e.key === ' ' && !e.shiftKey);
+    const up = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+    if (down) { e.preventDefault(); nav(active + 1); }
+    else if (up) { e.preventDefault(); nav(active - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); nav(0); }
+    else if (e.key === 'End') { e.preventDefault(); nav(panels.length - 1); }
+  });
+  deck.focus({ preventScroll: true });
+
+  /* ?panel=N deep link for per-panel review screenshots. */
+  const start = parseInt(qs.get('panel'), 10);
+  if (start >= 1 && start <= panels.length) {
+    panels[start - 1].scrollIntoView({ behavior: 'auto' });
+    setActive(start - 1);
+  } else {
+    setActive(0);
+  }
+})();
+</script>
+</body>
+</html>

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0805">
 <title>The Artisan · A Concept Film for Harbourline Boot Co.</title>
 <meta name="description" content="A cinematic concept film for the Harbourline Boot Co. Artisan boot. One hide, one seam, assembled by hand in Adelaide since 1932. A demonstration build, not an official Harbourline Boot Co. site.">
 <meta property="og:title" content="The Artisan · A Concept Film for Harbourline Boot Co.">
@@ -11,27 +12,51 @@
 <meta property="og:url" content="https://example.com/product-film/">
 <meta property="og:image" content="https://example.com/product-film/listing/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<!-- og:image is a designed 1200x630 JPG at an absolute public URL; patch to the live alias at deploy (web-standards Head 5) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='36' fill='none' stroke='%23c98d4b' stroke-width='10'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23c98d4b'/%3E%3C/svg%3E">
+<!-- base64 PNG fallback for browsers that ignore SVG favicons (web-standards Head 4) -->
+<link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,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">
+<!-- the poster is the LCP element: preload it so first paint is the designed frame -->
+<link rel="preload" as="image" href="video/poster.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
 <style>
+  /* metric-matched fallback: the swap from Arial to Inter shifts nothing
+     (web-standards Type 4). A client deliverable subsets and self-hosts one
+     variable woff2 and preloads it (<link rel="preload" as="font"
+     type="font/woff2" crossorigin>); the CDN stylesheet is the demo register only. */
+  @font-face{
+    font-family:'Inter-fallback';src:local('Arial');
+    size-adjust:107%;ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;
+  }
   :root{
     --bg:#0a0805;          /* warm ink */
     --ink:#f2ede4;         /* warm ivory */
     --platinum:#c9beac;    /* warm stone */
     --champagne:#c98d4b;   /* chestnut brass accent */
-    --font:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --font:'Inter','Inter-fallback',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:auto;overflow-x:hidden;overscroll-behavior-y:none}
+  html{scroll-behavior:auto;overflow-x:hidden;overflow-x:clip;overscroll-behavior-y:none;scrollbar-color:var(--platinum) var(--bg)}
+  ::-webkit-scrollbar{width:10px;background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--platinum);border-radius:5px}
+  ::selection{background:var(--champagne);color:var(--bg)}
   body{
     background:var(--bg);
     color:var(--ink);
     font-family:var(--font);
     -webkit-font-smoothing:antialiased;
   }
-  body.locked{overflow:hidden;height:100vh}
-  a:focus-visible,button:focus-visible{outline:1px solid var(--platinum);outline-offset:4px}
+  body.locked{overflow:hidden;height:100vh;height:100dvh}
+  h1,h2,h3{text-wrap:balance}
+  p{text-wrap:pretty}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--platinum);outline-offset:4px}
+  /* skip affordance: first focusable element, hidden until focused (web-standards A11y 2) */
+  .skip{position:fixed;left:16px;top:16px;z-index:300;background:var(--ink);color:var(--bg);
+    padding:14px 22px;font-size:.72rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;
+    text-decoration:none;transform:translateY(-250%);transition:transform .2s ease}
+  .skip:focus{transform:none}
   /* transparent scroll runway that drives the cinematic film */
   #cine{height:500vh;position:relative;z-index:5;pointer-events:none}
   /* the listing begins to cover the viewport: fade only the ENTER panel and hint,
@@ -49,11 +74,11 @@
      The video itself carries no background-color for the same reason: an undecoded
      video paints transparent, letting the poster show through until frame one lands. */
   #poster{
-    position:fixed;inset:0;width:100vw;height:100vh;
+    position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;
     object-fit:cover;z-index:0;display:block;background:#000;
   }
   #scrub{
-    position:fixed;inset:0;width:100vw;height:100vh;
+    position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;
     object-fit:cover;z-index:1;display:block;
   }
   /* chestnut glow that blooms in for the golden-hour workshop settle */
@@ -79,18 +104,20 @@
   header{
     position:fixed;top:0;left:0;width:100%;z-index:60;
     display:flex;justify-content:space-between;align-items:center;
-    padding:34px clamp(24px,5vw,56px);
+    padding:calc(34px + env(safe-area-inset-top,0px)) clamp(24px,5vw,56px) 34px;
     transition:background .5s ease, backdrop-filter .5s ease, padding .5s ease;
   }
   header.scrolled{
-    padding:20px clamp(24px,5vw,56px);
+    padding:calc(20px + env(safe-area-inset-top,0px)) clamp(24px,5vw,56px) 20px;
     background:linear-gradient(180deg, rgba(10,8,5,.55), transparent);
     backdrop-filter:blur(6px);
   }
   header .logo,header nav a,header .indicator{text-shadow:0 1px 26px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.4)}
   .hleft{display:flex;align-items:center;gap:16px}
-  .logo{font-size:.92rem;font-weight:200;letter-spacing:.34em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
-  #home{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+  /* interactive elements carry a 44px effective hit area (web-standards Mobile 7) */
+  .logo{font-size:.92rem;font-weight:200;letter-spacing:.34em;text-transform:uppercase;cursor:pointer;white-space:nowrap;
+    padding:15px 8px;margin:-15px -8px}
+  #home{display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
     border:1px solid rgba(242,237,228,.28);background:rgba(255,255,255,.05);color:var(--ink);cursor:pointer;
     pointer-events:auto;transition:all .3s ease;backdrop-filter:blur(4px)}
   #home:hover{background:var(--ink);color:#0a0805}
@@ -102,10 +129,11 @@
     color:rgba(242,237,228,.66);text-decoration:none;
     font-size:.68rem;font-weight:300;letter-spacing:.26em;text-transform:uppercase;
     transition:color .35s ease;position:relative;
+    padding:16px 8px;margin:-16px -8px;   /* 44px effective hit area */
   }
-  nav a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--platinum);transition:width .35s ease}
+  nav a::after{content:"";position:absolute;left:8px;bottom:10px;width:0;height:1px;background:var(--platinum);transition:width .35s ease}
   nav a:hover{color:var(--ink)}
-  nav a:hover::after{width:100%}
+  nav a:hover::after{width:calc(100% - 16px)}
   .indicator{
     font-size:.66rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;
     color:var(--platinum);min-width:170px;text-align:right;white-space:nowrap;
@@ -138,8 +166,10 @@
   /* split headlines live inside overflow:hidden word wrappers, which clip a big soft
      text-shadow; so the tight shadow rides the text and the wide glow moves to a
      drop-shadow filter on the parent, which paints outside the clip boxes */
+  /* weight 200 floor over footage (legibility kit): 100 is banned over moving
+     or photographic ground, even with the full pocket + parent-shadow stack */
   .stage .hl{
-    font-size:clamp(2.4rem,6vw,4.4rem);font-weight:100;line-height:1.12;
+    font-size:clamp(2.4rem,6vw,4.4rem);font-weight:200;line-height:1.12;
     letter-spacing:.04em;text-transform:uppercase;
     text-shadow:0 1px 3px rgba(0,0,0,.55);
     filter:drop-shadow(0 2px 18px rgba(0,0,0,.75));
@@ -154,12 +184,13 @@
   #enter{
     position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;visibility:hidden;
     display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:30px;
+    padding-bottom:env(safe-area-inset-bottom,0px);
   }
   /* arrival pocket held at .72 so the panel stays solid over the golden-hour settle */
   #enter::before{content:"";position:absolute;inset:0;z-index:-1;
     background:radial-gradient(ellipse 50% 46% at center, rgba(8,6,3,.72), rgba(8,6,3,.24) 60%, transparent 80%);}
   #enter .kicker{font-size:.72rem;font-weight:300;letter-spacing:.5em;text-transform:uppercase;color:var(--platinum)}
-  #enter h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:100;letter-spacing:.06em;line-height:1.2;
+  #enter h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:200;letter-spacing:.06em;line-height:1.2;
     text-shadow:0 2px 40px rgba(0,0,0,.5)}
   /* dark-glass ghost button */
   #enter .ghost{
@@ -173,7 +204,7 @@
 
   /* scroll hint */
   .hint{
-    position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:50;
+    position:fixed;left:50%;bottom:calc(34px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;
     font-size:.9rem;font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:rgba(242,237,228,.75);
     display:flex;flex-direction:column;align-items:center;gap:14px;transition:opacity .5s ease;
   }
@@ -202,19 +233,31 @@
   #loader .fill{height:100%;width:100%;background:var(--platinum);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
   #loader .pct{font-size:.62rem;font-weight:300;letter-spacing:.34em;color:rgba(242,237,228,.5)}
 
+  /* reduced-motion twin (web-standards Motion 10): no scrub, the poster held,
+     the runway collapsed so the page stays navigable. html.reduced mirrors the
+     media query for the ?reduced-motion=1 test hook (web-standards Gate 6);
+     html.save-data applies the same no-video path under the Save-Data header. */
   @media(prefers-reduced-motion:reduce){
     .hint .bar{animation:none}
     .reveal{opacity:1!important;transform:none!important}
     #listing .lead .bg img,.row .ph img{transform:none!important;transition:none!important}
     .w{overflow:visible}
+    #cine{height:150vh}
+    #scrub{display:none}
   }
+  html.reduced .hint .bar{animation:none}
+  html.reduced .reveal{opacity:1!important;transform:none!important}
+  html.reduced #listing .lead .bg img,html.reduced .row .ph img{transform:none!important;transition:none!important}
+  html.reduced .w{overflow:visible}
+  html.reduced #cine,html.save-data #cine{height:150vh}
+  html.reduced #scrub,html.save-data #scrub{display:none}
 
   /* ---------- content act ---------- */
   /* always in flow below the runway: the content slides up over the held arrival frame.
      No display:none lock (that hard-stop black-outs on iOS at both edges of the gate). */
   #listing{position:relative;z-index:20;background:#0d0a06;color:var(--ink)}
   #listing .kick{display:block;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--platinum);margin-bottom:22px}
-  #listing .lead{position:relative;overflow:hidden;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  #listing .lead{position:relative;overflow:hidden;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
     justify-content:flex-end;padding:0 clamp(28px,8vw,140px) clamp(48px,8vh,96px)}
   #listing .lead .bg{position:absolute;inset:0;z-index:0}
   #listing .lead .bg img{width:100%;height:100%;object-fit:cover;display:block;
@@ -225,7 +268,7 @@
   #listing .lead>*:not(.bg){position:relative;z-index:1}
   /* split h1 over photography: same clipped-wrapper rule as the stages, tight shadow
      on the text, wide glow on the parent filter */
-  #listing .lead h1{font-size:clamp(2.2rem,5.5vw,4rem);font-weight:100;line-height:1.14;letter-spacing:.02em;max-width:16ch;
+  #listing .lead h1{font-size:clamp(2.2rem,5.5vw,4rem);font-weight:200;line-height:1.14;letter-spacing:.02em;max-width:16ch;
     text-shadow:0 1px 3px rgba(0,0,0,.5);filter:drop-shadow(0 2px 18px rgba(0,0,0,.6))}
   #listing .lead h1 em,.row h3 em{font-style:normal;color:var(--champagne)}
   .stats{display:flex;flex-wrap:wrap;gap:clamp(26px,5vw,72px);margin-top:56px}
@@ -239,6 +282,7 @@
   /* 16/10 frame: the product plates are 1600x914, a 4/3 crop would clip the
      exploded components, 16/10 keeps them whole */
   .row .ph{position:relative;aspect-ratio:16/10;overflow:hidden;background:#16110a}
+  .row .ph picture{display:block;position:absolute;inset:0}
   .row .ph img{width:100%;height:100%;object-fit:cover;display:block;
     transform:scale(1.07);transition:transform 1.5s cubic-bezier(.16,1,.3,1)}
   .row.in .ph img{transform:scale(1)}
@@ -254,6 +298,7 @@
   .enquire p{max-width:48ch;margin:0 auto 42px;color:rgba(242,237,228,.7);line-height:1.75;font-weight:300}
   #listing .ghost{pointer-events:auto;cursor:pointer;border:1px solid rgba(242,237,228,.4);background:transparent;color:var(--ink);
     font-family:var(--font);font-size:.72rem;font-weight:300;letter-spacing:.32em;text-transform:uppercase;padding:18px 46px;
+    display:inline-block;text-decoration:none;
     transition:background .4s ease,color .4s ease,letter-spacing .4s ease}
   #listing .ghost:hover{background:var(--ink);color:#0d0a06;letter-spacing:.4em}
   .foot{margin-top:92px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(242,237,228,.55);line-height:2}
@@ -271,6 +316,8 @@
 </head>
 <body class="locked">
 
+  <a class="skip" href="#listing">Skip the film</a>
+
   <div id="loader">
     <div class="word">The Artisan</div>
     <div class="track"><div class="fill" id="loadFill"></div></div>
@@ -286,8 +333,8 @@
     </div>
     <nav>
       <a href="#">The Film</a>
-      <a href="#">The Craft</a>
-      <a href="#" id="navEnter">Enquire</a>
+      <a href="#listing">The Craft</a>
+      <a href="#enquire" id="navEnter">Enquire</a>
     </nav>
     <div class="indicator" id="indicator">01 // The Boot</div>
   </header>
@@ -330,9 +377,9 @@
 
   <div class="hint" id="hint"><span>Scroll to begin</span><span class="bar"></span></div>
 
-  <main id="listing">
+  <main id="listing" tabindex="-1">
     <section class="lead reveal">
-      <div class="bg"><img src="listing/hero.webp" alt="The Artisan boot in a dark atelier, chestnut leather catching warm light"></div>
+      <div class="bg"><img src="listing/hero.webp" decoding="async" alt="The Artisan boot in a dark atelier, chestnut leather catching warm light"></div>
       <span class="kick">The Craft</span>
       <h1 class="split">One piece of leather. One seam. Since <em>1932</em>.</h1>
       <div class="stats" id="stats">
@@ -344,7 +391,10 @@
     </section>
 
     <section class="row reveal">
-      <div class="ph"><img src="listing/hide.webp" alt="A single yearling hide, the macro grain of chestnut leather"></div>
+      <div class="ph"><picture>
+        <source type="image/avif" srcset="listing/hide.avif">
+        <img src="listing/hide.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="A single yearling hide, the macro grain of chestnut leather">
+      </picture></div>
       <div class="tx">
         <span class="rk">01 / The Hide</span>
         <h3 class="split">Cut from a <em>single</em> hide</h3>
@@ -353,7 +403,10 @@
     </section>
 
     <section class="row flip reveal">
-      <div class="ph"><img src="listing/explode.webp" alt="The Artisan boot exploded into its components, heel stack, gussets, and hide"></div>
+      <div class="ph"><picture>
+        <source type="image/avif" srcset="listing/explode.avif">
+        <img src="listing/explode.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="The Artisan boot exploded into its components, heel stack, gussets, and hide">
+      </picture></div>
       <div class="tx">
         <span class="rk">02 / The Anatomy</span>
         <h3 class="split">Every layer <em>earns</em> its place</h3>
@@ -362,7 +415,10 @@
     </section>
 
     <section class="row reveal">
-      <div class="ph"><img src="listing/hero-boot.webp" alt="The finished Artisan boot in golden workshop light"></div>
+      <div class="ph"><picture>
+        <source type="image/avif" srcset="listing/hero-boot.avif">
+        <img src="listing/hero-boot.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="The finished Artisan boot in golden workshop light">
+      </picture></div>
       <div class="tx">
         <span class="rk">03 / The Standard</span>
         <h3 class="split">Nine decades of <em>proof</em></h3>
@@ -370,11 +426,13 @@
       </div>
     </section>
 
-    <section class="enquire reveal">
+    <section class="enquire reveal" id="enquire">
       <span class="kick">The Pitch</span>
       <h2 class="split">Your Product Deserves This</h2>
       <p>This is a concept film built from Harbourline Boot Co.'s own product photography. Imagine your hero product presented the way it was made: deliberately. Start the conversation.</p>
-      <button class="ghost" id="enquireBtn">Start the conversation</button>
+      <!-- a real mailto anchor: works with no JS and in the CDN fail-open path;
+           the address is a discovery answer, never ship the default -->
+      <a class="ghost" id="enquireBtn" href="mailto:studio@example.com?subject=Cinematic%20Product%20Site">Start the conversation</a>
       <div class="foot">The Artisan Concept · Built as a demonstration · Not affiliated with or endorsed by Harbourline Boot Co.</div>
     </section>
   </main>
@@ -383,16 +441,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ===================== SCRUB engine (video variant) ===================== */
+(() => {
+if (!window.gsap || !window.ScrollTrigger){
+  /* CDN fail-open (web-standards Tiers 1 and 2): no GSAP = no film, never a
+     locked page. Mirror the video error path: release the loader, unlock
+     scroll, collapse the runway, and show the content act as a static document. */
+  document.getElementById('loader').classList.add('done');
+  document.body.classList.remove('locked');
+  document.body.classList.add('past-cine');
+  document.getElementById('cine').style.height = '0';
+  document.querySelectorAll('.reveal,.row').forEach(el => el.classList.add('in'));
+  return;
+}
 gsap.registerPlugin(ScrollTrigger);
 
-const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* reduced-motion twin (web-standards Motion 10, plus the ?reduced-motion=1
+   test hook for Gate 6) and the Save-Data tier (web-standards Tiers 3):
+   both skip the video entirely. The poster is the film; the html classes
+   collapse the runway to 150vh and hide #scrub. */
+const RM = matchMedia('(prefers-reduced-motion:reduce)').matches
+  || new URLSearchParams(location.search).has('reduced-motion');
+const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
+if (RM) document.documentElement.classList.add('reduced');
+if (SAVE_DATA) document.documentElement.classList.add('save-data');
+const NO_VIDEO = RM || SAVE_DATA;
+
 const SRC_D = 'video/scrub_d.mp4';   // 1920x1080, H.264, GOP 12, ~17.75s @30fps
 const SRC_M = 'video/scrub_m.mp4';   // 720x1080 portrait, same encode
 
 const v = document.getElementById('scrub');
 let mobile = innerWidth < 768;
-v.src = mobile ? SRC_M : SRC_D;
-v.load();                            // iOS: explicit load after setting src
+if (!NO_VIDEO){
+  v.src = mobile ? SRC_M : SRC_D;
+  v.load();                          // iOS: explicit load after setting src
+}
 
 const state = { t: 0 };
 
@@ -408,7 +490,7 @@ function tick(){
   }
   requestAnimationFrame(tick);
 }
-requestAnimationFrame(tick);
+if (!NO_VIDEO) requestAnimationFrame(tick);
 
 /* --- kinetic type: split headlines into clipped word spans (skipped in RM) ---
    A punctuation-only token (the period after an em word) is appended to the
@@ -494,8 +576,8 @@ if (!RM){
 }
 
 function setStage(el, o){
-  el.style.opacity = o;
-  el.style.transform = 'translateY(' + (1 - Math.min(1, o)) * 26 + 'px)';
+  el.style.opacity = o;                 // under RM the stages stay opacity-only crossfades
+  if (!RM) el.style.transform = 'translateY(' + (1 - Math.min(1, o)) * 26 + 'px)';
 }
 function overlays(p){
   const o1 = win(p, .02, .07, .22, .30),
@@ -515,11 +597,13 @@ function overlays(p){
 
 /* --- scroll driver --- */
 function startScroll(){
-  gsap.to(state, {
-    t: 1,
-    ease: 'none',
-    scrollTrigger: { trigger: '#cine', start: 'top top', end: 'bottom bottom', scrub: RM ? true : 0.6 }
-  });
+  if (!NO_VIDEO){
+    gsap.to(state, {
+      t: 1,
+      ease: 'none',
+      scrollTrigger: { trigger: '#cine', start: 'top top', end: 'bottom bottom', scrub: 0.6 }
+    });
+  }
   ScrollTrigger.create({
     trigger: '#cine', start: 'top top', end: 'bottom bottom',
     onUpdate: self => overlays(self.progress)
@@ -539,6 +623,7 @@ function bufferedEnd(){
   return v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
 }
 let released = false;
+let gatePoll = 0;
 function release(){
   if (released) return;
   released = true;
@@ -557,14 +642,20 @@ function updateGate(){
   // release once the pipe is genuinely usable: decodable now, or 4s buffered
   if (v.readyState >= 3 || buf >= 4) release();
 }
-['progress', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(ev =>
-  v.addEventListener(ev, updateGate));
-// fail open: if the video errors, unlock the page anyway (poster stays visible)
-v.addEventListener('error', release);
-// cached or fast sources can skip 'progress' events entirely; poll the same
-// real buffered ranges (this reads truth, it does not fake the bar)
-const gatePoll = setInterval(updateGate, 250);
-updateGate();
+if (NO_VIDEO){
+  // reduced-motion or Save-Data: nothing buffers, the poster is the film.
+  // A percentage counter here would animate a lie; release immediately.
+  release();
+} else {
+  ['progress', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(ev =>
+    v.addEventListener(ev, updateGate));
+  // fail open: if the video errors, unlock the page anyway (poster stays visible)
+  v.addEventListener('error', release);
+  // cached or fast sources can skip 'progress' events entirely; poll the same
+  // real buffered ranges (this reads truth, it does not fake the bar)
+  gatePoll = setInterval(updateGate, 250);
+  updateGate();
+}
 
 /* --- content act: reveals, split heads, count-ups, retire cinematic on arrival --- */
 function wireListing(){
@@ -622,6 +713,7 @@ function wireListing(){
 function enterCraft(e){
   if (e) e.preventDefault();
   window.scrollTo({ top: document.getElementById('listing').offsetTop, behavior: RM ? 'auto' : 'smooth' });
+  document.getElementById('listing').focus({ preventScroll: true });  // keyboard focus lands in the content act
 }
 // HOME / reset: glide back to the top; the scrub plays the film in reverse on the way.
 function resetLoop(e){
@@ -633,25 +725,32 @@ function goEnquire(e){
   if (e) e.preventDefault();
   document.querySelector('.enquire').scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
 }
-const mailTo = () => location.href = 'mailto:studio@example.com?subject=Cinematic%20Product%20Site';  // discovery answer replaces this, never ship the default
-
 window.__SCRUB = { v, state, set t(x){ state.t = x; } };  // debug hook
 
 // resize: swap source only across the 768 boundary (object-fit covers the rest).
 // The rAF loop reseeks from state.t as soon as the new file reports a duration,
 // so the held time fraction is preserved automatically.
+// iOS URL-bar collapse fires HEIGHT-only resizes mid-scroll; refreshing
+// ScrollTrigger on those churns the scrub, so everything gates on a width change.
+let lastW = innerWidth;
 addEventListener('resize', () => {
+  if (innerWidth === lastW) return;
+  lastW = innerWidth;
   const nowMobile = innerWidth < 768;
   if (nowMobile !== mobile){
     mobile = nowMobile;
-    v.src = mobile ? SRC_M : SRC_D;
-    v.load();
+    if (!NO_VIDEO){
+      v.src = mobile ? SRC_M : SRC_D;
+      v.load();
+    }
   }
   ScrollTrigger.refresh();
 }, { passive: true });
 
+// the skip link releases the loader first so the fragment jump can land
+document.querySelector('.skip').addEventListener('click', release);
 document.querySelector('#enter .ghost').addEventListener('click', enterCraft);
-document.getElementById('enquireBtn').addEventListener('click', mailTo);
+// #enquireBtn is a native mailto anchor; no JS binding needed
 document.getElementById('navEnter').addEventListener('click', goEnquire);
 document.getElementById('home').addEventListener('click', resetLoop);
 document.querySelector('.hleft .logo').addEventListener('click', resetLoop);
@@ -659,6 +758,7 @@ const navlinks = document.querySelectorAll('header nav a');
 navlinks[0].addEventListener('click', resetLoop);             // The Film -> top
 navlinks[1].addEventListener('click', enterCraft);            // The Craft -> #listing
 // navlinks[2] is #navEnter (Enquire -> enquire section), bound above
+})();
 </script>
 </body>
 </html>

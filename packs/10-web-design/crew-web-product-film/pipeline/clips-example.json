@@ -7,7 +7,7 @@
       "id": "clip1",
       "first": "A",
       "last": "B",
-      "prompt": "Slow cinematic orbit around the chestnut leather boot floating in a dark atelier, champagne rim light sweeping across the polished leather as the camera moves, dust motes drifting in the light beam, ultra premium product film, no people, no hands, no text, no watermark."
+      "prompt": "Camera movement only: a slow cinematic orbit around the chestnut leather boot floating in a dark atelier, champagne rim light sweeping across the polished leather as the camera moves, dust motes drifting in the light beam, ultra premium product film. The boot itself never changes: it is a Chelsea boot with elastic side gussets and NO laces, no eyelets, no lace holes, its shape, colour, stitching and proportions stay exactly as shown. No people, no hands, no text, no watermark."
     },
     {
       "id": "clip2",
@@ -19,13 +19,13 @@
       "id": "clip3",
       "first": "C",
       "last": "D",
-      "prompt": "The exploded boot components rotate slowly in dark space and drift gently back together, the leather sole rising toward the one-piece upper, brass nails drifting inward, an elegant slow motion assembly, ultra premium engineering film, no people, no hands, no text, no watermark."
+      "prompt": "An exploded-view assembly: the boot components rotate slowly in dark space and drift gently back together, the leather sole rising toward the one-piece upper, brass nails drifting inward, an elegant slow motion assembly, ultra premium engineering film. The components never grow or change shape, only their position changes: it stays a Chelsea boot with elastic side gussets and NO laces, no eyelets, no lace holes, no new parts appear. No people, no hands, no text, no watermark."
     },
     {
       "id": "clip4",
       "first": "D",
       "last": "D",
-      "prompt": "Very slow dolly push toward the pair of chestnut leather boots standing in golden workshop sunlight, dust drifting in the sunbeam, long shadows still, the camera settles calmly to a stop, serene ultra premium product film, no people, no hands, no text, no watermark."
+      "prompt": "Camera movement only: a very slow dolly push toward the pair of chestnut leather boots standing in golden workshop sunlight, dust drifting in the sunbeam, long shadows still, the camera settles calmly to a stop, serene ultra premium product film. The boots themselves never change: they are Chelsea boots with elastic side gussets and NO laces, no eyelets, no lace holes, their design stays exactly as shown. No people, no hands, no text, no watermark."
     }
   ]
 }

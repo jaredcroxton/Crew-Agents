@@ -10,27 +10,43 @@
   HOW THE SKILL USES THIS FILE:
     1. Copy this whole file.
     2. Swap the brand tokens in :root (and the [data-theme="light"] block).
-    3. Swap the font pairing (one heading font, one body font).
+    3. Swap the font pairing (one heading font, one body font) and retune the
+       metric-tuned fallback @font-face blocks to the new pairing.
     4. Replace every block marked REPLACE with real content.
-    5. Keep the engineering intact: theme toggle, nav, reveal, overflow safety.
+    5. Every real image gets a descriptive alt written from the slot's
+       purpose, or alt="" if decorative. No image ships with missing alt.
+    6. Keep the engineering intact: theme toggle, nav, reveal, overflow
+       safety, focus management, head hygiene.
 
   ABOUT THE REPLACE MARKERS:
     These markers are the ANTI-FABRICATION fallback, not the default output.
     When the skill is invoked with a real business and brand-context, it
     generates actual copy: real headlines, real body copy, real CTAs in the
     brand voice. The user edits a finished draft, not a blank. The markers are
-    the safety net, used only in Template mode or when there is no brand context
-    to write from. Generated copy never fabricates a price, a stat, a
+    the safety net, used only in Template delivery or when there is no brand
+    context to write from. Generated copy never fabricates a price, a stat, a
     testimonial, or a client name.
 
   LOCKED ENGINEERING (do not remove):
     - All brand values live in CSS custom properties. Nothing hardcoded.
-    - Sticky header, in-page smooth scroll, mobile hamburger.
+    - Head hygiene (web-standards Head 1 to 7): lang, title, description,
+      SVG favicon data URI, OG and Twitter tags (og:url and og:image are
+      deploy-time TODOs), theme-color synced to the toggle, viewport-fit.
+    - Sticky header with a sentinel-driven scrolled state, in-page smooth
+      scroll, focus-managed mobile drawer (Escape closes, focus returns).
     - Dark and light mode. Dark is default. Honours prefers-color-scheme on
       first load, user can override, choice persists to localStorage.
-    - Mobile-first responsive. Breakpoints at 768px and 1024px.
-    - Vanilla JS ONLY, and ONLY for: hamburger toggle, theme toggle, reveal.
-    - Subtle motion only. Honours prefers-reduced-motion.
+      color-scheme is declared per theme so native scrollbars and form
+      controls follow.
+    - Skip link first in the tab order; a designed :focus-visible ring on
+      every interactive element (web-standards A11y 1 and A11y 2).
+    - Mobile-first responsive. Breakpoints at 768px and 1024px. Safe-area
+      padding for notched phones.
+    - Vanilla JS ONLY, and ONLY for four behaviours: theme toggle (plus
+      theme-color sync), hamburger drawer, reveal observer, header sentinel.
+    - Subtle motion only. One-shot staggered reveals whose delays clear on
+      transitionend. Hover lifts behind the hover-capability query; touch
+      gets :active press states. Honours prefers-reduced-motion.
     - Overflow safety: content never clips under the sticky header. No
       horizontal overflow at any width.
     - Print stylesheet for PDF delivery.
@@ -39,50 +55,141 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <!-- REPLACE: page title and meta description with the real business -->
-  <title>Northbridge Studio :: Premium business website</title>
+  <title>Northbridge Studio :: Premium business websites</title>
   <meta name="description" content="A clean, premium, fast multi-page business website built as one self-contained file." />
+
+  <!-- theme-color keeps the browser chrome in the brand. The init script
+       below and the toggle JS keep it in sync with the active theme. -->
+  <meta name="theme-color" content="#0c0e12" />
 
   <!-- THEME INIT (runs synchronously BEFORE first paint, so no flash).
        Resolves the theme from the saved choice, else prefers-color-scheme,
        else dark, and sets data-theme on <html> before the page renders.
-       The data-theme="dark" on <html> above is only the no-JS fallback. -->
+       The data-theme="dark" on <html> above is only the no-JS fallback.
+       REPLACE the two background values to match --bg in each theme. -->
   <script>
     (function () {
       try {
+        var THEME_BG = { dark: "#0c0e12", light: "#f7f5f1" };
         var saved = localStorage.getItem("crew-theme");
         var theme = (saved === "light" || saved === "dark")
           ? saved
           : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
         document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta && THEME_BG[theme]) meta.setAttribute("content", THEME_BG[theme]);
       } catch (e) {}
     })();
   </script>
+
+  <!-- FAVICON (web-standards Head 4): an inline SVG data URI for modern
+       browsers, PLUS a base64 PNG data URI on the fallback rel="icon"
+       line and a 180x180 apple-touch-icon for older Safari and home-screen
+       saves. REPLACE the SVG fill colours and letter, then regenerate the
+       two PNGs to match, per brand. The SVG icon alone leaves the default
+       globe on browsers without SVG-favicon support (older Safari), so the
+       PNG fallback is not optional; a default globe in the tab is an
+       unfinished build. -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0e12'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='36' fill='%23c8a25b' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,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" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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" />
+
+  <!-- OPEN GRAPH AND TWITTER CARD (web-standards Head 5).
+       REPLACE title and description with the real business. -->
+  <meta property="og:title" content="Northbridge Studio: premium business websites" />
+  <meta property="og:description" content="A clean, premium, fast multi-page business website built as one self-contained file." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- TODO at deploy (Mode 3): og:url and og:image need absolute public
+       URLs, and the og:image is a designed 1200x630 card built from the
+       brand tokens, not a screenshot. Until a deploy URL exists, Gate 8
+       records "og:image deferred to deploy" as a named residual.
+  <meta property="og:url" content="https://REPLACE.example/" />
+  <meta property="og:image" content="https://REPLACE.example/og.png" />
+  <link rel="canonical" href="https://REPLACE.example/" />
+  -->
 
   <!-- Google Fonts CDN (the only external dependency). REPLACE the pairing per brand. -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
+  <!-- OPTIONAL SEO: JSON-LD LocalBusiness. Uncomment ONLY with facts the
+       user supplied (never invent an address, phone, or hours) and fill
+       every REPLACE. DELETE this block if the facts were not given.
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "REPLACE",
+    "telephone": "REPLACE",
+    "email": "REPLACE",
+    "url": "https://REPLACE.example/",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "REPLACE",
+      "addressLocality": "REPLACE",
+      "postalCode": "REPLACE",
+      "addressCountry": "REPLACE"
+    },
+    "openingHours": "REPLACE"
+  }
+  </script>
+  -->
+
   <style>
     /* ======================================================================
-       BRAND TOKENS  ::  the only place colour, type, and spacing live.
+       SECTION 2 OF THE FILE ARCHITECTURE  ::  BRAND TOKENS
+       The only place colour, type, spacing, elevation, and motion live.
        Swap these per brand. Selectors below reference the tokens, never raw
        values. Dark is the default theme (set on <html data-theme="dark">).
        ====================================================================== */
+
+    /* Metric-tuned local fallbacks so the display=swap reflow is invisible
+       (web-standards Type 4). Retune size-adjust and the overrides whenever
+       the font pairing changes. */
+    @font-face {
+      font-family: "Fraunces Fallback";
+      src: local("Georgia");
+      size-adjust: 103%;
+      ascent-override: 95%;
+      descent-override: 24%;
+    }
+    @font-face {
+      font-family: "Inter Fallback";
+      src: local("Arial");
+      size-adjust: 107%;
+      ascent-override: 90%;
+      descent-override: 22.5%;
+    }
+
     :root {
+      /* Native scrollbars and form controls follow the theme
+         (web-standards Color 3). The light block flips this. */
+      color-scheme: dark;
+
       /* Typography (REPLACE the two families to rebrand) */
-      --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
-      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-heading: "Fraunces", "Fraunces Fallback", Georgia, "Times New Roman", serif;
+      --font-body: "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
       /* Fluid type scale (clamp keeps it readable at every width) */
       --step-hero: clamp(2.6rem, 6vw, 4.75rem);
       --step-h2: clamp(1.9rem, 3.6vw, 2.85rem);
       --step-h3: clamp(1.2rem, 1.8vw, 1.45rem);
-      --step-body: clamp(1rem, 1.1vw, 1.0625rem);
+      --step-body: clamp(1rem, 0.97rem + 0.2vw, 1.0625rem);  /* 17px default from ~740px up, eases toward 16px only near the 375px floor (web-standards Type 1) */
       --step-small: 0.875rem;
+
+      /* Tracking tightens as size grows; leading loosens as size shrinks
+         (web-standards Type 2 and Type 3). Never one blanket letter-spacing. */
+      --track-hero: -0.022em;
+      --track-h2: -0.015em;
+      --track-h3: -0.005em;
+      --leading-hero: 1.05;
+      --leading-h2: 1.12;
+      --leading-h3: 1.3;
 
       /* Spacing scale */
       --space-1: 0.5rem;
@@ -104,6 +211,18 @@
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
       --dur: 0.55s;
 
+      /* Focus (web-standards A11y 1): a designed ring, never outline: none */
+      --focus-ring: 2px solid var(--accent);
+
+      /* COLOUR SYSTEM, named deviation from web-standards Color 1: this
+         reference ships a hand-tuned hex palette rather than deriving the ramp
+         from one oklch brand token with color-mix. Every surface, border, and
+         text token below is individually contrast-verified in both themes and
+         its measured ratio noted beside it, a per-pair guarantee a mechanical
+         color-mix ramp does not give for free. A rebrand may keep this verified
+         hex ramp or regenerate it from one oklch token per Color 1; record the
+         route taken in the Gate 10 contrast evidence. */
+
       /* ---- DARK THEME PALETTE (default) ---- */
       --bg: #0c0e12;
       --bg-soft: #14171d;
@@ -111,30 +230,41 @@
       --surface-2: #1f2530;
       --text: #eef1f6;
       --text-soft: #aab2c0;
-      --text-faint: #6f7888;
+      --text-faint: #828c9e;   /* 5.7:1 on --bg, 5.0:1 on --surface (Color 2) */
       --border: #2a313c;
       --border-soft: #222933;
       --accent: #c8a25b;       /* warm gold, REPLACE per brand */
       --accent-soft: #e0c489;
       --accent-ink: #0c0e12;   /* text colour that sits on the accent */
-      --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
+      --error: #ef6a6f;        /* 5.7:1 on --surface, 5.1:1 on --surface-2 */
+
+      /* Elevation ramp: three levels, each two layered shadows sharing the
+         same downward key light. Cards sit at 1, the drawer at 2, the
+         contact card at 3. One light source, page-wide. */
+      --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+      --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 32px -12px rgba(0, 0, 0, 0.55);
+      --shadow-3: 0 4px 8px rgba(0, 0, 0, 0.45), 0 28px 64px -20px rgba(0, 0, 0, 0.6);
     }
 
     /* ---- LIGHT THEME OVERRIDE ---- */
     [data-theme="light"] {
+      color-scheme: light;
       --bg: #f7f5f1;
       --bg-soft: #efece6;
       --surface: #ffffff;
       --surface-2: #f3f0ea;
       --text: #1a1d22;
       --text-soft: #4f5662;
-      --text-faint: #8a93a1;
+      --text-faint: #666f7e;   /* 4.7:1 on --bg, 5.1:1 on --surface (Color 2) */
       --border: #e2ddd3;
       --border-soft: #ebe6dc;
-      --accent: #9a7320;       /* darker gold for contrast on light, REPLACE */
-      --accent-soft: #b88f33;
+      --accent: #876317;       /* darker gold: 5.0:1 on --bg, white ink 5.5:1, REPLACE */
+      --accent-soft: #8a681d;  /* hover: white ink stays at 5.2:1 */
       --accent-ink: #ffffff;
-      --shadow: 0 24px 60px -28px rgba(40, 34, 20, 0.22);
+      --error: #b3261e;
+      --shadow-1: 0 1px 2px rgba(40, 34, 20, 0.08), 0 6px 16px -8px rgba(40, 34, 20, 0.12);
+      --shadow-2: 0 2px 4px rgba(40, 34, 20, 0.1), 0 14px 32px -12px rgba(40, 34, 20, 0.16);
+      --shadow-3: 0 4px 8px rgba(40, 34, 20, 0.12), 0 28px 64px -20px rgba(40, 34, 20, 0.2);
     }
 
     /* ======================================================================
@@ -155,6 +285,8 @@
       scroll-behavior: smooth;
       /* Anchored sections offset so headings never hide under the header */
       scroll-padding-top: var(--header-h);
+      /* Stops anchor jumps shifting layout when a scrollbar appears */
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -171,20 +303,65 @@
     h1, h2, h3 {
       font-family: var(--font-heading);
       font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -0.015em;
+      font-optical-sizing: auto; /* Fraunces ships an opsz axis; a swap loses it */
       margin: 0 0 var(--space-2);
       color: var(--text);
+      text-wrap: balance; /* no orphan last word in a headline (web-standards Type 6) */
     }
+    /* Per-level tracking and leading (web-standards Type 2 and Type 3) */
+    h1 { letter-spacing: var(--track-hero); line-height: var(--leading-hero); }
+    h2 { letter-spacing: var(--track-h2); line-height: var(--leading-h2); }
+    h3 { letter-spacing: var(--track-h3); line-height: var(--leading-h3); }
 
     p { margin: 0 0 var(--space-2); color: var(--text-soft); }
     p:last-child { margin-bottom: 0; }
+    p, li { text-wrap: pretty; } /* kills body-copy orphans (web-standards Type 6) */
 
     a { color: inherit; text-decoration: none; }
 
     img { max-width: 100%; display: block; }
 
     ::selection { background: var(--accent); color: var(--accent-ink); }
+
+    /* FOCUS (web-standards A11y 1): every interactive element shows the
+       designed ring on :focus-visible. Never remove without replacing. */
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 3px;
+    }
+
+    /* SKIP LINK (web-standards A11y 2): first in the tab order, visible on
+       focus only, targets the main landmark. */
+    .skip-link {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 200;
+      padding: 0.75rem 1.25rem;
+      background: var(--accent);
+      color: var(--accent-ink);
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: var(--step-small);
+      transform: translateY(-300%);
+    }
+    .skip-link:focus,
+    .skip-link:focus-visible { transform: none; }
+
+    /* HEADER SENTINEL: a zero-size marker at the top of the document. When
+       it leaves the viewport the header gains its scrolled state. */
+    .header-sentinel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+    }
 
     /* ======================================================================
        LAYOUT HELPERS
@@ -193,7 +370,9 @@
       width: 100%;
       max-width: var(--maxw);
       margin-inline: auto;
-      padding-inline: var(--gutter);
+      /* Safe areas: edge content never sits under a notch (web-standards Mobile 4) */
+      padding-inline: max(var(--gutter), env(safe-area-inset-left))
+                      max(var(--gutter), env(safe-area-inset-right));
     }
 
     .section {
@@ -237,12 +416,13 @@
       min-height: 48px; /* comfortable touch target */
     }
     .btn-primary { background: var(--accent); color: var(--accent-ink); }
-    .btn-primary:hover { transform: translateY(-2px); background: var(--accent-soft); }
     .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    /* Press state for every input type (web-standards Mobile 8) */
+    .btn:active { transform: scale(0.98); }
 
     /* ======================================================================
        HEADER  ::  sticky, brand wordmark + nav + theme toggle + hamburger
+       Border and shadow appear only in the scrolled state (sentinel-driven).
        ====================================================================== */
     .site-header {
       position: sticky;
@@ -252,15 +432,22 @@
       display: flex;
       align-items: center;
       background: color-mix(in srgb, var(--bg) 82%, transparent);
+      -webkit-backdrop-filter: saturate(140%) blur(14px); /* iOS Safari */
       backdrop-filter: saturate(140%) blur(14px);
-      border-bottom: var(--border-w) solid var(--border-soft);
-      transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+      border-bottom: var(--border-w) solid transparent;
+      transition: background var(--dur) var(--ease), border-color 0.3s var(--ease),
+                  box-shadow 0.3s var(--ease);
+    }
+    .site-header.scrolled {
+      border-bottom-color: var(--border-soft);
+      box-shadow: var(--shadow-1);
     }
     .header-inner {
       width: 100%;
       max-width: var(--maxw);
       margin-inline: auto;
-      padding-inline: var(--gutter);
+      padding-inline: max(var(--gutter), env(safe-area-inset-left))
+                      max(var(--gutter), env(safe-area-inset-right));
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -303,9 +490,11 @@
       border-radius: 999px;
       color: var(--text);
       cursor: pointer;
-      transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease);
+      transition: border-color 0.2s var(--ease), color 0.2s var(--ease),
+                  background 0.2s var(--ease), transform 0.2s var(--ease);
     }
     .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .icon-btn:active { transform: scale(0.94); }
     .icon-btn svg { width: 20px; height: 20px; }
     /* Show the right glyph per theme */
     .icon-sun { display: none; }
@@ -326,7 +515,9 @@
       border: var(--border-w) solid var(--border);
       border-radius: 999px;
       cursor: pointer;
+      transition: transform 0.2s var(--ease);
     }
+    .hamburger:active { transform: scale(0.94); }
     .hamburger span {
       width: 18px;
       height: 2px;
@@ -364,6 +555,9 @@
       font-size: clamp(1.8rem, 3vw, 2.4rem);
       color: var(--text);
       line-height: 1;
+      /* Numbers in rows never jitter (web-standards Type 5). The same rule
+         applies to pricing figures on a pricing page. */
+      font-variant-numeric: tabular-nums;
     }
     .hero-meta .stat span { font-size: var(--step-small); color: var(--text-faint); }
 
@@ -386,9 +580,10 @@
       border: var(--border-w) solid var(--border);
       border-radius: var(--radius);
       padding: var(--space-3);
+      box-shadow: var(--shadow-1); /* elevation level 1 */
       transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
     }
-    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .card:active { transform: scale(0.99); }
     .card-icon {
       width: 48px;
       height: 48px;
@@ -404,6 +599,15 @@
     .card h3 { font-size: var(--step-h3); }
     .card p { font-size: var(--step-small); }
 
+    /* HOVER LIFTS live behind the hover-capability query so a phone tap
+       never sticks a hover state (web-standards Mobile 8). Touch devices
+       get the :active press states above instead. */
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover { transform: translateY(-2px); background: var(--accent-soft); }
+      .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+      .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    }
+
     /* ======================================================================
        SOCIAL PROOF  ::  reviews strip
        ====================================================================== */
@@ -418,6 +622,7 @@
       border: var(--border-w) solid var(--border);
       border-radius: var(--radius);
       padding: var(--space-3);
+      box-shadow: var(--shadow-1); /* elevation level 1 */
     }
     .quote .stars { color: var(--accent); letter-spacing: 2px; margin-bottom: var(--space-1); }
     .quote blockquote {
@@ -426,6 +631,7 @@
       font-size: 1.15rem;
       line-height: 1.45;
       color: var(--text);
+      text-wrap: balance;
     }
     .quote cite { font-style: normal; font-size: var(--step-small); color: var(--text-faint); }
     .quote cite strong { color: var(--text-soft); display: block; font-weight: 600; }
@@ -475,7 +681,7 @@
     .faq-item .answer p { font-size: var(--step-small); }
 
     /* ======================================================================
-       CONTACT
+       CONTACT  ::  card + styled form + address
        ====================================================================== */
     .contact-card {
       background: var(--surface);
@@ -483,11 +689,67 @@
       border-radius: var(--radius);
       padding: clamp(var(--space-3), 5vw, var(--space-5));
       text-align: center;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-3); /* elevation level 3, the page's top surface */
     }
     .contact-card h2 { font-size: var(--step-h2); }
     .contact-card .lede { margin-inline: auto; margin-bottom: var(--space-3); }
     .contact-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+
+    /* The form: visible labels, designed focus, :user-invalid error copy,
+       field chrome that follows both themes via the tokens. */
+    .contact-form {
+      margin-top: var(--space-4);
+      display: grid;
+      gap: var(--space-2);
+      text-align: left;
+    }
+    .field { display: grid; gap: 0.4rem; }
+    .field label {
+      font-size: var(--step-small);
+      font-weight: 600;
+      color: var(--text);
+    }
+    .field input,
+    .field textarea {
+      font: inherit;
+      width: 100%;
+      color: var(--text);
+      background: var(--surface-2);
+      border: var(--border-w) solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      transition: border-color 0.2s var(--ease);
+    }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--text-faint); }
+    .field textarea { min-height: 8rem; resize: vertical; }
+    .field input:focus-visible,
+    .field textarea:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 2px;
+      border-color: var(--accent);
+    }
+    /* Error state fires only after the user has interacted (:user-invalid,
+       not :invalid), so the form does not open covered in red. */
+    .field input:user-invalid,
+    .field textarea:user-invalid { border-color: var(--error); }
+    .field .error-msg {
+      display: none;
+      font-size: var(--step-small);
+      color: var(--error);
+      margin: 0;
+    }
+    .field input:user-invalid ~ .error-msg,
+    .field textarea:user-invalid ~ .error-msg { display: block; }
+    .contact-form .btn { justify-self: start; }
+
+    .contact-address {
+      font-style: normal;
+      margin-top: var(--space-3);
+      font-size: var(--step-small);
+      color: var(--text-soft);
+    }
+    .contact-address a { color: var(--accent); }
 
     /* ======================================================================
        FOOTER  ::  footer nav
@@ -531,21 +793,37 @@
     }
 
     /* ======================================================================
-       REVEAL  ::  one-shot fade-up, added by IntersectionObserver
+       REVEAL  ::  one-shot staggered fade-up, added by IntersectionObserver.
+       The stagger delay is a custom property consumed ONLY by this
+       transition; the JS clears it on transitionend so a card's hover never
+       inherits its reveal delay. No permanent will-change (Motion 9).
        ====================================================================== */
     .reveal {
       opacity: 0;
       transform: translateY(24px);
-      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-      will-change: opacity, transform;
+      transition: opacity 0.7s var(--ease) var(--reveal-delay, 0ms),
+                  transform 0.7s var(--ease) var(--reveal-delay, 0ms);
     }
     .reveal.in { opacity: 1; transform: none; }
+    /* The signature moment: the hero rises further and slower than the
+       section reveals. Same observer, same one-shot surface. */
+    .reveal-hero {
+      transform: translateY(32px);
+      transition-duration: 0.9s;
+    }
+    /* NO-JS SAFETY (web-standards Tiers 1 and Tiers 2): the hidden state
+       arms only once the script stamps html.enhanced. Without JS the
+       choreography never matches and every .reveal element is fully
+       visible, so the base page is complete on its own. */
+    html:not(.enhanced) .reveal { opacity: 1; transform: none; }
 
     /* ======================================================================
        RESPONSIVE  ::  mobile-first, breakpoints at 768px and 1024px
        ====================================================================== */
 
-    /* Mobile nav drawer (under 768px the links collapse behind the hamburger) */
+    /* Mobile nav drawer (under 768px the links collapse behind the hamburger).
+       dvh-capped and scrollable so a long nav never clips on a small
+       landscape phone (web-standards Mobile 5). */
     @media (max-width: 767.98px) {
       .hamburger { display: flex; }
       .nav-links {
@@ -553,11 +831,14 @@
         top: var(--header-h);
         left: 0;
         right: 0;
+        max-height: calc(100dvh - var(--header-h));
+        overflow-y: auto;
         flex-direction: column;
         align-items: stretch;
         gap: 0;
         background: var(--bg);
         border-bottom: var(--border-w) solid var(--border);
+        box-shadow: var(--shadow-2); /* elevation level 2 */
         padding: var(--space-2) var(--gutter) var(--space-3);
         transform: translateY(-12px);
         opacity: 0;
@@ -580,6 +861,8 @@
       .quote-grid { grid-template-columns: repeat(2, 1fr); }
       .footer-top { flex-direction: row; justify-content: space-between; align-items: flex-start; }
       .footer-nav { gap: var(--space-5); }
+      .contact-form { grid-template-columns: 1fr 1fr; }
+      .field-full, .contact-form .btn { grid-column: 1 / -1; }
     }
 
     /* Desktop and up */
@@ -590,7 +873,7 @@
     }
 
     /* ======================================================================
-       REDUCED MOTION  ::  reveals instant, no smooth scroll
+       REDUCED MOTION  ::  reveals instant, no smooth scroll (Motion 10)
        ====================================================================== */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -606,7 +889,7 @@
        ====================================================================== */
     @media print {
       .site-header, .hamburger, .nav-actions, .hero-actions,
-      .contact-actions, .icon-btn { display: none !important; }
+      .contact-actions, .contact-form, .icon-btn, .skip-link { display: none !important; }
       html, body {
         background: #ffffff;
         color: #111111;
@@ -624,12 +907,18 @@
 </head>
 
 <body>
+  <!-- Skip link: the first focusable element on the page (A11y 2) -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Sentinel: when this leaves the viewport, the header gains .scrolled -->
+  <div class="header-sentinel" id="headerSentinel" aria-hidden="true"></div>
+
   <!-- ====================================================================
        HEADER
        REPLACE: brand wordmark, and the nav link labels to match the pages
        chosen in discovery (home, about, services, pricing, contact, FAQ, blog)
        ==================================================================== -->
-  <header class="site-header">
+  <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="#home" class="brand">North<span>bridge</span></a>
 
@@ -642,7 +931,8 @@
         </ul>
 
         <div class="nav-actions">
-          <!-- Theme toggle: swaps dark and light, persists to localStorage -->
+          <!-- Theme toggle: swaps dark and light, persists to localStorage,
+               and keeps the theme-color meta in sync -->
           <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark and light theme">
             <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -653,7 +943,7 @@
             </svg>
           </button>
 
-          <!-- Hamburger: opens the mobile nav drawer -->
+          <!-- Hamburger: opens the focus-managed mobile drawer -->
           <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">
             <span></span><span></span><span></span>
           </button>
@@ -662,10 +952,12 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <!-- ==================================================================
          HERO
          REPLACE: headline, lede, button labels.
+         The hero children carry reveal-hero: the signature rise, a larger
+         translateY and a longer duration than the section reveals.
          The hero-meta stat strip below is OPTIONAL. Like social proof, it
          ships ONLY if the user gave real, verifiable numbers. Never invent a
          project count, a star rating, or any metric. If the user has none,
@@ -673,15 +965,15 @@
          ================================================================== -->
     <section class="hero section" id="home">
       <div class="wrap">
-        <span class="eyebrow reveal">Premium business websites</span>
-        <h1 class="reveal">A site that looks like it cost twenty grand.</h1>
-        <p class="lede reveal">REPLACE: one sentence on what you do and who you do it for. Clear, confident, plain language. No jargon, no filler.</p>
-        <div class="hero-actions reveal">
+        <span class="eyebrow reveal reveal-hero">Premium business websites</span>
+        <h1 class="reveal reveal-hero">A site that looks like it cost twenty grand.</h1>
+        <p class="lede reveal reveal-hero">REPLACE: one sentence on what you do and who you do it for. Clear, confident, plain language. No jargon, no filler.</p>
+        <div class="hero-actions reveal reveal-hero">
           <a href="#contact" class="btn btn-primary">Start a project</a>
           <a href="#services" class="btn btn-ghost">See what we do</a>
         </div>
         <!-- OPTIONAL stat strip: each stat must be a real, user-supplied number, or delete the whole block. -->
-        <div class="hero-meta reveal">
+        <div class="hero-meta reveal reveal-hero">
           <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
           <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
           <div class="stat"><strong>REPLACE</strong><span>only a real, user-supplied stat</span></div>
@@ -768,6 +1060,9 @@
     <!-- ==================================================================
          SOCIAL PROOF  ::  reviews strip
          REPLACE: each quote, name, and role. Real reviews only.
+         The .stars rows are DELETE-unless-real, exactly like the hero stat
+         strip: keep a row ONLY if the user supplied that real star rating.
+         Never ship a fabricated five-star row as a default.
          ================================================================== -->
     <section class="section proof" id="proof">
       <div class="wrap">
@@ -778,18 +1073,21 @@
 
         <div class="quote-grid">
           <figure class="quote reveal">
+            <!-- DELETE this .stars row unless the user supplied a real star rating -->
             <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
             <blockquote>REPLACE: a short, specific quote about a real result. Specificity beats superlatives.</blockquote>
             <cite><strong>Client name</strong>Role, Company</cite>
           </figure>
 
           <figure class="quote reveal">
+            <!-- DELETE this .stars row unless the user supplied a real star rating -->
             <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
             <blockquote>REPLACE: a short, specific quote. One sentence is stronger than a paragraph.</blockquote>
             <cite><strong>Client name</strong>Role, Company</cite>
           </figure>
 
           <figure class="quote reveal">
+            <!-- DELETE this .stars row unless the user supplied a real star rating -->
             <div class="stars" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
             <blockquote>REPLACE: a short, specific quote. Mention the outcome or the feeling, ideally both.</blockquote>
             <cite><strong>Client name</strong>Role, Company</cite>
@@ -835,7 +1133,10 @@
 
     <!-- ==================================================================
          CONTACT
-         REPLACE: heading, lede, button labels, and the link targets
+         REPLACE: heading, lede, button labels, link targets, and the form
+         action. The form and the two buttons are alternatives: keep the form
+         (default) or DELETE it and keep the buttons if the user prefers
+         direct contact only.
          ================================================================== -->
     <section class="section" id="contact">
       <div class="wrap">
@@ -848,6 +1149,35 @@
             <a href="mailto:hello@example.com" class="btn btn-primary">Email us</a>
             <a href="tel:+10000000000" class="btn btn-ghost">Call the studio</a>
           </div>
+
+          <!-- REPLACE the action with the user's endpoint (for example a
+               Formspree URL). Until then this form is a FRONT-END SHELL:
+               it does not send mail, and the user must be told so. -->
+          <form class="contact-form" action="#" method="POST">
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required />
+              <p class="error-msg">Enter your name so we know who to reply to.</p>
+            </div>
+            <div class="field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required />
+              <p class="error-msg">Enter a valid email so we can reply.</p>
+            </div>
+            <div class="field field-full">
+              <label for="cf-message">What do you need?</label>
+              <textarea id="cf-message" name="message" required></textarea>
+              <p class="error-msg">Tell us a little about the project.</p>
+            </div>
+            <button class="btn btn-primary" type="submit">Send the message</button>
+          </form>
+
+          <!-- OPTIONAL: physical details, ONLY with user-supplied facts.
+               DELETE this block if the user gave no address or hours. -->
+          <address class="contact-address">
+            REPLACE: street address, suburb, opening hours.<br />
+            <a href="mailto:hello@example.com">hello@example.com</a> &middot; <a href="tel:+10000000000">REPLACE phone</a>
+          </address>
         </div>
       </div>
     </section>
@@ -901,50 +1231,89 @@
   </footer>
 
   <!-- ====================================================================
-       VANILLA JS  ::  hamburger toggle, theme toggle, reveal observer ONLY
-       No framework. No build step. This is the whole script.
+       VANILLA JS  ::  four behaviours ONLY: theme toggle (plus theme-color
+       sync), hamburger drawer (focus managed), reveal observer (self-
+       clearing stagger), header sentinel. No framework. No build step.
+       This is the whole script.
        ==================================================================== -->
   <script>
     (function () {
       var root = document.documentElement;
       var STORE_KEY = "crew-theme";
 
-      /* ---- THEME TOGGLE -------------------------------------------------
+      /* CAPABILITY STAMP (web-standards Tiers 2): arms the reveal
+         choreography. Without JS, html.enhanced is absent and the CSS
+         no-JS safety rule keeps every .reveal element visible. This is a
+         one-line setup, not a fifth behaviour. */
+      root.classList.add("enhanced");
+
+      /* ---- 1. THEME TOGGLE (plus theme-color sync) ----------------------
          The initial theme is resolved by the inline script in <head> before
-         paint (no flash). Here we only handle the click: flip data-theme and
-         persist the choice so it wins on the next load. */
+         paint (no flash). Here we handle the click: flip data-theme, persist
+         the choice, and keep the theme-color meta matched to --bg so the
+         browser chrome follows the theme (web-standards Head 6). */
       var themeToggle = document.getElementById("themeToggle");
+      var themeMeta = document.querySelector('meta[name="theme-color"]');
+      function syncThemeColor() {
+        if (!themeMeta) return;
+        var bg = getComputedStyle(root).getPropertyValue("--bg").trim();
+        if (bg) themeMeta.setAttribute("content", bg);
+      }
+      syncThemeColor(); /* align the meta with the resolved theme */
       if (themeToggle) {
         themeToggle.addEventListener("click", function () {
           var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
           root.setAttribute("data-theme", next);
           try { localStorage.setItem(STORE_KEY, next); } catch (e) {}
+          syncThemeColor();
         });
       }
 
-      /* ---- HAMBURGER TOGGLE --------------------------------------------- */
+      /* ---- 2. HAMBURGER DRAWER (focus managed, A11y 6) -------------------
+         aria-expanded flips, focus moves to the first link on open, the
+         drawer closes on link tap, and Escape closes it with focus returned
+         to the hamburger. */
       var hamburger = document.getElementById("hamburger");
       var navLinks = document.getElementById("navLinks");
-      function closeMenu() {
-        if (!navLinks) return;
+      function closeMenu(returnFocus) {
+        if (!navLinks || !navLinks.classList.contains("open")) return;
         navLinks.classList.remove("open");
         hamburger.setAttribute("aria-expanded", "false");
         hamburger.setAttribute("aria-label", "Open menu");
+        if (returnFocus) hamburger.focus();
       }
       if (hamburger && navLinks) {
         hamburger.addEventListener("click", function () {
           var open = navLinks.classList.toggle("open");
           hamburger.setAttribute("aria-expanded", open ? "true" : "false");
           hamburger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          /* Focus moves once the drawer is focusable: it transitions from
+             visibility: hidden, and a hidden element cannot take focus, so
+             the transitionend listener below owns the focus move. */
+        });
+        /* Move focus to the first link once the open transition lands
+           (visibility has resolved to visible by then, so focus sticks) */
+        navLinks.addEventListener("transitionend", function () {
+          if (navLinks.classList.contains("open") && !navLinks.contains(document.activeElement)) {
+            var first = navLinks.querySelector("a");
+            if (first) first.focus();
+          }
         });
         /* Close the drawer after tapping any in-page link */
         navLinks.addEventListener("click", function (e) {
-          if (e.target.closest("a")) closeMenu();
+          if (e.target.closest("a")) closeMenu(false);
+        });
+        /* Escape closes the drawer and returns focus to the hamburger */
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeMenu(true);
         });
       }
 
-      /* ---- REVEAL ON SCROLL  ::  one-shot fade-up, then unobserve --------
-         Honours prefers-reduced-motion: reveals everything instantly. */
+      /* ---- 3. REVEAL ON SCROLL  ::  one-shot staggered fade-up -----------
+         Honours prefers-reduced-motion: reveals everything instantly.
+         The stagger is a --reveal-delay custom property consumed only by
+         the reveal transition and CLEARED on transitionend, so a card's
+         hover never inherits its reveal delay. */
       var reveals = document.querySelectorAll(".reveal");
       var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -953,13 +1322,35 @@
       } else {
         var io = new IntersectionObserver(function (entries, obs) {
           entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in");
-              obs.unobserve(entry.target); /* one-shot */
-            }
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            var kin = Array.prototype.filter.call(el.parentElement.children, function (c) {
+              return c.classList.contains("reveal");
+            });
+            var i = kin.indexOf(el);
+            if (i > 0) el.style.setProperty("--reveal-delay", Math.min(i * 70, 420) + "ms");
+            el.addEventListener("transitionend", function () {
+              el.style.removeProperty("--reveal-delay"); /* hover never lags */
+            }, { once: true });
+            el.classList.add("in");
+            obs.unobserve(el); /* one-shot */
           });
         }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
         reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      /* ---- 4. HEADER SENTINEL  ::  the scrolled state ---------------------
+         A zero-size marker at the top of the document. When it leaves the
+         viewport, the header gains its border and level-1 shadow. An
+         observer, never a scroll listener. */
+      var header = document.getElementById("siteHeader");
+      var sentinel = document.getElementById("headerSentinel");
+      if (header && sentinel && "IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          header.classList.toggle("scrolled", !entries[0].isIntersecting);
+        }).observe(sentinel);
+      } else if (header) {
+        header.classList.add("scrolled"); /* fallback: permanent border */
       }
     })();
   </script>

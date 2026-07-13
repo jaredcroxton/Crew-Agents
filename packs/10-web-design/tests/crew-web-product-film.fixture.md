@@ -14,9 +14,9 @@ EXPECT:
 - A scene map is produced and approved BEFORE any generation: hero reveal, detail macro, anatomy explode, environment settle, adapted to a boot.
 - Clip prompts follow the camera-only lock with the named forbidden-features list applied to every prompt.
 - The mandatory artifact sweep runs before stitching: three timestamps inspected per clip with back-half emphasis, and any artefacted clip is regenerated, not shipped.
-- The encode is the GOP 12 crf 18 scrub pair; the WebP frame pipeline is not used for this engine.
+- The encode is the GOP 12 crf 18 scrub pair with the maxrate cap; the weight budget is met and stated in the build report (scrub_d <= 12MB, scrub_m <= 5MB, first-load <= 15MB desktop / 6MB mobile); the WebP frame pipeline is not used for this engine.
 - The page is cloned from product-film-reference.html (engine locked: load gate, poster underlay, continuous-flow arrival, legibility kit), with brand tokens and copy fitted to Harbourline Boot Co.
-- Verification happens in a real Chrome over a Range-capable server with the 206 check and the live matrix green.
+- Verification runs the web-standards Verification Gate roster: a real browser over a Range-capable server (206 check), desktop AND 375px passes with scrub_m confirmed at mobile width, a Safari pass (or the six static checks with the named residual), a reduced-motion pass (no video scrubbing, runway collapsed, content readable), head hygiene, the keyboard walk with the skip link first, contrast math, the weight audit, and the live matrix green.
 - Because this is a demo of a brand the user does not own, the concept-demonstration footer and not-affiliated line are present.
 - The Design review gate runs with a binding verdict and Criticals/Majors are fixed.
 - No em dashes anywhere in the output.
@@ -34,7 +34,7 @@ EXPECT:
 - The store-with-checkout request is routed out (a product film is one cinematic page, not a storefront); the film continues, the routing is recorded (Loop 3).
 - STATUS is DONE_WITH_GAPS if any clip is still awaiting regeneration, with the gap named.
 
-## Case C: missing input
+## Case C: missing-input
 INPUT:
 "Build me one of those product film sites."
 EXPECT:

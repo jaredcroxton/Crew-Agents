@@ -1,6 +1,6 @@
 ---
 name: crew-web-immersive-narrative
-description: Build a long-form immersive-narrative website where each themed stage reveals as the visitor scrolls, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, and an arrival hero resolves each stage with a CTA. Ships a deployed, scroll-driven guided story. Invoke for an immersive narrative, a scroll journey, immersive multi-stage onboarding, or a themed learning experience.
+description: Build an immersive-narrative website where themed stages reveal on scroll, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, and an arrival hero resolves each stage. The routing key is a multi-stage gated story; a single ungated camera journey is crew-web-fly-through-builder. Invoke for an immersive narrative, a gated scroll story, or multi-stage onboarding.
 ---
 
 # Crew: Immersive Narrative
@@ -11,19 +11,16 @@ The technical architecture is fixed and proven end to end. The theme, copy, audi
 
 ## Discovery
 
-Before I build anything:
+Before the work starts, know which way in this run is. There are three.
 
-1. Are we starting fresh, continuing, or using an existing brand?
-   - **Continuing:** run `crew-core-context-restore` (or name the project) and I read this skill's record in that project, picking up where we left off.
-   - **Existing brand:** I read `~/.claude/crew-state/brand-context.md` and confirm what I already know about you (brand, product, audience, voice, visual style).
-   - **Fresh start:** we run the questions in Inputs below, then build.
+- **Starting fresh.** No prior context for this skill. Run Step 0 (Context Recovery) to load the brand, then run the twelve-question brief in Inputs.
+- **Continuing via this skill's own record.** Run `crew-core-context-restore` (or name the project) and read this skill's record at `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md`; state what you recovered and carry the open items forward rather than starting cold.
+- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Product]. [Audience]. Voice: [tone]."), and work in the terms that business uses.
 
-If you are not sure, say "fresh start" and we will run the questions.
-
-2. How should this be delivered?
-   - **HTML:** best for screen, animations, interactivity
-   - **PDF:** clean print, no animations, embedded fonts
-   - **Both:** I will build HTML and include the print stylesheet so it exports cleanly
+Then confirm the pre-work, one line each, so the user can correct you before you build:
+- The metaphor and the stage list came from the user, never from you.
+- The asset route (API generation or user-generated from prompts) and the asset folder are settled.
+- The destination (learning module, brand story, induction, product narrative) and the deploy target are named, because they set the gate behaviour and the ship path.
 
 ## Inputs
 
@@ -96,13 +93,13 @@ After the user answers, confirm a one-paragraph summary back to them. Only then 
 
 ## Modes and when to use them
 
-- **Fast mode:** the user already has the theme, the stages, and the source MP4 plus JPEG assets in hand, and accepts the default register. Skip the full discovery ceremony, confirm the journey in one line, scaffold, extract frames, assemble, verify. Use when the assets exist and the theme is decided.
+- **Fast mode:** the user already has the theme, the stages, and the source MP4 plus JPEG assets in hand, and accepts the default register. Skip the full discovery ceremony, confirm the journey in one line, scaffold, extract frames, assemble, verify. Use when the assets exist and the theme is decided. The integrity checks survive Fast mode and are never lighter: the no-invented-theme rule, the two-state gate wiring (`unlockedStageCount` resolves to `advancedStageCount`), the stage-count invariant, the reduced-motion twin, the weight budgets, and the full Verification Gate and design review gate. If mid-Fast the stages turn out not to form a journey, assets are missing, or the register is contested, abandon Fast and finish in Careful.
 - **Careful mode (default):** the full twelve-question discovery, the chosen deploy route end to end, and the design review gate before any deploy. Use for any real programme build.
 - **Governed mode:** the full flow, plus a cross-reference against prior records in this project (`~/.claude/crew-state/projects/<project>/`) so one programme's register carries across builds, the design review gate mandatory with nothing waived, and a stricter check that gating is real (`unlockedStageCount` is `advancedStageCount`, never `stageCount`) before a single learner sees it. Use for a programme that ships to real learners where a skipped stage is a compliance risk.
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill for a pure camera fly-through with no narrative stages and no story copy, where scrolling just plays one continuous descent: that is `crew-web-fly-through-builder`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Immersive Narrative is specifically for a multi-stage narrative told through a metaphor, where each stage is a frame-scrubbed video that the visitor completes and then advances past, gated and paced as a guided story.
+Do not run this skill for a pure camera fly-through with no narrative stages and no story copy, where scrolling just plays one continuous descent: that is `crew-web-fly-through-builder`. Do not run it to activate a finished training programme into a presented, editable learning journey: that is `crew-web-learning-experience`. Do not run it for a slide-by-slide deck of discrete panels: that is `crew-web-slide-deck-builder`. Do not run it for a metrics surface, a scored lead list, or a data dashboard: that is `crew-web-lead-dashboard-builder`. Immersive Narrative is specifically for a multi-stage narrative told through a metaphor, where each stage is a frame-scrubbed video that the visitor completes and then advances past, gated and paced as a guided story.
 
 ## How the scroll-journey builder thinks
 
@@ -110,7 +107,7 @@ Do not run this skill for a pure camera fly-through with no narrative stages and
 2. **Each stage earns its reveal.** A stage shows only when the visitor scrolls into it, and its arrival hero resolves only in the final 30 percent of its scroll zone. Nothing reveals early, nothing reveals for free. The reveal is the payoff for the scroll the visitor just did.
 3. **Motion serves the narrative, not decoration.** Every frame painted on the canvas advances the story. The crossfade between stages is a scene cut, not an effect. The accent bloom marks an arrival, not a flourish. If an animation does not move the story forward or give feedback, it comes out.
 4. **The two-state gate is the pacing engine.** Completing a stage and advancing to the next are two separate clicks. Document height is bound to `unlockedStageCount`, so the visitor physically cannot scroll past the current stage until they advance. This is what makes it a paced journey and not an infinite scroll. Ripping the gate out turns the story into a brochure.
-5. **Performance budget is a story constraint.** The journey must begin fast and never stall. Frames preload per active stage, not all at once. A stage that blocks on a full preload feels broken before it begins, and a broken first impression kills the narrative. Paint the active stage, background the rest.
+5. **Performance budget is a story constraint.** The journey must begin fast and never stall. The poster paints first (the hero still, instantly), a bounded pool of frames backfills behind it and tracks the playhead (decode ahead, release behind, never all frames in memory, web-standards Mobile 3), and the next stage's first frames prefetch on idle so advance is instant. A visitor never stares at a loading counter, and the payload holds to the web-standards Perf 1 build class C budgets (2MB critical path, 60MB desktop, 15MB mobile for the full journey).
 6. **Accessibility floor is non-negotiable.** `prefers-reduced-motion` gets a real path: the scrub snaps to the arrival frame, reveals are instant, the story still reads. A journey that only works with full motion excludes part of the audience, and that fails the brief before it ships.
 7. **Silent by default.** Suppress every line that is not the deliverable or a genuine blocker. The user asked for an output, not a running commentary on how you built it. Progress updates and confirmations stay internal. The run receipt (context recovered, verdict if a gate ran, handoff written) and the Loops always speak.
 
@@ -119,7 +116,7 @@ Do not run this skill for a pure camera fly-through with no narrative stages and
 A single-page Vite plus React app where:
 
 1. The visitor lands at the **bottom** of a tall vertical document (the page snaps to bottom on mount).
-2. They scroll **upward** through stages. Each stage is a frame-scrubbed video clip: JPGs painted on a canvas advance frame-by-frame as they scroll.
+2. They scroll **upward** through stages. Each stage is a frame-scrubbed video clip: frame stills (WebP with JPEG fallback, two size rungs) painted on a canvas advance frame-by-frame as they scroll, with the hero still as an instant poster underneath.
 3. The final ~30 percent of each stage is the "arrival hero" zone: a centred panel slides up with title, subtitle, summary, and CTA.
 4. **Two-state gating:** completing the stage and advancing are two separate clicks. Document height is bound to `unlockedStageCount`, so the visitor physically cannot scroll past the current stage's arrival until they advance.
 5. A persistent themed UI element sits on top (the motif from question 8) showing journey progress, with locked stages obscured.
@@ -146,15 +143,17 @@ scripts/
   extract-frames.mjs               # Stage 1..N plus ffmpeg pipeline
   Stage_1.mp4 + Stage_1.jpeg       # Source assets (per stage)
 public/
+  fonts/                           # Self-hosted subset WOFF2 (web-standards Type 4)
   stages/<id>/                     # Generated by extract-frames
-    frames/frame_0001.jpg ... frame_0120.jpg
+    frames/1920/frame_0001.webp + frame_0001.jpg ...   # Desktop rung
+    frames/960/frame_0001.webp + frame_0001.jpg ...    # Mobile rung (<= 768px viewports)
     hero.jpg
     source.mp4
 src/
   main.jsx
   app/App.jsx                      # Orchestration
   components/
-    StageSection.jsx               # Wraps VideoScrubCanvas plus load states
+    StageSection.jsx               # Poster-first wrapper around VideoScrubCanvas
     VideoScrubCanvas.jsx           # Canvas painter
     ArrivalHero.jsx                # Centre-bottom slide-up panel
     PersistentUI.jsx               # Theme motif (compass / rail / map / etc.)
@@ -174,9 +173,10 @@ src/
 - `VIDEO_ZONE_END = 0.7`. First 70 percent of a stage is video scrub, last 30 percent is the arrival.
 - `CROSSFADE_RATIO = 0.1`. 10 percent crossfade between adjacent stages.
 - Frame target: 110 to 150 frames per stage (the pipeline picks the fps to target the 110 to 150 band, capped at 150).
-- Frame width: 1920px, JPEG quality 2.
+- Frame rungs: 1920px for viewports over 768px, 960px at or under, picked once at load by `matchMedia('(max-width: 768px)')`; WebP first with JPEG fallback (web-standards Perf 2, Perf 10). A phone never downloads the desktop rung.
+- Weight budgets, hard, the extract fails loudly if exceeded: per-stage frame payload 12MB on the 1920 rung and 4MB on the 960 rung; whole journey 60MB desktop and 15MB mobile; first paint (shell plus posters) under 2MB. These are the web-standards Perf 1 build class C budgets. This build is class C, Mode 2/3 always, never Mode 1.
 
-These four constants are scar tissue, tuned so the scrub feels continuous and the arrival lands cleanly. Changing one without testing breaks the pacing.
+The first four constants are scar tissue, tuned so the scrub feels continuous and the arrival lands cleanly. Changing one without testing breaks the pacing. The budgets are law, not tuning.
 
 ## The two-state model
 
@@ -203,11 +203,31 @@ The journey runs bottom-to-top: the visitor starts at the bottom of the document
 
 **The edge cases.** Stages at or beyond `unlockedStageCount` get zero weight, so a locked stage never paints. If total weight collapses to near zero (the visitor is between bands at the very bottom), weight falls back to stage 0 so the canvas is never blank. The last unlocked stage holds full weight at the top of its band so the arrival does not fade out. The implementing code is in Workflow Step 6.
 
+## Failure modes seen in production
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Canvas blank, no frames paint | Frames not loading: wrong path in the manifest, or extract did not run | Confirm `public/stages/<id>/frames/<rung>/` is populated and `framePath(i, rung, ext)` matches; re-run `extract-frames.mjs` |
+| Scroll math off, stage 1 at the top not the bottom | The inversion `scrollY = max - raw` removed or the page not snapped to bottom on mount | Keep the invert in `useScrollJourney`; keep the mount `jump()` in `App.jsx` |
+| Frames stop short or paint blanks at the end | Frame count miscount: the manifest `frameCount` does not match the files on disk | Re-run extract so the manifest regenerates; never hand-edit `stageManifest.js` |
+| Visitor stares at a loading state on open or advance | First paint blocked on a full-sequence decode, or the next stage never warmed | Poster-first: paint `hero.jpg` instantly, backfill the bounded pool around the playhead (decode ahead, release behind), paint the nearest decoded frame, warm the next stage's first window on idle (Step 7 and Step 9) |
+| Scrub stutters on high-refresh displays | setState fired per raw scroll event, uncoalesced | Coalesce compute behind one rAF tick (web-standards Motion 7); memoize `StageSection` and `PersistentUI` |
+| Arrival CTA fires early, before the visitor reaches the arrival | The arrival hero rendered outside the arrival zone, or `visible` not gated on `zone === 'arrival'` | Gate the CTA handler and `visible` on the arrival zone; `ctaDisabled` when not visible |
+| Mark-complete jumps straight to the next stage | Auto-advance wired onto mark-complete | Keep them as two separate clicks; `markComplete` must not call `advance` |
+| Visitor scrolls past the current stage into the next, gate broken | `unlockedStageCount` wired to `stageCount` instead of `advancedStageCount` | Bind document height to `unlockedStageCount` which resolves to `advancedStageCount` in production |
+| Persistent UI hidden behind the canvas | z-index conflict: the sticky scene paints over the motif | Give `.persistent-ui` a z-index above `.sticky-scene` and below the arrival hero |
+| Layout jumps on mobile Safari | Bare `100vh` on the pinned scene, the address bar resizes it | `100dvh` with a `100vh` legacy fallback line on the pinned scene (web-standards Mobile 5) |
+| Stage zones drift under the thumb on mobile | CSS vh track height mixed with live `innerHeight` JS math, the URL bar collapse moves one but not the other | Derive the track height in px from the frozen `viewportUnit` the scroll math uses; remeasure only on orientation change or a >120px height delta |
+| Reload lands mid-journey, canvas half-faded | Browser scroll restoration racing the mount snap-to-bottom | Set `history.scrollRestoration = 'manual'` before `jump()` in the mount effect |
+| Motion plays for a reduced-motion visitor | The `prefers-reduced-motion` block missing or the scrub not snapped | Keep the reduced-motion media block; snap the scrub to the arrival frame, make reveals instant (web-standards Motion 10) |
+| State from an old build corrupts the new one | localStorage keys collide across journeys on the same origin | Namespace keys with `<slug>_v1_`; the reads validate length and range and discard stale state |
+| Advance grows the doc but the viewport stays put | The scroll-handoff `useLayoutEffect` removed or not firing | Keep the handoff effect that shifts `scrollY` forward by the grown stage height on advance |
+
 ## Workflow
 
-**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. Next, read this skill's lessons file at `~/.claude/crew-state/lessons/crew-web-immersive-narrative-lessons.md` if it exists, and apply every lesson in it as a standing rule for this run. Then settle the project (Loop 4): if the request does not already answer it, ask once: "Is this a new project, or are we continuing an existing one?" For a NEW project, take a short name from the request or ask for one ("websites", "learnos", a client name all work), create `~/.claude/crew-state/projects/<project>/`, write the name to `~/.claude/crew-state/active-project`, and start from zero: the brand context and the lessons file are the whole context, read nothing else. For CONTINUING, the user runs `crew-core-context-restore` first (or names the project): read the `~/.claude/crew-state/active-project` pointer, then ONLY this skill's own record at `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md`; state what was recovered and its date, and if it is older than the artifacts it references, treat it as possibly stale and verify against the live files before relying on it. If the record does not exist in that project, state "No prior record in this project for this skill." Records in other projects, and legacy handoffs from before the Projects model, are never read automatically. (Loop 4, Context Change.) If this run was chained from an upstream skill, also read only the records of the skills this skill's Handoffs section names as sources, from the same active project, at most two files; state what was inherited, and record "Consumed: [upstream skill] record dated [date]" in this run's own record. If a named upstream record does not exist in the project, proceed without comment. Never scan outside the active project outside Governed mode.
+**Step 0: Context Recovery.** First, read `~/.claude/crew-state/brand-context.md`. If it exists, load it and state: "Working with [brand]. [Product]. [Audience]. Voice: [tone]." If `~/.claude/crew-state/brand-context.md` does not exist, STOP. Say: "Your business is not onboarded yet. I need to know who you are before I can work. Let us fix that now." Then run the eleven-question brand onboarding conversation inline (the same conversation `crew-core-brand-context` runs) and write the file before going further. This is a hard stop, not a suggestion: do not proceed to this skill's own discovery or workflow until `~/.claude/crew-state/brand-context.md` exists. Next, read this skill's lessons file at `~/.claude/crew-state/lessons/crew-web-immersive-narrative-lessons.md` if it exists, and apply every lesson in it as a standing rule for this run. Then settle the project (Loop 4): if the request is a pure question with nothing to build, skip the project question; settle a project only when real work starts. If `~/.claude/crew-state/active-project` is already set, confirm it in one line ("Continuing in project <name>") instead of asking; ask the question only when no active project exists and the request does not name one. Otherwise, if the request does not already answer it, ask once: "Is this a new project, or are we continuing an existing one?" For a NEW project, take a short name from the request or ask for one ("websites", "learnos", a client name all work), create `~/.claude/crew-state/projects/<project>/`, write the name to `~/.claude/crew-state/active-project`, and start from zero: the brand context and the lessons file are the whole context, read nothing else. For CONTINUING, the user runs `crew-core-context-restore` first (or names the project): read the `~/.claude/crew-state/active-project` pointer, then ONLY this skill's own record at `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md`; state what was recovered and its date, and if it is older than the artifacts it references, treat it as possibly stale and verify against the live files before relying on it. If the record does not exist in that project, state "No prior record in this project for this skill." Records in other projects, and legacy handoffs from before the Projects model, are never read automatically. (Loop 4, Context Change.) If this run was chained from an upstream skill, also read only the records of the skills this skill's Handoffs section names as sources, from the same active project, at most two files; state what was inherited, and record "Consumed: [upstream skill] record dated [date]" in this run's own record. If a named upstream record does not exist in the project, proceed without comment. Never scan outside the active project outside Governed mode.
 
-1. **Discovery (ALWAYS first, before any code).** Ask the twelve-question brief from Inputs in a single numbered message. Confirm a one-paragraph summary back to the user. Do not invent a theme the user did not choose. If the theme, stages, or audience are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1).
+1. **Discovery (ALWAYS first, before any code).** Ask the twelve-question brief from Inputs in a single numbered message. Confirm a one-paragraph summary back to the user. Do not invent a theme the user did not choose. If the theme, stages, or audience are missing and the user will not supply them, ask once, record the blocker in the handoff, and pause (Loop 1, Missing Input). If the stage copy carries a price, a guarantee, a superlative, or a compliance claim, do not write it yourself: mark it "Escalated: [who decides, the exact question]" and continue on the rest (Loop 3, Escalation).
 
 2. **Scaffold.** Create the project folder and the locked file scaffold.
 
@@ -247,17 +267,35 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({ plugins: [react()] })
 EOF
 
-# index.html
+# index.html. Head hygiene is web-standards Head 1 to 7: every tag below ships filled,
+# never as the placeholder text. A naked head is a Gate 8 failure.
 cat > index.html <<'EOF'
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title><PROGRAMME NAME></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta name="description" content="<150 to 160 chars: the programme, who it is for, written for the click>" />
+    <meta name="theme-color" content="<the --bg-deep value>" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<URL-encoded SVG mark derived from the Q8 motif>" />
+    <!-- Head 4 fallback pair: a base64 PNG for engines that do not read SVG icons, and a
+         180x180 apple-touch-icon for the home screen. Both are data URIs so they work in
+         Mode 2 offline; a separate .png file only ships in Mode 3. Generate both from the
+         same mark on the brand ground, do not leave the browser globe. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,<base64 32x32 PNG of the mark>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,<base64 180x180 PNG of the mark on the brand ground>" />
+    <meta property="og:title" content="<PROGRAMME NAME>" />
+    <meta property="og:description" content="<the meta description>" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- og:image (a DESIGNED 1200x630 brand card built from the tokens per Head 5, the Q8
+         mark plus the programme headline on the brand ground, NOT a raw screenshot of the
+         site; the stage 1 hero still may serve only as the card's ground. Built headless
+         as a BUILD step, not a post-ship patch) and og:url need absolute public URLs: fill
+         both at deploy and record "og:image deferred to deploy" as a named residual until
+         then (Head 5). -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/<display-face>.woff2" />
   </head>
   <body>
     <div id="root"></div>
@@ -280,11 +318,13 @@ EOF
 npm install
 ```
 
-3. **Frame extraction pipeline.** Create `scripts/extract-frames.mjs`. This probes each source clip, picks an fps that targets the 110 to 150 band (capped at 150), extracts frames at 1920px width, copies the hero still and source MP4, and writes the generated manifest. Every defined stage gets a manifest entry, including asset-less ones (a placeholder entry with `frameCount: 0` and `pending: true`) so that stage still occupies its 320vh band and can become active and be advanced past. A build-time invariant then asserts that the id sets of `scripts/STAGES`, `journeyStages`, and the written manifest are identical and the same length, so `stageCount === journeyStages.length` and `useScrollJourney`, the App height, `completion[]`, and `activeStageIndex` all agree. If they disagree the extract fails loudly with a clear message.
+Fonts are self-hosted per web-standards Type 4: subset the chosen faces to latin WOFF2 with fonttools (`pyftsubset`), place them in `public/fonts/`, declare them with `@font-face` plus `font-display: swap` and a metric-tuned fallback in Step 13, and preload only the display weight (the link above). 200KB total, two families maximum. A render-blocking Google Fonts stylesheet is not the default: use it only as the fallback route when no licensed file can be fetched and no subsetting tool exists, and say so in the handoff as a named residual. The system stack is a legitimate zero-byte alternative.
+
+3. **Frame extraction pipeline.** Create `scripts/extract-frames.mjs`. This probes each source clip, picks an fps that targets the 110 to 150 band (capped at 150), extracts each stage into two rungs (1920px and 960px) in WebP with a JPEG fallback set (web-standards Perf 2, Perf 10), enforces the class C weight budgets with a loud failure, copies the hero still and source MP4, and writes the generated manifest. Every defined stage gets a manifest entry, including asset-less ones (a placeholder entry with `frameCount: 0` and `pending: true`) so that stage still occupies its 320vh band and can become active and be advanced past. A build-time invariant then asserts that the id sets of `scripts/STAGES`, `journeyStages`, and the written manifest are identical and the same length, so `stageCount === journeyStages.length` and `useScrollJourney`, the App height, `completion[]`, and `activeStageIndex` all agree. If they disagree the extract fails loudly with a clear message.
 
 ```js
 import { execFileSync, spawnSync } from 'node:child_process'
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import ffmpegPath from 'ffmpeg-static'
@@ -309,8 +349,21 @@ const onlyFilter = onlyArg ? new Set(onlyArg.slice('--only='.length).split(',').
 
 const TARGET_FRAMES_MIN = 110
 const TARGET_FRAMES_MAX = 150
-const FRAME_WIDTH = 1920
 const JPEG_QUALITY = 2
+const WEBP_QUALITY = 82
+
+// Two rungs (web-standards Perf 2, Perf 10): a phone never downloads the desktop payload.
+const RUNGS = [
+  { name: '1920', width: 1920 },
+  { name: '960', width: 960 },
+]
+
+// Hard budgets: web-standards Perf 1, build class C. The extract FAILS if exceeded;
+// a 300MB frame sequence is not a build, it is a defect.
+const BUDGET = {
+  perStage: { 1920: 12 * 1024 * 1024, 960: 4 * 1024 * 1024 },
+  journey: { 1920: 60 * 1024 * 1024, 960: 15 * 1024 * 1024 },
+}
 
 function probeDuration(p) {
   const r = spawnSync(
@@ -361,34 +414,59 @@ function processStage(stage) {
     // occupies its 320vh band, can become active, and can be advanced past.
     // Do NOT return null (that would drop the band and desync stageCount).
     console.log(`[${stage.id}] no source assets, writing pending placeholder`)
-    return { ...stage, frameCount: 0, duration: 0, fps: 0, pending: true }
+    return { ...stage, frameCount: 0, duration: 0, fps: 0, pending: true, bytes: {} }
   }
   const dir = resolve(stagesDir, stage.id)
-  const framesDir = resolve(dir, 'frames')
-  rmSync(framesDir, { recursive: true, force: true })
-  mkdirSync(framesDir, { recursive: true })
   const dur = probeDuration(vSrc)
   const { fps, cap } = pickFps(dur)
   console.log(`\n[${stage.id}] ${stage.video} duration=${dur.toFixed(2)}s fps=${fps} cap=${cap}`)
 
-  execFileSync(ffmpegPath, [
-    '-y','-i', vSrc,
-    '-vf', `fps=${fps},scale=${FRAME_WIDTH}:-2`,
-    '-frames:v', String(cap),   // hard-cap frame count at <= 150 (down-sample long clips)
-    '-q:v', String(JPEG_QUALITY),
-    resolve(framesDir, 'frame_%04d.jpg')
-  ], { stdio: 'inherit' })
+  let frameCount = 0
+  const bytes = {}
+  for (const rung of RUNGS) {
+    const framesDir = resolve(dir, 'frames', rung.name)
+    rmSync(framesDir, { recursive: true, force: true })
+    mkdirSync(framesDir, { recursive: true })
+
+    // WebP primary set (30 to 60 percent lighter than JPEG at like quality, Perf 2).
+    execFileSync(ffmpegPath, [
+      '-y','-i', vSrc,
+      '-vf', `fps=${fps},scale=${rung.width}:-2`,
+      '-frames:v', String(cap),   // hard-cap frame count at <= 150 (down-sample long clips)
+      '-c:v','libwebp','-quality', String(WEBP_QUALITY),
+      resolve(framesDir, 'frame_%04d.webp')
+    ], { stdio: 'inherit' })
+
+    // JPEG fallback set for the rare non-WebP browser.
+    execFileSync(ffmpegPath, [
+      '-y','-i', vSrc,
+      '-vf', `fps=${fps},scale=${rung.width}:-2`,
+      '-frames:v', String(cap),
+      '-q:v', String(JPEG_QUALITY),
+      resolve(framesDir, 'frame_%04d.jpg')
+    ], { stdio: 'inherit' })
+
+    // Budget the served set (WebP): fail loudly, never ship an overweight stage.
+    const webps = readdirSync(framesDir).filter(f => f.endsWith('.webp'))
+    bytes[rung.name] = webps.reduce((s, f) => s + statSync(resolve(framesDir, f)).size, 0)
+    frameCount = webps.length
+    if (bytes[rung.name] > BUDGET.perStage[rung.name]) {
+      throw new Error(
+        `BUDGET FAILED: [${stage.id}] ${rung.name} rung is ${(bytes[rung.name] / 1048576).toFixed(1)}MB, ` +
+        `budget ${(BUDGET.perStage[rung.name] / 1048576).toFixed(0)}MB (web-standards Perf 1, class C). ` +
+        `Shorten the clip, lower the fps band, or raise compression. Do not raise the budget.`
+      )
+    }
+  }
 
   copyFileSync(iSrc, resolve(dir, 'hero.jpg'))
   copyFileSync(vSrc, resolve(dir, 'source.mp4'))
-
-  const files = readdirSync(framesDir).filter(f => f.endsWith('.jpg'))
-  console.log(`[${stage.id}] wrote ${files.length} frames plus hero plus source.mp4`)
-  return { ...stage, frameCount: files.length, duration: dur, fps }
+  console.log(`[${stage.id}] wrote ${frameCount} frames x ${RUNGS.length} rungs plus hero plus source.mp4`)
+  return { ...stage, frameCount, duration: dur, fps, bytes }
 }
 
 function stageFramePathLiteral(stageId) {
-  return `(i) => \`/stages/${stageId}/frames/frame_\${String(i + 1).padStart(4, '0')}.jpg\``
+  return `(i, rung = '1920', ext = 'webp') => \`/stages/${stageId}/frames/\${rung}/frame_\${String(i + 1).padStart(4, '0')}.\${ext}\``
 }
 
 function writeManifest(results) {
@@ -400,7 +478,8 @@ function writeManifest(results) {
     heroPath: '/stages/${r.id}/hero.jpg',
     videoPath: '/stages/${r.id}/source.mp4',
     sourceDuration: ${r.duration.toFixed(3)},
-    sourceFps: ${r.fps}
+    sourceFps: ${r.fps},
+    bytes: ${JSON.stringify(r.bytes || {})}
   }`).join(',\n')
 
   const body = `// Generated by scripts/extract-frames.mjs - do not edit by hand.
@@ -453,7 +532,7 @@ async function loadExistingManifestEntry(stageId) {
   try {
     const mod = await import(pathToFileURL(manifestPath).href + `?t=${Date.now()}`)
     const m = mod.stages.find(s => s.id === stageId)
-    return m ? { id: m.id, frameCount: m.frameCount, pending: !!m.pending, duration: m.sourceDuration, fps: m.sourceFps } : null
+    return m ? { id: m.id, frameCount: m.frameCount, pending: !!m.pending, duration: m.sourceDuration, fps: m.sourceFps, bytes: m.bytes || {} } : null
   } catch { return null }
 }
 
@@ -477,7 +556,24 @@ for (const stage of STAGES) {
     }
   }
 }
+// Journey budget (web-standards Perf 1, class C): the sum of every stage's served
+// rung must fit the full-scroll totals, desktop and mobile separately.
+function assertJourneyBudget(results) {
+  for (const rung of RUNGS) {
+    const total = results.reduce((s, r) => s + ((r.bytes || {})[rung.name] || 0), 0)
+    if (total > BUDGET.journey[rung.name]) {
+      throw new Error(
+        `BUDGET FAILED: journey total on the ${rung.name} rung is ${(total / 1048576).toFixed(1)}MB, ` +
+        `budget ${(BUDGET.journey[rung.name] / 1048576).toFixed(0)}MB (web-standards Perf 1, class C). ` +
+        `Cut stages, shorten clips, or lower the frame band.`
+      )
+    }
+    console.log(`[budget] ${rung.name} rung journey total: ${(total / 1048576).toFixed(1)}MB of ${(BUDGET.journey[rung.name] / 1048576).toFixed(0)}MB`)
+  }
+}
+
 await assertStageInvariant(results)
+assertJourneyBudget(results)
 writeManifest(results)
 console.log('\nDone.')
 ```
@@ -494,6 +590,8 @@ node scripts/extract-frames.mjs --only=stage1  # one stage, ONLY after a full ex
 4. **Stage metadata.** Fill `src/data/journeyStages.js` from the user's Q5 and Q6 answers.
 
 ```js
+export const programmeName = '<PROGRAMME NAME>'   // the sr-only h1 in App.jsx
+
 export const journeyStages = [
   {
     id: 'stage1',                       // matches scripts/Stage_1 to public/stages/stage1
@@ -610,15 +708,22 @@ function buildInitialState() {
   }))
   const stageWeights = new Array(stageCount).fill(0)
   if (stageCount > 0) stageWeights[0] = 1
-  return { stageStates, stageWeights, activeStageIndex: 0 }
+  const viewportUnit = typeof window !== 'undefined' ? window.innerHeight : 800
+  return { stageStates, stageWeights, activeStageIndex: 0, viewportUnit }
 }
 
 export function useScrollJourney(unlockedStageCount) {
   const [state, setState] = useState(buildInitialState)
 
   useEffect(() => {
+    // FREEZE the band unit against mobile URL-bar collapse: App derives the track
+    // height in px from this same viewportUnit, so the CSS track and the JS zone
+    // math can never drift apart (the vh versus dvh mixing bug class). Remeasure
+    // only on orientation change or a viewport height delta over 120px.
+    let viewportUnit = window.innerHeight
+
     function compute() {
-      const vh = window.innerHeight
+      const vh = viewportUnit
       const stageHeightPx = vh * (STAGE_HEIGHT_VH / 100)
       const crossfadePx = stageHeightPx * CROSSFADE_RATIO
       const raw = Math.max(0, window.scrollY || 0)
@@ -656,17 +761,39 @@ export function useScrollJourney(unlockedStageCount) {
         if (stageWeights[i] > maxW) { maxW = stageWeights[i]; activeStageIndex = i }
       }
 
-      setState({ stageStates, stageWeights, activeStageIndex })
+      setState({ stageStates, stageWeights, activeStageIndex, viewportUnit })
+    }
+
+    // COALESCE behind one rAF tick (web-standards Motion 7): the listeners only
+    // schedule; compute and its setState run at most once per frame. setState per
+    // raw scroll event re-renders the whole tree up to 120 times a second on a
+    // high-refresh display, exactly where the 60fps promise breaks.
+    let ticking = false
+    function schedule() {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => { ticking = false; compute() })
+    }
+
+    function onResize() {
+      if (Math.abs(window.innerHeight - viewportUnit) > 120) {
+        viewportUnit = window.innerHeight
+      }
+      schedule()
+    }
+    function onOrientation() {
+      viewportUnit = window.innerHeight
+      schedule()
     }
 
     compute()
-    window.addEventListener('scroll', compute, { passive: true })
-    window.addEventListener('resize', compute, { passive: true })
-    const raf = requestAnimationFrame(compute)
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('orientationchange', onOrientation, { passive: true })
     return () => {
-      window.removeEventListener('scroll', compute)
-      window.removeEventListener('resize', compute)
-      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onOrientation)
     }
   }, [unlockedStageCount])
 
@@ -674,79 +801,213 @@ export function useScrollJourney(unlockedStageCount) {
 }
 ```
 
-7. **Frame preloader.** Create `src/hooks/useFramePreload.js`. It loads the JPGs for one stage and reports progress, so the active stage paints and the rest stay idle until needed.
+Wrap `StageSection` and `PersistentUI` in `React.memo` and pass primitives (Steps 9 and 12), so a coalesced tick re-renders only the stages whose props actually changed.
+
+7. **Frame preloader.** Create `src/hooks/useFramePreload.js`. Poster-first, always: the stage paints its hero still the instant it is active (StageSection renders it, Step 9), and this hook backfills frames behind it from a BOUNDED decode pool (web-standards Mobile 3). A sliding window of frames tracks the playhead, decoding ahead of it in the scroll direction and releasing the frames behind it, so a ~130-frame stage never holds more than a small window of decoded bitmaps in memory. It picks the rung and format once per session, keeps at most two stage pools alive at once (the active stage plus one warmed neighbour) and LRU-evicts the rest so the cache Map stays bounded too, warms only the NEXT stage's first window on idle, and never blocks first paint on a full sequence. First paint blocking on ~130 decoded frames, and retaining every decoded frame for the whole stage lifetime, are the two anti-patterns this hook exists to prevent.
 
 ```js
 import { useEffect, useState } from 'react'
 import { stages } from '../data/stageManifest.js'
 
-export function useFramePreload(stageIndex) {
-  const [images, setImages] = useState(null)
-  const [loaded, setLoaded] = useState(0)
+// Rung and format picked once per session (web-standards Perf 2, Perf 10).
+const RUNG = window.matchMedia('(max-width: 768px)').matches ? '960' : '1920'
+const EXT = document.createElement('canvas').toDataURL('image/webp').startsWith('data:image/webp')
+  ? 'webp' : 'jpg'
+// Constrained connections get the poster-only path (Tiers 3): no sequence downloads.
+export const DATA_LITE =
+  (navigator.connection && navigator.connection.saveData === true) ||
+  window.matchMedia('(prefers-reduced-data: reduce)').matches
+// Read once, like the canvas: reduced motion parks the playhead on the arrival frame.
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+// Bounded decode pool (web-standards Mobile 3). The live set is a sliding WINDOW of
+// frames around the playhead: decode AHEAD in the scroll direction, release BEHIND it,
+// so a ~130-frame stage never holds more than (AHEAD + BEHIND + 1) decoded bitmaps.
+// This is the iOS canvas-memory floor stated verbatim: decode ahead of the playhead,
+// release behind it, never all frames into memory. The old "retain every frame for the
+// stage's lifetime" path is exactly the crash this replaces.
+const AHEAD = 24          // runway kept in front of the playhead (the scrub direction)
+const BEHIND = 8          // short tail so a small back-scrub does not re-decode
+const CONCURRENCY = 6     // in-flight decodes: fill the window without serialising the net
+// At most this many stages hold a pool at once (the active stage plus one warmed
+// neighbour); any other stage is evicted from the cache Map so the Map stays bounded too.
+const MAX_LIVE_STAGES = 2
+
+// Module-level cache: stageId -> pool. Bounded to MAX_LIVE_STAGES by LRU (below);
+// evicting a stage frees every bitmap it still holds. It is never allowed to grow
+// unbounded the way the old all-frames cache did.
+const cache = new Map()
+
+function makePool(stage) {
+  return {
+    stage,
+    frameCount: stage.frameCount,
+    images: new Array(stage.frameCount).fill(null),   // sparse: only the window is live
+    decoded: new Array(stage.frameCount).fill(false), // which indices are decoded RIGHT NOW
+    inFlight: new Set(),
+    live: 0,                     // decoded bitmaps currently held (<= window size)
+    playhead: 0,
+    lo: 0, hi: -1,               // inclusive bounds of the live window
+    listeners: new Set(),
+    lastUsed: performance.now()
+  }
+}
+
+// Release one frame: drop the bitmap, cancel its handlers, and free the array slot.
+function releaseFrame(pool, i) {
+  const img = pool.images[i]
+  if (img) { img.onload = null; img.onerror = null; img.src = ''; pool.images[i] = null }
+  pool.inFlight.delete(i)
+  if (pool.decoded[i]) { pool.decoded[i] = false; pool.live-- }
+}
+
+// Reclaim the oldest IDLE stage. A stage on screen (has a listener) is never evicted.
+function evictLRU() {
+  while (cache.size > MAX_LIVE_STAGES) {
+    let victim = null, oldest = Infinity
+    for (const [id, p] of cache) {
+      if (p.listeners.size > 0) continue
+      if (p.lastUsed < oldest) { oldest = p.lastUsed; victim = id }
+    }
+    if (victim == null) break     // every remaining pool is subscribed; do not evict
+    const p = cache.get(victim)
+    for (let i = 0; i < p.images.length; i++) releaseFrame(p, i)
+    cache.delete(victim)
+  }
+}
+
+function getPool(stage) {
+  let pool = cache.get(stage.id)
+  if (!pool) { pool = makePool(stage); cache.set(stage.id, pool); evictLRU() }
+  return pool
+}
+
+function decodeFrame(pool, i) {
+  const stage = pool.stage
+  pool.inFlight.add(i)
+  const img = new Image()
+  pool.images[i] = img
+  const done = () => {
+    pool.inFlight.delete(i)
+    if (pool.images[i] !== img) return                                // released mid-decode
+    if (i < pool.lo || i > pool.hi) { releaseFrame(pool, i); return } // fell out of the window
+    if (!pool.decoded[i]) { pool.decoded[i] = true; pool.live++ }
+    pool.listeners.forEach(fn => fn())
+    pump(pool)
+  }
+  img.onload = () => (typeof img.decode === 'function' ? img.decode().then(done, done) : done())
+  img.onerror = () => {
+    if (EXT === 'webp' && !img.dataset.retried) {
+      img.dataset.retried = '1'
+      img.src = stage.framePath(i, RUNG, 'jpg')   // per-frame JPEG fallback
+      return
+    }
+    done()   // a missing frame never wedges the scrub; the painter skips broken bitmaps
+  }
+  img.src = stage.framePath(i, RUNG, EXT)
+}
+
+// Keep CONCURRENCY decodes in flight, always the undecoded frame NEAREST the playhead
+// first (forward-biased) so the frame under the thumb lands before its neighbours.
+function pump(pool) {
+  const { lo, hi, playhead } = pool
+  while (pool.inFlight.size < CONCURRENCY) {
+    let pick = -1
+    for (let d = 0; d <= hi - lo && pick < 0; d++) {
+      const f = playhead + d, b = playhead - d
+      if (f <= hi && !pool.decoded[f] && !pool.inFlight.has(f)) pick = f
+      else if (b >= lo && !pool.decoded[b] && !pool.inFlight.has(b)) pick = b
+    }
+    if (pick < 0) break            // window fully decoded or in flight
+    decodeFrame(pool, pick)
+  }
+}
+
+// Slide the window to the playhead: release everything outside it, decode inside it.
+// Idempotent, so a stationary playhead does no work.
+function advance(pool, playhead) {
+  pool.lastUsed = performance.now()
+  const clamped = Math.max(0, Math.min(pool.frameCount - 1, playhead))
+  const lo = Math.max(0, clamped - BEHIND)
+  const hi = Math.min(pool.frameCount - 1, clamped + AHEAD)
+  if (lo !== pool.lo || hi !== pool.hi) {
+    for (let i = pool.lo; i <= pool.hi; i++) if (i < lo || i > hi) releaseFrame(pool, i)
+    pool.lo = lo; pool.hi = hi
+  }
+  pool.playhead = clamped
+  pump(pool)
+}
+
+export function useFramePreload(stageIndex, nextStageIndex = null, progress = 0) {
+  const stage = stageIndex != null ? stages[stageIndex] : null
+  const [, force] = useState(0)
+
+  const frameCount = stage?.frameCount ?? 0
+  // Reduced motion parks the playhead on the arrival frame so the pool decodes the END
+  // of the sequence (the still the canvas snaps to), not the start.
+  const playhead = frameCount > 0
+    ? (REDUCED ? frameCount - 1 : Math.min(frameCount - 1, Math.max(0, Math.floor(progress * frameCount))))
+    : 0
+
+  // Subscribe to this stage's pool; re-render as frames land so the canvas repaints.
   useEffect(() => {
-    const stage = stages[stageIndex]
-    if (!stage) { setImages(null); return }
-    let cancelled = false
-    const arr = new Array(stage.frameCount)
-    let count = 0
+    if (!stage || stage.frameCount === 0 || DATA_LITE) return
+    const pool = getPool(stage)
+    const bump = () => force(n => n + 1)
+    pool.listeners.add(bump)
+    return () => { pool.listeners.delete(bump) }
+  }, [stage])
 
-    // "ready" means paint-ready: count a frame only once it has DECODED, so the
-    // decode happens off the scrub path and the first paint does not jank.
-    const advance = () => {
-      if (cancelled) return
-      count++; setLoaded(count)
-      if (count === stage.frameCount) setImages(arr)
-    }
+  // Slide the window as the integer playhead moves: decode ahead, release behind.
+  useEffect(() => {
+    if (!stage || stage.frameCount === 0 || DATA_LITE) return
+    advance(getPool(stage), playhead)
+  }, [stage, playhead])
 
-    for (let i = 0; i < stage.frameCount; i++) {
-      const img = new Image()
-      img.src = stage.framePath(i)
-      img.onload = () => {
-        if (cancelled) return
-        // decode() resolves when the bitmap is ready to paint; fall back to onload
-        // on browsers without Image.decode.
-        if (typeof img.decode === 'function') {
-          img.decode().then(advance, advance)
-        } else {
-          advance()
-        }
-      }
-      img.onerror = advance
-      arr[i] = img
-    }
-    return () => {
-      cancelled = true
-      // Abort any in-flight loads/decodes so a stage change does not leak work.
-      for (const img of arr) {
-        if (img) { img.onload = img.onerror = null; img.src = '' }
-      }
-    }
-  }, [stageIndex])
+  // Warm only the NEXT stage's FIRST window on idle (never its whole sequence, which
+  // was the old unbounded prefetch), so advancing lands on a primed pool, not a cold one.
+  useEffect(() => {
+    if (nextStageIndex == null || DATA_LITE) return
+    const nextStage = stages[nextStageIndex]
+    if (!nextStage || nextStage.frameCount === 0) return
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 500))
+    const cancel = window.cancelIdleCallback || clearTimeout
+    const id = idle(() => advance(getPool(nextStage), 0))
+    return () => cancel(id)
+  }, [nextStageIndex])
 
-  return { images, loaded, total: stages[stageIndex]?.frameCount ?? 0 }
+  const pool = stage && !DATA_LITE ? cache.get(stage.id) : null
+  return {
+    images: pool ? pool.images : null,        // sparse: only the live window is populated
+    decoded: pool ? pool.decoded : null,      // the painter reads the nearest decoded index
+    hasDecoded: pool ? pool.live > 0 : false,
+    posterPath: stage ? stage.heroPath : null,
+    total: frameCount
+  }
 }
 ```
 
-8. **Canvas frame painter.** Create `src/components/VideoScrubCanvas.jsx`. It paints the frame for the current progress, cover-fits it, caps DPR at 2, and only repaints when the frame index changes.
+8. **Canvas frame painter.** Create `src/components/VideoScrubCanvas.jsx`. It lerps the frame index toward the scroll target (damped scrub, web-standards Motion 7), paints the nearest frame the bounded pool currently holds so a not-yet-decoded target never paints a blank (the poster underneath covers the gap), cover-fits, caps DPR at 2 (iOS canvas memory ceiling, web-standards Mobile 3), and only repaints when the frame index changes.
 
 ```jsx
 import { useEffect, useRef } from 'react'
 
-export default function VideoScrubCanvas({ images, frameCount, progress }) {
+export default function VideoScrubCanvas({ images, frameCount, decoded, progress }) {
   const canvasRef = useRef(null)
   const progressRef = useRef(progress)
+  const decodedRef = useRef(decoded)
   const renderedRef = useRef(-1)
   progressRef.current = progress
+  decodedRef.current = decoded
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let raf = 0, mounted = true
+    let raf = 0, mounted = true, cur = null, last = performance.now()
 
     function sizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)   // never higher (Mobile 3)
       canvas.width = Math.round(canvas.clientWidth * dpr)
       canvas.height = Math.round(canvas.clientHeight * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -763,18 +1024,44 @@ export default function VideoScrubCanvas({ images, frameCount, progress }) {
       ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh)
     }
 
-    const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // The bounded pool holds only a window of frames around the playhead, so the exact
+    // target frame may not be decoded yet on a fast scrub. Paint the nearest decoded
+    // frame instead of clamping to a contiguous-from-zero max; the poster underneath
+    // covers any gap, so the canvas never paints a blank.
+    function nearestDecoded(target) {
+      const dec = decodedRef.current
+      if (!dec) return -1
+      if (dec[target]) return target
+      for (let step = 1; step < frameCount; step++) {
+        const b = target - step
+        if (b >= 0 && dec[b]) return b
+        const f = target + step
+        if (f < frameCount && dec[f]) return f
+      }
+      return -1
+    }
 
-    function tick() {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Damped scrub (web-standards Motion 7): lerp toward the target frame, frame-rate
+    // corrected so 60Hz and 120Hz feel identical. Base 0.3, the scrub-critical ceiling:
+    // tracks the scrollbar tightly without twitching.
+    const BASE = 0.3
+    function tick(now) {
       if (!mounted) return
+      const dt = Math.min((now - last) / 1000, 0.1); last = now
       const p = Math.min(1, Math.max(0, progressRef.current))
       // Reduced-motion floor: snap to the final (arrival) frame, do not scrub.
-      const idx = reduce ? frameCount - 1 : Math.min(frameCount - 1, Math.floor(p * frameCount))
-      if (idx !== renderedRef.current) { paint(idx); renderedRef.current = idx }
+      const target = reduce ? frameCount - 1 : Math.min(frameCount - 1, Math.floor(p * frameCount))
+      const k = 1 - Math.pow(1 - BASE, dt * 60)
+      cur = cur == null ? target : cur + (target - cur) * k
+      const want = reduce ? target : Math.round(cur)
+      const idx = nearestDecoded(want)   // nearest frame actually held in the bounded pool
+      if (idx >= 0 && idx !== renderedRef.current) { paint(idx); renderedRef.current = idx }
       raf = requestAnimationFrame(tick)
     }
 
-    sizeCanvas(); tick()
+    sizeCanvas(); raf = requestAnimationFrame(tick)
     window.addEventListener('resize', sizeCanvas, { passive: true })
     return () => {
       mounted = false
@@ -787,15 +1074,16 @@ export default function VideoScrubCanvas({ images, frameCount, progress }) {
 }
 ```
 
-9. **Stage section wrapper.** Create `src/components/StageSection.jsx`. It loads frames only when its weight is non-zero and the stage has real frames, shows a load percentage while preloading, and an honest empty static state for a pending placeholder stage (frameCount 0) that has no asset yet.
+9. **Stage section wrapper.** Create `src/components/StageSection.jsx`. Poster-first: the hero still paints the instant the stage has weight, the canvas takes over as frames decode behind it, and no loading counter is ever shown; a percentage line as the visitor's first impression is the failure Principle 5 forbids. A pending placeholder stage (frameCount 0) renders the honest empty state. On save-data connections (`DATA_LITE`) the poster IS the stage: the sequence never downloads and the story still reads (web-standards Tiers 3). Memoized so the coalesced scroll tick re-renders only stages whose props changed.
 
 ```jsx
+import { memo } from 'react'
 import VideoScrubCanvas from './VideoScrubCanvas.jsx'
-import { useFramePreload } from '../hooks/useFramePreload.js'
+import { useFramePreload, DATA_LITE } from '../hooks/useFramePreload.js'
 import { stages as stageAssets } from '../data/stageManifest.js'
 import { journeyStages } from '../data/journeyStages.js'
 
-export default function StageSection({ stageIndex, weight, isPrimary, zone, zoneProgress }) {
+function StageSection({ stageIndex, nextStageIndex, weight, zone, zoneProgress }) {
   const journeyStage = journeyStages[stageIndex]
   const assetIndex = stageAssets.findIndex(s => s.id === journeyStage?.id)
   const asset = assetIndex >= 0 ? stageAssets[assetIndex] : null
@@ -805,9 +1093,17 @@ export default function StageSection({ stageIndex, weight, isPrimary, zone, zone
 
   const shouldLoad = weight > 0.001
   const preloadIndex = shouldLoad && hasFrames ? assetIndex : null
-  const { images, loaded, total } = useFramePreload(preloadIndex)
-  const ready = shouldLoad && images && images.length > 0
+  // Map the journey index of the next stage to its MANIFEST index: the invariant
+  // guarantees the same id sets, but never assume the same order.
+  const nextJourneyStage = nextStageIndex != null ? journeyStages[nextStageIndex] : null
+  const nextAssetIndex = nextJourneyStage
+    ? stageAssets.findIndex(s => s.id === nextJourneyStage.id) : -1
   const videoProgress = zone === 'video' ? zoneProgress : 1
+  // Feed the live playhead (videoProgress) into the pool so it decodes ahead of it and
+  // releases behind it (web-standards Mobile 3, the bounded decode pool).
+  const { images, decoded, hasDecoded, posterPath } = useFramePreload(
+    preloadIndex, nextAssetIndex >= 0 ? nextAssetIndex : null, videoProgress
+  )
 
   const style = {
     opacity: weight,
@@ -819,12 +1115,22 @@ export default function StageSection({ stageIndex, weight, isPrimary, zone, zone
 
   return (
     <div className="stage-slot" style={style}>
-      {hasFrames && ready ? (
-        <VideoScrubCanvas images={images} frameCount={asset.frameCount} progress={videoProgress} />
-      ) : hasFrames && shouldLoad ? (
-        <div className="stage-slot__loading">
-          <span>Loading stage {String(stageIndex + 1).padStart(2, '0')} . {total ? Math.round((loaded / total) * 100) : 0}%</span>
-        </div>
+      {hasFrames ? (
+        <>
+          {/* Poster paints instantly; the canvas covers it as frames decode.
+              If a wait is ever visible (cold cache, slow network), it is carried
+              by the persistent Q8 motif (a needle sweep, an altitude ticker),
+              never a raw percentage line. */}
+          <img className="stage-slot__poster" src={posterPath} alt="" aria-hidden="true" />
+          {!DATA_LITE && hasDecoded && (
+            <VideoScrubCanvas
+              images={images}
+              frameCount={asset.frameCount}
+              decoded={decoded}
+              progress={videoProgress}
+            />
+          )}
+        </>
       ) : (
         <div className="stage-slot__empty">
           <span className="stage-slot__empty-name">{journeyStage.title}</span>
@@ -835,6 +1141,8 @@ export default function StageSection({ stageIndex, weight, isPrimary, zone, zone
     </div>
   )
 }
+
+export default memo(StageSection)
 ```
 
 10. **Arrival hero with CTA logic (NON-NEGOTIABLE).** Create `src/components/ArrivalHero.jsx`. The CTA is the gate: mark-complete and advance are two separate clicks, and the panel only reveals in the arrival zone.
@@ -915,7 +1223,7 @@ export default function ArrivalHero({
 
 CTA logic distilled: `mark complete` and `advance` are TWO SEPARATE CLICKS. Mark complete does NOT auto-advance.
 
-11. **App orchestration.** Create `src/app/App.jsx`. It binds document height to `unlockedStageCount`, snaps to the bottom on mount, and shifts scroll forward on advance so the visitor lands at the next stage's video start, not on the old arrival hero.
+11. **App orchestration.** Create `src/app/App.jsx`. It binds document height to `unlockedStageCount` (in px from the same frozen viewport unit the scroll math uses, so CSS and JS can never drift), snaps to the bottom on mount with browser scroll restoration disarmed, shifts scroll forward on advance so the visitor lands at the next stage's video start, and moves keyboard focus with the viewport on advance so focus is never stranded on the old CTA inside an aria-hidden aside (web-standards A11y 6).
 
 ```jsx
 import { useLayoutEffect, useRef } from 'react'
@@ -924,20 +1232,26 @@ import { useScrollJourney, STAGE_HEIGHT_VH } from '../hooks/useScrollJourney.js'
 import StageSection from '../components/StageSection.jsx'
 import ArrivalHero from '../components/ArrivalHero.jsx'
 import PersistentUI from '../components/PersistentUI.jsx'
-import { journeyStages } from '../data/journeyStages.js'
+import { journeyStages, programmeName } from '../data/journeyStages.js'
 
 const TOTAL = journeyStages.length
 
 export default function App() {
   const { completion, completedCount, unlockedStageCount, markComplete, advance, reset, devUnlockAll } = useCompletion()
-  const { stageStates, stageWeights, activeStageIndex } = useScrollJourney(unlockedStageCount)
+  const { stageStates, stageWeights, activeStageIndex, viewportUnit } = useScrollJourney(unlockedStageCount)
   const initialScrollRef = useRef(false)
   const prevUnlockedRef = useRef(unlockedStageCount)
+  const mainRef = useRef(null)
 
   const activeState = stageStates[activeStageIndex] || { stageProgress: 0, zone: 'video', zoneProgress: 0 }
 
   // Snap to bottom on mount, first stage frame 1.
   useLayoutEffect(() => {
+    // Browser scroll restoration races the snap on reload mid-journey and can leave
+    // the visitor mid-band with a half-crossfaded canvas. Disarm it first.
+    if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
     if (initialScrollRef.current) return
     let attempts = 0
     function jump() {
@@ -949,20 +1263,25 @@ export default function App() {
   }, [])
 
   // On advance, the doc grows by one stage. Shift scrollY forward so the visitor lands at
-  // the new stage's video start, not on the old arrival hero.
+  // the new stage's video start, not on the old arrival hero, and move keyboard focus to
+  // the scene region so a keyboard user travels with the viewport.
   useLayoutEffect(() => {
     if (!initialScrollRef.current) return
     if (unlockedStageCount <= prevUnlockedRef.current) {
       prevUnlockedRef.current = unlockedStageCount; return
     }
     const grew = unlockedStageCount - prevUnlockedRef.current
-    const stageHeightPx = window.innerHeight * (STAGE_HEIGHT_VH / 100)
+    const stageHeightPx = viewportUnit * (STAGE_HEIGHT_VH / 100)
     window.scrollTo({ top: window.scrollY + grew * stageHeightPx, behavior: 'instant' })
+    mainRef.current?.focus({ preventScroll: true })
     prevUnlockedRef.current = unlockedStageCount
-  }, [unlockedStageCount])
+  }, [unlockedStageCount, viewportUnit])
 
   return (
     <div className="journey">
+      {/* Exactly one h1 (web-standards A11y 3); each arrival title is an h2. */}
+      <h1 className="sr-only">{programmeName}</h1>
+
       <PersistentUI
         activeStageIndex={activeStageIndex}
         unlockedStageCount={unlockedStageCount}
@@ -970,17 +1289,22 @@ export default function App() {
         completion={completion}
       />
 
+      {/* Track height in px from the SAME frozen viewportUnit the scroll math uses,
+          never CSS vh: mixing the two is the mobile zone-drift bug class. */}
       <main
+        ref={mainRef}
+        tabIndex={-1}
         className="scroll-track"
-        style={{ height: `calc(${unlockedStageCount * STAGE_HEIGHT_VH}vh + 100vh)` }}
+        aria-label={programmeName}
+        style={{ height: `${(unlockedStageCount * (STAGE_HEIGHT_VH / 100) + 1) * viewportUnit}px` }}
       >
         <div className="sticky-scene">
           {journeyStages.map((s, i) => (
             <StageSection
               key={s.id}
               stageIndex={i}
+              nextStageIndex={i === activeStageIndex && i + 1 < TOTAL ? i + 1 : null}
               weight={stageWeights[i] ?? 0}
-              isPrimary={i === activeStageIndex}
               zone={stageStates[i]?.zone ?? 'video'}
               zoneProgress={stageStates[i]?.zoneProgress ?? 0}
             />
@@ -1032,7 +1356,9 @@ Default mappings:
 | Athletic | Track lap counter plus split times | Current lap, completed laps stacked |
 
 ```jsx
-export default function PersistentUI({ activeStageIndex, unlockedStageCount, stages, completion }) {
+import { memo } from 'react'
+
+function PersistentUI({ activeStageIndex, unlockedStageCount, stages, completion }) {
   return (
     <div className="persistent-ui">
       {/* Theme-specific motif goes here. Iterate over `stages` and render
@@ -1054,18 +1380,33 @@ export default function PersistentUI({ activeStageIndex, unlockedStageCount, sta
     </div>
   )
 }
+
+export default memo(PersistentUI)
 ```
 
 Style this differently per theme. For a ship, surround it with a compass rose SVG. For a mountain, arrange it vertically with altitude markers. For a plane, arrange it horizontally with an airline route arc. The container component shape stays the same, the visual motif changes.
 
-13. **Styling.** Create `src/styles/index.css`. Start from these tokens and adapt to the user's Q7 palette.
+13. **Styling.** Create `src/styles/index.css`.
+
+**Type and spacing system, filled BEFORE any component CSS is written.** Consult `crew-design-language` (with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`) to formalise the Q7 one-line register into locked type, spacing, and colour tokens; hardcoded ad-hoc px values are where the 2015-blog look comes from. The rules, from web-standards:
+- A fluid scale of clamp() tokens, never fixed px sizes (Type 1). Five steps minimum: display, headline, subhead, body, label.
+- The tracking compensation curve (Type 2): negative tracking above 40px, roughly +0.002 to 0.003em per size step down. Uniform letter-spacing across sizes is a defect.
+- Line-height bands (Type 3): display 1.0 to 1.1, body 1.5 to 1.6, labels 1.3 to 1.4. Headline weight 600, not 700.
+- A 4px/8px spacing token ladder; no unrelated magic paddings.
+- The display face is a deliberate choice from the register, never a default. Georgia is allowed only when the register genuinely calls for a classical serif, and then it carries the tracking curve like any display face.
+- Every text/background pair meets the Color 2 floors (4.5:1 body, 3:1 at 24px+). The accent on the light panel needs its own deepened token; the raw accent at small caps sizes fails.
+
+Start from these tokens and adapt to the user's Q7 palette:
 
 ```css
 :root {
-  /* Replace these tokens with the user's palette from Q7. */
+  /* Replace the palette with the user's Q7 register (via the crew-design-language consult). */
   --bg-deep: #0b0b0c;
   --bg: #14141a;
   --accent: #c9a45f;
+  /* Accent text on the LIGHT panel: the raw accent is ~2:1 there, a WCAG failure.
+     Use the deep variant for any accent type on --hero-bg (web-standards Color 2). */
+  --accent-deep: #8a6a2f;
   --ink: #e8dcc0;
   --ink-soft: rgba(232, 220, 192, 0.78);
   --hairline: rgba(232, 220, 192, 0.18);
@@ -1073,6 +1414,61 @@ Style this differently per theme. For a ship, surround it with a compass rose SV
   --hero-bg: #f5efe2;
   --hero-ink: #1a1f29;
   --hero-mute: #4a5160;
+
+  /* Fluid type scale (web-standards Type 1): clamp(), not breakpoints. */
+  --text-display: clamp(2rem, 1.3rem + 3.5vw, 3.4rem);     /* arrival title */
+  --text-body: clamp(1rem, 0.95rem + 0.3vw, 1.0625rem);    /* arrival summary */
+  --text-label: clamp(0.6875rem, 0.65rem + 0.2vw, 0.8125rem); /* meta, hints, CTA */
+
+  /* Tracking curve (Type 2): tighter as type grows, wider as it shrinks. */
+  --track-display: -0.015em;
+  --track-label: 0.18em;   /* small caps labels keep their wide tracking */
+
+  /* Spacing ladder (4px/8px steps): no unrelated magic paddings. */
+  --space-1: 8px; --space-2: 16px; --space-3: 24px;
+  --space-4: 32px; --space-5: 40px; --space-6: 48px;
+
+  /* Named easing tokens (web-standards Motion 2): never raw beziers in selectors. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quad: cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+/* Self-hosted display and text faces (web-standards Type 4): subset WOFF2 from
+   public/fonts/, font-display swap, and EACH web face paired with a metric-tuned local
+   fallback, a second @font-face that aliases a system font and matches the web face's
+   metrics via size-adjust + ascent-override + descent-override, so the swap does not
+   shift layout. Replace the override numbers with the values measured for the chosen
+   faces (Malte Ubl's fontpie or capsize emit them straight from the WOFF2); the numbers
+   below are placeholders. The fallback aliases sit in every font-family stack below,
+   between the web face and the generic family, so they are what actually renders during
+   the swap. Two families maximum (Type 4): the display face and the text face. */
+@font-face {
+  font-family: '<DisplayFace>';
+  src: url('/fonts/<display-face>.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: '<DisplayFace> Fallback';
+  src: local('Georgia'), local('Times New Roman');   /* a serif system face when the display is a serif */
+  size-adjust: 100%;        /* measured: match the display face's advance width / x-height */
+  ascent-override: 90%;     /* measured */
+  descent-override: 22%;    /* measured */
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: '<TextFace>';
+  src: url('/fonts/<text-face>.woff2') format('woff2');
+  font-weight: 400 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: '<TextFace> Fallback';
+  src: local('Arial'), local('Helvetica Neue');       /* a grotesque system face for the text */
+  size-adjust: 100%;        /* measured */
+  ascent-override: 95%;     /* measured */
+  descent-override: 25%;    /* measured */
+  line-gap-override: 0%;
 }
 
 * { box-sizing: border-box; }
@@ -1081,9 +1477,10 @@ html, body, #root {
   margin: 0; padding: 0;
   background: var(--bg-deep);
   color: var(--ink);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: '<TextFace>', '<TextFace> Fallback', -apple-system, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
+  overflow-x: clip;   /* never overflow-x: hidden on a sticky ancestor (Mobile 6) */
 }
 
 body {
@@ -1092,13 +1489,39 @@ body {
     linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
 
+/* Designed selection and scrollbar: the scrollbar IS this site's interface
+   (web-standards Color 4 and the Craft register). */
+::selection { background: var(--accent); color: var(--bg-deep); }
+html {
+  scrollbar-color: var(--accent) transparent;
+  scrollbar-width: thin;
+}
+
+/* Designed focus ring on EVERY interactive element (web-standards A11y 1).
+   Never outline: none without a replacement. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+main:focus-visible { outline: none; }  /* the programmatic focus target, not a control */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
 .journey { position: relative; }
 
 .scroll-track { position: relative; width: 100%; }
+/* Track height is set inline in px by App.jsx from the frozen viewport unit.
+   Do not add a vh height here: mixing units is the mobile zone-drift bug. */
 
 .sticky-scene {
   position: sticky; top: 0;
-  height: 100dvh; width: 100%;
+  height: 100vh;    /* legacy fallback line only */
+  height: 100dvh;   /* the pinned full-viewport stage (web-standards Mobile 5) */
+  width: 100%;
   overflow: hidden;
 }
 
@@ -1111,14 +1534,21 @@ body {
 
 .stage-slot {
   position: absolute; inset: 0;
-  transition: opacity 220ms ease;
+  transition: opacity 220ms var(--ease-in-out-quad);
+}
+
+/* Poster-first: the hero still paints instantly under the canvas. */
+.stage-slot__poster {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .video-canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   display: block;
-  background: var(--bg-deep);
 }
 
 .stage-slot__horizon {
@@ -1127,17 +1557,16 @@ body {
   pointer-events: none;
 }
 
-.stage-slot__loading,
 .stage-slot__empty {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 10px;
-  font-family: Georgia, serif;
-  letter-spacing: 0.2em;
+  gap: var(--space-1);
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: var(--text-label);
 }
 
 /* ---- Arrival hero (centre-bottom slide-up) ---- */
@@ -1147,61 +1576,66 @@ body {
   bottom: 0; left: 0; right: 0;
   z-index: 4;
   display: flex; align-items: flex-end; justify-content: center;
-  padding: 0 24px 96px 24px;
+  /* Fixed chrome pads for the home indicator (web-standards Mobile 4). */
+  padding: 0 var(--space-3) calc(96px + env(safe-area-inset-bottom)) var(--space-3);
   pointer-events: none;
-  transition: opacity 600ms cubic-bezier(0.22, 0.8, 0.36, 1);
+  transition: opacity 600ms var(--ease-out-quart);
 }
 .arrival-hero--visible { pointer-events: auto; }
 
 .arrival-hero__panel {
   background: var(--hero-bg);
   color: var(--hero-ink);
-  padding: 38px 44px;
+  padding: var(--space-5) var(--space-6);
   border-radius: 18px;
   box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
   width: min(560px, 92vw);
 }
 .arrival-hero__meta {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 14px;
+  display: flex; align-items: center; gap: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 .arrival-hero__number {
-  font-family: Georgia, serif;
-  font-size: 13px; letter-spacing: 0.32em;
-  color: var(--accent);
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  font-size: var(--text-label); letter-spacing: var(--track-label);
+  color: var(--accent-deep);   /* NOT --accent: raw accent on the light panel fails Color 2 */
 }
 .arrival-hero__sub {
-  font-family: Georgia, serif;
-  font-size: 11px; letter-spacing: 0.3em;
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  font-size: var(--text-label); letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--hero-mute);
 }
 .arrival-hero__title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 600;
-  font-size: 44px; line-height: 1.05;
-  margin: 0 0 16px 0;
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  font-weight: 600;   /* headline weight 600, never 700 (Type 3) */
+  font-size: var(--text-display);
+  line-height: 1.05;
+  letter-spacing: var(--track-display);   /* the tracking curve, not default (Type 2) */
+  text-wrap: balance;                     /* no orphan word in the headline (Type 6) */
+  margin: 0 0 var(--space-2) 0;
   color: var(--hero-ink);
 }
 .arrival-hero__summary {
-  font-family: Georgia, serif;
-  font-size: 16px; line-height: 1.55;
+  font-family: '<TextFace>', '<TextFace> Fallback', sans-serif;
+  font-size: var(--text-body); line-height: 1.55;
+  text-wrap: pretty;
   color: var(--hero-mute);
-  margin: 0 0 20px 0;
+  margin: 0 0 var(--space-3) 0;
 }
 .arrival-hero__status {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: Georgia, serif;
-  font-size: 12px; letter-spacing: 0.18em;
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  font-size: var(--text-label); letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 18px;
+  color: var(--accent-deep);
+  margin-bottom: var(--space-2);
 }
 .arrival-hero__status-dot {
   display: inline-flex; align-items: center; justify-content: center;
   width: 18px; height: 18px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent-deep);
   color: var(--hero-bg);
   font-size: 10px; font-weight: 700;
 }
@@ -1212,19 +1646,21 @@ body {
   border: 0;
   border-radius: 999px;
   padding: 14px 22px;
-  font-family: Inter, sans-serif;
-  font-size: 13px; font-weight: 600;
+  min-height: 44px;   /* touch target floor (web-standards Mobile 7) */
+  font-family: '<TextFace>', '<TextFace> Fallback', sans-serif;
+  font-size: var(--text-label); font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex; align-items: center; gap: 10px;
-  transition: transform 200ms, background 200ms, opacity 200ms;
+  transition: transform 200ms var(--ease-out-quart), background 200ms var(--ease-out-quart), opacity 200ms var(--ease-out-quart);
 }
 .arrival-hero__cta:hover:not(:disabled) {
   background: var(--accent);
   color: var(--hero-ink);
   transform: translateY(-1px);
 }
+.arrival-hero__cta:active:not(:disabled) { transform: translateY(0); }
 .arrival-hero__cta:disabled { opacity: 0.4; cursor: not-allowed; }
 .arrival-hero__cta--advance { background: var(--accent); color: var(--hero-ink); }
 
@@ -1232,26 +1668,37 @@ body {
 
 .journey__hint {
   position: fixed;
-  bottom: 28px; right: 30px;
+  bottom: calc(28px + env(safe-area-inset-bottom)); right: 30px;
   z-index: 5;
-  display: flex; align-items: center; gap: 18px;
-  font-family: Georgia, serif;
-  letter-spacing: 0.3em;
-  font-size: 11px;
+  display: flex; align-items: center; gap: var(--space-2);
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  letter-spacing: var(--track-label);
+  font-size: var(--text-label);
   color: var(--ink-soft);
 }
 .journey__reset {
   background: transparent;
   border: 1px solid var(--hairline);
   color: var(--ink-soft);
-  padding: 6px 12px;
+  padding: 12px 16px;   /* 44px hit area via padding (Mobile 7) */
   border-radius: 999px;
-  font-family: Georgia, serif;
-  font-size: 10px; letter-spacing: 0.3em;
+  font-family: '<DisplayFace>', '<DisplayFace> Fallback', serif;
+  font-size: var(--text-label); letter-spacing: var(--track-label);
   cursor: pointer;
-  transition: border-color 200ms, color 200ms;
+  transition: border-color 200ms var(--ease-out-quart), color 200ms var(--ease-out-quart);
 }
 .journey__reset:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- Mobile block (mandatory): 375px is a first-class width (Mobile 6) ---- */
+
+@media (max-width: 480px) {
+  .arrival-hero { padding-left: var(--space-2); padding-right: var(--space-2); }
+  .arrival-hero__panel {
+    padding: var(--space-3) var(--space-3);
+    width: min(560px, 94vw);
+  }
+  .journey__hint { right: var(--space-2); }
+}
 
 /* ---- Reduced motion floor (mandatory) ---- */
 
@@ -1262,37 +1709,46 @@ body {
 }
 ```
 
-Adjust the palette tokens, the font choices, and the persistent-UI styling per Q7's register. Keep the reduced-motion block: it is the accessibility floor.
+**Finishing layer.** The default-chrome tells on a scroll-first experience are the scrollbar, the selection colour, and the wait state; all three are styled above or art-directed. When the register is textural, an optional grain layer is permitted within web-standards Craft 1 (one page-wide SVG feTurbulence layer, under 50KB, opacity under 0.08, never per-section stacks). Any visible wait state is art-directed in the Q8 motif (a compass needle sweep, an altitude ticker), never a raw percentage line.
 
-14. **Run plus verify.** Start the dev server and walk the verification checklist.
+Adjust the palette tokens, the font choices, and the persistent-UI styling per Q7's register (through the crew-design-language consult). Keep the reduced-motion block and the mobile block: they are the accessibility and mobile floors, not decoration.
+
+14. **Run plus verify, in the browser, with evidence.** This is a hard gate, not a read-through: a run that cannot produce these observations is not verified, and reasoning about the code does not substitute for observing the page (Loop 2, Quality Failure, on any miss).
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173/`. Walk this checklist:
+Open `http://localhost:5173/` in the browser tools and produce the evidence:
 
-1. The page loads at the bottom of the doc, frame 1 of stage 01 painted on the canvas.
-2. Scroll up, frames advance smoothly. The arrival hero appears ~70 percent through the stage.
-3. The doc is only ~420vh tall on first load. Scrolling past stage 01's arrival hits a wall.
+1. Capture and inspect screenshots at 1440px AND at 375px, each at three scroll positions: stage 1 frame 1, mid-scrub, and the arrival. Nothing clipped, the panel composed, the footer clear of the home indicator.
+2. Read the console after a full journey (every stage completed and advanced): zero errors, zero 404s on frame requests is a pass condition.
+3. Record total transferred bytes for stage 1 and for the full journey against the class C weight budgets (network panel), desktop and mobile rungs separately.
+4. Throttle to Fast 3G and reload: the stage 1 poster is visible under 1.5 seconds, and no loading counter is ever shown after stage 1.
+
+Then walk the behaviour checklist, from an actual scroll, not from the code:
+
+1. The page loads at the bottom of the doc, the stage 01 poster paints instantly, the canvas takes over as frames decode.
+2. Scroll up, frames advance smoothly in both directions with the damped scrub. The arrival hero appears ~70 percent through the stage.
+3. The doc is only one stage plus a viewport tall on first load. Scrolling past stage 01's arrival hits a wall.
 4. Click the stage CTA, it marks complete, the CTA flips to "Click to move to next destination".
-5. Click advance, the doc grows to ~740vh, the viewport jumps to stage 02 video start.
+5. Click advance, the doc grows by one stage, the viewport jumps to stage 02's video start, keyboard focus moves with it, and stage 02 is already warm (no loading state).
 6. Repeat through all stages, the final reads "Journey complete" disabled.
-7. Reload preserves both completion and advancement state.
+7. Reload mid-journey preserves both completion and advancement state and lands cleanly (scroll restoration disarmed).
 8. The reset button (visible when `completedCount > 0`) clears localStorage and snaps back to stage 01.
 9. `?preview=all` unlocks every stage, the persistent UI reveals locked stage names too.
 10. The persistent UI shows correct active, locked, and completed states.
-11. `prefers-reduced-motion` set: the scrub snaps and reveals are instant, the story still reads.
+11. `prefers-reduced-motion` forced: the scrub snaps to the arrival frame, reveals are instant, the story still reads. Screenshot the twin.
+12. At 375x812: type fits, the CTA is reachable and at least 44px, the footer clears the home indicator, and the stage zones do not drift under the thumb while the URL bar collapses.
+13. Keyboard only: complete the whole journey with Tab and Enter; every control shows its focus ring.
 
-If any check fails, the bug is almost always: doc height not bound to `unlockedStageCount`, storage keys colliding with another project, or the scroll-handoff `useLayoutEffect` not firing.
+If any check fails, the bug is almost always: doc height not bound to `unlockedStageCount`, storage keys colliding with another project, the scroll-handoff `useLayoutEffect` not firing, or a listener bypassing the rAF coalescer.
 
-15. **Print check (if PDF or Both).** If PDF or Both was chosen, verify the `@media print` block is present and correct. Print the page to PDF in the browser to confirm: page breaks at the right places, no animation artefacts, fonts render correctly.
+15. **Design review gate.** Run the gate per the Design review gate section before any deploy. Fix all Criticals and Majors, re-review, and only then proceed (Loop 2 on a Fail). A fail blocks the ship.
 
-16. **Design review gate.** Run the gate per the Design review gate section before any deploy. Fix all Criticals and Majors. A fail blocks the ship.
+16. **Deploy.** Ship per the Deploy pathway section. Fill og:image and og:url with the live absolute URLs (the og:image is a designed 1200x630 brand card built headless at build time per Head 5, the Q8 mark plus the programme headline on the brand ground, not a raw screenshot; the stage 1 hero still may serve only as the card's ground). Then note the new build and its URL in the handoff.
 
-17. **Deploy.** Ship per the Deploy pathway section. Then note the new build and its URL in the handoff.
-
-**Final Step: Handoff Save.** Confirm the active project: read `~/.claude/crew-state/active-project`; if no project was named this run, ask for a short name now and write the pointer. Run `mkdir -p ~/.claude/crew-state/projects/<project>`, then write `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md` with: the build report produced, decisions made (the theme, the stage names, the persistent-UI motif, the palette, FRAME_COUNT per stage, the deploy target and URL), unfinished work (any stage missing real content, footage owed by the user, the OG patch, a design fix not yet applied), what the Design review gate (crew-design-quality (binding) plus the Gate roster in `crew-design-quality`) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing record in the same project, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. Records in other projects are other work: never merged into this one and never overwritten by it. If the handoff write is denied or fails, retry once; if it still fails, do not fake success: print the full handoff body inline in the run receipt under the literal heading "STAGED HANDOFF (write denied)" so the user can save it, and mark STATUS: BLOCKED. After a successful write, re-read the file and confirm the frame is present (the title line, the Date line, and a STATUS from the sanctioned list); fix it before finishing if not. If this run captured a durable way-of-working lesson (not a project or brand fact), offer once: "Want me to save this lesson so it never happens again?" On yes, append one dated bullet (what went wrong, what to do instead) to `~/.claude/crew-state/lessons/crew-web-immersive-narrative-lessons.md`, creating the file if absent; it is read at every Step 0 and never leaves this machine (Loop 5, the lesson offer). A Loop 1 or Loop 3 pause counts as finishing for the Context Loop: write the handoff FIRST (STATUS: BLOCKED, the gap or escalation named), then ask and wait. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
+**Final Step: Handoff Save.** Confirm the active project: read `~/.claude/crew-state/active-project`. If no project was named this run, ask for a name only if something worth keeping was produced; otherwise skip the write and say so in the receipt. Run `mkdir -p ~/.claude/crew-state/projects/<project>`, then write `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md` with: the build report produced, decisions made (the theme, the stage names, the persistent-UI motif, the palette and type tokens, frame counts and payload per stage, the deploy target and URL), unfinished work (any stage missing real content, footage owed by the user, og:image and og:url values owed at deploy, a design fix not yet applied), what the Design review gate (crew-design-quality (binding) plus the Gate roster in `crew-design-quality`) needs next (the built file and the live local URL), and any "Learned" note (a theme rule, a register, or a preference the user gave). Always write it, even with no output ("No output, run completed [date]"). Open the handoff with the frame: a `# <skill> handoff` title line, a `Date:` line (ISO, today), and a `STATUS:` line (NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE / DONE_WITH_GAPS / NO OUTPUT); then the required content as its own headed blocks, with LEARNED and ESCALATED blocks when present. When rewriting an existing record in the same project, carry forward every prior Learned note and any unresolved Escalated or Not-provided item; a rewrite must never erase a lesson or an open flag. Records in other projects are other work: never merged into this one and never overwritten by it. If the handoff write is denied or fails, retry once; if it still fails, do not fake success: print the full handoff body inline in the run receipt under the literal heading "STAGED HANDOFF (write denied)" so the user can save it, and mark STATUS: BLOCKED. After a successful write, re-read the file and confirm the frame is present (the title line, the Date line, and a STATUS from the sanctioned list); fix it before finishing if not. If this run captured a durable way-of-working lesson (not a project or brand fact), offer once: "Want me to save this lesson so it never happens again?" On yes, append one dated bullet (what went wrong, what to do instead) to `~/.claude/crew-state/lessons/crew-web-immersive-narrative-lessons.md`, creating the file if absent; it is read at every Step 0 and never leaves this machine (Loop 5, the lesson offer). A Loop 1 or Loop 3 pause counts as finishing for the Context Loop: write the handoff FIRST (STATUS: BLOCKED, the gap or escalation named), then ask and wait. (Loop 4 and Loop 5.) Then prompt: "Session context should be saved so the next session knows what we decided and what is left. Shall I run context-save now?" If the user says yes, invoke `crew-core-context-save`. If no, note in the handoff: "Context-save declined by user."
 
 ## Output format
 
@@ -1309,15 +1765,19 @@ Frames: [per stage frame counts]   Constants: STAGE_HEIGHT_VH 320 / VIDEO_ZONE_E
 Gating: [two-state confirmed, unlockedStageCount = advancedStageCount in production]
 
 Verified:
-- [loads at bottom / scrub advances / arrival hero at ~70% / gate wall before advance /
-   mark-complete then advance two clicks / reload preserves state / reset works /
-   ?preview=all unlocks / reduced-motion path snaps and reads]
+- [loads at bottom on the poster / damped scrub advances both directions / arrival hero at ~70% /
+   gate wall before advance / mark-complete then advance two clicks / reload preserves state /
+   reset works / ?preview=all unlocks / reduced-motion path snaps and reads]
+Weight: [per-stage and journey payload vs the class C budgets, desktop and mobile rungs]
+web-standards Gate: [10/10, or the failures and named residuals]
 Design review gate: [crew-design-quality + crew-design-composition + crew-design-patterns +
-   crew-animation-gsap + crew-animation-locomotive verdicts, Criticals and Majors fixed]
+   crew-design-engineering + the register-conditional pack-13 lens verdicts, Criticals and Majors
+   fixed; crew-animation-gsap and crew-animation-locomotive: discipline cross-reference applied
+   (authoring spec, no verdict)]
 Reduced-motion path: [confirmed: scrub snaps, reveals instant, story still reads]
 
-Open / handed off: [stages missing real content? OG patched? a design fix pending?
-   what the reviewer needs next: the built file and the live local URL]
+Open / handed off: [stages missing real content? og:image and og:url owed at deploy? a design
+   fix pending? what the reviewer needs next: the built file and the live local URL]
 ```
 
 Example (filled):
@@ -1334,17 +1794,22 @@ Frames: 128 / 134 / 119 / 141 / 122   Constants: STAGE_HEIGHT_VH 320 / VIDEO_ZON
 Gating: two-state confirmed, unlockedStageCount = advancedStageCount in production
 
 Verified:
-- Loads at the bottom, scrub advances frame-for-frame, arrival hero reveals at ~70 percent,
-  the gate walls scroll before advance, mark-complete then advance are two clicks, reload
-  preserves completion and advancement, reset snaps to stage 01, ?preview=all unlocks all,
-  reduced-motion path snaps the scrub and the story still reads.
+- Loads at the bottom on the poster, damped scrub advances frame-for-frame both directions,
+  arrival hero reveals at ~70 percent, the gate walls scroll before advance, mark-complete then
+  advance are two clicks, reload preserves completion and advancement, reset snaps to stage 01,
+  ?preview=all unlocks all, reduced-motion path snaps the scrub and the story still reads.
+Weight: heaviest stage 9.8MB desktop / 3.4MB mobile; journey 47MB desktop / 12MB mobile. PASS.
+web-standards Gate: 10/10 (Gate 5 static checks only, decoder and canvas limits not exercised
+  on real hardware).
 Design review gate: crew-design-quality pass (Revise then fixed), crew-design-composition pass,
-  crew-design-patterns pass, crew-animation-gsap and crew-animation-locomotive pass (motion serves
-  the narrative, no decorative drift).
+  crew-design-patterns pass, crew-design-engineering pass (two Major rows applied),
+  crew-design-soft (register lens) pass; crew-animation-gsap and crew-animation-locomotive
+  discipline cross-reference applied (authoring spec, no verdict).
 Reduced-motion path: confirmed, scrub snaps to the arrival frame, reveals instant.
 
 Open / handed off: stage 4 ships with the honest "Content coming" stub, awaiting real copy.
-OG tags patched to the final alias. Reviewer has the built file and the live local URL.
+og:image and og:url filled at deploy with the final alias. Reviewer has the built file and the
+live local URL.
 ```
 
 ## Animation injection
@@ -1376,7 +1841,9 @@ useEffect(() => {
 }, []);
 ```
 
-Read before writing the motion. For the reveal spec: `crew-animation-scroll-reveal` (IntersectionObserver one-shot, stagger, reduced-motion floor). For the keyframe and Web Animations API spec on reveals and micro-interactions: `crew-animation-css`. For the scroll-linked scrub discipline (scrollbar-tied, not listener-fired, the bar the centerpiece is held to): `crew-animation-gsap`. Pull the spec from these, then implement in the rAF and canvas idiom above.
+Read before writing the motion. For the reveal spec: `crew-animation-scroll-reveal` (IntersectionObserver one-shot, stagger, reduced-motion floor). For the keyframe and Web Animations API spec on reveals and micro-interactions: `crew-animation-css`. For the scroll-linked scrub discipline (scrollbar-tied, not listener-fired, the bar the centerpiece is held to): `crew-animation-gsap`. For the micro-interaction craft (the CTA hover, press, and focus feel, easing choices, transition origins): `crew-design-engineering`. Pull the spec from these, then implement in the rAF and canvas idiom above.
+
+The mobile motion decisions route through `crew-animation-locomotive`'s mobile-disable doctrine, and the consult has an explicit outcome, not a nod: any smoothing or inertia beyond the damped scrub is disabled on touch and under reduced motion, transforms stay cheap on low-power devices, and the scroll position always maps damped-or-1:1 to the document (no hijacking, back-scroll always works, web-standards Motion 11).
 
 Reduced-motion and performance guardrails are not optional. Honor the floor exactly: `prefers-reduced-motion` snaps the scrub to the arrival frame and makes reveals instant, and the story still reads. Concretely, under reduced motion the IntersectionObserver adds `is-in` with no transition (content present immediately), the scrub and any parallax are disabled (paint the arrival frame directly), and there is no smooth scroll. Animate transform and opacity only, never layout properties (no top, left, width, height, margin). Observers are one-shot and call `unobserve` on first reveal. Hold the frame-scrub paint to 60fps and under budget: read the scroll position once per rAF tick, draw a single canvas frame, no per-frame layout reads.
 
@@ -1384,15 +1851,7 @@ This injected layer is exactly what the design review gate's Motion dimension (`
 
 ## Print and PDF
 
-When PDF delivery is chosen, add a `@media print` block to the output:
-
-- Page breaks at slide or section boundaries (`page-break-after: always`)
-- Animations disabled (`animation: none`, `transition: none`)
-- Background colours preserved for print (`print-color-adjust: exact`)
-- Fonts embedded or fall back to system serif
-- Margins: 0.5in on all sides
-- No navigation elements, no interactive UI
-- The reduced-motion path already serves as the print-appropriate layout
+A scroll journey does not print, and no `@media print` block is bolted onto it. If the destination needs a paper or PDF leave-behind (a learning module summary, a brand story one-pager), route that deliverable to `crew-web-slide-deck-builder` or consult `crew-design-documents` for the render spec; the journey itself ships as the live URL only.
 
 ## Design review gate
 
@@ -1403,6 +1862,7 @@ Run the checks, brief each with the theme intent, the register, and the no-em-da
 - **`crew-design-quality`** runs the dimensional sweep (typography, colour, spacing, hierarchy, materiality, motion, interactive states, execution) and returns a Pass, Revise, or Fail verdict with the AI tells named. Pass condition: a Pass verdict, or a Revise with every ranked fix tagged Critical or Major applied and re-reviewed. A Fail blocks the ship.
 - **`crew-design-composition`** checks composition and the eye-path: does the arrival hero sit where the eye lands after the scrub, does the persistent UI compete with the stage canvas, does each stage frame compose cleanly. Pass condition: the eye-path resolves to the arrival CTA at each stage with no competing focal point. A composition Fail blocks the ship.
 - **`crew-design-patterns`** checks pattern currency: the scroll-journey, the frame-scrub, and the persistent-motif patterns are current and not dated cliche, and no slop pattern (centered-hero-and-three-cards, AI-purple glow) snuck into the arrival panel. Pass condition: no dated or slop pattern flagged. A pattern Fail blocks the ship.
+- **`crew-design-engineering`** reviews the build at the pixel and animation-craft level: the CTA hover, press, active, and focus states, the easing choices against the named tokens, transition origins, the advance handoff feel, and any animation touching the keyboard path. It returns a Before, After, Why table with exact CSS fixes. Pass condition: every Critical and Major row applied.
 - **A register-conditional pack-13 style lens, exactly ONE per build:** `crew-design-soft` when the register is warm and premium, `crew-design-minimalist` when it is clean and composed, `crew-design-brutalist` when it is raw and bold. Pass condition: the built journey holds to its selected lens for its register. A style-lens Fail blocks the ship.
 - **`crew-animation-gsap`** and **`crew-animation-locomotive`** are AUTHORING cross-references, spec-writers that emit STATUS, not Pass or Fail, so they are NOT verdict reviewers. They hold this build's animation to the discipline those two skills define, regardless of how the motion is implemented. This build is hand-rolled rAF scroll math (no GSAP, no Locomotive in the stack), but the discipline is the same: the scrub drives the story frame-for-frame, the crossfade reads as a scene cut, the accent bloom marks an arrival, the reduced-motion path is real, and no animation is present that does not move the story or give feedback. The BINDING motion verdict is `crew-design-quality`'s Motion dimension, not these two.
 
@@ -1422,17 +1882,17 @@ gh repo create <slug>-journey --public --source . --push   # or via Vercel dashb
 npx vercel deploy --yes
 ```
 
-Disable Vercel deployment protection in project settings, Deployment Protection, Vercel Authentication, Disabled. Otherwise viewers hit a login wall. Frame assets: keep them gitignored locally (about 315MB for 5 to 6 stages). Push the code to GitHub, Vercel serves frames from the deploy bundle. For projects under 1GB this works on Vercel Pro.
+Disable Vercel deployment protection in project settings, Deployment Protection, Vercel Authentication, Disabled. Otherwise viewers hit a login wall. Frame assets: keep them gitignored locally. The budget-checked payload (at most 60MB desktop rung plus 15MB mobile rung plus the JPEG fallback sets, web-standards Perf 1 class C) deploys comfortably within Vercel limits; if the extract ever pushes past its budgets, that is a build defect to fix at the source, not a hosting problem.
 
 **c) Host LMS integration.**
 
-- Frame JPGs plus heroes live in an object-storage bucket `<slug>-journey` (public read).
-- The manifest URLs point at the bucket (`https://<project>.<storage-host>/storage/v1/object/public/<slug>-journey/<id>/frames/frame_0001.jpg`).
+- Frame renditions plus heroes live in an object-storage bucket `<slug>-journey` (public read), both rungs.
+- The manifest URLs point at the bucket (`https://<project>.<storage-host>/storage/v1/object/public/<slug>-journey/<id>/frames/1920/frame_0001.webp`).
 - The journey component reads programme plus destinations plus steps from the host's existing schema (no DB changes for content).
 - Add a `<slug>_progress` table for advancement state. Columns: `user_id`, `advanced_stage_count`, `updated_at`. Row-level security lets users read and write their own row, admin and exec can read any.
 - Add an audit query parameter to the route so executives can review a learner's progress in read-only mode (mark-complete buttons hidden, reflection text and quiz answers visible).
 
-Both prior integrated ports follow the same shape. Clone whichever is closest to the new programme's mood.
+Every LMS integration follows this same shape regardless of host: bucket-served frames, host-schema reads, one progress table, an audit route.
 
 ## Decision briefs
 
@@ -1452,8 +1912,10 @@ Typical calls that warrant a brief: how many stages (3 to 7, with 5 or 6 the swe
 ## Guardrails
 
 Build integrity:
-- Do not skip the discovery brief. Always ask Q1 to Q10 first.
+- Do not skip the discovery brief. Always ask Q1 to Q12 first.
 - Do not change `STAGE_HEIGHT_VH` (320), `VIDEO_ZONE_END` (0.7), or `CROSSFADE_RATIO` (0.1) without testing.
+- Do not exceed the weight budgets (web-standards Perf 1, build class C) and do not ship a single-rung desktop payload to phones. The extract's budget assert is not optional and is never raised.
+- Do not block first paint on a frame sequence. The poster paints first, the sequence backfills, and a loading counter is never the visitor's first impression.
 - Do not auto-advance on mark-complete. Two clicks always.
 - Do not ship to learners without verifying the gate: `unlockedStageCount` must be `advancedStageCount`, NOT `stageCount`.
 - Do not reuse localStorage keys across journeys. Always namespace with `<slug>_v1_`.
@@ -1464,9 +1926,12 @@ Build integrity:
 Truth and content:
 - Do not write fake placeholder content. When a stage has no real content yet, ship the honest stub "Content coming. Your admin is finalising this stage." Empty and honest beats placeholder and plausible. An asset-less stage still needs its placeholder manifest entry (`frameCount: 0`, `pending: true`) so it occupies its 320vh band and can become active and be advanced past; without the entry the trailing stages gate-lock and the canvas snaps back to stage 1 at the top.
 - Do not pre-fill the user's theme. They might say "marathon" or "kitchen brigade" or "garden seasons". Let them choose, then build it.
+- Do not write a price, a guarantee, a superlative, or a compliance claim into stage copy yourself. Mark it "Escalated: [who decides, the exact question]" and keep building around it (Loop 3, Escalation).
 
 Accessibility:
-- The reduced-motion floor is mandatory. `prefers-reduced-motion` snaps the scrub to the arrival frame and makes reveals instant, and the story still reads. A journey that only works with full motion ships broken for part of the audience.
+- The reduced-motion floor is mandatory. `prefers-reduced-motion` snaps the scrub to the arrival frame and makes reveals instant, and the story still reads. A journey that only works with full motion ships broken for part of the audience (web-standards Motion 10, A11y 8).
+- Never ship a text/background pair below the web-standards Color 2 floors (4.5:1 body, 3:1 at 24px+), verified with math, not by eye. Accent type on the light panel uses `--accent-deep`.
+- Never ship an interactive element without a visible `:focus-visible` ring, and never strand keyboard focus when advance moves the viewport (web-standards A11y 1, A11y 6).
 
 House style:
 - Never use an em dash anywhere (text, CSS comments, JavaScript strings). Use commas, periods, or parentheses.
@@ -1475,7 +1940,10 @@ House style:
 
 ## Handoffs
 
-- Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate: run `crew-design-quality` (binding) plus the Gate roster in `crew-design-quality`, here `crew-design-composition`, `crew-design-patterns`, `crew-animation-gsap`, and `crew-animation-locomotive`. Fix all Criticals and Majors before deploy.
+- The craft law for this build is `web-standards` (shared/web-standards.md, "Crew Web Standards"): the type system (Type 1 to 7), the contrast floors (Color 2), the class C budgets (Perf 1, Perf 2, Perf 10), the motion rules (Motion 1, 2, 5, 7, 10, 11), the mobile floor (Mobile 3 to 8), head hygiene (Head 1 to 7), the accessibility floor (A11y 1 to 8), and THE VERIFICATION GATE (Gate 1 to 10), which this skill's Verification section adopts by reference.
+- Before Step 13, consult `crew-design-language` (pack 12) to formalise the Q7 register into locked type, spacing, and colour tokens. Open the consult with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`.
+- Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate. Binding verdicts: `crew-design-quality`, `crew-design-composition`, `crew-design-patterns`, `crew-design-engineering`, and the register-conditional pack-13 style lens. Authoring references, no verdict: `crew-animation-gsap`, `crew-animation-locomotive`, `crew-animation-scroll-reveal`, `crew-animation-css`. Fix all Criticals and Majors before deploy. Every leg opens with the same literal consult preamble.
+- Route what is not this skill: a pure ungated camera journey to `crew-web-fly-through-builder`, a presented training programme to `crew-web-learning-experience`, a slide deck or PDF leave-behind to `crew-web-slide-deck-builder` (render spec via `crew-design-documents`).
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
@@ -1485,28 +1953,43 @@ In plan mode this skill can ask the discovery questions, read the prior handoff,
 
 ## Verification
 
-Before the run is marked done, confirm:
+This skill adopts THE VERIFICATION GATE from `web-standards` Section 10 by reference: all ten Gate items run before the run is marked done, each producing its named EVIDENCE (a screenshot, a console transcript, a byte count, a checked list; "looks right" is not evidence). This build ships heavy media (canvas frame sequences), so every media item applies. An item that cannot be executed runs its nearest emulation and NAMES the residual in the Gate verdict; silently skipping is a Gate failure. A failed item follows Loop 2 (Quality Failure): stop, fix, re-run that item.
+
+```
+[ ] Gate 1: served over HTTP (npm run dev, or a /tmp copy), opened in a real browser. Evidence: URL + 200.
+[ ] Gate 2: screenshots at 1440px AND 375px, each at stage 1 frame 1, mid-scrub, and arrival. Evidence: both sets, one-line verdict each.
+[ ] Gate 3: console read after a full journey (all stages completed and advanced): zero errors, zero frame 404s. Evidence: transcript.
+[ ] Gate 4: full-scroll behaviour pass from an actual scroll: damped scrub tracks both directions, arrival at ~70%, gate walls scroll, two-click gate, reload preserves state, reset works, ?preview=all unlocks. Evidence: per-beat checklist.
+[ ] Gate 5: iOS/Safari checks; no device available means the static roster runs (dpr cap present, bounded decode pool, safe-area padding, svh/dvh per Mobile 5) plus the fixed residual line. Evidence: checked list + environment.
+[ ] Gate 6: reduced-motion twin forced (headless flag or CDP emulation) and screenshotted: scrub snapped to arrival frame, reveals instant, story reads; save-data poster-only branch spot-checked. Evidence: screenshots + method.
+[ ] Gate 7: weight audit vs build class C (2MB critical, 60MB desktop, 15MB mobile; per-stage 12MB/4MB), desktop and mobile rungs separately. Evidence: byte counts + verdict.
+[ ] Gate 8: head hygiene, all seven Head rules quoted; "og:image deferred to deploy" recorded as the named residual until a public URL exists. Evidence: seven-item list.
+[ ] Gate 9: keyboard walk: whole journey completable with Tab and Enter, every control visibly focused, focus moves with the viewport on advance, nothing stranded. Evidence: ordered walk list.
+[ ] Gate 10: contrast math on the shipped palette (Appendix A6 snippet), including accent-on-panel meta text, vs the Color 2 floors. Evidence: computed ratios per pair.
+```
+
+Build-specific, on top of the Gate:
 
 ```
 [ ] Discovery ran first; the theme, stages, audience, palette, persistent UI, and deploy target were confirmed before any code
 [ ] No theme was invented; the metaphor came from the user
+[ ] First frame visible under 1.5s on a throttled Fast 3G run; no loading counter ever shown after stage 1
 [ ] package.json name = <slug>-journey; index.html <title> = the programme name
 [ ] LocalStorage keys = <slug>_v1_completion plus <slug>_v1_advancement (namespaced, no collision)
 [ ] journeyStages.js filled from Q5/Q6; extract-frames.mjs STAGES array matches the journey
 [ ] Stage-count invariant holds: the id sets of scripts/STAGES, journeyStages, and the written manifest are identical and the same length, so stageCount = journeyStages.length and activeStageIndex can never exceed TOTAL-1 (asset-less stages carry a pending placeholder entry)
-[ ] CSS variables match the Q7 palette; persistent UI built around the Q8 motif
-[ ] Arrival hero typography matches the theme register; footer hint reflects the theme verb
+[ ] Type and colour tokens came from the Q7 register via the crew-design-language consult; persistent UI built around the Q8 motif
 [ ] Two-state gate verified: mark-complete and advance are two clicks; unlockedStageCount = advancedStageCount in production
-[ ] Loads at the bottom, scrub advances, arrival hero at ~70%, gate walls scroll before advance
-[ ] Reload preserves state; reset works; ?preview=all unlocks all stages
-[ ] Reduced-motion path real: scrub snaps, reveals instant, story still reads
+[ ] Tested at 375x812: type fits, CTA 44px+ and reachable, footer clear of the home indicator, no zone drift while the URL bar collapses
 [ ] Any stage without real content ships the honest "Content coming" stub, not fake placeholder
-[ ] Design review gate run: crew-design-quality, crew-design-composition, crew-design-patterns, crew-animation-gsap, crew-animation-locomotive; Criticals and Majors fixed
+[ ] Design review gate run: binding verdicts (crew-design-quality, crew-design-composition, crew-design-patterns, crew-design-engineering, the register-conditional pack-13 lens) passed with Criticals and Majors fixed; crew-animation-gsap and crew-animation-locomotive applied as authoring references only, no verdict fabricated
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
-[ ] The record was written into the active project (~/.claude/crew-state/projects/<project>/)
+[ ] The record was written into the active project (~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md)
 ```
 
 ## Completion
+
+If nothing real could be produced (the discovery brief never arrived, the Loop 1 ask returned nothing, the assets never landed), set STATUS NEEDS_CONTEXT or BLOCKED, never DONE, so an empty scaffold is not mistaken for a shipped journey. If the journey was delivered with named items open (a pending stage stub, an Escalated claim, og:image owed at deploy, a Gate residual), set DONE_WITH_GAPS, never a clean DONE, so the open loops stay visible.
 
 ```
 STATUS: DONE | DONE_WITH_GAPS | BLOCKED | NEEDS_CONTEXT
@@ -1514,18 +1997,3 @@ REASON: [why this status, specific]
 RECOMMENDATION: [what should happen next]
 ```
 
-## Failure modes seen in production
-
-| Symptom | Cause | Fix |
-|---|---|---|
-| Canvas blank, no frames paint | Frame JPGs not loading: wrong path in the manifest, or extract did not run | Confirm `public/stages/<id>/frames/` is populated and `framePath(i)` matches; re-run `extract-frames.mjs` |
-| Scroll math off, stage 1 at the top not the bottom | The inversion `scrollY = max - raw` removed or the page not snapped to bottom on mount | Keep the invert in `useScrollJourney`; keep the mount `jump()` in `App.jsx` |
-| Frames stop short or paint blanks at the end | Frame count miscount: the manifest `frameCount` does not match the files on disk | Re-run extract so the manifest regenerates; never hand-edit `stageManifest.js` |
-| Arrival CTA fires early, before the visitor reaches the arrival | The arrival hero rendered outside the arrival zone, or `visible` not gated on `zone === 'arrival'` | Gate the CTA handler and `visible` on the arrival zone; `ctaDisabled` when not visible |
-| Mark-complete jumps straight to the next stage | Auto-advance wired onto mark-complete | Keep them as two separate clicks; `markComplete` must not call `advance` |
-| Visitor scrolls past the current stage into the next, gate broken | `unlockedStageCount` wired to `stageCount` instead of `advancedStageCount` | Bind document height to `unlockedStageCount` which resolves to `advancedStageCount` in production |
-| Persistent UI hidden behind the canvas | z-index conflict: the sticky scene paints over the motif | Give `.persistent-ui` a z-index above `.sticky-scene` and below the arrival hero |
-| Layout jumps on mobile Safari | `100vh` used for the sticky scene, address bar resizes it | Use `100dvh`, never `100vh`, for full-height sections |
-| Motion plays for a reduced-motion visitor | The `prefers-reduced-motion` block missing or the scrub not snapped | Keep the reduced-motion media block; snap the scrub to the arrival frame, make reveals instant |
-| State from an old build corrupts the new one | localStorage keys collide across journeys on the same origin | Namespace keys with `<slug>_v1_`; the reads validate length and range and discard stale state |
-| Advance grows the doc but the viewport stays put | The scroll-handoff `useLayoutEffect` removed or not firing | Keep the handoff effect that shifts `scrollY` forward by the grown stage height on advance |

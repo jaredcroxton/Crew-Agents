@@ -17,12 +17,12 @@ EXPECT:
 - The real tour is cut into room chapters (one chapter per room) and the report carries the chapter cut.
 - The frame scrub is built: the scrub maps the full scroll range forward and back over N frames, with a desktop set and a portrait mobile set.
 - Brand-only assets are produced (wordmark, grain, optional map card, dividers); no AI property imagery is generated; the gallery and floorplan are the real listing photos.
-- The reduced-motion path is present and confirmed: matchMedia holds a representative static frame, no auto motion, the page still reads.
-- The Design review gate is run: crew-design-quality (binding) plus crew-design-composition and crew-design-patterns, a register-conditional pack-13 lens (here crew-design-soft for the warm and inviting register), and crew-animation-gsap and crew-animation-locomotive as authoring references (status, not verdict).
+- The reduced-motion path is present and confirmed: matchMedia holds a representative static frame, html.enhanced is never stamped, no auto motion, the page still reads.
+- The Design review gate is run: the crew-design-engineering pre-pass over the interaction layer first, then crew-design-quality (binding) plus crew-design-composition and crew-design-patterns, a register-conditional pack-13 lens (here crew-design-soft for the warm and golden register), with crew-animation-scroll-reveal, crew-animation-css, crew-animation-view-transitions, and crew-animation-gsap (discipline only) as pack-14 authoring references (status, not verdict); crew-animation-locomotive is not consulted.
 - No em dashes anywhere in the output.
-- Handoff file `~/.claude/crew-state/web-design/crew-web-real-estate-immersive-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-web-real-estate-immersive-handoff.md` was written.
 
-## Case B: wrong-tool
+## Case B: messy
 INPUT:
 "I do not have a tour video or real photos yet, can you just AI-generate the interiors so it looks finished? Make up a few nice rooms and a kitchen and we will swap the real ones in later."
 EXPECT:

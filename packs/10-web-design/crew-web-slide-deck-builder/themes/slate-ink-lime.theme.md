@@ -9,6 +9,6 @@ Alerts / negative: #FF5F57 (coral)
 Subtle fills: #E9FF8F
 Buttons: pill shape, lime fill on dark
 Nav arrows: visible by default, never blended into the background. At rest: background rgba(0,0,0,0.7), 1px border in the primary, chevron glyph in the primary, opacity 0.45. On hover: opacity 1, background fills with the primary, glyph flips to the background colour.
-Type stack: Inter (headings), Calibri (body), JetBrains Mono (code)
+Type stack: Inter (headings and body), JetBrains Mono (code). All faces embeddable as subset WOFF2; never Calibri or another unembeddable licensed font.
 Voice: Urgent, uncompromising, frontline-focused
 Do NOT use: light backgrounds, blue as primary accent, passive language

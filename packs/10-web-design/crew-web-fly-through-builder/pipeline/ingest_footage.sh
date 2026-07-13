@@ -15,9 +15,14 @@ cd "$(dirname "$0")/.."
 mkdir -p .tmp/raw assets/video
 
 # Resolve inputs: a single dir arg expands to its videos, sorted.
+# Portable while-read loop, NOT mapfile: stock macOS ships bash 3.2, which has no
+# mapfile builtin, and this script must run there without a Homebrew bash.
 if [ "$#" -eq 1 ] && [ -d "$1" ]; then
   shift_dir="$1"
-  mapfile -t INPUTS < <(find "$shift_dir" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' \) | sort)
+  INPUTS=()
+  while IFS= read -r f; do
+    INPUTS+=("$f")
+  done < <(find "$shift_dir" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' \) | sort)
 else
   INPUTS=("$@")
 fi

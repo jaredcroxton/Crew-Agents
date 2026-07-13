@@ -7,7 +7,7 @@ Insert 3: handoff frame + copy-forward (after the "Always write ..." sentence)
 import re, pathlib
 
 ROOT = pathlib.Path("/Users/jc/Desktop/cluade/crew-skill-packs/packs")
-SKIP = {"crew-web-app-builder"}  # BLAST exception: no Step 0 / Final Step
+SKIP = set()
 
 INS1 = (' If this run was chained from an upstream skill, also read only the handoffs of the '
         'skills this skill\'s Handoffs section names as sources, at most two files; state what '

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==========================================================================
+     Crew Web Real Estate Immersive, LOCKED REFERENCE BUILD.
+     A FICTIONAL demonstration property. Every photo tile, the floorplan, and
+     the scrub frames are procedurally generated placeholders so this file runs
+     from a double-click. In a REAL build every one of those is the listing's
+     own real asset; this skill never AI-generates or invents property imagery.
+     Clone the engineering, never the fictional listing data.
+     Craft law: shared/web-standards.md (cited by rule number in comments).
+========================================================================== -->
+<meta charset="utf-8">
+<!-- Head 7 / Mobile 4: viewport-fit=cover, never user-scalable=no -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>14 Headland Drive | Crew Reference Build</title>
+<!-- Head 3 -->
+<meta name="description" content="A scroll-scrubbed digital open home: the tour plays forward and back as you scroll, one chapter per room. Fictional demonstration property for the Crew real estate immersive build.">
+<!-- Head 6: theme-color matches the page ground -->
+<meta name="theme-color" content="#f5efe4">
+<!-- Head 4: SVG favicon + apple-touch-icon as data URIs (Mode 2) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23211a11'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='17' fill='%23f5efe4'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABSUlEQVR42u3SMQ0AAAgEsdfAyIR/lRhgZWtSBZfLdMEpEmAOzIE5MAfmwByYA3NgDswB5sAcmANzYA7MgTkwB+bAHGAOzIE5MAfmwByYA3NgDswB5sAcmANzYA7MgTkwB+bAHJgDzIE5MAfmwByYA3NgDsyBOcAcmANzYA7MgTkwB+bAHJgDzIE5MAfmwByYA3NgDsyBOTAHmANzYA7MgTkwB+bAHJgDc4A5MAfmwByYA3NgDsyBOTAHmANzYA7MgTkwB+bAHJgDc2AOMAfmwByYA3NgDsyBOTAH5gBzYA7MgTkwB+bAHJgDc2AOMAfmwByYA3NgDsyBOTAH5sAcYA7MgTkwB+bAHJgDc2AOzAHmwByYA3NgDsyBOTAH5sAcYA7MgTkwB+bAHJgDc2AOzIE5wByYA3NgDsyBOTAH5sAcmAPMgTkwB18WZJiU7AWrRLEAAAAASUVORK5CYII=">
+<!-- Head 5: OG/Twitter. og:image is a 1200x630 export of the hero frame at
+     /og.jpg; og:url and og:image become absolute URLs at deploy (patch after
+     the first Vercel alias). TODO at deploy: absolute URLs here. -->
+<meta property="og:title" content="14 Headland Drive, Noosa Heads">
+<meta property="og:description" content="Scroll the tour. The listing's own walkthrough plays forward and back, one chapter per room.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Structured data: JSON-LD RealEstateListing, populated ONLY from scraped
+     facts in a real build. This instance is fictional demonstration data. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  "name": "14 Headland Drive, Noosa Heads",
+  "description": "Fictional demonstration listing for the Crew reference build.",
+  "url": "/",
+  "image": "/og.jpg"
+}
+</script>
+<!-- THE TYPE SYSTEM (skill: The type system; web-standards Type 1 to 7).
+     This offline reference uses metric-safe SYSTEM stacks (Type 4 permits the
+     system stack as a zero-byte alternative). A real build ships the register
+     pairing as ONE subset variable woff2 per family with:
+       <link rel="preload" as="font" type="font/woff2" crossorigin href="...">
+     plus font-display: swap AND a size-adjust/ascent-override metric-matched
+     fallback so the hero never reflows when the font lands.
+     A real build also preloads the hero frame (the LCP element):
+       <link rel="preload" as="image" fetchpriority="high"
+             href="/frames/d/f0013.webp" media="(min-width: 769px)">
+       <link rel="preload" as="image" fetchpriority="high"
+             href="/frames/m/f0013.webp" media="(max-width: 768px)"> -->
+<style>
+  :root {
+    /* Type scale (Type 1) */
+    --display: clamp(3.5rem, 10vw, 8.5rem);
+    --chapter: clamp(3rem, 9vw, 7rem);
+    --kicker: 0.75rem;
+    --body: 1.0625rem;
+    /* Motion tokens (Motion 2): named vocabulary, never raw beziers in selectors */
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out-quad: cubic-bezier(0.45, 0, 0.55, 1);
+    --dur-micro: 180ms;
+    --dur-reveal: 600ms;
+    /* Palette: warm golden register, one accent (Color 5) */
+    --paper: #f5efe4;
+    --ink: #211a11;
+    --ink-soft: #574d3f;
+    --accent: #8a5527;
+    --hairline: rgba(33, 26, 17, 0.22);
+    --stage-ink: #14100a;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  /* Mobile 6: clip, never hidden, on an ancestor of the sticky stage */
+  html, body { overflow-x: clip; }
+  /* No global scroll-behavior: smooth. It would turn the skip link into a
+     slow scrub through the whole runway; the rail passes behavior: 'smooth'
+     per call instead, and reduced motion gets 'auto'. */
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Color 4: designed selection */
+  ::selection { background: #e5d3b8; color: var(--ink); }
+
+  /* A11y 1: focus token on every interactive element */
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* Type 6 */
+  h1, h2, h3, h4, blockquote { text-wrap: balance; }
+  p, li { text-wrap: pretty; }
+
+  p { max-width: 65ch; }
+
+  /* Craft 1: one page-wide grain layer, opacity under 0.08 */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.055;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* A11y 2: skip link, first focusable, jumps past the scrub */
+  .skip {
+    position: absolute; left: 16px; top: 12px;
+    z-index: 80;
+    background: var(--ink); color: var(--paper);
+    padding: 12px 18px; border-radius: 4px;
+    font-family: var(--sans); font-size: 0.9375rem;
+    text-decoration: none;
+    transform: translateY(-300%);
+  }
+  .skip:focus-visible { transform: none; }
+
+  header.site {
+    position: absolute; top: 0; left: 0; right: 0;
+    z-index: 40;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px clamp(16px, 4vw, 48px);
+    font-family: var(--sans);
+  }
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-size: 1.0625rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .site .suburb {
+    font-size: var(--kicker);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  /* Mobile 6: designed at 375px, nothing clips */
+  @media (max-width: 560px) { .site .suburb { display: none; } }
+
+  /* ---------------- Hero ---------------- */
+  /* Mobile 5: svh with a vh fallback line before it */
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    align-content: center;
+    gap: 20px;
+    padding: clamp(16px, 4vw, 48px);
+    padding-top: 18svh;
+  }
+  .hero .kicker,
+  .kicker {
+    font-size: var(--kicker);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-family: var(--sans);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: var(--display);
+    font-weight: 600;             /* Type 3: 600, never 700 */
+    letter-spacing: -0.02em;      /* Type 2: display tracking */
+    line-height: 0.95;
+    max-width: 12ch;
+  }
+  /* Stats row: hairline dividers + tabular numerals (Type 5) */
+  .stats {
+    display: flex; flex-wrap: wrap;
+    margin-top: 12px;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    font-variant-numeric: tabular-nums;
+  }
+  .stats > div {
+    padding: 14px 22px 14px 0;
+    margin-right: 22px;
+    border-right: 1px solid var(--hairline);
+  }
+  .stats > div:last-child { border-right: 0; margin-right: 0; }
+  .stats .n { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; display: block; line-height: 1.1; }
+  .stats .l { font-size: var(--kicker); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+
+  .cue { color: var(--ink-soft); font-size: 0.9375rem; }
+  html.enhanced .cue span { display: inline-block; animation: cue 2.4s var(--ease-in-out-quad) infinite; }
+  @keyframes cue { 0%, 100% { transform: none; opacity: .55; } 50% { transform: translateY(6px); opacity: 1; } }
+
+  /* ---------------- The scrub (Tiers 1/2: base state complete, choreography
+     scoped under html.enhanced, stamped by JS in the full-motion path only.
+     No-JS and reduced-motion therefore never see the runway: no dead scroll
+     region, chapters read as a static list, nothing is hidden.) ------------ */
+  #scrub-section { position: relative; }
+  .scrub__sticky { position: relative; }
+  #scrub {
+    display: block;
+    width: 100%;
+    height: 58vh;
+    height: 58svh;      /* base/reduce: a composed still; real build paints the hero frame */
+    background: linear-gradient(180deg, #b9c8d4 0%, #7d8fa0 60%, #3c4a56 100%);
+  }
+  .ch {
+    padding: 28px clamp(16px, 4vw, 48px);
+    max-width: 44rem;
+  }
+  .ch__kicker {
+    font-size: var(--kicker);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-family: var(--sans);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .ch__title {
+    font-family: var(--serif);
+    font-size: var(--chapter);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.0;
+  }
+  .ch__copy { margin-top: 10px; font-size: var(--body); }
+
+  /* Enhanced: the runway (pacing: FRAME_COUNT x 6 to 8px floor, tuned upward
+     until one phone swipe advances about one room; 320 demo frames x 10px),
+     the sticky 100svh stage, and the chapter choreography. */
+  html.enhanced #scrub-section { height: 3200px; }
+  html.enhanced .scrub__sticky {
+    position: sticky; top: 0;
+    height: 100vh;
+    height: 100svh;     /* Mobile 5: never bare 100vh */
+    overflow: hidden;
+  }
+  html.enhanced #scrub { position: absolute; inset: 0; height: 100%; }
+  /* Chapters crossfade in CSS, driven ONLY by paintChapters toggling .ch--on.
+     The IO entrance reveals apply ONLY to sections below the scrub, never .ch. */
+  html.enhanced .ch {
+    position: absolute;
+    left: 0; bottom: 10svh;
+    color: #f7f2e9;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 400ms var(--ease-out-quart), transform 400ms var(--ease-out-quart);
+    /* The legibility scrim: verified >= 4.5:1 against the BRIGHTEST chapter
+       frame at Gate 10, by math, not by eye. */
+    background: radial-gradient(130% 130% at 18% 82%, rgba(12, 9, 5, 0.66) 0%, rgba(12, 9, 5, 0.38) 55%, rgba(12, 9, 5, 0) 78%);
+  }
+  html.enhanced .ch .ch__kicker { color: rgba(247, 242, 233, 0.85); }
+  html.enhanced .ch__title,
+  html.enhanced .ch__copy {
+    text-shadow: 0 1px 2px rgba(10, 7, 4, 0.7), 0 2px 18px rgba(10, 7, 4, 0.55);
+  }
+  html.enhanced .ch--on { opacity: 1; transform: none; }
+
+  /* ---------------- Progress rail (wayfinding; JS-driven, so it exists only
+     in the enhanced and reduce tiers; content is complete without it) ------ */
+  .rail {
+    display: none;
+    position: fixed;
+    right: calc(14px + env(safe-area-inset-right));
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    flex-direction: column;
+    gap: 6px;
+  }
+  html.enhanced .rail, html.reduce .rail { display: flex; }
+  @media (max-width: 768px) { .rail { display: none !important; } }
+  .rail button {
+    appearance: none;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 12px 6px;          /* Mobile 7: 44px hit area via padding */
+    transition: color var(--dur-micro) var(--ease-out-quart);
+  }
+  .rail button::before {
+    content: "";
+    width: 18px; height: 1px;
+    background: currentColor;
+    transition: width var(--dur-micro) var(--ease-out-quart);
+  }
+  .rail button[aria-current="true"] { color: var(--accent); }
+  .rail button[aria-current="true"]::before { width: 30px; }
+  html.enhanced .over-stage .rail button { color: rgba(247, 242, 233, 0.75); }
+  html.enhanced .over-stage .rail button[aria-current="true"] { color: #f7f2e9; }
+
+  /* ---------------- Sections below the scrub ---------------- */
+  section.block { padding: clamp(56px, 9vw, 120px) clamp(16px, 4vw, 48px); }
+  section.block h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: 0;          /* Type 2: ~0 near 40px */
+    line-height: 1.15;
+    margin: 6px 0 28px;
+  }
+
+  /* The ONE reveal primitive (Motion 5): opacity + translateY(24px), 600ms
+     ease-out-quart, 60 to 90ms stagger via --d. Enhanced tier only; the base
+     state never hides content (Tiers 1). One-shot: the observer unobserves. */
+  html.enhanced .rev {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--dur-reveal) var(--ease-out-quart) var(--d, 0ms),
+                transform var(--dur-reveal) var(--ease-out-quart) var(--d, 0ms);
+  }
+  html.enhanced .rev.rev--in { opacity: 1; transform: none; }
+
+  /* Gallery: editorial mixed-ratio grid, NOT a uniform three-column grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px;
+  }
+  .tile {
+    appearance: none; border: 0; padding: 0;
+    background: none; cursor: zoom-in;
+    display: block; width: 100%;
+    border-radius: 4px; overflow: hidden;
+    transition: transform var(--dur-micro) var(--ease-out-quart),
+                box-shadow var(--dur-micro) var(--ease-out-quart);
+  }
+  @media (hover: hover) and (pointer: fine) {   /* Mobile 8 */
+    .tile:hover { transform: scale(1.015); box-shadow: 0 14px 34px rgba(33, 26, 17, 0.18); }
+  }
+  .tile:active { transform: scale(0.99); }
+  .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .t-12 { grid-column: span 12; aspect-ratio: 21 / 9; }
+  .t-6  { grid-column: span 6;  aspect-ratio: 3 / 2; }
+  .t-4  { grid-column: span 4;  aspect-ratio: 4 / 5; }
+  @media (max-width: 768px) {
+    .t-6 { grid-column: span 12; }
+    .t-4 { grid-column: span 6; }
+  }
+
+  /* Lightbox: native dialog = free focus trap + Esc (A11y 6, Tiers 4) */
+  #lightbox {
+    border: 0; padding: 0;
+    background: transparent;
+    max-width: min(92vw, 1100px);
+    width: 100%;
+  }
+  #lightbox::backdrop { background: rgba(14, 10, 6, 0.84); }
+  #lightbox figure { margin: 0; }
+  #lightbox img {
+    display: block; width: 100%;
+    max-height: 78vh; max-height: 78svh;
+    object-fit: contain;
+    border-radius: 4px;
+    transform-origin: top left;
+  }
+  .lb-bar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding-top: 12px;
+  }
+  .lb-bar button {
+    appearance: none; cursor: pointer;
+    border: 1px solid rgba(247, 242, 233, 0.4);
+    background: rgba(20, 16, 10, 0.55);
+    color: #f7f2e9;
+    font-family: var(--sans); font-size: 0.9375rem;
+    border-radius: 4px;
+    min-width: 44px; min-height: 44px;    /* Mobile 7 */
+    padding: 8px 14px;
+    transition: background var(--dur-micro) var(--ease-out-quart);
+  }
+  .lb-bar button:hover { background: rgba(20, 16, 10, 0.8); }
+  .lb-bar .lb-count { color: #f7f2e9; font-variant-numeric: tabular-nums; font-size: 0.9375rem; padding: 0 8px; }
+
+  /* Floorplan: transform-only zoom (Motion 1) */
+  .plan-wrap {
+    appearance: none; border: 1px solid var(--hairline);
+    padding: 0; background: #fbf7ee;
+    display: block; width: 100%;
+    border-radius: 4px; overflow: hidden;
+    cursor: zoom-in;
+  }
+  .plan-wrap[aria-pressed="true"] { cursor: zoom-out; }
+  .plan-wrap img {
+    display: block; width: 100%; height: auto;
+    transition: transform var(--dur-reveal) var(--ease-out-quart);
+  }
+  .plan-wrap[aria-pressed="true"] img { transform: scale(1.7); }
+
+  /* Facts */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; margin-top: 24px; }
+  .chips li {
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+
+  /* Agents */
+  .agents { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .agent {
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    padding: 24px;
+    background: #fbf7ee;
+  }
+  .agent .name { font-family: var(--serif); font-size: 1.375rem; font-weight: 600; }
+  .agent .agency { color: var(--ink-soft); font-size: 0.9375rem; margin-top: 2px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px;                     /* Mobile 7 */
+    padding: 10px 22px;
+    margin-top: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    font-family: var(--sans); font-size: 0.9375rem;
+    text-decoration: none;
+    transition: transform var(--dur-micro) var(--ease-out-quart),
+                box-shadow var(--dur-micro) var(--ease-out-quart);
+  }
+  .btn.ghost { background: none; color: var(--ink); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(33, 26, 17, 0.2); }
+  }
+  .btn:active { transform: translateY(0); }
+
+  footer.site {
+    border-top: 1px solid var(--hairline);
+    padding: 32px clamp(16px, 4vw, 48px);
+    /* Mobile 4: safe-area on the bottom-most surface */
+    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#gallery">Skip to the gallery</a>
+
+<header class="site">
+  <a class="wordmark" href="#top">HEADLAND</a>
+  <span class="suburb">Noosa Heads, QLD</span>
+</header>
+
+<main id="top">
+
+  <!-- HERO: one h1 (A11y 3), real stats with tabular numerals -->
+  <section class="hero" aria-label="Introduction">
+    <p class="kicker">A fictional demonstration listing</p>
+    <h1>14 Headland Drive</h1>
+    <div class="stats" role="list" aria-label="Listing facts">
+      <div role="listitem"><span class="n">4</span><span class="l">Beds</span></div>
+      <div role="listitem"><span class="n">3</span><span class="l">Baths</span></div>
+      <div role="listitem"><span class="n">2</span><span class="l">Car</span></div>
+      <div role="listitem"><span class="n">612</span><span class="l">sqm</span></div>
+    </div>
+    <p class="cue"><span>&darr;</span>&nbsp; Scroll to walk the tour, forward and back</p>
+  </section>
+
+  <!-- THE SCRUB. Base state (no JS, reduced motion): a composed still plus the
+       chapters as a static readable list. Enhanced: the sticky stage and the
+       frame-for-frame scrub. -->
+  <section id="scrub-section" aria-label="The video tour, one chapter per room">
+    <div class="scrub__sticky">
+      <canvas id="scrub" aria-hidden="true"></canvas>
+
+      <!-- One chapter per room. data-s / data-e are frame indices into the set
+           of N frames, computed from the journey cut. -->
+      <div class="ch" id="ch-1" data-s="0" data-e="70">
+        <span class="ch__kicker">01</span>
+        <h2 class="ch__title">Arrival</h2>
+        <p class="ch__copy">The drive opens to water.</p>
+      </div>
+      <div class="ch" id="ch-2" data-s="78" data-e="150">
+        <span class="ch__kicker">02</span>
+        <h2 class="ch__title">The Living Pavilion</h2>
+        <p class="ch__copy">Glass folds back to the deck.</p>
+      </div>
+      <div class="ch" id="ch-3" data-s="158" data-e="230">
+        <span class="ch__kicker">03</span>
+        <h2 class="ch__title">Kitchen</h2>
+        <p class="ch__copy">Stone, timber, morning light.</p>
+      </div>
+      <div class="ch" id="ch-4" data-s="238" data-e="319">
+        <span class="ch__kicker">04</span>
+        <h2 class="ch__title">Waterfront</h2>
+        <p class="ch__copy">The lawn runs to the tide line.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY: editorial mixed-ratio grid, lazy real photos in a real build.
+       Demo tiles are generated placeholders and say so in their alt text. -->
+  <section class="block" id="gallery" aria-label="Photo gallery">
+    <p class="kicker">The photographs</p>
+    <h2>Every room, as it is</h2>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- LIGHTBOX: native dialog (focus trap, Esc), arrows step, neighbours preload -->
+  <dialog id="lightbox" aria-label="Photo viewer">
+    <figure><img id="lb-img" alt=""></figure>
+    <div class="lb-bar">
+      <button id="lb-prev" type="button" aria-label="Previous photo">&larr;</button>
+      <span class="lb-count" id="lb-count" aria-live="polite"></span>
+      <button id="lb-next" type="button" aria-label="Next photo">&rarr;</button>
+      <button id="lb-close" type="button">Close</button>
+    </div>
+  </dialog>
+
+  <!-- FLOORPLAN: the real floorplan in a real build; transform-only zoom -->
+  <section class="block" id="floorplan" aria-label="Floorplan">
+    <p class="kicker">The floorplan</p>
+    <h2>How it lays out</h2>
+    <button class="plan-wrap rev" id="plan-btn" type="button" aria-pressed="false" aria-label="Zoom the floorplan">
+      <img id="plan-img" width="1600" height="900" loading="lazy" decoding="async"
+        alt="Demo placeholder floorplan. A real build ships the listing's own floorplan image, under 350KB."
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Crect width='160' height='90' fill='%23fbf7ee'/%3E%3Cg fill='none' stroke='%23211a11' stroke-width='0.8'%3E%3Crect x='10' y='10' width='140' height='70'/%3E%3Cpath d='M70 10v40M70 50h40M110 50v30M10 55h35M45 55v25'/%3E%3C/g%3E%3Cg font-family='Georgia,serif' font-size='6' fill='%23574d3f'%3E%3Ctext x='34' y='36'%3ELiving%3C/text%3E%3Ctext x='100' y='34'%3EKitchen%3C/text%3E%3Ctext x='120' y='68'%3EMaster%3C/text%3E%3Ctext x='20' y='70'%3EEntry%3C/text%3E%3Ctext x='80' y='70'%3EDeck%3C/text%3E%3C/g%3E%3Ctext x='80' y='87' font-family='Georgia,serif' font-size='4' fill='%23574d3f' text-anchor='middle'%3EDEMO PLACEHOLDER PLAN%3C/text%3E%3C/svg%3E">
+    </button>
+  </section>
+
+  <!-- FACTS: real headline, real description, chips only from real facts -->
+  <section class="block" id="facts" aria-label="Listing facts and description">
+    <div class="rev">
+      <p class="kicker">The listing</p>
+      <h2>A single level to the water</h2>
+      <p>Demonstration copy. In a real build this is the listing's own headline and
+      description, verbatim from the live listing, with every number checked
+      claim-for-claim. Nothing here is embellished, rounded up, or staged as fact.</p>
+      <ul class="chips" aria-label="Features">
+        <li>North-east aspect</li>
+        <li>Single level</li>
+        <li>Private jetty</li>
+        <li>Three living zones</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- AGENT CTA: tel links on 44px targets, primary CTA to the live listing -->
+  <section class="block" id="agents-block" aria-label="Contact the agents">
+    <p class="kicker">Inspect it</p>
+    <h2>Talk to the agents</h2>
+    <div class="agents">
+      <div class="agent rev">
+        <p class="name">Demo Agent</p>
+        <p class="agency">Placeholder Realty, fictional</p>
+        <a class="btn" href="tel:+61000000000">Call (demo)</a>
+      </div>
+      <div class="agent rev" style="--d: 80ms">
+        <p class="name">Second Agent</p>
+        <p class="agency">Placeholder Realty, fictional</p>
+        <a class="btn ghost" href="tel:+61000000000">Call (demo)</a>
+      </div>
+    </div>
+    <a class="btn ghost rev" style="--d: 160ms" href="#top">View the live listing (demo link)</a>
+  </section>
+</main>
+
+<!-- PROGRESS RAIL: the tour's wayfinding spine, current room highlighted -->
+<nav class="rail" aria-label="Rooms in the tour" id="rail"></nav>
+
+<footer class="site">
+  <p>Reference build for the Crew real estate immersive skill. A fictional
+  demonstration property: every image on this page is a generated placeholder,
+  clearly labelled. A production build uses the listing's real footage and real
+  photos only, and carries this attribution plus a concept-demonstration note
+  until the agency signs off.</p>
+</footer>
+
+<script>
+  'use strict';
+  /* =========================================================================
+     THE LOCKED SCRUB ENGINE (skill: The frame pipeline). The same engine as
+     SKILL.md, plus the clearly-marked DEMO FRAME SOURCE below and one
+     reference-only refinement: the body.over-stage toggle in the Intersection
+     Observer, which recolors the progress rail while it sits over the dark
+     stage. Clone the engineering, never the fictional listing data.
+  ========================================================================= */
+  const canvas = document.getElementById('scrub');
+  const ctx = canvas.getContext('2d');
+
+  // Total frames in the extracted set (real builds: N from the pipeline,
+  // 400 to 600; the demo synthesizes 320).
+  const FRAME_COUNT = 320;
+
+  // The mobile PORTRAIT set is selected HERE, not by CSS. Verify it actually
+  // serves at 375px via the network log; never assume it.
+  const mq = window.matchMedia('(max-width: 768px)');
+  let MOBILE = mq.matches;
+
+  /* -----------------------------------------------------------------------
+     DEMO FRAME SOURCE. DELETE THIS BLOCK IN A REAL BUILD and restore:
+       const framePath = (i) =>
+         `/frames/${MOBILE ? 'm' : 'd'}/f${String(i + 1).padStart(4, '0')}.webp`;
+     The demo draws a fictional walkthrough (four rooms, slow pan, crossfade)
+     so this reference runs from a double-click with no frames/ folder. It is
+     NOT property imagery and must never ship in a client build.
+  ----------------------------------------------------------------------- */
+  const ROOMS = [
+    { name: 'ARRIVAL',    a: [185, 200, 212], b: [125, 143, 160], c: [60, 74, 86] },
+    { name: 'LIVING',     a: [232, 217, 196], b: [194, 166, 132], c: [107, 84, 60] },
+    { name: 'KITCHEN',    a: [223, 228, 220], b: [168, 179, 164], c: [76, 88, 74] },
+    { name: 'WATERFRONT', a: [207, 224, 232], b: [136, 168, 184], c: [46, 74, 88] }
+  ];
+  const lerp = (u, v, t) => u + (v - u) * t;
+  const mix = (u, v, t) => `rgb(${Math.round(lerp(u[0], v[0], t))},${Math.round(lerp(u[1], v[1], t))},${Math.round(lerp(u[2], v[2], t))})`;
+  const demoCache = { d: [], m: [] };
+  function demoFrame(i) {
+    const key = MOBILE ? 'm' : 'd';
+    if (demoCache[key][i]) return demoCache[key][i];
+    const w = MOBILE ? 360 : 512, h = MOBILE ? 540 : 288;
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    const pos = (i / FRAME_COUNT) * ROOMS.length;
+    const r0 = Math.min(ROOMS.length - 1, Math.floor(pos));
+    const r1 = Math.min(ROOMS.length - 1, r0 + 1);
+    const f = pos - r0;
+    const t = Math.max(0, Math.min(1, (f - 0.78) / 0.22)); // room crossfade tail
+    const A = ROOMS[r0], B = ROOMS[r1];
+    const sky = g.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, mix(A.a, B.a, t));
+    sky.addColorStop(0.58, mix(A.b, B.b, t));
+    sky.addColorStop(1, mix(A.c, B.c, t));
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    // parallax mullions: the slow pan
+    const pan = (f * 0.9 + r0) * w * 0.6;
+    g.fillStyle = 'rgba(20,16,10,0.30)';
+    for (let m = -1; m < 6; m++) {
+      const x = ((m * w * 0.34 - pan * 0.5) % (w * 1.4) + w * 1.4) % (w * 1.4) - w * 0.2;
+      g.fillRect(x, 0, Math.max(3, w * 0.012), h);
+    }
+    g.fillStyle = 'rgba(20,16,10,0.16)';
+    for (let m = -1; m < 5; m++) {
+      const x = ((m * w * 0.45 - pan) % (w * 1.6) + w * 1.6) % (w * 1.6) - w * 0.3;
+      g.fillRect(x, h * 0.42, w * 0.2, h * 0.58);
+    }
+    // light
+    const lx = w * (0.72 - 0.2 * f);
+    const glow = g.createRadialGradient(lx, h * 0.3, 0, lx, h * 0.3, w * 0.5);
+    glow.addColorStop(0, 'rgba(255,244,220,0.5)');
+    glow.addColorStop(1, 'rgba(255,244,220,0)');
+    g.fillStyle = glow; g.fillRect(0, 0, w, h);
+    // vignette
+    const vg = g.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, Math.max(w, h) * 0.75);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(10,7,4,0.42)');
+    g.fillStyle = vg; g.fillRect(0, 0, w, h);
+    g.fillStyle = 'rgba(247,242,233,0.6)';
+    g.font = '9px system-ui, sans-serif';
+    g.fillText(`DEMO FRAME ${String(i + 1).padStart(4, '0')} · ${ROOMS[r0].name}`, 10, h - 10);
+    return (demoCache[key][i] = c.toDataURL('image/jpeg', 0.7));
+  }
+  const framePath = (i) => demoFrame(i);
+  /* --------------------------- END DEMO FRAME SOURCE -------------------- */
+
+  // Reduced motion, plus the documented ?reduced-motion=1 test hook that the
+  // Verification Gate drives (web-standards, Gate 6).
+  const reduceMotion =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    new URLSearchParams(location.search).has('reduced-motion');
+
+  // Save-Data: hold the designed hero still, never pull the full set
+  // (web-standards, Tiers 3 and Perf 10).
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+
+  const HERO_IDX = Math.floor(FRAME_COUNT * 0.04);
+
+  // devicePixelRatio capped at 2 (web-standards, Mobile 3).
+  function sizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(canvas.clientWidth * dpr);
+    canvas.height = Math.round(canvas.clientHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // TIERED preload. Tier 0: the hero frame, fetchpriority high (the LCP
+  // element, also <link rel="preload"> in a real head). Tier 1: every 8th
+  // frame, so the scrub is usable immediately. Tier 2: idle-fill the rest at
+  // <= 8 decodes in flight. decode() keeps decoding off the scrub path.
+  const images = new Array(FRAME_COUNT);
+  let next = 0, inFlight = 0;
+  const idle = window.requestIdleCallback
+    ? (f) => requestIdleCallback(f) : (f) => setTimeout(f, 200);
+
+  function load(i, cb) {
+    if (images[i]) return;
+    const img = new Image();
+    if (i === HERO_IDX) img.fetchPriority = 'high';
+    img.src = framePath(i);
+    images[i] = img;
+    const done = () => {
+      // The hero frame drives the first paint the moment it decodes, in BOTH
+      // motion paths, so the canvas is never blank while the set loads.
+      if (i === HERO_IDX && rendered < 0) paint(HERO_IDX);
+      if (cb) cb();
+    };
+    if (typeof img.decode === 'function') {
+      img.decode().then(done, () => { img.onload = done; img.onerror = done; });
+    } else { img.onload = done; img.onerror = done; }
+  }
+
+  function fill() {
+    while (next < FRAME_COUNT && inFlight < 8) {
+      const i = next++;
+      if (images[i]) continue;
+      inFlight++;
+      load(i, () => { inFlight--; if (next < FRAME_COUNT) idle(fill); });
+    }
+  }
+
+  function preload() {
+    load(HERO_IDX);
+    if (reduceMotion || saveData) return;      // the designed still IS the tier
+    for (let i = 0; i < FRAME_COUNT; i += 8) load(i);
+    idle(fill);
+  }
+
+  function cover(img) {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+  }
+
+  // lastFrame survives a resize so the repaint restores the visitor's frame,
+  // never a blank canvas (sizeCanvas wipes the bitmap).
+  let rendered = -1, lastFrame = 0;
+  const ready = (img) => !!img && img.complete && img.naturalWidth > 0;
+  function paint(idx) {
+    let img = images[idx];
+    if (!ready(img)) { idx -= idx % 8; img = images[idx]; } // nearest tier-1 frame
+    if (!ready(img) || idx === rendered) return;
+    cover(img);
+    rendered = idx;
+    lastFrame = idx;
+  }
+
+  // Scroll maps to a frame index over the scrub range, forward and back.
+  // Caveat: window.innerHeight changes as the iOS URL bar collapses; the
+  // sticky stage is 100svh and the lerp in tick() damps the residual jump
+  // (web-standards, Mobile 5).
+  function frameForScroll() {
+    const scrub = document.getElementById('scrub-section');
+    const rect = scrub.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    const p = Math.min(1, Math.max(0, -rect.top / Math.max(1, total)));
+    return Math.min(FRAME_COUNT - 1, p * FRAME_COUNT);
+  }
+
+  const paintChapters = (f) => (window.paintChapters || (() => {}))(f);
+
+  // The rAF loop lerps toward the target frame, frame-rate corrected, base 0.3
+  // (scrub-critical tightness), per web-standards Motion 7.
+  let raf = 0, cur = 0, lastT = 0;
+  function tick(now) {
+    const dt = Math.min((now - (lastT || now)) / 1000, 0.1); lastT = now;
+    const target = frameForScroll();
+    const k = 1 - Math.pow(1 - 0.3, dt * 60);
+    cur += (target - cur) * k;
+    if (Math.abs(target - cur) < 0.5) cur = target;
+    const f = Math.round(cur);
+    paint(f);
+    paintChapters(f);
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    // A reload must land at the top of the tour, not mid-scrub. A shared
+    // anchor link (#gallery, a room id) still lands on its target.
+    history.scrollRestoration = 'manual';
+    if (!location.hash) window.scrollTo(0, 0);
+
+    if (reduceMotion) {
+      // Reduced-motion twin (web-standards, Motion 10): the enhanced class is
+      // never stamped, so the page IS the static designed document: no runway,
+      // chapters in flow, reveals visible. Paint the hero still once decoded.
+      document.documentElement.classList.add('reduce');
+      sizeCanvas();
+      preload();
+      return;
+    }
+
+    // Tiers 2: JS stamps the capability class; all choreography CSS is scoped
+    // under html.enhanced, so no-JS renders the complete static document.
+    document.documentElement.classList.add('enhanced');
+    sizeCanvas();
+    preload();
+
+    // Gate the rAF loop to when the scrub section is on screen, so
+    // getBoundingClientRect is not read ~60x/sec while it is scrolled away.
+    const section = document.getElementById('scrub-section');
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          document.body.classList.add('over-stage');
+          if (!raf) { lastT = 0; raf = requestAnimationFrame(tick); }
+        } else {
+          document.body.classList.remove('over-stage');
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      }
+    });
+    io.observe(section);
+  }
+
+  // A resize or rotation wipes the canvas bitmap: repaint immediately, in BOTH
+  // motion paths, even while the IO gate has the loop parked.
+  window.addEventListener('resize', () => {
+    sizeCanvas();
+    rendered = -1;
+    paint(reduceMotion ? HERO_IDX : lastFrame);
+  }, { passive: true });
+
+  // Crossing the 768px breakpoint (a resize past it, a rotation) means the
+  // other rendition set: drop the old images, re-select the path, re-preload.
+  mq.addEventListener('change', (e) => {
+    MOBILE = e.matches;
+    images.fill(undefined);
+    rendered = -1; next = 0; inFlight = 0;
+    sizeCanvas();
+    preload();
+  });
+
+  /* =========================================================================
+     CHAPTERS + PROGRESS RAIL. Chapter overlays are driven ONLY by
+     paintChapters (a class toggle; the crossfade lives in CSS). The IO
+     entrance reveals below never touch .ch.
+  ========================================================================= */
+  const chapters = [...document.querySelectorAll('.ch')];
+  const railEl = document.getElementById('rail');
+  chapters.forEach((ch, n) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = ch.querySelector('.ch__title').textContent;
+    b.addEventListener('click', () => {
+      if (reduceMotion) { ch.scrollIntoView(); return; }
+      const sec = document.getElementById('scrub-section');
+      const total = sec.offsetHeight - window.innerHeight;
+      const top = sec.offsetTop + (+ch.dataset.s / FRAME_COUNT) * total + 2;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+    railEl.appendChild(b);
+  });
+  const railBtns = [...railEl.children];
+
+  window.paintChapters = function paintChaptersImpl(frame) {
+    let current = -1;
+    chapters.forEach((ch, n) => {
+      const on = frame >= +ch.dataset.s && frame <= +ch.dataset.e;
+      ch.classList.toggle('ch--on', on);
+      if (on) current = n;
+    });
+    railBtns.forEach((b, n) =>
+      b.setAttribute('aria-current', n === current ? 'true' : 'false'));
+  };
+
+  /* =========================================================================
+     GALLERY + LIGHTBOX. Editorial mixed-ratio grid; native dialog lightbox
+     (focus trap, Esc for free), arrow keys, neighbour preload, focus return,
+     open animated from the clicked tile's rect (transform/opacity only).
+     Demo tiles are generated placeholders; a real build lays out the
+     listing's real photos with real, factual alt text.
+  ========================================================================= */
+  const svgTile = (c1, c2, label) =>
+    "data:image/svg+xml," + encodeURIComponent(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'>` +
+      `<rect width='12' height='8' fill='${c1}'/>` +
+      `<rect y='5' width='12' height='3' fill='${c2}'/>` +
+      `<text x='6' y='4.4' font-family='Georgia,serif' font-size='0.9' fill='rgba(255,255,255,0.85)' text-anchor='middle'>${label}</text>` +
+      `</svg>`);
+  const PHOTOS = [
+    { span: 't-12', c1: '#7d8fa0', c2: '#3c4a56', label: 'DEMO · THE WATERFRONT', alt: 'Demo placeholder (real build: the waterfront photo from the listing)' },
+    { span: 't-6', c1: '#c2a684', c2: '#6b543c', label: 'DEMO · LIVING', alt: 'Demo placeholder (real build: the living pavilion photo)' },
+    { span: 't-6', c1: '#a8b3a4', c2: '#4c584a', label: 'DEMO · KITCHEN', alt: 'Demo placeholder (real build: the kitchen photo)' },
+    { span: 't-4', c1: '#88a8b8', c2: '#2e4a58', label: 'DEMO · MASTER', alt: 'Demo placeholder (real build: the master bedroom photo)' },
+    { span: 't-4', c1: '#b9a58e', c2: '#5c4a38', label: 'DEMO · DECK', alt: 'Demo placeholder (real build: the deck photo)' },
+    { span: 't-4', c1: '#96a48e', c2: '#3e4c3a', label: 'DEMO · GARDEN', alt: 'Demo placeholder (real build: the garden photo)' }
+  ];
+  const grid = document.getElementById('grid');
+  PHOTOS.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = `tile rev ${p.span}`;
+    btn.type = 'button';
+    btn.style.setProperty('--d', `${(i % 3) * 80}ms`);   // 60 to 90ms stagger
+    btn.setAttribute('aria-label', `Open photo: ${p.alt}`);
+    const img = new Image();
+    img.src = svgTile(p.c1, p.c2, p.label);
+    img.alt = p.alt;
+    img.loading = 'lazy';                                 // Perf 2 on gallery
+    img.decoding = 'async';
+    img.width = 1200; img.height = 800;                   // reserve layout, CLS 0
+    btn.appendChild(img);
+    btn.addEventListener('click', () => openLightbox(i, btn));
+    grid.appendChild(btn);
+  });
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCount = document.getElementById('lb-count');
+  let lbIdx = 0, lbOpener = null;
+  const preloadPhoto = (i) => {
+    if (i < 0 || i >= PHOTOS.length) return;
+    const im = new Image();
+    im.src = svgTile(PHOTOS[i].c1, PHOTOS[i].c2, PHOTOS[i].label);
+  };
+  function showPhoto(i) {
+    lbIdx = (i + PHOTOS.length) % PHOTOS.length;
+    const p = PHOTOS[lbIdx];
+    lbImg.src = svgTile(p.c1, p.c2, p.label);
+    lbImg.alt = p.alt;
+    lbCount.textContent = `${lbIdx + 1} / ${PHOTOS.length}`;
+    preloadPhoto(lbIdx - 1);                              // neighbours ready
+    preloadPhoto(lbIdx + 1);
+  }
+  function openLightbox(i, opener) {
+    lbOpener = opener;
+    showPhoto(i);
+    lb.showModal();
+    if (!reduceMotion) {
+      // Animate from the clicked tile's rect: transform and opacity only.
+      requestAnimationFrame(() => {
+        const from = opener.getBoundingClientRect();
+        const to = lbImg.getBoundingClientRect();
+        if (!to.width || !to.height) return;
+        lbImg.style.transition = 'none';
+        lbImg.style.transform =
+          `translate(${from.left - to.left}px, ${from.top - to.top}px) ` +
+          `scale(${from.width / to.width}, ${from.height / to.height})`;
+        lbImg.style.opacity = '0.4';
+        requestAnimationFrame(() => {
+          lbImg.style.transition =
+            'transform 400ms var(--ease-out-quart), opacity 400ms var(--ease-out-quart)';
+          lbImg.style.transform = 'none';
+          lbImg.style.opacity = '1';
+        });
+      });
+    }
+  }
+  document.getElementById('lb-prev').addEventListener('click', () => showPhoto(lbIdx - 1));
+  document.getElementById('lb-next').addEventListener('click', () => showPhoto(lbIdx + 1));
+  document.getElementById('lb-close').addEventListener('click', () => lb.close());
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') showPhoto(lbIdx - 1);
+    if (e.key === 'ArrowRight') showPhoto(lbIdx + 1);
+  });
+  lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('close', () => {
+    lbImg.style.transition = 'none';
+    lbImg.style.transform = 'none';
+    // Focus returns to the opening tile (A11y 6). setTimeout(0) runs after the
+    // browser's own focus restoration, so the tile wins deterministically.
+    if (lbOpener) setTimeout(() => lbOpener.focus(), 0);
+  });
+
+  /* Floorplan zoom: transform scale only (Motion 1) */
+  const planBtn = document.getElementById('plan-btn');
+  planBtn.addEventListener('click', () => {
+    const on = planBtn.getAttribute('aria-pressed') === 'true';
+    planBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+  });
+
+  /* =========================================================================
+     THE ONE REVEAL PRIMITIVE (Motion 5). Below-the-scrub sections only:
+     gallery tiles, floorplan, facts, agent cards. One-shot: unobserve after
+     firing. Enhanced tier only; base and reduce show everything.
+  ========================================================================= */
+  if (!reduceMotion) {
+    const ioRev = new IntersectionObserver((entries) => {
+      for (const en of entries) {
+        if (en.isIntersecting) {
+          en.target.classList.add('rev--in');
+          ioRev.unobserve(en.target);
+        }
+      }
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.rev').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      // IO failsafe: anything already above the fold reveals immediately.
+      if (r.top < window.innerHeight) el.classList.add('rev--in');
+      else ioRev.observe(el);
+    });
+  }
+
+  start();
+</script>
+</body>
+</html>

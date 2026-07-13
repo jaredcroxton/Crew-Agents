@@ -2,28 +2,85 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>DESCENT · Beyond Elevation</title>
+
+<!-- Locked head block (web-standards Head 1 to Head 7). Step 6 replaces the copy,
+     never deletes a line. og:image and og:url need ABSOLUTE public URLs, so they ship
+     as placeholders until the first deploy, then get patched to the live alias and a
+     designed 1200x630 card at /og.webp (web-standards Head 5). -->
+<meta name="description" content="A cinematic scroll descent from orbit to the penthouse at the summit of the world. Scroll to fall through the cloud deck into the DESCENT residence, a single private home above the weather.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DESCENT · Beyond Elevation">
+<meta property="og:description" content="A cinematic scroll descent from orbit to the penthouse at the summit of the world.">
+<meta property="og:url" content="https://REPLACE-WITH-DEPLOY-ALIAS/"><!-- TODO: patch to the live alias after deploy -->
+<meta property="og:image" content="https://REPLACE-WITH-DEPLOY-ALIAS/og.webp"><!-- TODO: 1200x630 hero-frame card, built in Step 6 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#050505">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050505'/%3E%3Cpath d='M32 13v27M20 30l12 12 12-12' stroke='%23e3c79a' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACxElEQVR42u3dwU3rQBSG0YkVN5JC0lDqoSEKoRYW2SCEFAnH9tz/nm8HLB7JPW9inNhzWdd1SH+1eAoEh+AQHIJDcAgOwSE4BIfgkOAQHIJDcAgOwaEpunoKnn19fvz88nZ/eE4urpX9xQIRLyuvZbz8KRx9ZfDhgFRwbFgS2i4eVg7BITgEh+DYM+dA4RAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcGjYqWnYQ6n9Y7mW29jg+c1yRCo+lsUeSh5LMRxJeyjVfSwOSFUKR9IeSqUfy9JnNy6/W8eXlTlnELAz3NJtNz8yOh6QzjOPmN0kl6Q9lGaYyr9/hwlPhS1td4u1ZlTFseW/0VkT2vLvznkGfYncoO94H3kyZn9Zud0fJY4/thxnzPwO4hK8x+cxPpKOQEsekE7rI1hGpb9WJvSRLaPYn7JT+YiXUe88xyQ+OsgoeRLsdB9NZFQ9Q3qijz4yCp8+P8VHKxm131s52Ec3GeXfeDvMR0MZY4zLuq5jeCd2ureHrBzJM6guI+fzHLNNIkBG1Id95plHhoy0T4LNMJUYGYEfEzx3NkkyMi+HPGtCYTJir5U9fk55MpIvpD5yWpEywq+yP2ZmqTLyb8Gw9+SCZbS4P8d+88uW0eXmLXtMMV5Gozv7vHeWHWT0uu3TuybaREa7e4Jtn2sfGR1vGLdluq1kuJug4BAcu746dHtNsXIIjs3LQMNlw8ohOLYtBj2XjZFx3crY7bKXtizgiN0PCg455hAcgkNwCA7BITgkOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7Boff3DfBy03wTpmUtAAAAAElFTkSuQmCC">
+
+<!-- Preload frame 1 per set so the poster paints before script executes (web-standards Perf 9:
+     a static LCP element). Width-based media is a close proxy for the JS device pick below;
+     a landscape-held phone wastes one desktop preload, nothing more. The no-preference
+     condition skips the preload under reduced motion, where the arrival frame is the poster. -->
+<link rel="preload" as="image" href="frames/d/f0001.webp" media="(prefers-reduced-motion: no-preference) and (min-width:768px)">
+<link rel="preload" as="image" href="frames/m/f0001.webp" media="(prefers-reduced-motion: no-preference) and (max-width:767px)">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
 <style>
+  /* Metric-tuned fallback so the pre-Inter paint does not shift the stage typography
+     (web-standards Type 4). For a client ship, self-host the subset woff2 instead. */
+  @font-face{
+    font-family:'Inter Fallback';
+    src:local('Helvetica Neue'),local('Arial');
+    size-adjust:107%;ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;
+  }
   :root{
+    /* ---- brand carrier. A carrier swap edits ONLY this block, never a selector. ---- */
     --bg:#050505;
     --ink:#f5f4f1;
     --platinum:#b9c4d0;
     --champagne:#e3c79a;
-    --font:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --font-body:var(--font-display);
+    /* fluid type scale, ~1.25 ratio (web-standards Type 1) */
+    --step--2:clamp(.62rem,.6rem + .1vw,.68rem);     /* chips, footnotes, stat labels */
+    --step--1:clamp(.68rem,.64rem + .2vw,.78rem);    /* labels, nav, kickers */
+    --step-0:clamp(.92rem,.88rem + .25vw,1.05rem);   /* body, buttons, hint */
+    --step-1:clamp(1.05rem,.95rem + .5vw,1.35rem);   /* wordmark, loader word */
+    --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.6rem);    /* row heads, stat numerals */
+    --step-3:clamp(2rem,1.4rem + 2.7vw,3.4rem);      /* arrival head */
+    --step-4:clamp(2.4rem,1.5rem + 4vw,4.4rem);      /* stage display */
+    /* tracking bands: labels live in the .2 to .6em band; uppercase display +.02 to +.06em.
+       Weight floor: Inter 100 only at display sizes (1.5rem rendered and up); labels and body stay 200+. */
+    --track-label:.3em;
+    --track-label-wide:.46em;
+    --track-wordmark:.62em;
+    --track-display:.04em;
+    /* leading bands (web-standards Type 3) */
+    --leading-display:1.12;
+    --leading-body:1.75;
+    /* named easing (web-standards Motion 2) */
+    --ease-out:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:auto;overflow-x:hidden;overscroll-behavior-y:none}
+  /* overflow-x is clip, not hidden, so html never becomes a scroll container (web-standards Mobile 6).
+     overscroll-behavior-y:none on html kills the iOS rubber-band black at both page edges. */
+  html{scroll-behavior:auto;overflow-x:clip;overscroll-behavior-y:none;scrollbar-color:rgba(245,244,241,.25) transparent}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(245,244,241,.25);border-radius:5px}
+  ::selection{background:var(--champagne);color:var(--bg)}
   body{
     background:var(--bg);
     color:var(--ink);
-    font-family:var(--font);
+    font-family:var(--font-body);
     -webkit-font-smoothing:antialiased;
   }
-  body.locked{overflow:hidden;height:100vh}
+  body.locked{overflow:hidden;height:100vh;height:100svh}
   /* transparent scroll runway that drives the cinematic descent */
   #cine{height:500vh;position:relative;z-index:5;pointer-events:none}
   /* the listing begins to cover the viewport: fade only the ENTER panel and hint,
@@ -36,9 +93,21 @@
   .past-cine #scroller-canvas,.past-cine .glow,.past-cine .scrim,
   .past-cine #enter,.past-cine .hint{opacity:0!important;visibility:hidden!important;transition:opacity .6s ease}
 
+  /* ---------- locked accessibility kit (do not strip) ---------- */
+  /* focus ring on every interactive element (web-standards A11y 1) */
+  :focus-visible{outline:2px solid var(--champagne);outline-offset:3px}
+  .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+  /* skip link: first focusable element (web-standards A11y 2).
+     On an ambient endpoint with no listing, point it at #enter instead. */
+  .skip{position:fixed;top:14px;left:14px;z-index:300;background:var(--bg);color:var(--ink);
+    border:1px solid rgba(245,244,241,.5);padding:12px 20px;font-size:var(--step--1);
+    letter-spacing:var(--track-label);text-transform:uppercase;text-decoration:none;
+    opacity:0;pointer-events:none}
+  .skip:focus-visible{opacity:1;pointer-events:auto}
+
   /* ---------- fixed cinematic layers ---------- */
   #scroller-canvas{
-    position:fixed;inset:0;width:100vw;height:100vh;
+    position:fixed;inset:0;width:100vw;height:100vh;height:100svh;
     z-index:1;display:block;background:#000;
   }
   /* warm champagne glow that blooms in for the Sanctuary stage */
@@ -65,6 +134,7 @@
     position:fixed;top:0;left:0;width:100%;z-index:60;
     display:flex;justify-content:space-between;align-items:center;
     padding:34px clamp(24px,5vw,56px);
+    padding-top:max(34px, env(safe-area-inset-top));
     transition:background .5s ease, backdrop-filter .5s ease, padding .5s ease;
   }
   header.scrolled{
@@ -74,10 +144,12 @@
   }
   header .logo,header nav a,header .indicator{text-shadow:0 1px 26px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.4)}
   .hleft{display:flex;align-items:center;gap:16px}
-  .logo{font-size:1.05rem;font-weight:200;letter-spacing:.62em;text-transform:uppercase;cursor:pointer}
+  .logo{font-size:var(--step-1);font-weight:200;letter-spacing:var(--track-wordmark);text-transform:uppercase;cursor:pointer}
   #home{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
     border:1px solid rgba(245,244,241,.28);background:rgba(255,255,255,.05);color:var(--ink);cursor:pointer;
-    pointer-events:auto;transition:all .3s ease;backdrop-filter:blur(4px)}
+    pointer-events:auto;transition:all .3s ease;backdrop-filter:blur(4px);position:relative}
+  /* 34px visual, 46px hit area (web-standards Mobile 7) */
+  #home::after{content:"";position:absolute;inset:-6px}
   #home:hover{background:var(--ink);color:#07080c}
   #home svg{display:block}
   body.covering #home,body.past-cine #home{display:flex}
@@ -85,15 +157,15 @@
   nav{display:flex;gap:clamp(20px,3vw,42px)}
   nav a{
     color:rgba(245,244,241,.66);text-decoration:none;
-    font-size:.68rem;font-weight:300;letter-spacing:.26em;text-transform:uppercase;
+    font-size:var(--step--1);font-weight:300;letter-spacing:var(--track-label);text-transform:uppercase;
     transition:color .35s ease;position:relative;
   }
   nav a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--platinum);transition:width .35s ease}
   nav a:hover{color:var(--ink)}
   nav a:hover::after{width:100%}
   .indicator{
-    font-size:.66rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;
-    color:var(--platinum);min-width:170px;text-align:right;
+    font-size:var(--step--2);font-weight:300;letter-spacing:var(--track-label);text-transform:uppercase;
+    color:var(--platinum);min-width:170px;text-align:right;font-variant-numeric:tabular-nums;
   }
   @media(max-width:760px){
     nav{display:none}
@@ -112,16 +184,17 @@
   .stage>div::before{content:"";position:absolute;inset:-50px -90px;z-index:-1;
     background:radial-gradient(ellipse 72% 92% at center, rgba(4,5,9,.52), rgba(4,5,9,.2) 55%, transparent 78%);}
   .stage .meta{
-    font-size:.74rem;font-weight:300;letter-spacing:.42em;text-transform:uppercase;
+    font-size:var(--step--1);font-weight:300;letter-spacing:var(--track-label-wide);text-transform:uppercase;
     color:var(--platinum);display:block;margin-bottom:18px;
   }
-  .stage h1{
-    font-size:clamp(2.4rem,6vw,4.4rem);font-weight:100;line-height:1.12;
-    letter-spacing:.04em;text-transform:uppercase;
+  /* stage headlines are h2: the page's single h1 is the sr-only experience name (web-standards A11y 3) */
+  .stage h2{
+    font-size:var(--step-4);font-weight:100;line-height:var(--leading-display);
+    letter-spacing:var(--track-display);text-transform:uppercase;text-wrap:balance;
     text-shadow:0 2px 40px rgba(0,0,0,.5);
   }
   .stage .meta,#enter .kicker{text-shadow:0 1px 24px rgba(0,0,0,.5)}
-  .stage h1 em{font-style:normal;font-weight:200;color:var(--champagne)}
+  .stage h2 em{font-style:normal;font-weight:200;color:var(--champagne)}
 
   /* ---------- ENTER endpoint ---------- */
   #enter{
@@ -130,20 +203,20 @@
   }
   #enter::before{content:"";position:absolute;inset:0;z-index:-1;
     background:radial-gradient(ellipse 46% 42% at center, rgba(4,5,9,.55), rgba(4,5,9,.15) 60%, transparent 78%);}
-  #enter .kicker{font-size:.72rem;font-weight:300;letter-spacing:.5em;text-transform:uppercase;color:var(--platinum)}
-  #enter h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:100;letter-spacing:.06em;line-height:1.2}
+  #enter .kicker{font-size:var(--step--1);font-weight:300;letter-spacing:var(--track-label-wide);text-transform:uppercase;color:var(--platinum)}
+  #enter h2{font-size:var(--step-3);font-weight:100;letter-spacing:var(--track-display);line-height:var(--leading-display);text-wrap:balance}
   #enter .ghost{
     pointer-events:auto;cursor:pointer;
     border:1px solid rgba(245,244,241,.5);background:rgba(255,255,255,.04);color:var(--ink);
-    font-family:var(--font);font-size:.86rem;font-weight:300;letter-spacing:.34em;text-transform:uppercase;
+    font-family:var(--font-body);font-size:var(--step-0);font-weight:300;letter-spacing:var(--track-label);text-transform:uppercase;
     padding:22px 64px;transition:all .4s ease;backdrop-filter:blur(4px);
   }
-  #enter .ghost:hover{background:var(--ink);color:var(--bg);letter-spacing:.42em}
+  #enter .ghost:hover{background:var(--ink);color:var(--bg);letter-spacing:var(--track-label-wide)}
 
-  /* scroll hint */
+  /* scroll hint: offset clears the iOS home indicator (web-standards Mobile 4) */
   .hint{
-    position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:50;
-    font-size:.9rem;font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:rgba(245,244,241,.75);
+    position:fixed;left:50%;bottom:max(34px, env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;
+    font-size:var(--step-0);font-weight:300;letter-spacing:var(--track-label);text-transform:uppercase;color:rgba(245,244,241,.75);
     display:flex;flex-direction:column;align-items:center;gap:14px;transition:opacity .5s ease;
   }
   .hint .bar{
@@ -159,6 +232,16 @@
     100%{transform:scaleY(0);transform-origin:bottom;opacity:.3}
   }
 
+  /* one-time affordance when a phone loads in landscape: the portrait frame set
+     is boot-time-fixed, so rotating upright is the fix, not a set swap */
+  .rotate-note{
+    position:fixed;left:50%;bottom:max(96px, env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;
+    font-size:var(--step--1);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--platinum);
+    background:rgba(5,5,5,.72);border:1px solid rgba(245,244,241,.2);padding:10px 18px;
+    opacity:0;pointer-events:none;transition:opacity .4s ease;white-space:nowrap;
+  }
+  .rotate-note.show{opacity:1}
+
   /* ---------- loader ---------- */
   #loader{
     position:fixed;inset:0;z-index:200;background:var(--bg);
@@ -166,62 +249,77 @@
     transition:opacity .9s ease;
   }
   #loader.done{opacity:0;pointer-events:none}
-  #loader .word{font-size:1.1rem;font-weight:200;letter-spacing:.72em;text-transform:uppercase;padding-left:.72em}
+  #loader .word{font-size:var(--step-1);font-weight:200;letter-spacing:var(--track-wordmark);text-transform:uppercase;padding-left:var(--track-wordmark)}
   #loader .track{width:min(260px,52vw);height:1px;background:rgba(245,244,241,.16);overflow:hidden}
   #loader .fill{height:100%;width:100%;background:var(--platinum);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
-  #loader .pct{font-size:.62rem;font-weight:300;letter-spacing:.34em;color:rgba(245,244,241,.5)}
+  #loader .pct{font-size:var(--step--2);font-weight:300;letter-spacing:var(--track-label);color:rgba(245,244,241,.5)}
 
+  /* ---------- reduced-motion designed twin (web-standards Motion 10, Gate 6) ----------
+     JS stamps html.rm when prefers-reduced-motion matches OR the ?reduced-motion=1 test
+     hook is present, and it never creates the frame-scrub tween: the arrival keyframe is
+     painted once as a static full-bleed poster, the stages stack as plain sections, and
+     ENTER is a plain anchor. The media block below is the no-JS safety net only. */
   @media(prefers-reduced-motion:reduce){
     .hint .bar{animation:none}
-    .reveal{opacity:1!important;transform:none!important}
+    .reveal,.row{opacity:1!important;transform:none!important}
   }
+  html.rm #cine{display:none}
+  html.rm .stage{position:relative;inset:auto;opacity:1!important;transform:none!important;
+    pointer-events:auto;min-height:72svh;padding-top:16vh;padding-bottom:8vh}
+  html.rm #enter{position:relative;inset:auto;opacity:1!important;visibility:visible!important;
+    pointer-events:auto;min-height:70svh;padding:14vh 6vw}
+  html.rm .glow{opacity:1}
+  html.rm .hint,html.rm .rotate-note{display:none}
+  html.rm .indicator{visibility:hidden}
+  html.rm .reveal,html.rm .row{opacity:1!important;transform:none!important}
 
   /* ---------- listing walkthrough ---------- */
   /* always in flow below the runway: the listing slides up over the held arrival frame.
      No display:none lock (that hard-stop black-outs on iOS at both edges of the gate). */
   #listing{position:relative;z-index:20;background:#07080c;color:var(--ink)}
-  #listing .kick{display:block;font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--platinum);margin-bottom:22px}
+  #listing .kick{display:block;font-size:var(--step--1);letter-spacing:var(--track-label-wide);text-transform:uppercase;color:var(--platinum);margin-bottom:22px}
   #listing .lead{position:relative;overflow:hidden;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
     justify-content:flex-end;padding:0 clamp(28px,8vw,140px) clamp(48px,8vh,96px)}
   #listing .lead .bg{position:absolute;inset:0;z-index:0}
   #listing .lead .bg img{width:100%;height:100%;object-fit:cover;display:block;
-    transform:scale(1.06);transition:transform 2s cubic-bezier(.16,1,.3,1)}
+    transform:scale(1.06);transition:transform 2s var(--ease-out)}
   #listing .lead.in .bg img{transform:scale(1)}
   #listing .lead .bg::after{content:"";position:absolute;inset:0;
     background:linear-gradient(180deg,rgba(7,8,12,.62) 0%,rgba(7,8,12,.12) 38%,rgba(7,8,12,.55) 72%,#07080c 100%)}
   #listing .lead>*:not(.bg){position:relative;z-index:1}
-  #listing .lead h2{font-size:clamp(2.2rem,5.5vw,4rem);font-weight:100;line-height:1.14;letter-spacing:.02em;max-width:15ch;
-    text-shadow:0 2px 40px rgba(0,0,0,.5)}
+  #listing .lead h2{font-size:var(--step-4);font-weight:100;line-height:var(--leading-display);letter-spacing:.02em;max-width:15ch;
+    text-wrap:balance;text-shadow:0 2px 40px rgba(0,0,0,.5)}
   #listing .lead h2 em,.row h3 em{font-style:normal;color:var(--champagne)}
   .stats{display:flex;flex-wrap:wrap;gap:clamp(26px,5vw,72px);margin-top:56px}
   .stats>div{display:flex;flex-direction:column;gap:9px}
-  .stats b{font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:200;letter-spacing:.01em}
-  .stats span{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(245,244,241,.5)}
+  .stats b{font-size:var(--step-2);font-weight:200;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+  .stats span{font-size:var(--step--2);letter-spacing:var(--track-label);text-transform:uppercase;color:rgba(245,244,241,.5)}
 
   .row{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(28px,5vw,90px);
     padding:clamp(56px,9vh,128px) clamp(28px,8vw,140px)}
   .row.flip .ph{order:2}
   .row .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:#0d0f15}
   .row .ph img{width:100%;height:100%;object-fit:cover;display:block;
-    transform:scale(1.07);transition:transform 1.5s cubic-bezier(.16,1,.3,1)}
+    transform:scale(1.07);transition:transform 1.5s var(--ease-out)}
   .row.in .ph img{transform:scale(1)}
-  .row .rk{display:block;font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--platinum);margin-bottom:18px}
-  .row h3{font-size:clamp(1.7rem,3.4vw,2.7rem);font-weight:100;letter-spacing:.02em;line-height:1.16;margin-bottom:22px}
-  .row p{font-size:1.02rem;line-height:1.78;color:rgba(245,244,241,.74);max-width:46ch;font-weight:300}
+  .row .rk{display:block;font-size:var(--step--1);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--platinum);margin-bottom:18px}
+  .row h3{font-size:var(--step-2);font-weight:100;letter-spacing:.02em;line-height:var(--leading-display);margin-bottom:22px;text-wrap:balance}
+  .row p{font-size:var(--step-0);line-height:var(--leading-body);color:rgba(245,244,241,.74);max-width:46ch;font-weight:300}
   .row .feat{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
-  .row .feat li{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,244,241,.66);
+  .row .feat li{font-size:var(--step--2);letter-spacing:var(--track-label);text-transform:uppercase;color:rgba(245,244,241,.66);
     border:1px solid rgba(245,244,241,.16);padding:8px 15px;border-radius:40px}
 
-  .reveal{opacity:0;transform:translateY(36px)}
-  .reveal.in{opacity:1;transform:none;transition:opacity 1s ease,transform 1.1s cubic-bezier(.16,1,.3,1)}
+  /* Listing reveals are driven by GSAP (ScrollTrigger.batch, once:true, real stagger); the
+     hidden state is set in JS (never CSS) so a script failure never blanks the copy, and no
+     CSS opacity fights the tween. The .in class only settles the image scale (above). */
 
   .enquire{text-align:center;padding:18vh clamp(28px,8vw,140px) 13vh;border-top:1px solid rgba(245,244,241,.08)}
-  .enquire h2{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:100;letter-spacing:.05em;margin:12px 0 26px;text-transform:uppercase}
-  .enquire p{max-width:48ch;margin:0 auto 42px;color:rgba(245,244,241,.7);line-height:1.75;font-weight:300}
+  .enquire h2{font-size:var(--step-4);font-weight:100;letter-spacing:var(--track-display);margin:12px 0 26px;text-transform:uppercase;text-wrap:balance}
+  .enquire p{max-width:48ch;margin:0 auto 42px;color:rgba(245,244,241,.7);line-height:var(--leading-body);font-weight:300}
   #listing .ghost{pointer-events:auto;cursor:pointer;border:1px solid rgba(245,244,241,.4);background:transparent;color:var(--ink);
-    font-family:var(--font);font-size:.72rem;font-weight:300;letter-spacing:.32em;text-transform:uppercase;padding:18px 46px;transition:all .4s ease}
-  #listing .ghost:hover{background:var(--ink);color:#07080c;letter-spacing:.4em}
-  .foot{margin-top:92px;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,244,241,.38)}
+    font-family:var(--font-body);font-size:var(--step--1);font-weight:300;letter-spacing:var(--track-label);text-transform:uppercase;padding:18px 46px;transition:all .4s ease}
+  #listing .ghost:hover{background:var(--ink);color:#07080c;letter-spacing:var(--track-label-wide)}
+  .foot{margin-top:92px;font-size:var(--step--2);letter-spacing:var(--track-label);text-transform:uppercase;color:rgba(245,244,241,.38)}
 
   @media(max-width:820px){
     .row{grid-template-columns:1fr;gap:24px}
@@ -230,6 +328,10 @@
 </style>
 </head>
 <body class="locked">
+
+  <a class="skip" href="#listing">Skip to the residence</a>
+  <h1 class="sr-only">DESCENT. A cinematic descent from orbit to a single penthouse residence.</h1>
+  <p class="sr-only">Scrolling plays a continuous camera journey: deep space, the cloud deck, the tower below the cloud, then the penthouse arrival, where the residence listing follows as a normal page.</p>
 
   <div id="loader">
     <div class="word">Descent</div>
@@ -240,7 +342,7 @@
   <header id="header">
     <div class="hleft">
       <button id="home" aria-label="Restart the descent" title="Restart">
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
       </button>
       <div class="logo"><b>Descent</b></div>
     </div>
@@ -250,34 +352,34 @@
       <a href="#">The View</a>
       <a href="#" id="navEnter">Enter</a>
     </nav>
-    <div class="indicator" id="indicator">01 // Orbit</div>
+    <div class="indicator" id="indicator" aria-hidden="true">01 // Orbit</div>
   </header>
 
-  <canvas id="scroller-canvas"></canvas>
-  <div class="glow" id="glow"></div>
-  <div class="scrim"></div>
-  <div class="grain"></div>
+  <canvas id="scroller-canvas" aria-hidden="true"></canvas>
+  <div class="glow" id="glow" aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <div id="cine"></div>
+  <div id="cine" aria-hidden="true"></div>
 
   <section class="stage" id="stage1">
     <div>
       <span class="meta">Stage I</span>
-      <h1>Top of<br>the <em>World</em></h1>
+      <h2>Top of<br>the <em>World</em></h2>
     </div>
   </section>
 
   <section class="stage" id="stage2">
     <div>
       <span class="meta">Stage II</span>
-      <h1>Breaking<br>The <em>Clouds</em></h1>
+      <h2>Breaking<br>The <em>Clouds</em></h2>
     </div>
   </section>
 
   <section class="stage right" id="stage3">
     <div>
       <span class="meta">Stage III</span>
-      <h1>The <em>Sanctuary</em><br>In the Sky</h1>
+      <h2>The <em>Sanctuary</em><br>In the Sky</h2>
     </div>
   </section>
 
@@ -287,9 +389,10 @@
     <button class="ghost">Enter</button>
   </div>
 
-  <div class="hint" id="hint"><span>Scroll to descend</span><span class="bar"></span></div>
+  <div class="hint" id="hint" aria-hidden="true"><span>Scroll to descend</span><span class="bar"></span></div>
+  <div class="rotate-note" id="rotateNote" aria-hidden="true">Rotate upright for the full picture</div>
 
-  <main id="listing">
+  <main id="listing" tabindex="-1">
     <section class="lead reveal">
       <div class="bg"><img src="listing/tower.webp" alt=""></div>
       <span class="kick">The Descent Residence</span>
@@ -303,8 +406,10 @@
       </div>
     </section>
 
+    <!-- Row images keep loading="lazy" in production. The preview harness forces them
+         with the __FLYTHROUGH.eager() debug hook; never strip lazy to satisfy a harness. -->
     <section class="row reveal">
-      <div class="ph"><img src="listing/great-room.webp" alt="The Great Room"></div>
+      <div class="ph"><img src="listing/great-room.webp" alt="The Great Room" loading="lazy"></div>
       <div class="tx">
         <span class="rk">01 / The Great Room</span>
         <h3>Living above<br>the <em>weather</em></h3>
@@ -314,7 +419,7 @@
     </section>
 
     <section class="row flip reveal">
-      <div class="ph"><img src="listing/kitchen.webp" alt="The Kitchen"></div>
+      <div class="ph"><img src="listing/kitchen.webp" alt="The Kitchen" loading="lazy"></div>
       <div class="tx">
         <span class="rk">02 / The Kitchen</span>
         <h3>A <em>monolith</em><br>in pale stone</h3>
@@ -324,7 +429,7 @@
     </section>
 
     <section class="row reveal">
-      <div class="ph"><img src="listing/master.webp" alt="The Master Suite"></div>
+      <div class="ph"><img src="listing/master.webp" alt="The Master Suite" loading="lazy"></div>
       <div class="tx">
         <span class="rk">03 / The Master Suite</span>
         <h3>Waking <em>at altitude</em></h3>
@@ -334,7 +439,7 @@
     </section>
 
     <section class="row flip reveal">
-      <div class="ph"><img src="listing/bath.webp" alt="The Spa"></div>
+      <div class="ph"><img src="listing/bath.webp" alt="The Spa" loading="lazy"></div>
       <div class="tx">
         <span class="rk">04 / The Spa</span>
         <h3>Bathing <em>in the sky</em></h3>
@@ -344,7 +449,7 @@
     </section>
 
     <section class="row reveal">
-      <div class="ph"><img src="listing/terrace.webp" alt="The Terrace"></div>
+      <div class="ph"><img src="listing/terrace.webp" alt="The Terrace" loading="lazy"></div>
       <div class="tx">
         <span class="rk">05 / The Terrace</span>
         <h3>Open air,<br><em>impossibly high</em></h3>
@@ -354,7 +459,7 @@
     </section>
 
     <section class="row flip reveal">
-      <div class="ph"><img src="listing/tower.webp" alt="The Address"></div>
+      <div class="ph"><img src="listing/tower.webp" alt="The Address" loading="lazy"></div>
       <div class="tx">
         <span class="rk">06 / The Address</span>
         <h3>One tower,<br>one <em>summit</em></h3>
@@ -368,31 +473,59 @@
       <h2>Enquire</h2>
       <p>The Descent Residence is offered by private appointment only. Arrange a confidential viewing with our director of sales.</p>
       <button class="ghost" id="enquireBtn">Request a private showing</button>
-      <div class="foot">DESCENT · Residences in the Stratosphere</div>
+      <div class="foot">Concept demonstration only · DESCENT · Residences in the Stratosphere</div>
     </section>
   </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- SRI-pinned (web-standards script discipline): if either file is tampered with or the
+     CDN stalls, the boot guard below fails visibly instead of leaving a dead loader.
+     For a fully offline client ship, inline both libraries into this file instead. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 /* ===================== DESCENT engine ===================== */
+(() => {
+'use strict';
+
+const fill = document.getElementById('loadFill'), pct = document.getElementById('loadPct');
+function loaderFail(msg){ pct.textContent = msg; fill.style.transform = 'scaleX(0)'; }
+
+/* boot guard: a blocked or stalled CDN fails visibly, never a dead loader */
+if (!window.gsap || !window.ScrollTrigger){
+  loaderFail('Assets failed to load. Check the connection and reload.');
+  return;
+}
 gsap.registerPlugin(ScrollTrigger);
 
 /* --- config: FRAME_COUNT is set by the asset pipeline (to_webp.py prints it) --- */
 const FRAME_COUNT = 406;          // <-- updated after frame extraction
 const GATE = 48;                  // paint after this many frames; background-load rest
-const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
-const MOBILE = innerWidth < 768;
+/* reduced-motion, plus the ?reduced-motion=1 test hook (web-standards Gate 6):
+   the hook applies the exact same html.rm rules the media query path applies */
+const RM = matchMedia('(prefers-reduced-motion:reduce)').matches
+        || new URLSearchParams(location.search).has('reduced-motion');
+/* frame set by device class, not window orientation: a coarse-pointer (touch) device
+   with a short edge under 768 gets the portrait set regardless of how it is held at
+   load; fine-pointer viewports (a short desktop window is not a phone) pick by width.
+   Boot-time-fixed by design; the rotate-note covers rotation. */
+const COARSE = matchMedia('(pointer: coarse)').matches;
+const MOBILE = COARSE ? Math.min(innerWidth, innerHeight) < 768 : innerWidth < 768;
 const DIR = MOBILE ? 'frames/m/' : 'frames/d/';
 const framePath = i => DIR + 'f' + String(i + 1).padStart(4, '0') + '.webp';
 
 const canvas = document.getElementById('scroller-canvas');
 const ctx = canvas.getContext('2d', { alpha: false });
 const imgs = new Array(FRAME_COUNT);
-let loaded = 0, anyLoaded = false, lastDrawn = -1;
+let loaded = 0, ok = 0, anyLoaded = false, lastDrawn = '';
 const state = { frame: 0 };
 
-/* --- canvas sizing with DPR cap --- */
+const header = document.getElementById('header'), hint = document.getElementById('hint'),
+      glow = document.getElementById('glow'), indicator = document.getElementById('indicator'),
+      s1 = document.getElementById('stage1'), s2 = document.getElementById('stage2'),
+      s3 = document.getElementById('stage3'), enter = document.getElementById('enter'),
+      listing = document.getElementById('listing');
+
+/* --- canvas sizing with DPR cap (web-standards Mobile 3) --- */
 function size(){
   const dpr = Math.min(devicePixelRatio || 1, 2);
   canvas.width = Math.round(innerWidth * dpr);
@@ -402,12 +535,13 @@ function size(){
 }
 size();
 
-/* --- frame loading --- */
+/* --- frame loading: `ok` counts real decodes, `loaded` also counts errors so a 404
+       can never hang the gate. The gate asserts on `ok` before releasing scroll. --- */
 function loadFrame(i){
   return new Promise(res => {
     if (imgs[i]) return res();
     const im = new Image();
-    im.onload = () => { imgs[i] = im; loaded++; anyLoaded = true; res(); };
+    im.onload = () => { imgs[i] = im; loaded++; ok++; anyLoaded = true; res(); };
     im.onerror = () => { loaded++; res(); };   // tolerate gaps, never block
     im.src = framePath(i);
   });
@@ -463,18 +597,25 @@ function starfield(){          // graceful pre-frame backdrop, deterministic
   }
   ctx.globalAlpha = 1;
 }
+/* sub-frame blend: the nearest frame at full alpha, the next frame at the fractional
+   scrub progress, so slow scrubs read liquid instead of stepped. The blend key is
+   quantised to eighths so the canvas is not redrawn on sub-pixel scroll noise. */
 function render(){
-  const f = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(state.frame)));
   if (!anyLoaded){ starfield(); return; }
+  const raw = Math.max(0, Math.min(FRAME_COUNT - 1, state.frame));
+  const f = Math.floor(raw), frac = raw - f;
   const im = nearestLoaded(f);
-  if (!im) { starfield(); return; }
-  if (f === lastDrawn) return;
+  if (!im){ starfield(); return; }
+  const key = f + ':' + Math.round(frac * 8);
+  if (key === lastDrawn) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawCover(im, 1);
-  const nx = nearestLoaded(Math.min(FRAME_COUNT - 1, f + 1));
-  if (nx && nx !== im) drawCover(nx, (state.frame - f + 1) % 1 * 0); // hook for sub-frame blend
+  if (frac > 0.01 && f < FRAME_COUNT - 1){
+    const nx = nearestLoaded(f + 1);
+    if (nx && nx !== im) drawCover(nx, frac);
+  }
   ctx.globalAlpha = 1;
-  lastDrawn = f;
+  lastDrawn = key;
 }
 
 /* --- overlay timing --- */
@@ -484,11 +625,6 @@ function win(p, a, b, c, d){      // 0 -> rise(a..b) -> 1 -> fall(c..d) -> 0
   if (p > c) return (d - p) / (d - c);
   return 1;
 }
-const s1 = document.getElementById('stage1'), s2 = document.getElementById('stage2'),
-      s3 = document.getElementById('stage3'), enter = document.getElementById('enter'),
-      glow = document.getElementById('glow'), indicator = document.getElementById('indicator'),
-      header = document.getElementById('header'), hint = document.getElementById('hint');
-
 function setStage(el, o){
   el.style.opacity = o;
   el.style.transform = 'translateY(' + (1 - Math.min(1, o)) * 26 + 'px)';
@@ -511,7 +647,7 @@ function startScroll(){
   gsap.to(state, {
     frame: FRAME_COUNT - 1,
     ease: 'none',
-    scrollTrigger: { trigger: '#cine', start: 'top top', end: 'bottom bottom', scrub: RM ? true : 0.6 },
+    scrollTrigger: { trigger: '#cine', start: 'top top', end: 'bottom bottom', scrub: 0.6 },
     onUpdate: render
   });
   ScrollTrigger.create({
@@ -525,37 +661,68 @@ function startScroll(){
 }
 
 /* --- boot --- */
-const fill = document.getElementById('loadFill'), pct = document.getElementById('loadPct');
 history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 starfield();
+header.setAttribute('inert', '');   // nothing behind the loader is tabbable while locked
 
-loadFrame(0).then(render);
-loadBatch(Array.from({ length: Math.min(GATE, FRAME_COUNT) }, (_, i) => i), 8, (done, total) => {
-  const p = done / total;
-  fill.style.transform = 'scaleX(' + p + ')';
-  pct.textContent = Math.round(p * 100) + '%';
-}).then(() => {
-  render();
+function releaseLoader(){
   document.getElementById('loader').classList.add('done');
   document.body.classList.remove('locked');
-  startScroll();
-  ScrollTrigger.refresh();
-  // background: stride pass, then fill the gaps
-  const rest = [];
-  for (let i = GATE; i < FRAME_COUNT; i += 4) rest.push(i);
-  loadBatch(rest, 6, null).then(() => {
-    const gaps = [];
-    for (let i = GATE; i < FRAME_COUNT; i++) if (!imgs[i]) gaps.push(i);
-    loadBatch(gaps, 6, render);
+  header.removeAttribute('inert');
+}
+
+function boot(){
+  loadFrame(0).then(render);
+  loadBatch(Array.from({ length: Math.min(GATE, FRAME_COUNT) }, (_, i) => i), 8, (done, total) => {
+    const p = done / total;
+    fill.style.transform = 'scaleX(' + p + ')';
+    pct.textContent = Math.round(p * 100) + '%';
+  }).then(() => {
+    /* gate assertion: the gate counts errors so it cannot hang, but scroll is only
+       released when at least 90% of gate frames actually decoded. A wrong frames/
+       path fails here visibly instead of shipping the starfield as the descent. */
+    if (ok < Math.min(GATE, FRAME_COUNT) * 0.9){
+      loaderFail('Assets failed to load. Check the frames path and reload.');
+      return;
+    }
+    render();
+    releaseLoader();
+    startScroll();
+    ScrollTrigger.refresh();
+    // background: stride pass, then fill the gaps
+    const rest = [];
+    for (let i = GATE; i < FRAME_COUNT; i += 4) rest.push(i);
+    loadBatch(rest, 6, null).then(() => {
+      const gaps = [];
+      for (let i = GATE; i < FRAME_COUNT; i++) if (!imgs[i]) gaps.push(i);
+      loadBatch(gaps, 6, render);
+    });
   });
-});
+}
+
+/* reduced-motion boot: no scrub tween is ever created. The arrival keyframe paints
+   once as a static poster, the stages stack via html.rm, ENTER is a plain anchor. */
+function bootReduced(){
+  document.documentElement.classList.add('rm');
+  loadFrame(FRAME_COUNT - 1).then(() => {
+    if (!ok){
+      loaderFail('Assets failed to load. Check the frames path and reload.');
+      return;
+    }
+    state.frame = FRAME_COUNT - 1;
+    render();
+    releaseLoader();
+    wireListing();   // instant class toggles and one-shot reveals only, no tweens
+  });
+}
+
+RM ? bootReduced() : boot();
 
 /* --- listing: reveals + retire cinematic when it arrives + navigation --- */
 function wireListing(){
-  const body = document.body, listing = document.getElementById('listing');
-  // retire the fixed cinematic layers once the listing scrolls in
-  const ind = document.getElementById('indicator');
+  const body = document.body;
+  const ind = indicator;
   // the listing starts covering the viewport: fade the ENTER panel and hint,
   // keep the canvas painting the arrival frame underneath (no black, ever)
   ScrollTrigger.create({
@@ -569,31 +736,58 @@ function wireListing(){
     onEnter: () => { body.classList.add('past-cine'); ind.textContent = 'The Residence'; },
     onLeaveBack: () => { body.classList.remove('past-cine'); ind.textContent = '03 // Sanctuary'; }
   });
-  // reveal rows / lead as they enter (with failsafe: anything already at/above viewport reveals now)
-  const els = document.querySelectorAll('.reveal, .row');
-  const io = new IntersectionObserver(ex => {
-    ex.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.01, rootMargin: '0px 0px -8% 0px' });
-  els.forEach(el => {
-    if (el.getBoundingClientRect().top < innerHeight * 0.92) el.classList.add('in');
-    else io.observe(el);
-  });
+  // reveal rows / lead as they enter: batched ScrollTriggers, once:true, start "top 80%",
+  // with a real gsap stagger (a per-element forEach tween gets none). The hidden state is set
+  // in JS, never CSS, so a script failure never blanks the copy. The .in class settles the CSS
+  // image scale. Under reduced motion no tween is created; every reveal is simply shown.
+  if (RM){
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  } else {
+    gsap.set('.reveal', { opacity: 0, y: 36 });
+    ScrollTrigger.batch('.reveal', {
+      start: 'top 80%',
+      once: true,
+      onEnter: batch => {
+        batch.forEach(el => el.classList.add('in'));
+        gsap.to(batch, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true });
+      }
+    });
+  }
 }
 // ENTER: the listing is always in flow, so this is a smooth glide down to it.
 // The scrub plays the descent forward on the way. (named to avoid the id="enter" global)
+// Under reduced motion the glide is an instant jump.
+const glide = top => window.scrollTo({ top, behavior: RM ? 'auto' : 'smooth' });
 function enterResidence(e){
   if (e) e.preventDefault();
-  window.scrollTo({ top: document.getElementById('listing').offsetTop, behavior: 'smooth' });
+  glide(listing.offsetTop);
 }
 // HOME / reset: glide back to the top; the scrub plays the descent in reverse on the way.
 function resetLoop(e){
   if (e) e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  glide(0);
 }
 const mailTo = () => location.href = 'mailto:enquiries@example.com?subject=DESCENT%20Private%20Showing';
 
-window.__FLYTHROUGH = { state, overlays, set f(v){ state.frame = v; lastDrawn = -1; render(); } };  // debug hook
-addEventListener('resize', () => { size(); lastDrawn = -1; render(); ScrollTrigger.refresh(); }, { passive: true });
+/* rotate-back affordance (touch devices only): the portrait set is boot-time-fixed,
+   so a phone held landscape is told to rotate upright rather than served a blurry
+   cover-fit sliver */
+if (COARSE && MOBILE && !RM){
+  const rotateNote = document.getElementById('rotateNote');
+  const orient = matchMedia('(orientation: landscape)');
+  const note = () => rotateNote.classList.toggle('show', orient.matches);
+  if (orient.addEventListener) orient.addEventListener('change', note);
+  note();
+}
+
+/* debug hooks: f forces a frame for pixel-readback verification; eager() forces the
+   lazy listing images in a headless preview harness (never strip lazy in production) */
+window.__FLYTHROUGH = {
+  state, overlays,
+  set f(v){ state.frame = v; lastDrawn = ''; render(); },
+  eager(){ document.querySelectorAll('#listing img[loading="lazy"]').forEach(im => { im.loading = 'eager'; }); }
+};
+addEventListener('resize', () => { size(); lastDrawn = ''; render(); ScrollTrigger.refresh(); }, { passive: true });
 document.querySelector('#enter .ghost').addEventListener('click', enterResidence);
 document.getElementById('enquireBtn').addEventListener('click', mailTo);
 document.getElementById('navEnter').addEventListener('click', enterResidence);
@@ -603,6 +797,7 @@ const navlinks = document.querySelectorAll('header nav a');
 navlinks[0].addEventListener('click', resetLoop);             // Overview
 navlinks[1].addEventListener('click', resetLoop);             // The Descent
 navlinks[2].addEventListener('click', enterResidence);        // The View
+})();
 </script>
 </body>
 </html>

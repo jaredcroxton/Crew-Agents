@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--
+  cinematic-reference.html (crew-web-cinematic-build, locked reference implementation)
+
+  A complete single-file cinematic build wired for Path A procedural placeholders:
+  it runs with ZERO assets. Start from this file and adapt; never rewrite the engine
+  from scratch. Every block is labelled with the SKILL.md section it implements and,
+  where relevant, the web-standards rule it satisfies.
+
+  What plugs in where when the nine real assets land:
+  - Backdrops: crossfaded planes at a fixed far z per station (Application rules).
+  - Heroes: additive planes on pure black replace the procedural geometry below.
+  - Video slot: the full attribute set + canplaythrough promise (Application rules),
+    counted into the preloader alongside the LoadingManager.
+  - Raise assetCount and pass `manager` into every loader.
+
+  Copy marked REPLACE is a placeholder, swap for real brand copy. Never invent
+  a claim, a price, a testimonial, or a stat.
+-->
+<meta charset="utf-8">
+<!-- Head block: web-standards Head 7 (viewport-fit=cover for safe-area insets) -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Head 2: "Brand: one-line promise" -->
+<title>Drift: a cinematic scroll reference</title>
+<!-- Head 3: 150 to 160 characters, written for the click -->
+<meta name="description" content="Drift is the Crew cinematic build reference: five scenes that morph on scroll, fog, bloom, and oversized editorial type, running from a single HTML file.">
+<!-- Head 5: OG and Twitter. og:image and og:url need absolute public URLs.
+     TODO on deploy: point og:image at the designed 1200x630 Scene 3 composite card
+     and og:url at the live URL. Until then this deferral is a named residual at Gate 8. -->
+<meta property="og:title" content="Drift: a cinematic scroll reference">
+<meta property="og:description" content="Five scenes that morph on scroll. Fog, bloom, oversized editorial type, one HTML file.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Head 6: theme-color matched to the Scene 1 background so mobile chrome joins the film -->
+<meta name="theme-color" content="#07090c">
+<!-- Head 4: SVG favicon as a data URI, PLUS a base64 PNG data-URI fallback on the
+     rel="icon" line and an apple-touch-icon, per web-standards Head 4 (Mode 1/2:
+     everything is a data URI). The SVG is the primary; the PNG fallback serves the
+     browsers that ignore SVG favicons and the home-screen save. All three derive
+     from the same brand mark (dark ground, one amber ring). -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307090c'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23e8a84c' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEiUlEQVR42sWXW2gdZRDHf/N9u+e2m7RNYtMbaZuixeQlqaIIomBDKwhWUF+rFLX1rSiiPoiiIAreqG+NeAOp0iLig7TSIK1FQSpYkd5SW0laU1PaJs255Jzd/caHc5JWqclJ2tSBhX3Y/eY/M//vPzNC1QzggiBojZ15BngQdDUgXB9TkGPA155x7xQKhb8mfMrESzqdW6fG9ArSBsrcmKDogDj3ZLlc/BYwApBOB2sxZm/NcVIDJdfZuwIOsCDgXE+5XOgTwvCmVMwvIiy+/MGcWgIYVYYqHl02bf2XxZj7b5DzSb6JkXmeU5VUNjwpsKKWIsONMQeIwh+SzoazZpzI5erqNaRDZ+rUWkGAKFaiWHEK1ghGZsxb9WbCdmuEcuRIKhE25dHc6CMIY6WYYqEC1pLLWBJXd0zi1Z0qIxQLMQub0jyxfiX3dTWzpCmDCFwYizjYP0rv7kF+O3mJdNarP6P1cMAYoVRKWNvVzLanO2hflMW3/+RrnCgjhYhXd5xg+zcDeL6pixtePWkvFmLW3tbCVy+twalSKjv2Hj7Pj0dGiBJH5/KQnu4Wwozl/S0dNGQ93vy8n1yQmrYcU2ZABOJYaWrw+e6NO1nWnGF4tMKLHx9l1/dnwblJCt2+ej7vbu6gsy1EBDa89jP7D10gl/OmBGGmiz6uxGxat4xVi3IkTnn+o6Ps2neaIOcRhCmC0Cds8Dl4bITH3j7EhXxExrds3bASa2E6Pk4JIE6UVNqjp6sZa4UDhy/y5YGzBEGWONHJJ4qVhsYUJ8/k+aTvDMbAmlWNLF8UUKkktY4zQwAiVQALQp8lTRmMwI9HRxDnqhr2b4FPFBHDD4cvMl5JmBd6rGjN4GJFptAHU0cHnYwgit20qhElDqfVf6QOYfpPAFpTt3wp4fxYhCp0Lg9RlatqlzGCqqOjrYFsypAvJQyPVBArKLMkoW+FQqHCT8dHiRNlXXcL3bfMp5Avk/JNVX6N4HuGYikmCHwe71mKqnBiqEj/6Tx+ylQvy2wAOBRjLb17BhkpRIQZy7YtHdy8LGTsUpliMaZUjMmPlQnTlvc2d7B6aQAo23cPMj6e4Nupy2A9P/XKVGVI+YY/h0sUIsdDd7XSGHg8fPdiFjSk8D1D28IsD9zRyltP3co9nU005jw+2zfE6zv6yWT8axOiK3hIJXI890g7LzzaTiZlMCKUKgmqkEnZyab6xf4hnu09wqVigufJtDpQHwCpnj9eirm3q4WtG1bQvaqBeYGPESE/HvP7UJEP9gzyad8ZPGvwPYNTvT7NaLJettoXMEL74hzLF2YxAsOjFY6fzlMeT8jkvMny1dsN3UxnAqdKOXJopNXUWEM6Vb0VM5gFAHTWI5kIkxOQKnWl+6rXUOHUFTN7/dAVEqckTmfj3NWOOGUE3VnTzLlah66+pIiIoDv/98XEkM+fE9WNtctmax/onERdPduCiKhuJJ8/ZwBTLhf6cMl6hQEQOwd7YU3PxCoM4JL15XKhDzATEmaSJDqRSfs7nIoDaQaa52A9/9A3uqlUKv46saL9DZgc9ffu9BvZAAAAAElFTkSuQmCC">
+<!-- apple-touch-icon 180x180 for the home-screen save (Head 4) -->
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+
+<!-- Typography loading. Fraunces is a variable font with the opsz axis active
+     (the locked type spec). SANCTIONED DEVIATION from web-standards Type 4: this
+     build uses the Google Fonts stylesheet (no build step, no self-hosted subset
+     woff2, no rel=preload) rather than a build-time pyftsubset + self-host, because
+     the whole skill is CDN-delivered with zero build tooling. The one Type 4 rule
+     kept in full is the metric-tuned fallback, and it is keyed to the DISPLAY serif
+     (Fraunces), NOT the body font: the body is the zero-byte system stack, which
+     never swaps and needs no metric fallback, whereas Fraunces is the face that
+     actually swaps and reflows the h1. See the @font-face 'Fraunces Fallback' below. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&display=swap" rel="stylesheet">
+
+<style>
+/* Metric-tuned fallback for the DISPLAY serif (web-standards Type 4).
+   Aliases the local Georgia to Fraunces' metrics so the h1 does not reflow when
+   Fraunces swaps in (font-display: swap) and so the offline / Save-Data render on
+   Georgia holds the same box. Overrides are the standard fallback-metric outputs
+   for Fraunces over Georgia; regenerate them (e.g. with the fontaine/capsize
+   method) if you swap the display face. The body font is the system stack and
+   needs no such fallback. */
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  font-display: swap;
+  size-adjust: 100%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+/* ============================================================
+   Tokens. Brand values live here and only here.
+   Type scale: the locked spec (SKILL.md, Typography).
+   ============================================================ */
+:root {
+  --bg: #07090c;            /* Scene 1 ground, matches theme-color */
+  --ink: #f2ede4;           /* body ink over the scrim, measured at Gate 10 */
+  --ink-dim: #b9b2a4;       /* captions; keep at or above 4.5:1 over the scrim */
+  --accent: #e8a84c;        /* one accent, every state derives from it (Color 5) */
+  --display: 'Fraunces', 'Fraunces Fallback', Georgia, serif; /* metric-tuned fallback, no swap reflow */
+  --body: -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif; /* zero-byte stack, Type 4 */
+
+  /* The locked scale. H1 per the spec; never track a serif positive at display size. */
+  --step-display: clamp(3rem, 1rem + 8vw, 9rem);      /* lh 0.92 to 1.02, ls -0.02 to -0.04em */
+  --step-h2: clamp(1.9rem, 1.1rem + 2.6vw, 3.4rem);
+  --step-caption: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  --step-body: 1.0625rem;                              /* 17px, 16px floor */
+  --step-label: 0.72rem;                               /* micro-labels, +0.08em tracking */
+
+  /* Named easing tokens (web-standards Motion 2; GSAP names live in the timelines) */
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Finishing pass: selection and scrollbar (web-standards Color 4, Craft) */
+::selection { background: var(--accent); color: #0b0d10; }
+html { scrollbar-color: #3a3f47 var(--bg); }
+
+* { box-sizing: border-box; margin: 0; }
+html { overflow-x: clip; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: var(--step-body); line-height: 1.55;
+  overflow-x: clip;
+}
+
+/* Accessibility floor: skip link, first focusable (A11y 2) */
+.skip {
+  position: absolute; left: 1rem; top: 1rem; z-index: 60;
+  background: var(--accent); color: #0b0d10; padding: .6rem 1rem;
+  border-radius: 4px; font-weight: 600; text-decoration: none;
+  transform: translateY(-300%);
+}
+.skip:focus-visible { transform: none; }
+
+/* Accessibility floor: visible focus everywhere (A11y 1) */
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ============================================================
+   The stage. Fixed canvas in a 100dvh wrapper (Mobile 5).
+   aria-hidden: the DOM copy carries the message (A11y 5).
+   ============================================================ */
+.stage-wrap {
+  position: fixed; inset: 0;
+  height: 100vh;   /* legacy fallback line */
+  height: 100dvh;  /* the rule: dvh for the fixed wrapper */
+  z-index: 0; pointer-events: none;
+}
+.stage-wrap canvas { width: 100%; height: 100%; display: block; }
+
+/* Finishing pass: film grain (Craft 1: one page-wide layer, opacity under 0.08).
+   The tile is an inline SVG feTurbulence, a few hundred bytes. */
+.grain {
+  position: fixed; inset: -60px; z-index: 3; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation: grain-shift 900ms steps(3) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-24px, 16px); }
+  66% { transform: translate(18px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Finishing pass: gentle radial vignette so the frame reads composed */
+.vignette {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.42) 100%);
+}
+
+/* Scroll progress line, the scroll affordance. Fixed UI pads with safe-area (Mobile 4). */
+.progress {
+  position: fixed; z-index: 40;
+  top: calc(1.25rem + env(safe-area-inset-top));
+  right: calc(1.1rem + env(safe-area-inset-right));
+  bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  width: 1px; background: rgba(242,237,228,.14);
+}
+.progress span {
+  display: block; width: 100%; height: 100%;
+  background: var(--accent); transform: scaleY(0); transform-origin: top;
+}
+
+/* Contextual cursor (Craft 3): augments, never replaces; desktop fine-pointer only (Mobile 8) */
+#cursor { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  #cursor {
+    display: block; position: fixed; z-index: 50; pointer-events: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff; mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ============================================================
+   Preloader (SKILL.md, Preloader; Craft 2, CONDITIONAL). Real
+   values only. Counter uses tabular figures (Type 5) so digits
+   do not jitter. Inert in this zero-asset Path A reference; the
+   sanctioned brand moment only when a >5MB deferred payload is
+   wired, else cut it (see the preloader JS block).
+   ============================================================ */
+#preloader {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem;
+}
+#preloader .word {
+  font-family: var(--display); font-size: clamp(1.6rem, 4vw, 2.6rem);
+  letter-spacing: .02em; opacity: 0; animation: word-in 1.2s var(--ease-out) forwards;
+}
+@keyframes word-in { to { opacity: 1; } }
+#preloader .bar { width: min(38vw, 260px); height: 1px; background: rgba(242,237,228,.15); }
+#preloader .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+#preloader .count { font-variant-numeric: tabular-nums; font-size: var(--step-label); letter-spacing: .08em; color: var(--ink-dim); }
+
+/* ============================================================
+   Scenes. min-height 100svh, never bare 100vh (Mobile 5).
+   The copy sits over a default radial scrim (the accessibility
+   floor: contrast is measured over the darkest scrim state).
+   ============================================================ */
+main { position: relative; z-index: 10; }
+.scene {
+  min-height: 100vh;   /* legacy fallback line */
+  min-height: 100svh;  /* the rule: svh so the iOS URL bar never causes a jump */
+  display: grid; align-items: end;
+  padding: clamp(1.5rem, 5vw, 5rem);
+  padding-bottom: calc(clamp(2.5rem, 8vh, 6rem) + env(safe-area-inset-bottom));
+}
+.scene.center { align-items: center; justify-items: center; text-align: center; }
+
+.copy { position: relative; max-width: 60ch; }
+.copy::before {
+  /* The default radial scrim: ships on every build, not as a rescue */
+  content: ''; position: absolute; inset: -3.5rem -4.5rem; z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(4,6,9,.78) 0%, rgba(4,6,9,.45) 55%, transparent 78%);
+}
+
+.label {
+  font-size: var(--step-label); text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-dim); margin-bottom: 1rem;
+}
+h1, h2 { font-family: var(--display); font-weight: 420; text-wrap: balance; }
+h1 {
+  font-size: var(--step-display);
+  line-height: .96;              /* lh 0.92 to 1.02 */
+  letter-spacing: -0.03em;       /* tighter as size grows; never positive on a serif at display size */
+  font-variation-settings: 'opsz' 144;
+}
+h2 { font-size: var(--step-h2); line-height: 1.08; letter-spacing: -0.02em; margin-bottom: .8rem; }
+.caption { font-size: var(--step-caption); line-height: 1.3; color: var(--ink-dim); margin-top: .9rem; }
+p { margin-top: .9rem; }
+
+.cta {
+  display: inline-block; margin-top: 1.6rem; padding: .85rem 1.6rem; min-height: 44px; /* Mobile 7 */
+  border: 1px solid var(--accent); border-radius: 999px;
+  color: var(--accent); text-decoration: none; letter-spacing: .04em; font-size: .95rem;
+  transition: transform .3s var(--ease-out), background-color .3s var(--ease-out), color .3s var(--ease-out);
+}
+.cta:hover { background: var(--accent); color: #0b0d10; transform: translateY(-2px); }
+.cta:active { transform: translateY(0) scale(.98); }
+
+footer { position: relative; z-index: 10; padding: 2rem; font-size: var(--step-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-dim); }
+
+/* ============================================================
+   Designed rest states. Two audiences share them:
+   - body.no-webgl  (feature-detect failed, or the context died)
+   - html.reduced   (prefers-reduced-motion, the designed twin, Motion 10)
+   Each scene rests on a composed gradient still, so the page is
+   a designed document, never a degraded one (Tiers 1).
+   ============================================================ */
+body.no-webgl .stage-wrap { display: none; }
+body.no-webgl .scene, html.reduced .scene { background: radial-gradient(120% 90% at 50% 20%, var(--zone, #10141b) 0%, var(--bg) 70%); }
+.s1 { --zone: #121826; }
+.s2 { --zone: #1a1420; }
+.s3 { --zone: #211a10; }  /* the contrast scene warms toward the accent */
+.s4 { --zone: #0d1314; }
+.s5 { --zone: #171310; }
+
+/* Reduced motion: grain animation off and the layer dimmed (Craft 1),
+   cursor and preloader theatrics off. The media query AND the class both
+   apply, because the ?reduced-motion=1 test hook only sets the class. */
+@media (prefers-reduced-motion: reduce) {
+  .grain { animation: none; opacity: .03; }
+  html { scroll-behavior: auto; }
+}
+html.reduced .grain { animation: none; opacity: .03; }
+html.reduced #cursor { display: none; }
+</style>
+
+<!-- The stack (SKILL.md): three via importmap, jsdelivr resolves the addon paths -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Preloader: inert scaffolding in this zero-asset Path A reference (Craft 2 is
+     conditional, see the preloader JS block). It becomes the real brand moment only
+     once the wired build carries a >5MB deferred opening payload; cut it otherwise. -->
+<div id="preloader">
+  <div class="word">Drift</div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="count" id="count">0</div>
+</div>
+
+<div class="stage-wrap"><canvas id="stage" aria-hidden="true"></canvas></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+<div id="cursor" aria-hidden="true"></div>
+
+<main id="main">
+  <!-- Scene 1: entrance. The one h1 on the page (A11y 3). -->
+  <section class="scene center s1" id="s1">
+    <div class="copy">
+      <div class="label">A Crew reference build</div>
+      <h1>Drift through the work.</h1>
+      <p class="caption">REPLACE: one line on what this brand promises, in its own voice.</p>
+      <a class="cta reveal-cta" href="#s2">Begin the descent</a>
+    </div>
+  </section>
+
+  <!-- Scene 2: reveal -->
+  <section class="scene s2" id="s2">
+    <div class="copy">
+      <div class="label">Scene II, the reveal</div>
+      <h2>REPLACE: the reveal headline.</h2>
+      <p>REPLACE: two sentences of real copy from the brief or brand-context. No invented claims, prices, or stats.</p>
+    </div>
+  </section>
+
+  <!-- Scene 3: contrast, the high-meets-modern signature moment -->
+  <section class="scene s3" id="s3">
+    <div class="copy">
+      <div class="label">Scene III, the contrast</div>
+      <h2>Ancient craft meets modern intelligence.</h2>
+      <p>REPLACE: the one unforgettable claim this brand can actually stand behind.</p>
+    </div>
+  </section>
+
+  <!-- Scene 4: product moment -->
+  <section class="scene s4" id="s4">
+    <div class="copy">
+      <div class="label">Scene IV, the product moment</div>
+      <h2>REPLACE: the product, named plainly.</h2>
+      <p>REPLACE: what it does, in the user's words.</p>
+    </div>
+  </section>
+
+  <!-- Scene 5: close -->
+  <section class="scene center s5" id="s5">
+    <div class="copy">
+      <div class="label">Scene V, the close</div>
+      <h2>REPLACE: the closing line.</h2>
+      <a class="cta" href="#s1">REPLACE: the one CTA verb</a>
+    </div>
+  </section>
+</main>
+
+<footer>Drift, a crew-web-cinematic-build reference. REPLACE with the brand footer.</footer>
+
+<!-- GSAP + ScrollTrigger + Lenis from CDN script tags (The stack) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============================================================
+   Capability tiers, decided before anything renders.
+   - reduced: prefers-reduced-motion OR the ?reduced-motion=1
+     test hook (web-standards Gate 6; the hook applies the exact
+     same rules the media query applies).
+   - finePointer: Lenis and the custom cursor are desktop-only
+     (crew-animation-locomotive rule; web-standards Mobile 8).
+   - hasGL: WebGL feature-detect; without it the page rests on
+     its designed static layout (.no-webgl).
+   ============================================================ */
+const params = new URLSearchParams(location.search);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+  || params.has('reduced-motion');
+/* ?debug=1: the verification hook for automation (Workflow Step 8). Backgrounded
+   tabs suspend rAF and do not composite, so screenshots capture a stale or black
+   canvas. In debug: the drawing buffer is preserved so __render() frames survive
+   into screenshots, and the hidden-tab pause is skipped. Never ship a link with
+   ?debug=1; it costs GPU memory. */
+const debug = params.has('debug');
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const probe = document.createElement('canvas');
+const hasGL = !!(probe.getContext('webgl2') || probe.getContext('webgl'));
+
+if (reduced) document.documentElement.classList.add('reduced');
+if (!hasGL) document.body.classList.add('no-webgl');
+
+/* Lenis smooth scroll: fine-pointer desktop at full motion only.
+   Touch and reduced motion get native scroll; ScrollTrigger reads it directly. */
+let lenis = null;
+if (hasGL && !reduced && finePointer && window.Lenis) {
+  lenis = new Lenis();
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* ============================================================
+   Preloader (SKILL.md, Preloader). Three gates, not one:
+   the LoadingManager (textures), document.fonts.ready (the
+   display serif, 3s timeout), and any video's canplaythrough.
+   Path A is asset-free, so assetCount is 0 and the manager
+   resolves immediately; raise it when real slots are wired.
+
+   CONDITIONAL, per web-standards Craft 2: a percentage-counter
+   preloader is sanctioned ONLY on a Mode 2/3 build with a
+   measurable deferred opening payload (an opening scene over
+   5MB). In this zero-asset Path A reference there is no such
+   payload, so this preloader is INERT SCAFFOLDING that
+   demonstrates the mechanism, not a shipped brand moment: the
+   bar jumps straight to 100 because nothing is loading. When
+   you wire the nine real assets and assetCount clears the >5MB
+   Craft 2 threshold, this becomes the real counter and hands
+   into Scene 1. If the finished build has no >5MB deferred
+   opening payload, CUT this preloader entirely (Craft 2 bans a
+   counter that animates over nothing).
+   ============================================================ */
+const assetCount = 0; // Path A: procedural, zero assets. Pass `manager` into every real loader and raise this.
+const barEl = document.getElementById('bar');
+const countEl = document.getElementById('count');
+const setBar = v => { barEl.style.width = (v * 100).toFixed(0) + '%'; countEl.textContent = Math.round(v * 100); };
+
+const manager = new THREE.LoadingManager();
+manager.onProgress = (url, loaded, total) => setBar(loaded / total);
+const managerDone = new Promise(res => { manager.onLoad = res; if (assetCount === 0) { setBar(1); res(); } });
+const fontsDone = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 3000))]);
+const videoDone = Promise.resolve(); // a video slot resolves its canplaythrough promise here (Application rules)
+
+/* Gate scroll while the preloader holds. overflow:hidden alone does NOT stop
+   Lenis once it is wired into the GSAP ticker; lenis.stop() is the real gate. */
+if (lenis) lenis.stop();
+document.body.style.overflow = 'hidden';
+
+const preloaderEl = document.getElementById('preloader');
+Promise.all([managerDone, fontsDone, videoDone]).then(() => {
+  // A real video slot calls video.play() here and .catch()es to its still poster (Mobile 1).
+  if (reduced) {
+    // The designed twin exits instantly: no fade theatre under reduced motion (Motion 10)
+    preloaderEl.style.display = 'none';
+    document.body.style.overflow = '';
+    return;
+  }
+  gsap.to(preloaderEl, {
+    opacity: 0, duration: 0.8, ease: 'power2.inOut', delay: 0.4,
+    onComplete: () => {
+      preloaderEl.style.display = 'none';
+      document.body.style.overflow = '';
+      if (lenis) lenis.start(); // free scroll only once Scene 1 is up
+    }
+  });
+});
+
+/* ============================================================
+   The world. Five stations along negative z; the camera dollies
+   through them on the master scrubbed timeline. Backdrop planes
+   and additive hero planes replace this procedural set when the
+   nine assets land (Path B, Application rules).
+   ============================================================ */
+let renderer, composer, camera, scene, bloomPass, particles, stations = [];
+const CAM_START = 8;
+
+function initThree() {
+  const canvas = document.getElementById('stage');
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: debug });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Mobile 3: dpr cap
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;   // the single biggest shot-on-film lift
+  renderer.toneMappingExposure = 1.1;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x07090c);
+  scene.fog = new THREE.FogExp2(0x07090c, 0.045);
+
+  camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 200);
+  camera.position.set(0, 0, CAM_START);
+
+  // Lighting: one key, one rim for edge glow, low ambient (Atmosphere)
+  const key = new THREE.DirectionalLight(0xfff2dd, 2.2); key.position.set(4, 6, 6); scene.add(key);
+  const rim = new THREE.PointLight(0xe8a84c, 30, 60); rim.position.set(-6, 3, -10); scene.add(rim);
+  scene.add(new THREE.AmbientLight(0x3a4152, 0.7));
+
+  /* Station builders. Each is one scene's hero, floated, never full-spun. */
+  const glass = new THREE.MeshPhysicalMaterial({ roughness: 0.08, transmission: 1, thickness: 1.4, color: 0xdfe8ff });
+  const metal = new THREE.MeshPhysicalMaterial({ roughness: 0.18, metalness: 1, color: 0xc9c2b4, anisotropy: 0.6 });
+  const wet = new THREE.MeshPhysicalMaterial({ roughness: 0.12, clearcoat: 1, color: 0x14181f });
+  const soap = new THREE.MeshPhysicalMaterial({ roughness: 0.1, metalness: 0.2, iridescence: 1, iridescenceIOR: 1.3, color: 0x8891a0 });
+  const glow = new THREE.MeshBasicMaterial({ color: 0xffc46e });
+
+  const stationSpecs = [
+    // Scene 1 entrance: a glass icosahedron
+    { z: 3, build: g => g.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, 1), glass)) },
+    // Scene 2 reveal: a metallic torus knot
+    { z: -9, build: g => g.add(new THREE.Mesh(new THREE.TorusKnotGeometry(1.1, 0.34, 160, 24), metal)) },
+    // Scene 3 contrast: the high-meets-modern signature frame,
+    // a dark classical column with a glowing orb floating above it
+    { z: -21, build: g => {
+        const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.7, 3.4, 24), wet);
+        col.position.y = -1.2;
+        const orb = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), glow);
+        orb.position.y = 1.5;
+        g.add(col, orb);
+      } },
+    // Scene 4 product moment: an iridescent ring in a black void
+    { z: -33, build: g => g.add(new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.38, 24, 96), soap)) },
+    // Scene 5 close: a wet-look sphere, settling
+    { z: -45, build: g => g.add(new THREE.Mesh(new THREE.SphereGeometry(1.3, 48, 48), wet)) },
+  ];
+  stations = stationSpecs.map(spec => {
+    const group = new THREE.Group();
+    group.position.z = spec.z;
+    spec.build(group);
+    scene.add(group);
+    return { group, z: spec.z };
+  });
+
+  // Particles: dust in a sunbeam, not a snowstorm (Atmosphere)
+  const COUNT = finePointer ? 1600 : 500; // mobile cut: particles cut hard
+  const pos = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT; i++) {
+    pos[i * 3] = (Math.random() - 0.5) * 30;
+    pos[i * 3 + 1] = (Math.random() - 0.5) * 16;
+    pos[i * 3 + 2] = 8 - Math.random() * 60;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  particles = new THREE.Points(pGeo, new THREE.PointsMaterial({
+    color: 0xcfc4ae, size: 0.045, transparent: true, opacity: 0.5,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  }));
+  scene.add(particles);
+
+  // Composer chain: render + bloom, layered at 60 percent, not 100
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.85, 0.7, 0.82);
+  composer.addPass(bloomPass);
+
+  /* Context loss: mobile Safari kills WebGL under memory pressure.
+     Degrade to the designed static layout, attempt ONE restore. */
+  let restored = false;
+  renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); showStaticFallback(); });
+  renderer.domElement.addEventListener('webglcontextrestored', () => {
+    if (restored) return; restored = true;
+    document.body.classList.remove('no-webgl');
+    onResize();
+  });
+}
+
+function showStaticFallback() {
+  // The same designed rest states the no-WebGL tier gets (Tiers 1)
+  document.body.classList.add('no-webgl');
+}
+
+/* ============================================================
+   Adaptive quality: the mechanism that defends the frame-rate
+   gate. The gate bar is median >= 50fps (20ms) (SKILL.md
+   Verification; 60fps is the felt aspiration, 50fps is what the
+   gate enforces). Rolling 60-frame median; over 20ms steps down
+   one tier at a time: pixelRatio 2 -> 1.5 -> 1, halve particles,
+   drop bloom resolution. The tier is logged so verification
+   records it. The threshold matches the gate so a page steady
+   at 45-49fps steps down instead of silently failing the gate.
+   ============================================================ */
+const frameTimes = [];
+let qualityTier = 0;
+function sampleQuality(dtMs) {
+  frameTimes.push(dtMs);
+  if (frameTimes.length < 60) return;
+  const median = frameTimes.sort((a, b) => a - b)[30];
+  frameTimes.length = 0;
+  if (median <= 20 || qualityTier >= 4) return; // <= 20ms == >= 50fps, the gate bar
+  qualityTier++;
+  if (qualityTier === 1) renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  if (qualityTier === 2) renderer.setPixelRatio(1);
+  if (qualityTier === 3 && particles) particles.geometry.setDrawRange(0, Math.floor(particles.geometry.attributes.position.count / 2));
+  if (qualityTier === 4 && bloomPass) bloomPass.setSize(innerWidth / 2, innerHeight / 2);
+  console.info('[quality] stepped down to tier', qualityTier, 'median frame ms was', median.toFixed(1));
+}
+
+/* Render loop lives on the GSAP ticker so one clock drives everything. */
+let lastT = performance.now();
+function render() {
+  const now = performance.now();
+  sampleQuality(now - lastT);
+  lastT = now;
+  composer.render();
+}
+
+/* Finishing pass: hidden-tab pause. No battery burned for a hidden page.
+   Skipped in ?debug=1 so automation in a backgrounded tab can still drive it. */
+if (!debug) document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { gsap.ticker.remove(render); gsap.globalTimeline.pause(); }
+  else { lastT = performance.now(); gsap.ticker.add(render); gsap.globalTimeline.play(); }
+});
+
+/* Resize, throttled through rAF; setSize and setPixelRatio both re-run. */
+let resizeQueued = false;
+function onResize() {
+  if (resizeQueued) return; resizeQueued = true;
+  requestAnimationFrame(() => {
+    resizeQueued = false;
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, qualityTier >= 2 ? 1 : qualityTier >= 1 ? 1.5 : 2));
+    composer.setSize(innerWidth, innerHeight);
+  });
+}
+addEventListener('resize', onResize, { passive: true });
+
+/* ============================================================
+   The scroll flow: ONE master timeline scrubbed by ScrollTrigger
+   drives camera, fog, and bloom together so the worlds morph as
+   one (transform and opacity only in the DOM, Motion 1). Each
+   gap has a camera verb and a named transition; none repeats
+   consecutively.
+   ============================================================ */
+const zones = [0x121826, 0x1a1420, 0x211a10, 0x0d1314, 0x171310];
+function buildChoreography() {
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: '#main', start: 'top top', end: 'bottom bottom', scrub: true }
+  });
+  const fog = scene.fog; // captured so the tween has a bound target
+  for (let i = 1; i < stations.length; i++) {
+    const c = new THREE.Color(zones[i]);
+    const verbs = ['push in (dolly-through)', 'drift and rise (fog-curtain)', 'orbit into the contrast (bloom-flash)', 'settle (colour-shift)'];
+    // Scene gap camera verb: see verbs[i-1]
+    tl.to(camera.position, { z: stations[i].z + 5, ease: 'power3.inOut', duration: 1 }, i - 1)
+      .to(fog.color, { r: c.r, g: c.g, b: c.b, ease: 'sine.inOut', duration: 1 }, i - 1)
+      .to(scene.background, { r: c.r, g: c.g, b: c.b, ease: 'sine.inOut', duration: 1 }, i - 1)
+      // fog thins toward the product moment, thickens at entrance and close
+      .to(fog, { density: i === 3 ? 0.028 : 0.05, ease: 'sine.inOut', duration: 1 }, i - 1)
+      // bloom-flash marks the contrast reveal, then eases back
+      .to(bloomPass, { strength: i === 2 ? 1.45 : 0.85, ease: 'sine.inOut', duration: 1 }, i - 1);
+  }
+
+  // Floats: vertical sine float, tiny yaw, slow scale pulse. Never a full spin.
+  stations.forEach(({ group }, i) => {
+    gsap.to(group.position, { y: '+=0.3', duration: 3 + i * 0.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to(group.rotation, { y: 0.1, duration: 5 + i * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  });
+
+  // Entrance reveals: one-shot (once: true), transform and opacity only, staggered
+  gsap.utils.toArray('.scene').forEach(sceneEl => {
+    const items = sceneEl.querySelectorAll('.label, h1, h2, p, .cta');
+    gsap.set(items, { opacity: 0, y: 28 });
+    ScrollTrigger.create({
+      trigger: sceneEl, start: 'top 70%', once: true,
+      onEnter: () => gsap.to(items, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.12 })
+    });
+  });
+}
+
+/* Scroll progress line (transform only) */
+ScrollTrigger.create({
+  start: 0, end: 'max',
+  onUpdate: self => { document.getElementById('progressBar').style.transform = `scaleY(${self.progress})`; }
+});
+
+/* ============================================================
+   The reduced-motion DESIGNED TWIN (Motion 10). Scenes rest on
+   their composed gradient stills, copy and CTAs are fully
+   visible with no observer dependency, the canvas paints one
+   composed Scene 1 frame and holds it, floats and scrubs never
+   build. The same rules fire from the OS setting, the runtime
+   change listener, and the ?reduced-motion=1 hook.
+   ============================================================ */
+function applyReducedFloor() {
+  document.documentElement.classList.add('reduced');
+  ScrollTrigger.getAll().forEach(st => st.kill());
+  gsap.globalTimeline.getChildren().forEach(t => t.kill());
+  gsap.set('.label, h1, h2, p, .cta', { clearProps: 'all' }); // everything visible, instantly
+  if (lenis) { lenis.destroy(); lenis = null; }
+  if (renderer) { camera.position.set(0, 0, CAM_START); composer.render(); } // one composed frame, held
+}
+
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', e => {
+  // A mid-session flip TO reduced applies the floor live; a flip back to full
+  // motion reloads, the deterministic way to rebuild the killed timelines.
+  if (e.matches) applyReducedFloor();
+  else location.reload();
+});
+
+/* ============================================================
+   Contextual cursor: desktop fine-pointer only, augments the
+   native cursor, grows over links and buttons.
+   ============================================================ */
+if (finePointer && !reduced) {
+  const cur = document.getElementById('cursor');
+  const cx = gsap.quickTo(cur, 'left', { duration: 0.25, ease: 'power3.out' });
+  const cy = gsap.quickTo(cur, 'top', { duration: 0.25, ease: 'power3.out' });
+  addEventListener('mousemove', e => { cx(e.clientX); cy(e.clientY); }, { passive: true });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => gsap.to(cur, { width: 46, height: 46, duration: 0.3, ease: 'expo.out' }));
+    el.addEventListener('mouseleave', () => gsap.to(cur, { width: 16, height: 16, duration: 0.3, ease: 'expo.out' }));
+  });
+}
+
+/* ============================================================
+   Boot.
+   ============================================================ */
+if (hasGL) {
+  initThree();
+  if (reduced) {
+    applyReducedFloor();
+  } else {
+    buildChoreography();
+    gsap.ticker.add(render);
+  }
+} else {
+  // No WebGL: the designed static layout carries the page. Reveals become instant.
+  gsap.set('.label, h1, h2, p, .cta', { clearProps: 'all' });
+}
+
+/* ============================================================
+   Debug hooks for verification (Workflow Step 8). Automation
+   backgrounds its tab and browsers suspend rAF there, so these
+   paint a frame on demand for screenshots.
+   ============================================================ */
+window.__render = () => {
+  if (!renderer) return;
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  composer.render();
+};
+window.__goScene = i => {
+  if (!stations[i]) return;
+  camera.position.z = stations[i].z + 5;
+  const c = new THREE.Color(zones[i]);
+  scene.fog.color.copy(c); scene.background.copy(c);
+  window.__render();
+};
+/* FPS sampler for the gate: await __fps() in the console, returns the median over 120 frames. */
+window.__fps = (frames = 120) => new Promise(resolve => {
+  const samples = []; let prev = performance.now();
+  const step = now => {
+    samples.push(now - prev); prev = now;
+    if (samples.length >= frames) {
+      const median = samples.sort((a, b) => a - b)[Math.floor(frames / 2)];
+      resolve(Math.round(1000 / median));
+    } else requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+});
+</script>
+</body>
+</html>

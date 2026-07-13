@@ -78,11 +78,6 @@ for d in "$PACKS_DIR"/*/; do
   for sd in "$packdir"/crew-*/; do
     [ -d "$sd" ] || continue
     skill="$(basename "${sd%/}")"
-    # crew-web-app-builder is the BLAST-protocol mirror, a deliberate exception to the
-    # gold-standard structural gates (its own SKILL.md plus assets/templates/, ported whole).
-    # Skip the per-skill structural check here; the global em-dash and ban-list checks above
-    # still cover it.
-    case "$skill" in crew-web-app-builder) continue ;; esac
     f="$sd/SKILL.md"
     SKILL_COUNT=$((SKILL_COUNT+1))
     SKILL_FAIL_BASE=$FAIL
@@ -258,9 +253,6 @@ FIXTURE
     for sd in "$packdir"/crew-*/; do
       [ -d "$sd" ] || continue
       skill="$(basename "${sd%/}")"; f="$sd/SKILL.md"
-      # the BLAST-protocol exception has no fixture by design; skip it here as the
-      # structural loop does
-      case "$skill" in crew-web-app-builder) continue ;; esac
       fx="$packdir/tests/$skill.fixture.md"
       [ -f "$f" ] && [ -f "$fx" ] || { note "smoke $skill: missing skill or fixture"; continue; }
       header="$(awk '/^## Output format/{o=1} o&&/^```/{b++} o&&b==1&&!/^```/{print;exit}' "$f")"

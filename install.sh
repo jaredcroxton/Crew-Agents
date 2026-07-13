@@ -96,6 +96,8 @@ if [ "$DOCTOR" = 1 ]; then
     [ "$NORPH" = 0 ] && dok "no orphaned Crew skills"
     [ -f "$DEST/crew-method.md" ] && dok "crew-method.md installed (every skill references it)" \
       || dnote "crew-method.md missing from $DEST (rerun install to place it)"
+    [ -f "$DEST/web-standards.md" ] && dok "web-standards.md installed (cited by every web skill)" \
+      || dnote "web-standards.md missing from $DEST (rerun install to place it)"
   fi
   STATE="$HOME/.claude/crew-state"
   if [ -d "$STATE" ] && [ -w "$STATE" ]; then dok "state root writable: $STATE"
@@ -155,6 +157,13 @@ done
 if [ "$DRY" != 1 ] && [ -f "$HERE/shared/crew-method.md" ]; then
   cp "$HERE/shared/crew-method.md" "$DEST/crew-method.md"
   echo "  ok    crew-method.md (the Crew Method, referenced by every skill)"
+fi
+
+# install the Crew Web Standards doc the same way: every web skill cites it by name
+# and adopts its Verification Gate by reference.
+if [ "$DRY" != 1 ] && [ -f "$HERE/shared/web-standards.md" ]; then
+  cp "$HERE/shared/web-standards.md" "$DEST/web-standards.md"
+  echo "  ok    web-standards.md (Crew Web Standards, cited by every web skill)"
 fi
 
 # prune: remove crew-* dirs in the target that have no source folder in packs/.

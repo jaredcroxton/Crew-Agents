@@ -2,6 +2,33 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.11.0 (2026-07-14)
+
+### Added
+- shared/web-standards.md (441 lines): the single web-build standard every
+  Pack 10 skill now cites. Covers the type system, performance budgets, the
+  motion law, iOS reality, head hygiene, the accessibility floor, the anti-slop
+  register, the Verification Gate roster, and an Apple scroll-pattern appendix.
+  Wired into install.sh so it lands with the pack.
+- Two new web skills, built to the standard (SKILL, compliant reference HTML,
+  and fixture each): crew-web-landing-page-builder and
+  crew-web-booking-site-builder.
+
+### Changed
+- Pack 10 (Web Design) closed to gold: 44 critical, 98 major, and 73 minor
+  holes fixed across 14 existing skills, each reworked and then re-verified on
+  disk under the three-lens loop (craft, gold, consistency), not by self-report.
+  Confirmed fixes include the two-part favicon, 44px touch targets, oklch
+  light-theme contrast, the two-tag theme-color, font-cap reconciliation, and
+  the preload contradictions.
+
+### Removed
+- crew-web-app-builder deleted: it was the Express automation protocol misfiled
+  in the web pack, a duplicate of crew-project-builder (Pack 11). The four
+  crew-web-learning-experience references were repointed to crew-project-builder,
+  and its QA carve-outs were stripped from qa-check.sh and the two sweep scripts
+  so no shipped skill dodges the frame check. Catalogue count 105 to 104.
+
 ## 1.10.0 (2026-07-13)
 
 ### Changed
