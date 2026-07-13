@@ -133,32 +133,39 @@ A strong page draft is necessary for a ranking, not sufficient for one. A draft 
 
 ## Technical pre-flight (live domain)
 
-When the page will ship on a site that already exists, ground the draft in the site's real technical state instead of assuming it. With a domain supplied in Discovery, run these read-only fetches from the shell before the architecture is locked. Every field is a fetched fact or a marked gap, never a guess: a failed fetch is "Not checked (unreachable)", and no domain means the whole block is "skipped, no domain supplied".
+When the page will ship on a site that already exists, ground the draft in the site's real technical state instead of assuming it. With a domain supplied in Discovery, run these read-only fetches from the shell before the architecture is locked (where no shell exists, an equivalent read-only web-fetch tool may stand in). Every field is a fetched fact or a marked gap, never a guess: a failed fetch is "Not checked (unreachable)", a harness with no shell and no fetch tool means each field is "Not checked (no shell in this environment)", and no domain means the whole block is "skipped, no domain supplied".
 
 ```bash
 # Crawlability: does robots.txt exist, and is the target path disallowed?
 curl -s "https://DOMAIN/robots.txt"
 
-# Existing URLs: the evidence half of the cannibalization check
-curl -s "https://DOMAIN/sitemap.xml" | head -100
+# Existing URLs: the evidence half of the cannibalization check.
+# Use the Sitemap: line from robots.txt if it names one. If the response is a
+# <sitemapindex>, fetch the child sitemaps it lists (gunzip if needed) before
+# judging. Never truncate: scan the full body for the keyword and its variants.
+curl -s "https://DOMAIN/sitemap.xml"
 
-# SSR vs CSR: does the served HTML already carry the tags, or does JS render them?
-curl -s "https://DOMAIN/TARGET-PAGE" | grep -E "<title>|<meta|<h1|<h2|schema|llms"
+# Rendering: is the page's OWN content in the served HTML, or JS-rendered?
+# A static <title> or <meta charset> in a CSR shell proves nothing; the signals
+# that matter are the h1 and the page's own copy.
+curl -s "https://DOMAIN/TARGET-PAGE" | grep -E "<h1|schema|llms"
 
-# AI-search readiness: does the site publish llms.txt?
-curl -o /dev/null -s -w "%{http_code}" "https://DOMAIN/llms.txt"
+# AI-search readiness: does the site publish llms.txt? Check the body, not just
+# the status: a soft-404 returns 200 with an HTML error page. Real llms.txt is
+# plain text or markdown; a body starting with "<" is not it.
+curl -s "https://DOMAIN/llms.txt" | head -5
 
 # Mobile performance score via the public PageSpeed API (can take up to a minute)
-curl -s "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://DOMAIN&strategy=mobile" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Performance:', d['lighthouseResult']['categories']['performance']['score']*100)"
+curl -s "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://DOMAIN&strategy=mobile" | python3 -c "import sys,json; d=json.load(sys.stdin); r=d.get('lighthouseResult'); print('Performance:', r['categories']['performance']['score']*100) if r else print('Not checked:', d.get('error',{}).get('message','no result returned'))"
 ```
 
 What each result changes in the draft:
 
 - **robots.txt.** If the target path (or the whole site) is disallowed, flag it in Open items as a blocker for the developer: the strongest draft on a blocked path ranks nothing. A missing robots.txt is a note, not a blocker.
-- **sitemap.xml.** Scan the URLs for the keyword and its close variants. A match is live cannibalization evidence: route it to the Decision briefs (strengthen the existing page rather than build a rival) even if the user answered "none known". Sitemap URLs also inform the internal-linking plan, but a sitemap can be stale, so the user still confirms a page exists before it is linked.
-- **SSR vs CSR.** If the served HTML comes back without the title, meta, and h1 (client-side rendered), the metadata and schema in this draft may never reach a crawler as written. Flag "site appears client-side rendered" in Open items and route it to the developer. Do not silently assume the tags will be seen.
-- **llms.txt.** A 200 means the site already publishes an AI-readable index, so note that this page should be added to it. A 404 is an optional gap worth noting, since AI search surfaces increasingly read it. Neither result blocks the draft.
-- **PageSpeed (mobile).** Report the performance score as a measured fact for the business. Speed still sits outside what a draft can fix, but a measured 40 beats "page speed is outside this draft". If the API call fails or times out, mark "Not checked", never estimate a score.
+- **sitemap.xml.** Scan the URLs for the keyword and its close variants. A match is live cannibalization evidence: route it to the Decision briefs (strengthen the existing page rather than build a rival) even if the user answered "none known". "No match, no cannibalization" may be reported only when the full sitemap (and every child sitemap, if the response was a <sitemapindex>) was actually scanned; if only an index or a partial fetch was seen, the sanctioned value is "sitemap partially checked, cannibalization not ruled out". Sitemap URLs also inform the internal-linking plan, but a sitemap can be stale, so the user still confirms a page exists before it is linked.
+- **Rendering.** Judge page-specific signals only: the h1 and the page's own copy (its real title and meta-description text, not just any <title> tag, which nearly every CSR shell ships statically). A shell title or meta charset does not prove server rendering. If the h1 and page copy are absent from the served HTML, the metadata and schema in this draft may never reach a crawler as written: flag "h1 and page copy absent from served HTML (CSR risk)" in Open items and route it to the developer. Do not silently assume the tags will be seen.
+- **llms.txt.** Present means a fetch whose body reads as plain text or markdown, not just a 200 status: a soft-404 returns 200 with an HTML page, and that is absent. When present, note that this page should be added to it. Absent is an optional gap worth noting, since AI search surfaces increasingly read it. Neither result blocks the draft.
+- **PageSpeed (mobile).** Report the performance score as a measured fact for the business. Speed still sits outside what a draft can fix, but a measured 40 beats "page speed is outside this draft". If the API call fails, times out, or returns a rate-limit or error body instead of a result, mark "Not checked", never estimate a score.
 
 Run all five checks in Careful and Governed mode when a domain is supplied. In Fast mode run the four quick fetches and skip the PageSpeed call (mark it "skipped in Fast mode").
 
@@ -209,9 +216,9 @@ A: [direct 2 to 3 sentence answer]
 
 Technical pre-flight: [run on DOMAIN / skipped, no domain supplied]
   robots.txt: [ok, target path crawlable / blocked by: <rule> / Not checked (unreachable)]
-  sitemap: [existing URL matching the keyword, or "no match, no cannibalization"]
-  Rendering: [SSR, tags in served HTML / CSR risk: title, meta, h1 absent from served HTML]
-  llms.txt: [200 present / 404 absent]
+  sitemap: [existing URL matching the keyword / no match across the fully scanned sitemap(s), no cannibalization / sitemap partially checked, cannibalization not ruled out]
+  Rendering: [h1 and page copy present in served HTML / h1 and page copy absent from served HTML (CSR risk)]
+  llms.txt: [present, plain-text body / absent (404 or HTML soft-404)]
   PageSpeed (mobile): [score / skipped in Fast mode / Not checked]
 
 Internal links: [only pages the user confirmed exist, or "none confirmed"]
@@ -248,9 +255,9 @@ A: Look for a stated on-time and in-temperature percentage plus a defined except
 
 Technical pre-flight: run on the supplied domain
   robots.txt: ok, /cold-chain-3pl not disallowed
-  sitemap: no existing URL targets "cold chain 3pl", no cannibalization
-  Rendering: SSR, title and h1 present in the served HTML
-  llms.txt: 404 absent, optional gap noted for the developer
+  sitemap: no existing URL targets "cold chain 3pl" across the fully scanned sitemap, no cannibalization
+  Rendering: h1 and page copy present in the served HTML
+  llms.txt: absent (404), optional gap noted for the developer
   PageSpeed (mobile): 62, reported for the business, outside this draft's control
 
 Internal links: /services/temperature-controlled-warehousing and /contact, both confirmed to exist by the user. No others invented.

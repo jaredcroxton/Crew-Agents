@@ -2,23 +2,44 @@
 
 All notable changes to the Crew skill packs.
 
-## 1.8.1 (2026-07-11)
+## 1.9.0 (2026-07-12)
+
+### Added
+- crew-web-product-film: the Apple-grade cinematic product film site.
+  Graduated from a shipped concept build into the catalogue: a scroll-scrubbed
+  video opening act plus a kinetic content act, seeded from the brand's own
+  real product plates (including the CDN-transform-stripping route that pulls
+  original transparent cutouts from Cloudinary-backed stores). Ships the
+  locked reference build (fictional branding), the full pipeline (asset
+  generation with skip-existing and retry patches, stitcher, Range-capable
+  dev server, a real production clip manifest), the camera-only prompt lock
+  with named forbidden-features lists, the mandatory three-timestamp artifact
+  sweep with back-half emphasis, the GOP 12 crf 18 scrub encode pair, and a
+  fourteen-row failure-modes table from five production builds.
+- crew-voice-receptionist (Pack 11 Infrastructure): a no-code AI phone
+  receptionist build for small businesses. Answers missed calls on the
+  existing number via carrier call divert, sounds human (an AU voice through
+  the user's own voice platform), answers FAQs from a knowledge base, books
+  into the user's calendar, takes structured messages, and delivers a
+  transcript plus customer SMS after every call. Ships a reference kit in
+  assets/: five SOPs (divert, voice agent, booking, post-call, compliance),
+  locked data schemas, system prompt, tool JSON schemas, divert-code card,
+  webhook field map, knowledge-base template, and a send-ready client
+  playbook. The catalogue reaches 103 skills; Web Design grows to 15,
+  Infrastructure to 2.
 
 ### Changed
-- crew-marketing-seo-page-builder: the Technical pre-flight. When the page will
-  ship on a site that already exists, the skill now grounds the draft in five
-  read-only fetches instead of assumptions: robots.txt (is the target path
-  crawlable), sitemap.xml (live cannibalization evidence that overrides a
-  "none known" answer), the served HTML (SSR vs CSR, will the metadata and
-  schema ever reach a crawler as written), llms.txt (AI-search readiness), and
-  the PageSpeed API mobile score (a measured number instead of "page speed sits
-  outside this draft"). Wired end to end: discovery asks for the domain, a new
-  workflow step runs the checks, the output format and the filled example carry
-  the pre-flight block, Fast mode keeps the quick fetches and skips the slow
-  PageSpeed call, and the handoff records the findings. The no-fabrication rule
-  extends to it: every field is a fetched fact, "Not checked (unreachable)", or
-  "skipped, no domain supplied", and a guessed result counts as a fabricated
-  metric.
+- crew-marketing-seo-page-builder: the Technical pre-flight. When the page
+  will ship on a site that already exists, the skill grounds the draft in
+  five read-only fetches instead of assumptions: robots.txt (is the target
+  path crawlable), sitemap.xml (live cannibalization evidence), the served
+  HTML (SSR vs CSR), llms.txt (AI-search readiness), and the PageSpeed API
+  mobile score. Wired end to end through discovery, workflow, output format,
+  Fast mode, and the handoff; every field is a fetched fact, "Not checked
+  (unreachable)", or "skipped, no domain supplied".
+- 24 adversarial-review findings fixed across the three additions before
+  landing, including a Critical personal-email leak in the product-film
+  reference and full retargeting of its spliced ceremony and design gate.
 
 ## 1.8.0 (2026-07-08)
 

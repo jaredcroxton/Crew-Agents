@@ -1,0 +1,31 @@
+{
+  "model": "bytedance/v1-lite-image-to-video",
+  "resolution": "1080p",
+  "duration": 5,
+  "clips": [
+    {
+      "id": "clip1",
+      "first": "A",
+      "last": "B",
+      "prompt": "Slow cinematic orbit around the chestnut leather boot floating in a dark atelier, champagne rim light sweeping across the polished leather as the camera moves, dust motes drifting in the light beam, ultra premium product film, no people, no hands, no text, no watermark."
+    },
+    {
+      "id": "clip2",
+      "first": "B",
+      "last": "C",
+      "prompt": "Camera movement only: an extreme macro shot gliding very slowly across the stitched leather seam and elastic side gusset of this Chelsea boot, warm golden raking light shifting across the grain, shallow depth of field. The boot itself never changes: it is a Chelsea boot with elastic side gussets and NO laces, no eyelets, no lace holes, its design stays exactly as shown. No people, no hands, no text, no watermark."
+    },
+    {
+      "id": "clip3",
+      "first": "C",
+      "last": "D",
+      "prompt": "The exploded boot components rotate slowly in dark space and drift gently back together, the leather sole rising toward the one-piece upper, brass nails drifting inward, an elegant slow motion assembly, ultra premium engineering film, no people, no hands, no text, no watermark."
+    },
+    {
+      "id": "clip4",
+      "first": "D",
+      "last": "D",
+      "prompt": "Very slow dolly push toward the pair of chestnut leather boots standing in golden workshop sunlight, dust drifting in the sunbeam, long shadows still, the camera settles calmly to a stop, serene ultra premium product film, no people, no hands, no text, no watermark."
+    }
+  ]
+}
