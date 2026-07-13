@@ -2,6 +2,25 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.12.0 (2026-07-14)
+
+### Changed
+- crew-web-app-builder is restored to Pack 10 and is a permanent core skill: it
+  is the Express / Antigravity automation builder (the five-phase Blueprint,
+  Link, Architect, Stylize, Trigger protocol on the A.N.T. three-layer
+  architecture), the daily driver for scaffolding deterministic automation. It
+  keeps its deliberate QA carve-out from the Step 0 / Final Step frame because
+  it is the BLAST-protocol mirror, not a context-loop skill. Do not delete it.
+
+### Removed
+- crew-project-builder (Pack 11) and its fixture retired: it was the neutralised
+  duplicate of the automation protocol; crew-web-app-builder is the one that
+  ships. The four crew-web-learning-experience references were repointed back to
+  crew-web-app-builder, and the QA carve-outs were re-added to qa-check.sh and
+  the two sweep scripts. Pack 11 now holds crew-voice-receptionist only.
+- Net catalogue count unchanged at 104 (one skill in, one out). This reverses
+  the app-builder removal shipped in 1.11.0.
+
 ## 1.11.0 (2026-07-14)
 
 ### Added

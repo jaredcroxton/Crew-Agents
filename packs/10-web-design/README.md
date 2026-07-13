@@ -22,6 +22,7 @@ These skills build production-ready web output (decks, sites, dashboards, cinema
 | `crew-web-lead-dashboard-builder` | Turns a scrape target into a branded one-page lead dashboard: fit-scores every lead 0 to 100, finds the decision-maker via LinkedIn with backups, drafts a cold email and a LinkedIn DM per lead, verify-before-send | One dashboard.html plus scrape/leads JSON and outreach drafts |
 | `crew-web-website-architect` | Scrapes a live competitor or inspiration site and reverse-engineers type, colour, spacing, layout, surface, and motion into a reusable system; an analysis skill, it studies a site, it does not build one | One design-architecture report plus a fill-in token kit for `crew-web-page-builder` |
 | `crew-web-stitch` | Generates an agent-friendly `DESIGN.md` taste contract for Google Stitch screen generation, encoding premium anti-generic standards, then verifies Stitch's rendered screens against the contract | One `DESIGN.md` taste contract plus a verification pass |
+| `crew-web-app-builder` | The Express automation build protocol: scaffolds and builds any automation, scraper, webhook, cron job, or API integration as deterministic, self-healing Python tooling through the five-phase (Blueprint, Link, Architect, Stylize, Trigger) A.N.T. three-layer architecture | A scaffolded project (memory files, architecture SOPs, tested tools) and a build report |
 
 ## Routing the cinematic cluster
 
