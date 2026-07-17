@@ -2,6 +2,32 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.13.0 (2026-07-18)
+
+### Added
+- Bundled third-party: the six HyperFrames agent skills (hyperframes,
+  hyperframes-cli, hyperframes-media, hyperframes-registry,
+  remotion-to-hyperframes, website-to-hyperframes) now ship under
+  vendor/hyperframes/, redistributed verbatim from
+  github.com/heygen-com/hyperframes under Apache-2.0, with the full licence
+  text and a provenance README beside them. A fresh Crew install now includes
+  rendered video: HTML compositions, synced captions, text-to-speech
+  voiceover, audio-reactive motion, hand-drawn emphasis effects, shader
+  transitions, and renders via npx hyperframes (Node 18+).
+- install.sh installs the vendor skills under their own names with the same
+  skip and force rules as the packs, and places the licence plus provenance
+  note in the target. uninstall.sh --all removes exactly the six shipped
+  names and nothing else.
+- README gains a Bundled extra section; CREDITS.md now separates the
+  Crew-authored guarantee (packs/) from the clearly labelled vendor
+  redistribution.
+
+### Changed
+- qa-check.sh deliberately exempts vendor/ from the em-dash and ban-list
+  scans: third-party text redistributed under its own licence is not
+  Crew-authored and the white-label rules do not apply to it. The Crew
+  catalogue count remains 104; vendor skills are additive.
+
 ## 1.12.0 (2026-07-14)
 
 ### Changed

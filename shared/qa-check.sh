@@ -44,7 +44,10 @@ echo "== em-dash check (all .md except none; em dashes banned everywhere) =="
 # no-op that never matched anything. -CSD is load-bearing: without it perl reads
 # raw bytes and \x{2014} never matches the three UTF-8 bytes of an em dash, the
 # same silent-no-op failure all over again.
-DASHED="$(find . -name '*.md' -type f ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' -exec perl -CSD -ne 'if (/[\x{2014}\x{2013}\x{2015}]/) { print "$ARGV\n"; last }' {} \; 2>/dev/null | sort -u)"
+# vendor/ is deliberately exempt: third-party skills redistributed verbatim under
+# their own licence (see vendor/*/LICENSE); they are not Crew-authored text and the
+# white-label rules do not apply to them.
+DASHED="$(find . -name '*.md' -type f ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' ! -path './vendor/*' -exec perl -CSD -ne 'if (/[\x{2014}\x{2013}\x{2015}]/) { print "$ARGV\n"; last }' {} \; 2>/dev/null | sort -u)"
 if [ -n "$DASHED" ]; then
   echo "$DASHED"; note "em/en dashes found in the files above"
 else ok "no em dashes"; fi
@@ -59,10 +62,11 @@ while IFS= read -r f; do
     */CREDITS.md|./CREDITS.md|*/README.md|./README.md|*/LICENSE|./LICENSE) continue ;;
     */qa-check.sh|./shared/qa-check.sh) continue ;;
     */.claude/*|./.claude/*|./.git/*|./.tmp/*|./dist/*|./plugins/*) continue ;;
+    ./vendor/*) continue ;;
     *.png|*.jpg|*.jpeg|*.gif|*.zip|*.db) continue ;;
   esac
   if grep -iwnE "$BAN" "$f" >/dev/null 2>&1; then note "banned name in $f"; BANHIT=1; fi
-done < <(find . -type f \( -name '*.md' -o -name '*.sh' -o -name '*.json' -o -name '*.py' -o -name '*.html' -o -name '*.txt' -o -name '*.yml' -o -name '*.yaml' \) ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' ! -path './.claude/*')
+done < <(find . -type f \( -name '*.md' -o -name '*.sh' -o -name '*.json' -o -name '*.py' -o -name '*.html' -o -name '*.txt' -o -name '*.yml' -o -name '*.yaml' \) ! -path './.git/*' ! -path './.tmp/*' ! -path './dist/*' ! -path './plugins/*' ! -path './.claude/*' ! -path './vendor/*')
 [ "$BANHIT" = 0 ] && ok "no banned names in shipped files"
 
 echo "== stray binary check (no databases or unexpected binaries in the tree) =="

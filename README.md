@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.12.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.12.0">
+  <img src="https://img.shields.io/badge/CREW-v1.13.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.13.0">
   <img src="https://img.shields.io/badge/SKILLS-104-333333?style=for-the-badge&labelColor=lime&color=333333" alt="104 Skills">
   <img src="https://img.shields.io/badge/PACKS-14-333333?style=for-the-badge&labelColor=lime&color=333333" alt="14 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
@@ -224,6 +224,12 @@ Every skill is gold-standard. Here is what that means:
 | **AU-law jurisdiction-neutral** | Business sets jurisdiction once. Skills adapt. |
 
 ---
+
+## Bundled extra: HyperFrames (rendered video)
+
+Alongside the 104 Crew skills, the install ships six [HyperFrames](https://github.com/heygen-com/hyperframes) skills, the HTML-to-video engine ("Write HTML. Render video. Built for agents."). Invoke `hyperframes` when you want a rendered video: compositions, captions synced to audio, text-to-speech voiceover, audio-reactive motion, hand-drawn emphasis effects, shader transitions, and full renders via `npx hyperframes` (needs Node 18+).
+
+HyperFrames is third-party, redistributed verbatim under its Apache-2.0 licence (see `vendor/hyperframes/`). It keeps its own name and its own conventions; the Crew gold template and QA gates apply to Crew skills only.
 
 ## Compatibility
 

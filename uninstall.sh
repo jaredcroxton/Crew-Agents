@@ -96,6 +96,15 @@ done
 if [ "$ALL" = 1 ] && [ "$DRY" != 1 ] && [ -f "$DEST/crew-method.md" ]; then
   remaining=$(find "$DEST" -maxdepth 1 -type d -name 'crew-*' 2>/dev/null | wc -l | tr -d ' ')
   if [ "$remaining" = 0 ]; then rm -f "$DEST/crew-method.md"; echo "  removed  crew-method.md (no Crew skills remain)"; fi
+  if [ "$remaining" = 0 ] && [ -f "$DEST/web-standards.md" ]; then rm -f "$DEST/web-standards.md"; echo "  removed  web-standards.md (no Crew skills remain)"; fi
+fi
+
+# with --all, also remove the bundled HyperFrames vendor skills (exact shipped names
+# only, so a buyer's own similarly named work is never touched)
+if [ "$ALL" = 1 ] && [ "$DRY" != 1 ]; then
+  for v in hyperframes hyperframes-cli hyperframes-media hyperframes-registry remotion-to-hyperframes website-to-hyperframes; do
+    if [ -d "$DEST/$v" ]; then rm -rf "$DEST/$v"; echo "  removed  $v (bundled vendor skill)"; REMOVED=$((REMOVED+1)); fi
+  done
 fi
 
 echo "------------------------------------------------------------"

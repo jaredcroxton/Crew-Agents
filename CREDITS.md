@@ -1,7 +1,10 @@
 # Credits and provenance
 
 ## Authored fresh
-Every Crew skill in this product is written from scratch. No third-party skill text, prose, code, or binaries are included or redistributed. The skills are original work.
+Every Crew skill in this product (every `crew-*` skill in packs/) is written from scratch. No third-party text, prose, or code appears inside any Crew-authored skill. The skills are original work.
+
+## Bundled third-party: HyperFrames
+One third-party skill set is redistributed alongside the Crew skills, clearly separated under `vendor/hyperframes/`: the six HyperFrames agent skills from https://github.com/heygen-com/hyperframes, redistributed verbatim under the Apache License 2.0 (the full licence text ships in `vendor/hyperframes/LICENSE`). HyperFrames keeps its own name and conventions; it is not Crew-authored, and the Crew gold template, Context Loop, and QA gates do not apply to it.
 
 ## Methodology influences
 The Crew Method draws on two open-source methodologies, credited here as influences on approach, not as sources of any shipped text:

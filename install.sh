@@ -166,6 +166,28 @@ if [ "$DRY" != 1 ] && [ -f "$HERE/shared/web-standards.md" ]; then
   echo "  ok    web-standards.md (Crew Web Standards, cited by every web skill)"
 fi
 
+# bundled third-party: HyperFrames (Apache-2.0, vendored verbatim under vendor/).
+# Installed as-is under its own names; the licence and provenance ship beside the
+# skills in the target so redistribution stays compliant. Same skip/force rules
+# as the packs. Requires Node 18+ at runtime (the skills drive npx hyperframes).
+if [ -d "$HERE/vendor/hyperframes/skills" ]; then
+  for sd in "$HERE"/vendor/hyperframes/skills/*/; do
+    [ -d "$sd" ] || continue
+    skill="$(basename "${sd%/}")"
+    if [ -d "$DEST/$skill" ] && [ "$FORCE" != 1 ]; then echo "  skip  $skill (already present)"; SKIPPED=$((SKIPPED+1)); continue; fi
+    if [ "$DRY" = 1 ]; then echo "  would install  $skill (vendor: hyperframes)"; INSTALLED=$((INSTALLED+1)); continue; fi
+    rm -rf "$DEST/$skill"
+    cp -R "$sd" "$DEST/$skill"
+    INSTALLED=$((INSTALLED+1))
+    echo "  ok    $skill (vendor: hyperframes, Apache-2.0)"
+  done
+  if [ "$DRY" != 1 ]; then
+    mkdir -p "$DEST/hyperframes"
+    cp "$HERE/vendor/hyperframes/LICENSE" "$DEST/hyperframes/LICENSE" 2>/dev/null || true
+    cp "$HERE/vendor/hyperframes/README.md" "$DEST/hyperframes/VENDOR-README.md" 2>/dev/null || true
+  fi
+fi
+
 # prune: remove crew-* dirs in the target that have no source folder in packs/.
 # Scoped to the crew-* prefix so no other skill (flow-*, gsap, hyperframes, ...) is
 # ever touched, AND ownership-validated: a dir whose SKILL.md frontmatter name does
