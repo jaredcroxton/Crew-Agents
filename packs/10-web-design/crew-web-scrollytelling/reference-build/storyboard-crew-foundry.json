@@ -1,0 +1,31 @@
+{
+  "concept": "THE FOUNDRY - gold-standard skills are not prompted, they are forged. One continuous slow push-in, dark charcoal world, electric lime-green molten light.",
+  "keyframe": "Cinematic film still, near-total darkness. A single brilliant electric lime-green molten ember, a small glowing fleck of liquid metal, hangs at upper center frame, falling slowly through a vast black industrial void, leaving a faint trail of tiny lime sparks. Subtle drifting dust motes catch its green light. Deep charcoal-black gradient, faint volumetric haze below hinting at a distant hot glow far beneath. Photoreal, high contrast, subtle film grain, Full-bleed full-frame image, no letterbox bars, no black bars, no borders, no text, no watermark, no logo.",
+  "clips": [
+    {
+      "id": "clip1",
+      "chapter": "The Ember",
+      "prompt": "The camera slowly pushes downward following a single brilliant electric lime-green molten ember falling through a vast black industrial void, tiny lime sparks trailing behind it, dust motes drifting in its light, a faint hot glow growing at the bottom of frame as it falls, slow steady continuous camera descent, cinematic, photoreal, subtle film grain, deep charcoal-black world with electric lime-green light as the only color, no text, no watermark."
+    },
+    {
+      "id": "clip2",
+      "chapter": "The Pour",
+      "prompt": "Continue the exact same shot from the reference frame, identical framing, identical colour grade. Do not change the colour grade. The falling ember reveals a vast dark foundry hall below: molten electric lime-green metal pours from a massive dark crucible into a black mold, cascading lime sparks, silhouetted black machinery, volumetric smoke lit green, the camera keeps pushing slowly forward and down toward the glowing pour, cinematic, photoreal, deep charcoal-black world with electric lime-green molten light as the only color, no text, no watermark."
+    },
+    {
+      "id": "clip3",
+      "chapter": "The Strike",
+      "prompt": "Continue the exact same shot from the reference frame, identical framing, identical colour grade. Do not change the colour grade. A massive black forge press slams down onto the glowing lime-green billet: a slow-motion explosion of lime sparks bursts toward the camera, a shockwave of green light through smoke, the camera pushes slowly forward through the drifting spark storm, black industrial silhouettes, cinematic, photoreal, deep charcoal-black world with electric lime-green light as the only color, no text, no watermark."
+    },
+    {
+      "id": "clip4",
+      "chapter": "The Temper",
+      "prompt": "Continue the exact same shot from the reference frame, identical framing, identical colour grade. Do not change the colour grade. The sparks clear to reveal a freshly forged dark steel instrument cooling in close-up, its edges still glowing electric lime-green, fine precise engraved lines pulsing with lime light along its surface, thin wisps of steam rising, the camera glides slowly forward along the cooling blade edge in macro, metal fading from molten green to matte black steel, cinematic, photoreal, no text, no watermark."
+    },
+    {
+      "id": "clip5",
+      "chapter": "The Armory",
+      "prompt": "Continue the exact same shot from the reference frame, identical framing, identical colour grade. Do not change the colour grade. The camera pushes slowly past the finished dark forged instrument into a vast pitch-black armory hall: endless tall racks of black forged tools barely visible in deep shadow, only faint electric lime-green glints tracing their edges, thick darkness swallowing the space, all lights dimming as the camera drifts slowly forward into a deep black corridor, the frame gradually darkening until almost everything is pure black with a few last lime glints, very dark moody cinematic lighting, no bright room, no visible ceiling lights, no text, no watermark."
+    }
+  ]
+}

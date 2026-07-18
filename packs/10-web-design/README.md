@@ -13,6 +13,7 @@ These skills build production-ready web output (decks, sites, dashboards, cinema
 | `crew-web-slide-deck-mobile` | Builds a 9:16 vertical story deck for the phone: full-screen snap panels, reels-native type, media generated vertical at the source, plus a Mobile Quote template for sending proposals by text | One self-contained vertical `.html` deck |
 | `crew-web-cinematic-build` | Builds an epic scroll-driven site with floating 3D objects in themed environments, scenes that morph on scroll, fog, bloom, oversized editorial type; the 3D world is built in-browser from nine still images, no footage needed | One self-contained cinematic scroll `.html` |
 | `crew-web-fly-through-builder` | Builds a scroll-scrub site where scrolling scrubs one continuous camera journey forward and back under stage typography, ending at an arrival that expands into a listing, product, or story | One scroll-scrub site (canvas frame-sequence) |
+| `crew-web-scrollytelling` | Builds a scroll-film site where the whole page is one continuous cinematic shot that plays as the visitor scrolls, beats of copy riding on the film, resolving into standard content sections; pure-code motion by default, chained generated footage as the opt-in signature lane | One self-contained scroll-film `.html` |
 | `crew-web-immersive-narrative` | Builds a multi-stage gated story site: themed stages reveal on scroll, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, an arrival hero resolves each stage | One self-contained gated-story `.html` |
 | `crew-web-product-film` | Builds an Apple-grade cinematic product film site (scroll-scrubbed video opening act plus a kinetic content act) for one physical product, seeded from the brand's own real imagery via the KIE pipeline | One self-contained product-film site plus generated frames |
 | `crew-web-real-estate-immersive` | Builds a scroll-scrubbed cinematic property tour from a REAL listing: the listing's tour footage plays forward and back under serif chapter type, one chapter per room, plus photo gallery, floorplan, and agent CTAs | One self-contained listing tour site (real footage only) |
@@ -33,6 +34,7 @@ Several skills sit close together. Route in one read:
 - **Local service business that needs bookings and calls**: `crew-web-booking-site-builder`.
 - **3D world and atmosphere on scroll** (objects, fog, bloom, built from stills, no footage): `crew-web-cinematic-build`.
 - **One continuous camera journey scrubbed by the scrollbar**: `crew-web-fly-through-builder`.
+- **The page IS the film, several beats on one unbroken shot, ending in content sections**: `crew-web-scrollytelling`.
 - **A long-form story world with gated multi-stage reveals**: `crew-web-immersive-narrative`.
 - **An Apple-style page for one physical product**: `crew-web-product-film`.
 - **A single-effect hero**: `crew-web-spotlight-hero` (cursor reveal) or `crew-web-webcam-website` (hand-tracking gesture scrub).

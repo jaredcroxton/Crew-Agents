@@ -2,6 +2,31 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.14.0 (2026-07-18)
+
+### Added
+- Skill 105: crew-web-scrollytelling (Pack 10). Builds a scroll-film site where
+  the whole page is one continuous cinematic shot that plays as the visitor
+  scrolls, beats of copy riding on the film, resolving into standard content
+  sections. Two lanes: pure-code motion by default (zero setup), chained
+  generated footage as the opt-in signature lane (KIE primary route with the
+  proven chain contract, Higgsfield documented alternative, any start-image
+  engine on the same contract). Converted from a field-proven local studio
+  build: the footage-first law, the chaining law with exact continuation
+  language, the measured junction gate (SSIM thresholds plus the stochastic
+  under-read allowances, side-by-side decides), billing verified by balance
+  delta, the canvas scrub engine (never a video element), letterbox and
+  bright-ending regeneration language, the clip-path IntersectionObserver
+  deadlock law, and cost discipline with a user-approved credit ceiling.
+  Ships references/ (playbook, engine recipes), scripts/ (kie.py chain
+  runner, chain-step.sh, assemble.sh, verify.js), a worked reference
+  storyboard, and a three-case fixture. Second-model consults from the
+  source were stripped; taste stays on the one model and the binding
+  verdict stays with the design review gate.
+- README pack table reconciled against disk: Web Design 18, Infrastructure 1
+  (rows had been stale since 1.11.0; the count guard checks only the badge
+  total, which stays exact at 105).
+
 ## 1.13.0 (2026-07-18)
 
 ### Added
