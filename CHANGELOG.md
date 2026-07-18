@@ -2,6 +2,31 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.15.0 (2026-07-18)
+
+### Added
+- Skill 106: crew-sales-audit-deck (Pack 02 Sales, 7 to 8). Turns discovery
+  call notes into a branded ten-slide audit deck, matched against the
+  operator's own library of past builds. Ported from a community n8n audit
+  workflow, stripped to the reasoning that actually matters: the extraction
+  discipline, the library match, and the cost of inaction, with blank beats
+  invented held throughout (never invent a firmographic, a tool, or a dollar
+  figure the client did not state; process steps the only inferred content,
+  always labelled). The library is the moat: a per-brand cabinet drawer at
+  crew-state/brands/<brand>/sales/library/, SHIPPED-only entries, grep-matched,
+  seed six real builds. Renders by consulting crew-web-slide-deck-builder with
+  the completed plan (its Fast mode renders, it keeps its own design gate), and
+  writes a durable handoff either way. A three-tier product: Native on Claude,
+  a portable bring-your-own-model kit, a managed done-for-you.
+- Built through the full gold loop (author, three adversarial lenses, fixer).
+  The senior-sales lens caught a real cost-of-inaction inflation (frequency
+  times value with no capture rate reads 3 to 5x high and gets torn apart on
+  the follow-up call); the method now applies a conservative capture-rate range
+  labelled revenue at risk. Also added: a two-sided proof clause on the
+  recommendations slide, roadmap months reconciled against each build's stated
+  timeline, money slides stamped pending and the deck held at DONE_WITH_GAPS
+  until priced, and a single primary call to action on the close slide.
+
 ## 1.14.0 (2026-07-18)
 
 ### Added

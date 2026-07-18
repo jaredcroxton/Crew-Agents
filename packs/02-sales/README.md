@@ -11,6 +11,7 @@ From first research to a signed proposal, these skills keep the pipeline moving 
 | `crew-sales-outreach-draft` | Writes specific first-touch messages, not templated filler | First email, LinkedIn message, call opener |
 | `crew-sales-follow-up-sequence` | Creates follow-ups that each try a fresh angle | Email sequence, SMS follow-up, call script |
 | `crew-sales-proposal-builder` | Turns a discovery call into a yes-able proposal | Proposal draft, scope, deliverables, next-step email |
+| `crew-sales-audit-deck` | Turns discovery call notes into a branded audit deck, matched to your real past builds | Branded 10-slide HTML audit deck, grounded, pricing left manual |
 | `crew-sales-pipeline-review` | Surfaces stuck deals and the next action for each | Pipeline summary, stalled deals, next-action plan |
 | `crew-sales-crm-cleanup` | Produces a prioritised cleanup plan from a messy CRM | Missing-data list, duplicates to review, cleanup plan |
 
