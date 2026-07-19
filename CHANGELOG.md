@@ -2,6 +2,21 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.15.1 (2026-07-18)
+
+### Changed
+- crew-web-scrollytelling rebuilt craft-first (55KB to 24KB). Field comparison
+  against the original studio skill showed the conversion had preserved the
+  reference files but diluted the build brief: the same craft wrapped in four
+  times the governance, with the creative-authority framing buried. The skill
+  now leads with the golden rule (design is done by the model running it),
+  keeps the original's voice and order (interview, pitch, art-direct, lanes,
+  delegation model, cost discipline), and compresses the Crew rails to the
+  required blocks at the tail. The design review gate is now briefed with the
+  cinema register: boldness judged as intent, the gate kills real defects
+  (jank, illegible copy, broken reduced-motion, masked seams), it does not
+  sand the art. Process spine unchanged: interview, pitch, pick, then build.
+
 ## 1.15.0 (2026-07-18)
 
 ### Added
