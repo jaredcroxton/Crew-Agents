@@ -2,6 +2,32 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.16.0 (2026-07-18)
+
+### Added
+- Skill 107: crew-marketing-carousel-campaign (Pack 03 Marketing, 7 to 8). The
+  proven Meta carousel campaign pipeline, converted whole: one style reference
+  in, a ready-to-post kit out. Six carousels of four slides (an animated hero
+  plus three code-rendered slides each), built on the core principle that AI
+  generates only the hero plates and code does everything else (copy, layout,
+  animation of fragile assets). Ships the full working toolchain (plate
+  extension, headless page export, Seedance animation with a code-built
+  fallback, 4K upgrade, text surgeon, kit builder, review gallery), the style
+  recipes, the failure-modes scar tissue, and an offer template with a fully
+  fictional worked example. The mandatory human step is welded in as the
+  spine: the skill delivers the prompt pack, then STOPS while the user
+  generates the six hero plates in Google Flow and returns them; proceeding
+  without real plates is named a defect. Converted craft-first per the house
+  doctrine, rails at the tail, zero personal or brand data.
+
+### Changed
+- crew-marketing-campaign-plan now routes the produced paid-social visual
+  system to crew-marketing-carousel-campaign (its builder roster is complete);
+  crew-marketing-social-post-pack routes fully produced carousel systems the
+  same way. The chain: plan the campaign, the carousel skill consumes the plan
+  record from the project and asks only for the style reference, captions run
+  through brand-voice-check, the kit through the quality checker.
+
 ## 1.15.1 (2026-07-18)
 
 ### Changed

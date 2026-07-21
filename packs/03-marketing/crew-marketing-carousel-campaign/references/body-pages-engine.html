@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Body Pages · Render Canvas (room-colour engine, fictional worked example)</title>
+<style>
+  @font-face {
+    font-family: 'Archivo Black';
+    src: url('assets/fonts/ArchivoBlack-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  :root {
+    --paper: #F4F1E9;
+    --ink: #131312;
+    --lime: #D9E021;
+    --disp: 'Archivo Black', 'Arial Black', sans-serif;
+    --grot: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #333; font-family: var(--grot); }
+
+  .sheet { width: 1080px; height: 1350px; background: var(--paper); color: var(--ink);
+    position: relative; overflow: hidden; flex: 0 0 auto; }
+
+  .grain { position: absolute; inset: 0; pointer-events: none; z-index: 40; opacity: 0.45;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* checkerboard footer strip */
+  .checker { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; z-index: 8;
+    background-size: 64px 64px; background-position: 0 0; }
+
+  /* glass tile visual with hero fragment */
+  .tile { position: absolute; z-index: 10; border-radius: 34px; overflow: hidden;
+    box-shadow: 0 0 0 6px rgba(217,224,33,0.9), 0 0 60px rgba(217,224,33,0.55), 0 24px 60px rgba(19,19,18,0.25); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile.solid { background: var(--lime); }
+  .tile.solid img { display: none; }
+
+  .content { position: absolute; inset: 72px 76px 96px; z-index: 20; display: flex; flex-direction: column; }
+  .content > * { flex-shrink: 0; }
+
+  .kicker { display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--grot); font-weight: 700; font-size: 21px; letter-spacing: 0.22em; }
+  .kicker .r { opacity: 0.55; letter-spacing: 0.14em; }
+
+  .headwrap { margin-top: 52px; }
+  .headline { font-family: var(--disp); text-transform: uppercase; line-height: 1.02; }
+  .headline .hl-line { display: block; white-space: nowrap; }
+  .headline .ac { padding: 2px 18px 0; display: inline-block; }
+
+  .bodywrap { margin-top: 42px; }
+  .bodycopy { font-family: var(--grot); font-size: 37px; line-height: 1.44; font-weight: 500; }
+  .bodycopy b { font-weight: 700; background: var(--lime); padding: 0 8px; color: var(--ink); }
+  .bodycopy .li { display: block; margin-bottom: 12px; }
+  .bodycopy .arrow { font-weight: 700; }
+
+  .spacer { flex: 1; }
+
+  .price { font-family: var(--disp); line-height: 0.9; letter-spacing: -0.01em; }
+  .pill { display: inline-flex; align-items: center; gap: 16px; background: var(--lime); color: var(--ink);
+    font-family: var(--grot); font-weight: 800; font-size: 30px; letter-spacing: 0.06em;
+    padding: 24px 36px; border-radius: 999px; box-shadow: 0 0 44px rgba(217,224,33,0.5); }
+  .pill svg { width: 34px; height: 34px; }
+
+  .footer { display: flex; align-items: center; justify-content: flex-start; gap: 52px; margin-top: 34px; }
+  .footer .swipe { margin-left: auto; }
+  .brand { font-family: var(--grot); font-weight: 700; font-size: 20px; letter-spacing: 0.18em; opacity: 0.85; }
+  .dots { display: flex; gap: 12px; align-items: center; }
+  .dots i { width: 16px; height: 16px; border-radius: 4px; border: 3px solid currentColor; display: block; opacity: 0.45; }
+  .dots i.on { background: var(--lime); border-color: var(--ink); opacity: 1; }
+  .swipe { display: flex; align-items: center; gap: 12px; font-family: var(--grot); font-weight: 700;
+    font-size: 18px; letter-spacing: 0.2em; }
+  .swipe .chip { width: 56px; height: 56px; border-radius: 16px; background: var(--lime); display: flex;
+    align-items: center; justify-content: center; box-shadow: 0 0 26px rgba(217,224,33,0.6); }
+  .swipe .chip svg { width: 26px; height: 26px; }
+
+  body.contact { display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; background: #26251f; }
+  body.contact .sheet { transform: scale(0.30); transform-origin: top left;
+    margin-right: calc(-1080px * 0.70); margin-bottom: calc(-1350px * 0.70 + 20px); }
+  body.single { display: flex; }
+  body.single .sheet { transform: none; }
+</style>
+</head>
+<body>
+<script>
+const INK = '#131312', LIME = '#D9E021';
+
+/* per-carousel room accent system */
+const ROOMS = {
+  1: { name:'THE ANNOUNCEMENT', accent:'#B9C400', deep:'#8A9400', tint:'#F3F5D8', dark:false },
+  2: { name:'THE DIFFERENTIATOR', accent:'#2E62B8', deep:'#1F4A96', tint:'#E3EBF7', dark:false },
+  3: { name:'THE CREDENTIALS', accent:'#C05A38', deep:'#9A431F', tint:'#F6E7DE', dark:false },
+  4: { name:'THE MECHANISM', accent:'#E8A420', deep:'#B87D10', tint:'#FBF0D8', dark:false },
+  5: { name:'THE CLOSE', accent:'#B49E72', deep:'#8F7A50', tint:'#F6EFE2', dark:false },
+  6: { name:'THE KEEPSAKE', accent:'#161616', deep:'#000000', tint:'#EDEDEA', dark:true },
+};
+
+
+const HEROES_IMG = {
+  1: 'exports/hero1-announcement.png',
+  2: 'exports/hero2-differentiator.png',
+  3: 'exports/hero3-credentials.png',
+  4: 'exports/hero4-mechanism.png',
+  5: 'exports/hero5-close.png',
+  6: 'exports/hero6-keepsake.png',
+};
+
+/* Copy below is the FICTIONAL Saltbrook Ceramics worked example (ONE DAY ON THE
+   WHEEL, 14.11, $349). Rewrite every page for your campaign; keep one idea per
+   payoff slide and the CTA structure (price + date + tap the link). */
+const PAGES = [
+  { id:'c1p2', c:1, page:2,
+    lines:[{t:"YOU WON'T WATCH."},{t:"YOU'LL THROW.",ac:1}], size:94,
+    body:`One day. At the wheel. You walk in never having touched clay and walk out having thrown <b>six real pieces</b> with your own hands. No screens. No theory. You make the thing.`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c1p3', c:1, page:3,
+    lines:[{t:"SIX PIECES."},{t:"FIRED",ac:1},{t:"FOR YOU.",ac:1}], size:94,
+    body:`You throw them, trim them, and glaze the lot. We fire every piece in the studio kiln and <b>you collect the finished set</b> two weeks later. Real stoneware, food safe, made by you.`,
+    frag:{x:'16%', y:'66%', s:2.4} },
+  { id:'c1p4', c:1, page:4, cta:true,
+    lines:[{t:"OPENING"},{t:"PRICE."}], size:88, price:'$349',
+    body:`14.11, in the studio, 12 wheels only. The opening cohort, the lowest this ever goes.`,
+    pill:'TAP THE LINK · LOCK YOUR WHEEL' },
+
+  { id:'c2p2', c:2, page:2,
+    lines:[{t:"EVERY TUTORIAL"},{t:"LOOKS THE SAME.",ac:1}], size:82,
+    body:`40 videos you never finish. A folder of saved reels. A wishlist with a wheel in it. You do not need more watching. <b>You need your hands on clay.</b>`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c2p3', c:2, page:3,
+    lines:[{t:"SO WE TURNED"},{t:"OFF THE SCREEN.",ac:1}], size:82,
+    body:`No modules. No replays. You are at a wheel with a potter beside you, <b>making live</b>, your hands corrected in the moment. Six hours of doing, not watching.`,
+    frag:{x:'53%', y:'69%', s:2.4} },
+  { id:'c2p4', c:2, page:4, cta:true,
+    lines:[{t:"ONE DAY."},{t:"REAL PIECES."}], size:80, price:'$349',
+    body:`14.11, in the studio, opening price. No recordings, no catch-up module. You make it live or you miss it.`,
+    pill:'TAP THE LINK · SEE OPEN WHEELS' },
+
+  { id:'c3p2', c:3, page:2,
+    lines:[{t:"WHO'S"},{t:"TEACHING THIS?",ac:1}], size:90,
+    body:`Twenty years of <b>production throwing</b>. Work stocked in three galleries. More than 400 beginners taught at this wheel. Not an influencer. A potter who teaches.`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c3p3', c:3, page:3,
+    lines:[{t:"AND SHE"},{t:"STILL THROWS DAILY.",ac:1}], size:90,
+    body:`Every technique you learn is one she used <b>this morning</b>. Centering, pulling walls, trimming feet, glazing. Not theory. What the working day actually looks like.`,
+    frag:{x:'50%', y:'74%', s:2.4} },
+  { id:'c3p4', c:3, page:4, cta:true,
+    lines:[{t:"LEARN FROM SOMEONE"},{t:"WHO MAKES."}], size:64, price:'$349',
+    body:`14.11. In the studio. Opening price. 12 wheels only.`,
+    pill:'TAP THE LINK · LOCK YOUR WHEEL' },
+
+  { id:'c4p2', c:4, page:2,
+    lines:[{t:"THROW. TRIM. GLAZE."},{t:"ONE DAY,",ac:1},{t:"START TO SET.",ac:1}], size:78,
+    body:`Morning: centre your first ball of clay and throw six pieces. Afternoon: trim your best, then glaze two favourites from the <b>studio glaze wall</b>. Every step at your own wheel.`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c4p3', c:4, page:3,
+    lines:[{t:"WE FIRE."},{t:"YOU COLLECT.",ac:1}], size:78,
+    body:`Your pieces go through a bisque firing and a glaze firing in the studio kiln. Two weeks later you collect a <b>finished, food-safe set</b>. Nothing to buy, nothing to bring.`,
+    frag:{x:'42%', y:'80%', s:2.4} },
+  { id:'c4p4', c:4, page:4, cta:true,
+    lines:[{t:"BOOK YOUR WHEEL"},{t:"FOR 14.11."}], size:76, price:'$349',
+    body:`In the studio. 6 hours. Clay, tools, firing and glazes all included.`,
+    pill:'TAP THE LINK · BOOK 14.11' },
+
+  { id:'c5p2', c:5, page:2,
+    lines:[{t:"NEVER TOUCHED"},{t:"CLAY?"},{t:"PERFECT.",ac:1}], size:78,
+    body:`No experience needed. Aprons, clay, tools and firing all provided. If you can <b>push your hands into mud</b>, you can throw a pot. Built for absolute beginners.`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c5p3', c:5, page:3,
+    lines:[{t:"HERE'S"},{t:"YOUR DAY.",ac:1}], size:98,
+    body:`<span class="li"><span class="arrow">&#8594;</span>&nbsp; Walk in at nine</span><span class="li"><span class="arrow">&#8594;</span>&nbsp; Centre your first ball of clay</span><span class="li"><span class="arrow">&#8594;</span>&nbsp; Throw six pieces at your own wheel</span><span class="li"><span class="arrow">&#8594;</span>&nbsp; Glaze two favourites</span><span class="li"><span class="arrow">&#8594;</span>&nbsp; Collect the fired set, <b>made by you</b>, two weeks later</span>`,
+    frag:{x:'40%', y:'74%', s:2.4} },
+  { id:'c5p4', c:5, page:4, cta:true,
+    lines:[{t:"THIS IS"},{t:"THE FLOOR."}], size:90, price:'$349',
+    body:`Opening cohort, the lowest price this will ever be. 12 wheels, in the studio, 14.11.`,
+    pill:'TAP THE LINK · START NOW' },
+
+  { id:'c6p2', c:6, page:2,
+    lines:[{t:"EVERYTHING YOU OWN"},{t:"WAS MADE",ac:1},{t:"BY SOMEONE ELSE."}], size:82,
+    body:`Your mug, your bowl, your plates: all of it arrived in a box, made by hands you will never meet. Buy another and it means nothing. <b>Make one and it means everything.</b>`,
+    frag:{x:'50%', y:'50%', s:1} },
+  { id:'c6p3', c:6, page:3,
+    lines:[{t:"SO MAKE"},{t:"THE NEXT ONE.",ac:1}], size:78,
+    body:`The mug you drink from every morning, thrown by your own hands, glazed in your colour, fired and permanent. A thing <b>nobody can buy</b>, because there is only one.`,
+    frag:{x:'30%', y:'78%', s:2.4} },
+  { id:'c6p4', c:6, page:4, cta:true,
+    lines:[{t:"OWN IT"},{t:"ON 14.11."}], size:90, price:'$349',
+    body:`In the studio. Opening price. Make the thing and take it home for good.`,
+    pill:'TAP THE LINK · OWN YOUR SEAT' },
+];
+
+function checkerCSS(color) {
+  return `linear-gradient(45deg, ${color} 25%, transparent 25%, transparent 75%, ${color} 75%),` +
+         `linear-gradient(45deg, ${color} 25%, #FFFFFF 25%, #FFFFFF 75%, ${color} 75%)`;
+}
+
+function renderPage(p) {
+  const room = ROOMS[p.c];
+  const cta = !!p.cta;
+  const sheetBg = cta ? room.accent : room.tint;
+  const inkColor = cta ? (room.dark ? '#F2F1EC' : (p.c === 1 || p.c === 4 || p.c === 5 ? INK : '#FFFFFF')) : INK;
+  const acBg = cta ? (room.dark ? LIME : 'rgba(19,19,18,0.85)') : room.accent;
+  const acFg = cta ? (room.dark ? INK : '#FFFFFF') : (['#B9C400','#E8A420','#B49E72'].includes(room.accent) ? INK : '#FFFFFF');
+
+  const headline = p.lines.map(l =>
+    `<span class="hl-line">${l.ac ? `<span class="ac" style="background:${acBg}; color:${acFg};">${l.t}</span>` : l.t}</span>`).join('');
+
+  const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="${INK}" stroke-width="3.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+
+  const tileHtml = cta ? `
+    <div class="tile solid" style="right:-150px; top:-150px; width:460px; height:460px; transform:rotate(8deg);"></div>` : `
+    <div class="tile" style="right:-120px; bottom:120px; width:520px; height:520px; transform:rotate(4deg);">
+      <img src="${HEROES_IMG[p.c]}" style="object-position:${p.frag.x} ${p.frag.y}; transform-origin:${p.frag.x} ${p.frag.y}; transform:scale(${p.frag.s||1});">
+    </div>`;
+
+  const priceBlock = cta ? `
+    <div class="price" style="font-size:290px; margin-top:26px; color:${room.dark ? LIME : (p.c===1||p.c===4||p.c===5 ? INK : '#FFFFFF')};">${p.price}</div>` : '';
+
+  const pillBlock = cta ? `
+    <div style="margin-top:56px;"><span class="pill">${p.pill} ${arrow}</span></div>` : '';
+
+  return `
+  <div class="sheet" id="${p.id}" style="background:${sheetBg}; color:${inkColor};">
+    ${tileHtml}
+    <div class="checker" style="background-image:${checkerCSS(cta ? 'rgba(19,19,18,0.25)' : room.accent)}; background-size:64px 64px, 64px 64px; background-position:0 0, 32px 32px; opacity:${cta ? 0.5 : 0.9};"></div>
+    <div class="content">
+      <div class="kicker">
+        <span>SALTBROOK &middot; ${room.name}</span>
+        <span class="r">0${p.page} / 04</span>
+      </div>
+      <div class="headwrap">
+        <div class="headline" style="font-size:${p.size}px;">${headline}</div>
+      </div>
+      ${priceBlock}
+      <div class="bodywrap" style="max-width:${cta ? '820px' : '580px'};">
+        <div class="bodycopy" style="${cta && !room.dark && p.c !== 1 && p.c !== 4 && p.c !== 5 ? 'color:rgba(255,255,255,0.92);' : ''}${cta && room.dark ? 'color:rgba(242,241,236,0.88);' : ''}">${p.body}</div>
+      </div>
+      ${pillBlock}
+      <div class="spacer"></div>
+      <div class="footer">
+        <div class="brand">Saltbrook &middot; 14.11</div>
+        <div class="dots">
+          ${[1,2,3,4].map(n => `<i class="${n === p.page ? 'on' : ''}"></i>`).join('')}
+        </div>
+        <div class="swipe">${p.page < 4 ? `<span>SWIPE</span><span class="chip">${arrow}</span>` : `<span style="letter-spacing:0.14em;">12 WHEELS ONLY</span>`}</div>
+      </div>
+    </div>
+    <div class="grain"></div>
+  </div>`;
+}
+
+const params = new URLSearchParams(location.search);
+const want = params.get('page');
+const list = want ? PAGES.filter(p => p.id === want) : PAGES;
+document.body.className = want ? 'single' : 'contact';
+document.body.innerHTML = list.map(renderPage).join('');
+
+document.fonts.ready.then(() => {
+  document.querySelectorAll('.sheet').forEach(sheet => {
+    const head = sheet.querySelector('.headline');
+    const wrap = sheet.querySelector('.headwrap');
+    let size = parseInt(head.style.fontSize);
+    while (head.scrollWidth > wrap.clientWidth && size > 44) {
+      size -= 3; head.style.fontSize = size + 'px';
+    }
+    const bodyEl = sheet.querySelector('.bodycopy');
+    let bsize = parseInt(getComputedStyle(bodyEl).fontSize);
+    const content = sheet.querySelector('.content');
+    while (content.scrollHeight > content.clientHeight && bsize > 26) {
+      bsize -= 1; bodyEl.style.fontSize = bsize + 'px';
+    }
+    const price = sheet.querySelector('.price');
+    if (price) {
+      let ps = parseInt(price.style.fontSize);
+      while (price.scrollWidth > wrap.clientWidth && ps > 160) {
+        ps -= 10; price.style.fontSize = ps + 'px';
+      }
+    }
+  });
+  document.body.dataset.fitted = '1';
+});
+</script>
+</body>
+</html>

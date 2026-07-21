@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIMELIGHT · Prompt Pack (worked example: Saltbrook Ceramics, fictional)</title>
+<style>
+  :root {
+    --bg: #0E0E0E;
+    --card: #161616;
+    --line: #2A2A2A;
+    --paper: #F4F4F0;
+    --dim: #9A9A94;
+    --lime: #D9E021;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+    --display: "Archivo Black", "Arial Black", Impact, sans-serif;
+    --body: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--paper); font-family: var(--body); line-height: 1.55; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 44px 24px 120px; }
+
+  header { border-bottom: 3px solid var(--lime); padding-bottom: 30px; margin-bottom: 10px; }
+  .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; color: var(--dim); }
+  .kicker .chip { background: var(--lime); color: #111; padding: 2px 9px; font-weight: 700; }
+  h1 { font-family: var(--display); font-size: clamp(48px, 10vw, 104px); line-height: 0.92; text-transform: uppercase; letter-spacing: -0.01em; }
+  h1 .lime { color: var(--lime); }
+  .sub { font-family: var(--mono); font-size: 12.5px; margin-top: 18px; max-width: 660px; color: var(--dim); }
+  .sub b { color: var(--lime); font-weight: 700; }
+
+  nav { display: flex; gap: 8px; flex-wrap: wrap; padding: 18px 0 30px; font-family: var(--mono); font-size: 11px; }
+  nav a { color: var(--paper); text-decoration: none; border: 1.5px solid var(--line); padding: 5px 11px; background: var(--card); }
+  nav a:hover { border-color: var(--lime); color: var(--lime); }
+
+  .togglebar { position: sticky; top: 0; z-index: 50; background: var(--lime); color: #111; padding: 12px 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; font-weight: 700; margin-bottom: 36px; }
+  .togglebar .copyall { margin-left: auto; background: #111; color: var(--lime); border: none; font-family: var(--mono); font-weight: 700; font-size: 11px; padding: 8px 14px; cursor: pointer; letter-spacing: 0.05em; }
+  .togglebar .copyall:hover { background: #000; }
+
+  section { margin-bottom: 64px; }
+  .sec-tab { display: inline-block; background: var(--lime); color: #111; font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: 0.1em; padding: 6px 12px; margin-bottom: 18px; text-transform: uppercase; }
+  h2 { font-family: var(--display); font-size: clamp(28px, 5vw, 42px); text-transform: uppercase; line-height: 1.02; margin-bottom: 14px; }
+  .sec-note { font-size: 14.5px; max-width: 700px; margin-bottom: 20px; color: #C9C9C2; }
+  .sec-note strong { color: var(--lime); font-weight: 700; }
+
+  .card { background: var(--card); border: 1.5px solid var(--line); margin-bottom: 28px; overflow: hidden; }
+  .card-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1.5px solid var(--line); background: #1B1B1B; }
+  .slide-no { font-family: var(--display); font-size: 28px; line-height: 1; color: var(--lime); }
+  .slide-title { font-family: var(--mono); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .slide-purpose { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-left: auto; }
+  .card-body { padding: 18px; }
+  .prompt-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+  .prompt { font-family: var(--mono); font-size: 12.5px; line-height: 1.65; background: #101010; border: 1.5px dashed #3A3A34; padding: 14px; white-space: pre-wrap; margin-bottom: 14px; color: #E6E6DE; }
+  .hookline { font-family: var(--mono); font-size: 12px; margin: 0 0 14px 0; padding: 10px 14px; background: rgba(217,224,33,0.09); border-left: 4px solid var(--lime); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .copy-btn { background: var(--lime); color: #111; font-family: var(--mono); font-weight: 700; font-size: 12px; border: none; padding: 10px 16px; cursor: pointer; letter-spacing: 0.05em; }
+  .copy-btn:hover { background: #fff; }
+  .copy-btn.copied { background: #fff; }
+
+  .free-card { background: var(--card); border: 1.5px solid var(--line); padding: 18px; margin-bottom: 26px; }
+  .free-card h3 { font-family: var(--mono); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; color: var(--lime); }
+
+  ol.steps { padding-left: 22px; font-size: 14.5px; max-width: 740px; color: #C9C9C2; }
+  ol.steps li { margin-bottom: 10px; }
+  ol.steps li strong { color: var(--lime); }
+
+  #toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--lime); color: #111; font-family: var(--mono); font-weight: 700; padding: 12px 22px; font-size: 13px; letter-spacing: 0.1em; transition: transform 0.25s; z-index: 100; }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  footer { border-top: 3px solid var(--line); padding-top: 20px; font-family: var(--mono); font-size: 11px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">
+    <span class="chip">PACK 01</span>
+    <span>PROMPT PACK // ONE DAY ON THE WHEEL (FICTIONAL WORKED EXAMPLE)</span>
+    <span>TARGET: GOOGLE FLOW · NANO BANANA PRO · 3:4 · x4</span>
+    <span>FORMAT: META CAROUSEL 4:5</span>
+  </div>
+  <h1>LIME<span class="lime">LIGHT</span></h1>
+  <p class="sub">Grayscale photoreal editorial + one accent: <b>electric acid lime</b>. Flat lime circle halo, physical paint smears over the photo, massive lime type in the lower third. The smear MEANS something on every hero: war paint, blindfold, tally marks, the rising swarm, painted twin. 6 carousels, one family. Worked example brand: Saltbrook Ceramics (fictional).</p>
+</header>
+
+<nav>
+  <a href="#style">00 STYLE DNA</a>
+  <a href="#heroes">01 SIX HEROES</a>
+  <a href="#flow">02 FLOW WORKFLOW</a>
+  <a href="#comeback">03 COMEBACK PLAN</a>
+</nav>
+
+<div class="togglebar">
+  <span>EVERY COPY = STYLE DNA + HERO BLOCK · ONE PASTE PER FLOW RUN</span>
+  <button class="copyall" id="copyAllBtn">COPY ALL 6 PROMPTS</button>
+</div>
+
+<!-- ============ 00 STYLE DNA ============ -->
+<section id="style">
+  <div class="sec-tab">SECTION 00</div>
+  <h2>Style DNA · Master Block</h2>
+  <p class="sec-note">The whole look in one paragraph. <strong>Auto-prefixed to every hero prompt</strong> when you hit copy. Copy alone only to freestyle extra assets.</p>
+  <div class="free-card">
+    <div class="prompt-label">MASTER STYLE BLOCK</div>
+    <div class="prompt" id="masterBlock">Premium editorial Instagram artwork, photorealistic black-and-white studio photography with exactly one accent color: electric acid lime (#D9E021). Composition fills the entire 3:4 portrait frame, full bleed: the artwork itself IS the image, edge to edge. Never render it as a printed poster or card hanging on a wall or lying on a surface; no poster borders, no margins, no mockup presentation, no wall behind the artwork, no drop shadow around the artwork. The subject is photographed in rich grayscale on a seamless pale-gray studio backdrop, soft directional key light, crisp focus, high contrast, subtle fine film grain. Behind the subject sits one huge perfectly round flat matte acid-lime circle, solid print-flat color, no gradient, no glow. Thick acid-lime oil paint strokes are dragged across the printed photograph with heavy impasto texture, visible bristle streaks and dry-brush tails; the paint sits on top of the photo like real paint on a print. The lower third of the frame fades into a soft near-black gradient carrying a massive ultra-bold geometric sans-serif headline in the same acid lime, all caps, very tight leading, with small clean white letterspaced micro-labels above and below it. The subject and photograph stay fully grayscale; only the circle, the paint strokes and the type carry color. Flat premium print finish. No 3D render look, no glow effects, no logos, no watermarks, no extra text beyond what is specified. Keep the top and bottom 4% of the frame free of text and critical detail.</div>
+    <div class="btn-row"><button class="copy-btn" data-copy-master>COPY MASTER ONLY</button></div>
+  </div>
+  <div class="free-card">
+    <h3>Fallback lever</h3>
+    <p style="font-size:13.5px; color:#C9C9C2;">If lime paint reads sickly on skin in the first plates, swap "electric acid lime (#D9E021)" for "warm golden amber (#F0B429)" in the master and regenerate. One-word pivot, same system. Decide after hero 1, then never touch it again.</p>
+  </div>
+</section>
+
+<!-- ============ 01 HEROES ============ -->
+<section id="heroes">
+  <div class="sec-tab">SECTION 01</div>
+  <h2>Six Heroes · One Per Carousel</h2>
+  <p class="sec-note">Three text elements per hero, never more: white kicker, giant lime headline, white subline. Big display type is safe on Nano Banana Pro; micro-labels stay this simple or they turn to gibberish. Every prompt carries the <strong>reference-wording guard line</strong> baked in.</p>
+  <div id="heroCards"></div>
+</section>
+
+<!-- ============ 02 FLOW WORKFLOW ============ -->
+<section id="flow">
+  <div class="sec-tab">SECTION 02</div>
+  <h2>Google Flow Workflow</h2>
+  <ol class="steps">
+    <li><strong>Model + aspect:</strong> Nano Banana Pro, 3:4 portrait, x4 variants per run. Never 1:1. I crop 1080x1440 to 1080x1350 in post; the master block already keeps the top and bottom 4% clear.</li>
+    <li><strong>Hero 1 first, from prompt alone.</strong> Do NOT attach your style reference image; its wording and palette bleed in. The master block carries the look. Run hero 1 until the grade, circle and paint feel right (3 to 4 runs max, variants are free).</li>
+    <li><strong>Chain the winner.</strong> Save winning hero 1 to project assets. For heroes 2 to 6, attach it as reference and append: "Match the exact photographic grade, palette, circle and paint treatment of this poster. Same series." The guard line in each prompt stops its wording leaking.</li>
+    <li><strong>Regen rule:</strong> if a hero still fights after 3 to 4 runs, take the best plate and move on. I fix stickers and labels in post; prompt-wrestling one label wastes the session.</li>
+    <li><strong>Plate checklist before saving:</strong> full bleed edge to edge (no poster-on-a-wall mockup), date reads exactly "14.11", every word spelled right, the brand name capitalised exactly as your brand writes it ("Saltbrook" in this worked example). Any miss kills the plate, regen.</li>
+    <li><strong>Faces:</strong> different person each hero is correct (it is a campaign family, not one character). If Flow drifts toward the same face, add "a different person from previous images" to the prompt.</li>
+  </ol>
+</section>
+
+<!-- ============ 03 COMEBACK ============ -->
+<section id="comeback">
+  <div class="sec-tab">SECTION 03</div>
+  <h2>When you come back</h2>
+  <ol class="steps">
+    <li>Drop the 6 winning plates in a folder (any names, tell me the path).</li>
+    <li>I crop all 6 to exact 1080x1350 and verify nothing clipped.</li>
+    <li>I reskin the coded body-page engine to this campaign (near-black sheets, white + lime type, grayscale hero fragments in lime circle masks) and export 18 body pages.</li>
+    <li>KIE Seedance animates all 6 heroes: paint glisten, particle drift, circle pulse. Faces stay locked; any poster that fails twice gets code-built motion instead.</li>
+    <li>Posting kit ships to your Desktop: caption files, hero video + backup image, slide PNGs, READ ME with the weekly drip.</li>
+  </ol>
+</section>
+
+<footer>
+  <span>LIMELIGHT // PROMPT PACK 01</span>
+  <span>ONE DAY ON THE WHEEL · 14.11 · $349</span>
+  <span>Saltbrook Ceramics (fictional worked example)</span>
+</footer>
+
+</div>
+
+<div id="toast">COPIED ✓</div>
+
+<script>
+const MASTER = document.getElementById('masterBlock').textContent.trim();
+const GUARD = 'TYPE & LABELS (ignore all wording in any attached reference image, use only the wording below): ';
+
+const HEROES = [
+  {
+    no: '01', title: 'The Announcement · War Paint', purpose: 'C1 · HOOK',
+    hook: 'SIX PIECES. / ONE DAY.',
+    subject: 'A confident woman in her early 30s wearing a clay-dusted black apron over a dark tee, grayscale, photographed from the chest up behind a freshly thrown vessel on a wheel head, hands resting on the rim, facing the camera dead-on with a calm certain expression. Her head sits centered on the giant acid-lime circle. Two thick horizontal acid-lime paint strokes are dragged across her cheekbones like war paint, bristle tails trailing past her ears onto the circle.',
+    type: 'Small white letterspaced kicker above the headline: "ONE DAY ON THE WHEEL". Massive stacked acid-lime headline in the lower third: "SIX PIECES." on the first line, "ONE DAY." on the second line. Small white letterspaced subline beneath: "Saltbrook · 14.11", exact capitalisation "Saltbrook". No other text anywhere.'
+  },
+  {
+    no: '02', title: 'The Differentiator · Blindfold', purpose: 'C2 · NOT A TUTORIAL',
+    hook: 'STOP / SCROLLING.',
+    subject: 'A man around 30 in a plain dark crewneck, grayscale studio portrait from the shoulders up, chin lifted slightly, expression completely calm. One thick continuous acid-lime paint stroke runs horizontally straight across both eyes like a painted blindfold, heavy bristle texture, its dry-brush tail streaking off his temple onto the lime circle behind him.',
+    type: 'Small white letterspaced kicker above the headline: "NOT ANOTHER TUTORIAL". Massive stacked acid-lime headline in the lower third: "STOP" on the first line, "SCROLLING." on the second line. Small white letterspaced subline beneath: "MAKE IT WITH YOUR HANDS · 14.11". No other text anywhere.'
+  },
+  {
+    no: '03', title: 'The Credentials · Tally Marks', purpose: 'C3 · AUTHORITY',
+    hook: 'TAUGHT BY / A POTTER.',
+    subject: 'A distinguished woman in her mid 40s with short gray-flecked hair and a dark linen smock, dried clay dusting her forearms, grayscale, arms crossed, photographed slightly from below so she reads quietly authoritative, direct eye contact, faint knowing smile. Three short vertical acid-lime paint tally strokes mark the side of her jaw like a score count. One wide acid-lime paint stroke crosses the circle behind her head.',
+    type: 'Small white letterspaced kicker above the headline: "20 YEARS AT THE WHEEL". Massive stacked acid-lime headline in the lower third: "TAUGHT BY" on the first line, "A POTTER." on the second line. Small white letterspaced subline beneath: "STOCKED IN THREE GALLERIES · 14.11". No other text anywhere.'
+  },
+  {
+    no: '04', title: 'The Mechanism · Rising Swarm', purpose: 'C4 · THE DAY ITSELF',
+    hook: 'THROW. TRIM. / GLAZE.',
+    subject: 'A grayscale close-up of an open hand held palm-up toward the camera, arm entering from the bottom edge of frame, fingers relaxed, fine dried clay cracking on the skin. Above the palm floats a swarm of dozens of small flat acid-lime squares and round dots arranged like a rising constellation, several smeared into short paint dashes with bristle texture. The giant lime circle sits behind the swarm. The hand and arm stay fully grayscale.',
+    type: 'Small white letterspaced kicker above the headline: "SIX PIECES FIRED FOR YOU". Massive stacked acid-lime headline in the lower third: "THROW. TRIM." on the first line, "GLAZE." on the second line. Small white letterspaced subline beneath: "COLLECT IN TWO WEEKS · 14.11". No other text anywhere.'
+  },
+  {
+    no: '05', title: 'The Close · First-Timer', purpose: 'C5 · NO EXPERIENCE',
+    hook: 'NO EXPERIENCE / NEEDED.',
+    subject: 'A warm small-business owner in her late 50s wearing a work apron over a rolled-sleeve shirt, grayscale, photographed mid-laugh with creased smiling eyes, arms folded loosely. One confident diagonal acid-lime paint stroke swipes across one cheek like war paint, its dry-brush tail flicking toward the circle behind her.',
+    type: 'Small white letterspaced kicker above the headline: "ONE DAY · 6 HOURS AT THE WHEEL". Massive stacked acid-lime headline in the lower third: "NO EXPERIENCE" on the first line, "NEEDED." on the second line. Small white letterspaced subline beneath: "$349 OPENING PRICE · 14.11". No other text anywhere.'
+  },
+  {
+    no: '06', title: 'The Keepsake · Painted Twin', purpose: 'C6 · MADE BY YOUR HANDS',
+    hook: 'MADE BY / YOUR HANDS.',
+    subject: 'A grayscale profile portrait of a man in his 30s facing right, head and shoulders on the left side of the frame, with the giant acid-lime circle centered behind him. Facing him on the right, painted directly onto the circle, is a mirror-image profile silhouette of his own head rendered entirely in thick acid-lime brushstrokes with visible bristle texture and dry-brush edges, like a second self in wet paint, a few small flicked droplets in the gap between the two faces.',
+    type: 'Small white letterspaced kicker above the headline: "STOP WATCHING. START MAKING.". Massive stacked acid-lime headline in the lower third: "MADE BY" on the first line, "YOUR HANDS." on the second line. Small white letterspaced subline beneath: "Saltbrook · 14.11", exact capitalisation "Saltbrook". No other text anywhere.'
+  }
+];
+
+function heroPrompt(h) {
+  return MASTER + '\n\nSUBJECT: ' + h.subject + '\n\n' + GUARD + h.type;
+}
+
+const cardsEl = document.getElementById('heroCards');
+HEROES.forEach((h, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="slide-no">${h.no}</span>
+      <span class="slide-title">${h.title}</span>
+      <span class="slide-purpose">${h.purpose}</span>
+    </div>
+    <div class="card-body">
+      <div class="hookline">HOOK: ${h.hook}</div>
+      <div class="prompt-label">Hero prompt (copy = style DNA + this)</div>
+      <div class="prompt">SUBJECT: ${h.subject}\n\nTYPE &amp; LABELS: ${h.type}</div>
+      <div class="btn-row"><button class="copy-btn" data-idx="${i}">COPY FULL PROMPT</button></div>
+    </div>`;
+  cardsEl.appendChild(card);
+});
+
+const toast = document.getElementById('toast');
+let toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+}
+function doCopy(text, btn, msg) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(msg || 'COPIED ✓');
+    if (btn) { btn.classList.add('copied'); setTimeout(() => btn.classList.remove('copied'), 1200); }
+  });
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.dataset.idx !== undefined) {
+    const h = HEROES[+btn.dataset.idx];
+    doCopy(heroPrompt(h), btn, 'HERO ' + h.no + ' COPIED ✓');
+  } else if (btn.hasAttribute('data-copy-master')) {
+    doCopy(MASTER, btn, 'MASTER COPIED ✓');
+  } else if (btn.id === 'copyAllBtn') {
+    const all = HEROES.map(h => '=== HERO ' + h.no + ' · ' + h.title + ' ===\n\n' + heroPrompt(h)).join('\n\n\n');
+    doCopy(all, btn, 'ALL 6 COPIED ✓');
+  }
+});
+</script>
+</body>
+</html>

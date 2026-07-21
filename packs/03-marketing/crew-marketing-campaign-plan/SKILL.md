@@ -46,7 +46,7 @@ If the goal is missing or vague ("get more sales"), ask once for the one outcome
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill to WRITE the copy: the writers do that (`crew-marketing-email-campaign-builder` for the sequence, `crew-marketing-social-post-pack` for the posts, `crew-marketing-seo-page-builder` for the page). Do not run it to RUN ads (this skill plans paid as a channel, it does not buy media). Do not run it for a brand-voice check (`crew-marketing-brand-voice-check`). If the ask is to draft the emails, route to `crew-marketing-email-campaign-builder`; if it is to write the posts, route to `crew-marketing-social-post-pack`; if it is to check tone, route to `crew-marketing-brand-voice-check`.
+Do not run this skill to WRITE the copy: the writers do that (`crew-marketing-email-campaign-builder` for the sequence, `crew-marketing-social-post-pack` for the posts, `crew-marketing-seo-page-builder` for the page). Do not run it to RUN ads (this skill plans paid as a channel, it does not buy media). Do not run it for a brand-voice check (`crew-marketing-brand-voice-check`). If the ask is to draft the emails, route to `crew-marketing-email-campaign-builder`; if it is to write the posts, route to `crew-marketing-social-post-pack`; if it is to produce the visual carousel ad system, route to `crew-marketing-carousel-campaign`; if it is to check tone, route to `crew-marketing-brand-voice-check`.
 
 ## How the campaign strategist thinks
 
@@ -264,7 +264,7 @@ The real ambiguous calls this skill faces:
 
 ## Handoffs
 
-- Hand the plan to `crew-marketing-seo-page-builder` for the landing page, `crew-marketing-social-post-pack` for the posts, and `crew-marketing-email-campaign-builder` for the sequence. Each asset in the plan names its builder.
+- Hand the plan to `crew-marketing-seo-page-builder` for the landing page, `crew-marketing-social-post-pack` for the posts, `crew-marketing-email-campaign-builder` for the sequence, and `crew-marketing-carousel-campaign` for the produced paid-social visual system (the multi-carousel ad kit). Each asset in the plan names its builder.
 - Send finished pages to `crew-marketing-landing-page-review` before paid traffic, and run every draft through `crew-marketing-brand-voice-check`.
 - Before the plan or any asset ships, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond this per-skill handoff, hand off to `crew-core-context-save`.
