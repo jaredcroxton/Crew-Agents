@@ -2,6 +2,25 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.17.0 (2026-07-23)
+
+### Added
+- Pack 15, Second Brain, and skill 108: crew-my-second-brain. The living,
+  visual map of everything the owner's AI agents know, converted whole from
+  the field-proven personal skill with the behaviour unchanged. One command
+  in, one living map out: a cinematic Awakening on first load, a light-theme
+  wheel with profile lenses (including a presenter-safe mode that hides file
+  paths), a genesis growth replay, Ask-the-Brain with a lit citation trail,
+  a voice mode with optional premium TTS, and live node births over SSE when
+  new memories land. Ships the full working kit (viewer template, map
+  assembler, server, default brand taxonomy) plus the workshop cold-start
+  gate that seeds a day-one brain so nobody ever sees an empty map. Its own
+  pack because the second brain is the spine the whole Crew hangs off. One
+  deliberate rail difference: a missing brand file does not hard-stop this
+  skill (the map can be built pre-onboarding and is the best advertisement
+  for onboarding); privacy guardrails lock it to localhost with the
+  presenter-safe profile for projection.
+
 ## 1.16.0 (2026-07-18)
 
 ### Added

@@ -1,0 +1,142 @@
+{
+  "title": "Second Brain",
+  "owner": "You",
+  "tagline": "the second brain",
+  "bg": "#FAF8F2",
+  "colors": {
+    "brain": "#16181A",
+    "brand": "#C6F24E",
+    "crew": "#2DD4BF",
+    "clients": "#60A5FA",
+    "sales": "#5EEAD4",
+    "marketing": "#F472B6",
+    "ops": "#22D3EE",
+    "finance": "#FDE047",
+    "people": "#A78BFA",
+    "support": "#4ADE80",
+    "tooling": "#94A3B8",
+    "personal": "#D4AF37",
+    "other": "#6B7280"
+  },
+  "hubs": [
+    {
+      "id": "hub-brand",
+      "label": "My Business",
+      "group": "brand",
+      "description": "your brand and offers"
+    },
+    {
+      "id": "hub-crew",
+      "label": "CREW",
+      "group": "crew",
+      "description": "your AI workforce"
+    },
+    {
+      "id": "hub-clients",
+      "label": "Customers",
+      "group": "clients",
+      "description": "client work and accounts"
+    },
+    {
+      "id": "hub-sales",
+      "label": "Sales",
+      "group": "sales",
+      "description": "leads, outreach, proposals"
+    },
+    {
+      "id": "hub-marketing",
+      "label": "Marketing",
+      "group": "marketing",
+      "description": "content, campaigns, socials"
+    },
+    {
+      "id": "hub-ops",
+      "label": "Operations",
+      "group": "ops",
+      "description": "processes and automation"
+    },
+    {
+      "id": "hub-finance",
+      "label": "Finance",
+      "group": "finance",
+      "description": "money in, money out"
+    },
+    {
+      "id": "hub-people",
+      "label": "People",
+      "group": "people",
+      "description": "team, hiring, training"
+    },
+    {
+      "id": "hub-support",
+      "label": "Support",
+      "group": "support",
+      "description": "customer care"
+    },
+    {
+      "id": "hub-tooling",
+      "label": "Tooling",
+      "group": "tooling",
+      "description": "pipelines and utilities"
+    },
+    {
+      "id": "hub-personal",
+      "label": "Personal",
+      "group": "personal",
+      "description": "preferences and memory"
+    },
+    {
+      "id": "hub-other",
+      "label": "Misc",
+      "group": "other",
+      "description": "everything else"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "all",
+      "label": "Everything",
+      "mode": "light",
+      "groups": "all",
+      "hidePaths": false
+    },
+    {
+      "id": "work",
+      "label": "My Business",
+      "mode": "light",
+      "groups": [
+        "brand",
+        "crew",
+        "clients",
+        "sales",
+        "marketing",
+        "ops",
+        "finance",
+        "people",
+        "support",
+        "tooling",
+        "other"
+      ],
+      "hidePaths": true
+    },
+    {
+      "id": "personal",
+      "label": "Personal",
+      "mode": "dark",
+      "theme": {
+        "accent": "#A78BFA"
+      },
+      "groups": [
+        "personal",
+        "tooling",
+        "other"
+      ],
+      "hidePaths": false
+    }
+  ],
+  "examples": [
+    "What do I know about my customers?",
+    "What can my crew do for marketing?",
+    "What did I teach you this week?"
+  ]
+}
