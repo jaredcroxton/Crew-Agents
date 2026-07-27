@@ -9,7 +9,10 @@
 #   ./uninstall.sh --all           remove every Crew pack (including core)
 #   ./uninstall.sh --global        target ~/.claude/skills
 #   ./uninstall.sh --target DIR     target DIR
-#   ./uninstall.sh --purge         also clear saved handoffs under .claude/crew-state
+#   ./uninstall.sh --purge         also clear the business memory under ~/.claude/crew-state
+#                                   (projects/, lessons/, brand-context.md, active-project,
+#                                   legacy pack handoffs; always tars a backup first)
+#   ./uninstall.sh --purge --all   additionally removes archived brand drawers (brands/)
 #   ./uninstall.sh --dry-run       show what would be removed, remove nothing
 #   ./uninstall.sh --list          list available packs and exit
 
@@ -91,6 +94,35 @@ for packdir in "${PACKDIRS[@]}"; do
     fi
   fi
 done
+
+# modern-layout purge: the per-pack loop above only knows the legacy pre-Projects
+# layout ($STATE_BASE/<packid>). The modern store keeps the business memory at
+# projects/, lessons/, brand-context.md, and active-project; a buyer clearing a
+# machine expects --purge to remove it. Backed up to the same tar first.
+if [ "$PURGE" = 1 ]; then
+  MODERN_ITEMS=()
+  for item in projects lessons brand-context.md active-project SWITCHING; do
+    [ -e "$STATE_BASE/$item" ] && MODERN_ITEMS+=("$item")
+  done
+  [ "$ALL" = 1 ] && [ -d "$STATE_BASE/brands" ] && MODERN_ITEMS+=("brands")
+  if [ "${#MODERN_ITEMS[@]}" -gt 0 ]; then
+    if [ "$DRY" = 1 ]; then
+      echo "  would purge   modern crew-state memory: ${MODERN_ITEMS[*]}"
+      [ "$ALL" != 1 ] && [ -d "$STATE_BASE/brands" ] && echo "  would keep    brands/ (archived drawers; add --all to remove them too)"
+    else
+      if [ "$PURGED_ANY" = 0 ]; then
+        tar -czf "$PURGE_BACKUP" -C "$(dirname "$STATE_BASE")" "$(basename "$STATE_BASE")" 2>/dev/null \
+          && echo "  backup   full crew-state saved to $PURGE_BACKUP"
+      fi
+      for item in "${MODERN_ITEMS[@]}"; do
+        rm -rf "${STATE_BASE:?}/$item"
+        echo "  purged   $STATE_BASE/$item"
+      done
+      [ "$ALL" != 1 ] && [ -d "$STATE_BASE/brands" ] && echo "  kept     $STATE_BASE/brands (archived drawers; rerun with --all to remove)"
+      PURGED_ANY=1
+    fi
+  fi
+fi
 
 # with --all and every crew-* skill gone, remove the installed Crew Method doc too
 if [ "$ALL" = 1 ] && [ "$DRY" != 1 ] && [ -f "$DEST/crew-method.md" ]; then

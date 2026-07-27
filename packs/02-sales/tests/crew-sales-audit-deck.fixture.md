@@ -3,7 +3,7 @@
 ## Case A: clean
 INPUT:
 Call notes: "Marlow & Finch Removals, family removalist, two trucks. Owner says quotes go out slow because everything is booked by phone and typed up later that night. About 4 quote requests a week fall through the cracks and go to a competitor, each job averages around $900. Also chasing deposits by hand, one person a full day a week. Wants faster quotes, fewer lost jobs, and to stop the manual deposit chase. Uses a paper diary and a shared inbox."
-Library: drawer at ~/.claude/crew-state/brands/<brand>/sales/library/ holds six SHIPPED entries, including "Instant Quote Responder" (Pain it solves: quote requests lost to slow manual replies; Industry: trades, removals) and "Deposit Chase Automation" (Pain it solves: staff time lost chasing deposits by hand; Industry: services).
+Library: drawer at ~/.claude/crew-state/library/sales/ holds six SHIPPED entries, including "Instant Quote Responder" (Pain it solves: quote requests lost to slow manual replies; Industry: trades, removals) and "Deposit Chase Automation" (Pain it solves: staff time lost chasing deposits by hand; Industry: services).
 Brand context: present, so Step 0 passes.
 Mode: not named (defaults to Careful).
 

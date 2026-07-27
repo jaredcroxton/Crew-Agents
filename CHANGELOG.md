@@ -2,6 +2,34 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.18.0 (2026-07-27)
+
+### Fixed
+- Four cabinet-layer bugs found by a four-lens expert review of the deployed
+  harness, all in the two places prose performs filesystem surgery.
+- Brand switch is now crash-safe: the switch procedure checks for a live
+  session first, raises a SWITCHING sentinel, archives with the brand file
+  LAST and restores it FIRST (the commit token, so a half-moved store always
+  coherently names one brand), merges never overwrites (a same-named
+  collision stops and reports instead of nesting directories and burying
+  records), verifies the landed brand file and the active-project pointer,
+  and only then lowers the sentinel. Both front-door skills now recognise a
+  mid-switch cabinet and offer to complete or roll back instead of running
+  fresh onboarding over another brand's projects.
+- The sales audit-deck library moved from brands/<brand>/sales/library/ (a
+  path that cannot exist for the active brand, silently emptying the
+  matcher) to library/sales/ in the live store, where it rides every brand
+  switch automatically.
+- Final Step now writes into the project bound at Step 0 across all 105
+  conventional skills; a re-read of the active-project pointer can warn that
+  another session moved it but can never redirect the write. Closes the one
+  true concurrent data-loss path (session B moving the pointer mid-run of
+  session A).
+- uninstall.sh --purge now purges the modern store layout (projects/,
+  lessons/, brand-context.md, active-project, the sentinel) after the same
+  tar backup, and --purge --all also removes archived brand drawers. A buyer
+  clearing a machine now actually clears it.
+
 ## 1.17.0 (2026-07-23)
 
 ### Added
