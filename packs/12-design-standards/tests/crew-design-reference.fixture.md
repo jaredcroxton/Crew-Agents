@@ -4,32 +4,32 @@ Three cases. The smoke test feeds each INPUT to the skill and asserts the EXPECT
 
 ## Case A: clean
 INPUT:
-I am building a SaaS billing dashboard. Audience is finance operators. It needs to feel trustworthy and exact, and it is dense (invoices, line items, totals). What references should I study? (Careful mode.)
+CREW CONSULT from crew-web-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md. Reference wanted: the reference library. Building the editorial journal pages for Gullwing Sailing Journal, a long-form sailing magazine. Which sites in the library do editorial typography and long-form reading layout at world class, and what would an AI build get wrong chasing them?
 EXPECT:
-- Output begins with "DESIGN REFERENCE BRIEF" and includes a Problem line, an Aesthetic goal line, a Category line, and a Mode.
-- A "References (best match first):" block returns at least three real sites, each with a real URL, a named principle, a "Why premium:" line that is specific (not "looks clean"), and an "AI would get wrong:" line.
-- At least one reference covers Stripe-level information design (Stripe for the billing surface, or Sentry for legible data density), with a concrete reason.
-- A "Primary north star:" line names the one site to anchor on and why.
-- An "Emulate:" line and an "Avoid:" line, where Avoid names the category's AI-slop defaults (centered hero, Inter, gradient glow, equal-weight cards).
-- No invented sites or URLs; every site named is real.
+- The skill routes to `references/reference-library.md` and reads ONLY that reference file; no other file under `references/` is read.
+- The brand onboarding hard stop is NOT re-run: the literal CREW CONSULT preamble plus the present brand-context file carve straight through Step 0.
+- Output begins with "DESIGN REFERENCE" and includes a Lens line, a Reference line naming references/reference-library.md, a Question line, a Built date, and a Fit line.
+- The Findings name real entries from the library's editorial section, each finding citing the specific reference section or entry it comes from, including the principle each site demonstrates and what an AI build would get wrong.
+- Findings, not verdicts: no score, no ship or no-ship call; the For the build line points the page builder at what to apply and leaves the binding verdict to crew-design-quality.
 - No em dashes anywhere in the output.
-- Handoff file `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md` was written.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-design-reference-handoff.md` was written, recording the reference consulted and the entries cited.
 
-## Case B: cross-category
+## Case B: wrong-reference
 INPUT:
-I need a look that is luxury e-commerce meets editorial typography, for a high-end print magazine that also sells subscriptions. What should I reference?
+CREW CONSULT from crew-web-landing-page-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md. Reference wanted: the reference library. Cooper's Creek Bait and Tackle has no brand, no designer, and no reference; pick the colour palette and font pairing for its first site.
 EXPECT:
-- The brief crosses categories: it pulls from luxury and fashion (for example Aesop, Bottega Veneta, or Saint Laurent for whitespace-as-luxury) AND from editorial and long-form (for example Stripe Press or Medium for reading craft), rather than forcing one category.
-- Each reference still carries a principle, a specific why-premium, and a what-AI-gets-wrong lesson; the bridge between the two aesthetics is named (restraint plus reading craft).
-- No site is fabricated to fit the cross-category brief; if the library lacks a perfect single match, the brief composes two real references instead of inventing one.
-- A primary north star is chosen and the tension between the two directions is acknowledged (this is a candidate for a decision brief).
-- Handoff file written, recording the chosen references.
+- The skill says the reference library is the wrong reference for this job: the library holds named sites and principles, it does not mint palettes; a no-brand palette and pairing is the design kit's exact ground.
+- It routes to `references/kit.md`, reads it, and returns findings in that reference's terms: a feeling-led palette as a copy-paste :root token block with real hex values and a real Google Fonts pairing, each citing the kit section it comes from.
+- The output's Fit line records the reroute and why; the Lens line names the design kit, not the reference library.
+- It does not invent library entries about bait shops or fabricate a palette outside the kit.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-design-reference-handoff.md` written, recording that the library was asked for, why it was refused, and which reference answered instead.
 
 ## Case C: missing-input
 INPUT:
-"What looks good?" No project, no category, no aesthetic goal, no artifact.
+"Give me a design reference." No reference named, no design question, no build named, and no context to infer what the consult wants back.
 EXPECT:
-- The skill follows Loop 1 (Missing Input): it asks once what is being built and the aesthetic goal, because a reference match needs a problem to match against.
-- It does NOT dump the whole library or invent a project, and it names no references against an unknown problem.
-- If it emits any partial output, the Problem, Category, and References fields are marked "Not provided" rather than filled.
-- Handoff file `~/.claude/crew-state/design-standards/crew-design-reference-handoff.md` written, recording the missing problem as the blocker the next run needs.
+- The skill asks once: what is being built and what the consult wants back (a named site reference, a pattern check, a composition read, tokens, an authority read, or a palette and pairing), because routing needs a question.
+- It does not pick a reference arbitrarily, does not read a reference file on a guess, and does not invent findings against nothing.
+- If it emits any partial output, the Lens, Question, and Findings fields are marked "Not provided" rather than filled.
+- The handoff records STATUS: BLOCKED with the missing question named as the blocker; the chat status is NEEDS_CONTEXT or BLOCKED, never DONE.
+- Handoff file `~/.claude/crew-state/projects/<project>/crew-design-reference-handoff.md` written, recording what the next run needs.

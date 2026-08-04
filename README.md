@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.18.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.18.0">
+  <img src="https://img.shields.io/badge/CREW-v1.19.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.19.0">
   <img src="https://img.shields.io/badge/SKILLS-108-333333?style=for-the-badge&labelColor=lime&color=333333" alt="108 Skills">
   <img src="https://img.shields.io/badge/PACKS-15-333333?style=for-the-badge&labelColor=lime&color=333333" alt="15 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
@@ -206,6 +206,8 @@ The only skills a business invokes. One call, one output.
 | 13 | Design Styles | 5 | Brutalist, minimalist, soft, redesign |
 | 14 | Animation | 12 | GSAP, Motion, Lottie, Rive, Spring, CSS |
 | 15 | Second Brain | 1 | The living map of everything your agents know |
+
+Packs 12 to 14 install as consolidated agents: the animation engines, the style lenses, and the design reference each ship as ONE skill carrying their specs as bundled reference files. 108 capabilities, 88 installed agents, a picker that reads like a business team.
 
 ---
 

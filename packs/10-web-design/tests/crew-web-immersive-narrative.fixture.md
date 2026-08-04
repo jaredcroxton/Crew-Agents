@@ -18,7 +18,7 @@ EXPECT:
 - localStorage keys are namespaced per programme (new_hire_voyage_v1_completion and new_hire_voyage_v1_advancement).
 - Frames extract in two rungs (1920 and 960) as WebP with JPEG fallback, budget-checked against the web-standards Perf 1 class C limits; the report carries a Weight line and a "web-standards Gate:" verdict line.
 - The stage opens poster-first: no loading counter is the first impression, and the next stage prefetches on idle.
-- The Design review gate is run with binding verdicts from crew-design-quality, crew-design-composition, crew-design-patterns, crew-design-engineering, and the register-conditional pack-13 lens, Criticals and Majors fixed before deploy; crew-animation-gsap and crew-animation-locomotive are applied as authoring references only, with no Pass or Fail verdict attributed to them.
+- The Design review gate is run with binding verdicts from crew-design-quality, crew-design-reference (composition lens), crew-design-reference (patterns lens), crew-design-engineering, and the register-conditional pack-13 lens, Criticals and Majors fixed before deploy; crew-animation (gsap spec) and crew-animation (locomotive spec) are applied as authoring references only, with no Pass or Fail verdict attributed to them.
 - A reduced-motion path is present and confirmed: the scrub snaps to the arrival frame and reveals are instant, and the story still reads.
 - No em dashes anywhere in the output.
 - Handoff file `~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md` was written.

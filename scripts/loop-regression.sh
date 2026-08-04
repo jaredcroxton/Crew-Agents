@@ -29,7 +29,7 @@ note() { printf '  FAIL  %s\n' "$1"; FAIL=$((FAIL+1)); }
 ok()   { printf '  ok    %s\n' "$1"; }
 
 SKILL_QC="packs/01-core/crew-core-quality-checker/SKILL.md"
-SKILL_COMP="packs/12-design-standards/crew-design-composition/SKILL.md"
+SKILL_COMP="packs/12-design-standards/crew-design-reference/SKILL.md"
 SKILL_FG="packs/09-training/crew-training-facilitator-guide-creator/SKILL.md"
 
 seed_brand() {

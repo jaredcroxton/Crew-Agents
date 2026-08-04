@@ -18,7 +18,7 @@ EXPECT:
 - The frame scrub is built: the scrub maps the full scroll range forward and back over N frames, with a desktop set and a portrait mobile set.
 - Brand-only assets are produced (wordmark, grain, optional map card, dividers); no AI property imagery is generated; the gallery and floorplan are the real listing photos.
 - The reduced-motion path is present and confirmed: matchMedia holds a representative static frame, html.enhanced is never stamped, no auto motion, the page still reads.
-- The Design review gate is run: the crew-design-engineering pre-pass over the interaction layer first, then crew-design-quality (binding) plus crew-design-composition and crew-design-patterns, a register-conditional pack-13 lens (here crew-design-soft for the warm and golden register), with crew-animation-scroll-reveal, crew-animation-css, crew-animation-view-transitions, and crew-animation-gsap (discipline only) as pack-14 authoring references (status, not verdict); crew-animation-locomotive is not consulted.
+- The Design review gate is run: the crew-design-engineering pre-pass over the interaction layer first, then crew-design-quality (binding) plus crew-design-reference (composition lens) and crew-design-reference (patterns lens), a register-conditional pack-13 lens (here crew-design-styles (soft lens) for the warm and golden register), with crew-animation (scroll-reveal spec), crew-animation (css spec), crew-animation (view-transitions spec), and crew-animation (gsap spec) (discipline only) as pack-14 authoring references (status, not verdict); crew-animation (locomotive spec) is not consulted.
 - No em dashes anywhere in the output.
 - Handoff file `~/.claude/crew-state/projects/<project>/crew-web-real-estate-immersive-handoff.md` was written.
 

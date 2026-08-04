@@ -1388,7 +1388,7 @@ Style this differently per theme. For a ship, surround it with a compass rose SV
 
 13. **Styling.** Create `src/styles/index.css`.
 
-**Type and spacing system, filled BEFORE any component CSS is written.** Consult `crew-design-language` (with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`) to formalise the Q7 one-line register into locked type, spacing, and colour tokens; hardcoded ad-hoc px values are where the 2015-blog look comes from. The rules, from web-standards:
+**Type and spacing system, filled BEFORE any component CSS is written.** Consult `crew-design-reference` (language lens) (with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`) to formalise the Q7 one-line register into locked type, spacing, and colour tokens; hardcoded ad-hoc px values are where the 2015-blog look comes from. The rules, from web-standards:
 - A fluid scale of clamp() tokens, never fixed px sizes (Type 1). Five steps minimum: display, headline, subhead, body, label.
 - The tracking compensation curve (Type 2): negative tracking above 40px, roughly +0.002 to 0.003em per size step down. Uniform letter-spacing across sizes is a defect.
 - Line-height bands (Type 3): display 1.0 to 1.1, body 1.5 to 1.6, labels 1.3 to 1.4. Headline weight 600, not 700.
@@ -1400,7 +1400,7 @@ Start from these tokens and adapt to the user's Q7 palette:
 
 ```css
 :root {
-  /* Replace the palette with the user's Q7 register (via the crew-design-language consult). */
+  /* Replace the palette with the user's Q7 register (via the crew-design-reference (language lens) consult). */
   --bg-deep: #0b0b0c;
   --bg: #14141a;
   --accent: #c9a45f;
@@ -1711,7 +1711,7 @@ main:focus-visible { outline: none; }  /* the programmatic focus target, not a c
 
 **Finishing layer.** The default-chrome tells on a scroll-first experience are the scrollbar, the selection colour, and the wait state; all three are styled above or art-directed. When the register is textural, an optional grain layer is permitted within web-standards Craft 1 (one page-wide SVG feTurbulence layer, under 50KB, opacity under 0.08, never per-section stacks). Any visible wait state is art-directed in the Q8 motif (a compass needle sweep, an altitude ticker), never a raw percentage line.
 
-Adjust the palette tokens, the font choices, and the persistent-UI styling per Q7's register (through the crew-design-language consult). Keep the reduced-motion block and the mobile block: they are the accessibility and mobile floors, not decoration.
+Adjust the palette tokens, the font choices, and the persistent-UI styling per Q7's register (through the crew-design-reference (language lens) consult). Keep the reduced-motion block and the mobile block: they are the accessibility and mobile floors, not decoration.
 
 14. **Run plus verify, in the browser, with evidence.** This is a hard gate, not a read-through: a run that cannot produce these observations is not verified, and reasoning about the code does not substitute for observing the page (Loop 2, Quality Failure, on any miss).
 
@@ -1770,9 +1770,9 @@ Verified:
    reset works / ?preview=all unlocks / reduced-motion path snaps and reads]
 Weight: [per-stage and journey payload vs the class C budgets, desktop and mobile rungs]
 web-standards Gate: [10/10, or the failures and named residuals]
-Design review gate: [crew-design-quality + crew-design-composition + crew-design-patterns +
+Design review gate: [crew-design-quality + crew-design-reference (composition lens) + crew-design-reference (patterns lens) +
    crew-design-engineering + the register-conditional pack-13 lens verdicts, Criticals and Majors
-   fixed; crew-animation-gsap and crew-animation-locomotive: discipline cross-reference applied
+   fixed; crew-animation (gsap spec) and crew-animation (locomotive spec): discipline cross-reference applied
    (authoring spec, no verdict)]
 Reduced-motion path: [confirmed: scrub snaps, reveals instant, story still reads]
 
@@ -1801,9 +1801,9 @@ Verified:
 Weight: heaviest stage 9.8MB desktop / 3.4MB mobile; journey 47MB desktop / 12MB mobile. PASS.
 web-standards Gate: 10/10 (Gate 5 static checks only, decoder and canvas limits not exercised
   on real hardware).
-Design review gate: crew-design-quality pass (Revise then fixed), crew-design-composition pass,
-  crew-design-patterns pass, crew-design-engineering pass (two Major rows applied),
-  crew-design-soft (register lens) pass; crew-animation-gsap and crew-animation-locomotive
+Design review gate: crew-design-quality pass (Revise then fixed), crew-design-reference (composition lens) pass,
+  crew-design-reference (patterns lens) pass, crew-design-engineering pass (two Major rows applied),
+  crew-design-styles (soft lens) (register lens) pass; crew-animation (gsap spec) and crew-animation (locomotive spec)
   discipline cross-reference applied (authoring spec, no verdict).
 Reduced-motion path: confirmed, scrub snaps to the arrival frame, reveals instant.
 
@@ -1822,7 +1822,7 @@ The motion budget is three required layers, no more.
 2. Micro-interactions. Hover, press, and focus on the actual interactive elements: the arrival CTA (hover lift plus accent bloom, active press), and the persistent-UI stage nodes in their three states (locked dimmed and non-interactive, active accent ring, done check). Feedback only, no decoration.
 3. The signature moment. Per-stage scroll-scrubbed canvas centerpiece: the frame sequence advances frame-for-frame tied to the inverted scrollbar position (never a scroll listener fired animation), crossfading into the next stage as a scene cut, then resolving into the arrival hero that slides up only in the final 30 percent of the stage's scroll zone.
 
-Stack rule, stated plainly. The library this skill uses is none. The centerpiece is hand-rolled rAF scroll math plus Canvas 2D frame-scrub inside `useScrollJourney` and the stage canvas component; React 18 is the framework, not a motion library. Reveals and micro-interactions are CSS keyframes plus the Web Animations API plus IntersectionObserver, authored in the stage component's effect and its module CSS, nothing else. `crew-animation-gsap` and `crew-animation-scroll-reveal` are consulted for the motion discipline only, never added to the stack. Forbidden, so a builder never reaches for them: GSAP, Locomotive Scroll, any external animation library bolted onto the stack, and CSS-faked frame motion (the scrub is the real canvas frame-scrub, never a CSS approximation). The locked engineering holds: rAF and canvas drive the scrub, the named skills are the bar, not an import.
+Stack rule, stated plainly. The library this skill uses is none. The centerpiece is hand-rolled rAF scroll math plus Canvas 2D frame-scrub inside `useScrollJourney` and the stage canvas component; React 18 is the framework, not a motion library. Reveals and micro-interactions are CSS keyframes plus the Web Animations API plus IntersectionObserver, authored in the stage component's effect and its module CSS, nothing else. `crew-animation` (gsap spec) and `crew-animation` (scroll-reveal spec) are consulted for the motion discipline only, never added to the stack. Forbidden, so a builder never reaches for them: GSAP, Locomotive Scroll, any external animation library bolted onto the stack, and CSS-faked frame motion (the scrub is the real canvas frame-scrub, never a CSS approximation). The locked engineering holds: rAF and canvas drive the scrub, the named skills are the bar, not an import.
 
 The reveal idiom for this stack (IntersectionObserver one-shot, transform and opacity only):
 
@@ -1841,13 +1841,13 @@ useEffect(() => {
 }, []);
 ```
 
-Read before writing the motion. For the reveal spec: `crew-animation-scroll-reveal` (IntersectionObserver one-shot, stagger, reduced-motion floor). For the keyframe and Web Animations API spec on reveals and micro-interactions: `crew-animation-css`. For the scroll-linked scrub discipline (scrollbar-tied, not listener-fired, the bar the centerpiece is held to): `crew-animation-gsap`. For the micro-interaction craft (the CTA hover, press, and focus feel, easing choices, transition origins): `crew-design-engineering`. Pull the spec from these, then implement in the rAF and canvas idiom above.
+Read before writing the motion. For the reveal spec: `crew-animation` (scroll-reveal spec) (IntersectionObserver one-shot, stagger, reduced-motion floor). For the keyframe and Web Animations API spec on reveals and micro-interactions: `crew-animation` (css spec). For the scroll-linked scrub discipline (scrollbar-tied, not listener-fired, the bar the centerpiece is held to): `crew-animation` (gsap spec). For the micro-interaction craft (the CTA hover, press, and focus feel, easing choices, transition origins): `crew-design-engineering`. Pull the spec from these, then implement in the rAF and canvas idiom above.
 
-The mobile motion decisions route through `crew-animation-locomotive`'s mobile-disable doctrine, and the consult has an explicit outcome, not a nod: any smoothing or inertia beyond the damped scrub is disabled on touch and under reduced motion, transforms stay cheap on low-power devices, and the scroll position always maps damped-or-1:1 to the document (no hijacking, back-scroll always works, web-standards Motion 11).
+The mobile motion decisions route through `crew-animation` (locomotive spec)'s mobile-disable doctrine, and the consult has an explicit outcome, not a nod: any smoothing or inertia beyond the damped scrub is disabled on touch and under reduced motion, transforms stay cheap on low-power devices, and the scroll position always maps damped-or-1:1 to the document (no hijacking, back-scroll always works, web-standards Motion 11).
 
 Reduced-motion and performance guardrails are not optional. Honor the floor exactly: `prefers-reduced-motion` snaps the scrub to the arrival frame and makes reveals instant, and the story still reads. Concretely, under reduced motion the IntersectionObserver adds `is-in` with no transition (content present immediately), the scrub and any parallax are disabled (paint the arrival frame directly), and there is no smooth scroll. Animate transform and opacity only, never layout properties (no top, left, width, height, margin). Observers are one-shot and call `unobserve` on first reveal. Hold the frame-scrub paint to 60fps and under budget: read the scroll position once per rAF tick, draw a single canvas frame, no per-frame layout reads.
 
-This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`) then scores, with `crew-animation-scroll-reveal`, `crew-animation-css`, and `crew-animation-gsap` as the authoring references it grades against. Ship the motion, then run the gate.
+This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`) then scores, with `crew-animation` (scroll-reveal spec), `crew-animation` (css spec), and `crew-animation` (gsap spec) as the authoring references it grades against. Ship the motion, then run the gate.
 
 ## Print and PDF
 
@@ -1860,11 +1860,11 @@ Before ship, the build MUST pass the Design Standards pack. This gate is require
 Run the checks, brief each with the theme intent, the register, and the no-em-dash rule:
 
 - **`crew-design-quality`** runs the dimensional sweep (typography, colour, spacing, hierarchy, materiality, motion, interactive states, execution) and returns a Pass, Revise, or Fail verdict with the AI tells named. Pass condition: a Pass verdict, or a Revise with every ranked fix tagged Critical or Major applied and re-reviewed. A Fail blocks the ship.
-- **`crew-design-composition`** checks composition and the eye-path: does the arrival hero sit where the eye lands after the scrub, does the persistent UI compete with the stage canvas, does each stage frame compose cleanly. Pass condition: the eye-path resolves to the arrival CTA at each stage with no competing focal point. A composition Fail blocks the ship.
-- **`crew-design-patterns`** checks pattern currency: the scroll-journey, the frame-scrub, and the persistent-motif patterns are current and not dated cliche, and no slop pattern (centered-hero-and-three-cards, AI-purple glow) snuck into the arrival panel. Pass condition: no dated or slop pattern flagged. A pattern Fail blocks the ship.
+- **`crew-design-reference` (composition lens)** checks composition and the eye-path: does the arrival hero sit where the eye lands after the scrub, does the persistent UI compete with the stage canvas, does each stage frame compose cleanly. Pass condition: the eye-path resolves to the arrival CTA at each stage with no competing focal point. A composition Fail blocks the ship.
+- **`crew-design-reference` (patterns lens)** checks pattern currency: the scroll-journey, the frame-scrub, and the persistent-motif patterns are current and not dated cliche, and no slop pattern (centered-hero-and-three-cards, AI-purple glow) snuck into the arrival panel. Pass condition: no dated or slop pattern flagged. A pattern Fail blocks the ship.
 - **`crew-design-engineering`** reviews the build at the pixel and animation-craft level: the CTA hover, press, active, and focus states, the easing choices against the named tokens, transition origins, the advance handoff feel, and any animation touching the keyboard path. It returns a Before, After, Why table with exact CSS fixes. Pass condition: every Critical and Major row applied.
-- **A register-conditional pack-13 style lens, exactly ONE per build:** `crew-design-soft` when the register is warm and premium, `crew-design-minimalist` when it is clean and composed, `crew-design-brutalist` when it is raw and bold. Pass condition: the built journey holds to its selected lens for its register. A style-lens Fail blocks the ship.
-- **`crew-animation-gsap`** and **`crew-animation-locomotive`** are AUTHORING cross-references, spec-writers that emit STATUS, not Pass or Fail, so they are NOT verdict reviewers. They hold this build's animation to the discipline those two skills define, regardless of how the motion is implemented. This build is hand-rolled rAF scroll math (no GSAP, no Locomotive in the stack), but the discipline is the same: the scrub drives the story frame-for-frame, the crossfade reads as a scene cut, the accent bloom marks an arrival, the reduced-motion path is real, and no animation is present that does not move the story or give feedback. The BINDING motion verdict is `crew-design-quality`'s Motion dimension, not these two.
+- **A register-conditional pack-13 style lens, exactly ONE per build:** `crew-design-styles` (soft lens) when the register is warm and premium, `crew-design-styles` (minimalist lens) when it is clean and composed, `crew-design-styles` (brutalist lens) when it is raw and bold. Pass condition: the built journey holds to its selected lens for its register. A style-lens Fail blocks the ship.
+- **`crew-animation` (gsap spec)** and **`crew-animation` (locomotive spec)** are AUTHORING cross-references, spec-writers that emit STATUS, not Pass or Fail, so they are NOT verdict reviewers. They hold this build's animation to the discipline those two skills define, regardless of how the motion is implemented. This build is hand-rolled rAF scroll math (no GSAP, no Locomotive in the stack), but the discipline is the same: the scrub drives the story frame-for-frame, the crossfade reads as a scene cut, the accent bloom marks an arrival, the reduced-motion path is real, and no animation is present that does not move the story or give feedback. The BINDING motion verdict is `crew-design-quality`'s Motion dimension, not these two.
 
 Fix all Criticals and Majors from every binding check, re-review, and only then proceed to deploy. In Governed mode nothing is waived.
 
@@ -1941,8 +1941,8 @@ House style:
 ## Handoffs
 
 - The craft law for this build is `web-standards` (shared/web-standards.md, "Crew Web Standards"): the type system (Type 1 to 7), the contrast floors (Color 2), the class C budgets (Perf 1, Perf 2, Perf 10), the motion rules (Motion 1, 2, 5, 7, 10, 11), the mobile floor (Mobile 3 to 8), head hygiene (Head 1 to 7), the accessibility floor (A11y 1 to 8), and THE VERIFICATION GATE (Gate 1 to 10), which this skill's Verification section adopts by reference.
-- Before Step 13, consult `crew-design-language` (pack 12) to formalise the Q7 register into locked type, spacing, and colour tokens. Open the consult with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`.
-- Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate. Binding verdicts: `crew-design-quality`, `crew-design-composition`, `crew-design-patterns`, `crew-design-engineering`, and the register-conditional pack-13 style lens. Authoring references, no verdict: `crew-animation-gsap`, `crew-animation-locomotive`, `crew-animation-scroll-reveal`, `crew-animation-css`. Fix all Criticals and Majors before deploy. Every leg opens with the same literal consult preamble.
+- Before Step 13, consult `crew-design-reference` (language lens) (pack 12) to formalise the Q7 register into locked type, spacing, and colour tokens. Open the consult with the literal preamble `CREW CONSULT from crew-web-immersive-narrative: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md`.
+- Run the Design Standards gate before the build ships: hand the built file plus the live local URL to the Design review gate. Binding verdicts: `crew-design-quality`, `crew-design-reference` (composition lens), `crew-design-reference` (patterns lens), `crew-design-engineering`, and the register-conditional pack-13 style lens. Authoring references, no verdict: `crew-animation` (gsap spec), `crew-animation` (locomotive spec), `crew-animation` (scroll-reveal spec), `crew-animation` (css spec). Fix all Criticals and Majors before deploy. Every leg opens with the same literal consult preamble.
 - Route what is not this skill: a pure ungated camera journey to `crew-web-fly-through-builder`, a presented training programme to `crew-web-learning-experience`, a slide deck or PDF leave-behind to `crew-web-slide-deck-builder` (render spec via `crew-design-documents`).
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
@@ -1978,11 +1978,11 @@ Build-specific, on top of the Gate:
 [ ] LocalStorage keys = <slug>_v1_completion plus <slug>_v1_advancement (namespaced, no collision)
 [ ] journeyStages.js filled from Q5/Q6; extract-frames.mjs STAGES array matches the journey
 [ ] Stage-count invariant holds: the id sets of scripts/STAGES, journeyStages, and the written manifest are identical and the same length, so stageCount = journeyStages.length and activeStageIndex can never exceed TOTAL-1 (asset-less stages carry a pending placeholder entry)
-[ ] Type and colour tokens came from the Q7 register via the crew-design-language consult; persistent UI built around the Q8 motif
+[ ] Type and colour tokens came from the Q7 register via the crew-design-reference (language lens) consult; persistent UI built around the Q8 motif
 [ ] Two-state gate verified: mark-complete and advance are two clicks; unlockedStageCount = advancedStageCount in production
 [ ] Tested at 375x812: type fits, CTA 44px+ and reachable, footer clear of the home indicator, no zone drift while the URL bar collapses
 [ ] Any stage without real content ships the honest "Content coming" stub, not fake placeholder
-[ ] Design review gate run: binding verdicts (crew-design-quality, crew-design-composition, crew-design-patterns, crew-design-engineering, the register-conditional pack-13 lens) passed with Criticals and Majors fixed; crew-animation-gsap and crew-animation-locomotive applied as authoring references only, no verdict fabricated
+[ ] Design review gate run: binding verdicts (crew-design-quality, crew-design-reference (composition lens), crew-design-reference (patterns lens), crew-design-engineering, the register-conditional pack-13 lens) passed with Criticals and Majors fixed; crew-animation (gsap spec) and crew-animation (locomotive spec) applied as authoring references only, no verdict fabricated
 [ ] No em dashes anywhere (text, CSS comments, JavaScript strings)
 [ ] The record was written into the active project (~/.claude/crew-state/projects/<project>/crew-web-immersive-narrative-handoff.md)
 ```

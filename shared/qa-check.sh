@@ -103,7 +103,12 @@ for d in "$PACKS_DIR"/*/; do
     [ "$keys" = 2 ] || note "$skill: frontmatter has $keys keys (want exactly name+description)"
     dlen=${#ds}
     { [ "$dlen" -ge 120 ] && [ "$dlen" -le 400 ]; } || note "$skill: description length $dlen (want 120-400)"
-    printf '%s' "$skill" | grep -qE '^crew-[a-z]+-[a-z0-9-]+$' || note "$skill: name not crew-<pack>-<skill>"
+    # crew-animation is the consolidated animation-pack container: deliberately two
+    # segments (the pack IS the skill), the 12 engine specs live in its references/.
+    case "$skill" in
+      crew-animation) : ;;
+      *) printf '%s' "$skill" | grep -qE '^crew-[a-z]+-[a-z0-9-]+$' || note "$skill: name not crew-<pack>-<skill>" ;;
+    esac
 
     case " $NAMES_SEEN " in *" $skill "*) note "$skill: duplicate name" ;; esac
     NAMES_SEEN="$NAMES_SEEN $skill"
@@ -162,10 +167,21 @@ echo "  checked $SKILL_COUNT skills"
 if [ -z "$PACK_FILTER" ]; then
   # README truth: the headline skill count must equal the disk count
   DISK_COUNT=$(find "$PACKS_DIR" -mindepth 2 -maxdepth 2 -type d -name 'crew-*' | wc -l | tr -d ' ')
+  # The badge counts CAPABILITIES, not folders: the three consolidated fuel skills
+  # (crew-animation, crew-design-styles, crew-design-reference) each bundle their
+  # specs as references/*.md, so capabilities = folders + bundled specs - containers.
+  SPEC_COUNT=0; CONTAINER_COUNT=0
+  for c in "$PACKS_DIR"/14-animation/crew-animation "$PACKS_DIR"/13-design-styles/crew-design-styles "$PACKS_DIR"/12-design-standards/crew-design-reference; do
+    if [ -d "$c/references" ]; then
+      n=$(find "$c/references" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
+      SPEC_COUNT=$((SPEC_COUNT + n)); CONTAINER_COUNT=$((CONTAINER_COUNT + 1))
+    fi
+  done
+  CAP_COUNT=$((DISK_COUNT + SPEC_COUNT - CONTAINER_COUNT))
   if [ -f README.md ]; then
-    grep -q "SKILLS-$DISK_COUNT-" README.md \
-      && ok "README skill count matches disk ($DISK_COUNT)" \
-      || note "README badge count does not match disk count ($DISK_COUNT skills on disk)"
+    grep -q "SKILLS-$CAP_COUNT-" README.md \
+      && ok "README skill count matches capabilities ($CAP_COUNT = $DISK_COUNT folders + $SPEC_COUNT specs - $CONTAINER_COUNT containers)" \
+      || note "README badge count does not match capability count ($CAP_COUNT: $DISK_COUNT folders + $SPEC_COUNT specs - $CONTAINER_COUNT containers)"
   fi
   # parity: the plugin route must ship byte-identical skills. Generate a fresh
   # comparison copy to .tmp (never touching ./plugins in place), hash-compare

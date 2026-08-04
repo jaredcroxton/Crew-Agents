@@ -109,7 +109,7 @@ Brand enters as a carrier choice and flows through the template `:root` into eve
 
 **Three carriers:**
 - **Minimal-luxe (default):** the reference DNA below, ink and ivory with one warm accent.
-- **Extract a brand:** pull the brand's design language from a URL first. Consult `crew-design-language` (the token authority; it returns the `:root` type-and-colour kit this carrier model needs) with the `CREW CONSULT from crew-web-fly-through-builder:` preamble, or hand off to `crew-web-website-architect` when a full-site architecture report is also wanted. Then carry the returned `:root` block in.
+- **Extract a brand:** pull the brand's design language from a URL first. Consult `crew-design-reference` (language lens) (the token authority; it returns the `:root` type-and-colour kit this carrier model needs) with the `CREW CONSULT from crew-web-fly-through-builder:` preamble, or hand off to `crew-web-website-architect` when a full-site architecture report is also wanted. Then carry the returned `:root` block in.
 - **The user's own kit:** their colours, type, and accent, mapped onto the same `:root` variables.
 
 **Locked default DNA (minimal-luxe):** ink `#050505`, ivory `#f5f4f1`, cold platinum `#b9c4d0`, warm champagne `#e3c79a` accent that blooms in for the final stage, Inter 100 to 300 weights, labels tracked in the 0.2 to 0.6em band, grain plus vignette plus radial scrims, header blur-in on scroll.
@@ -191,11 +191,11 @@ ScrollTrigger.create({
 });
 ```
 
-**Authoring references (read the spec before writing motion).** Pull the exact easing, stagger, and scroll-binding contracts from pack 14 before you author: `crew-animation-gsap` for the ScrollTrigger timelines, scrub, and pin; `crew-animation-scroll-reveal` for the one-shot enter-the-viewport reveals and stagger; `crew-animation-css` for the micro-interaction transitions (hover, press, focus) on the interactive elements; `crew-animation-locomotive` only to confirm the smooth-scroll trade is correctly declined for this single-file lock; `crew-animation-view-transitions` only to confirm the View Transitions API is correctly declined for the arrival hand-off. These are spec-writers, not the verdict.
+**Authoring references (read the spec before writing motion).** Pull the exact easing, stagger, and scroll-binding contracts from pack 14 before you author: `crew-animation` (gsap spec) for the ScrollTrigger timelines, scrub, and pin; `crew-animation` (scroll-reveal spec) for the one-shot enter-the-viewport reveals and stagger; `crew-animation` (css spec) for the micro-interaction transitions (hover, press, focus) on the interactive elements; `crew-animation` (locomotive spec) only to confirm the smooth-scroll trade is correctly declined for this single-file lock; `crew-animation` (view-transitions spec) only to confirm the View Transitions API is correctly declined for the arrival hand-off. These are spec-writers, not the verdict.
 
 **Reduced-motion and performance guardrails.** Honor `prefers-reduced-motion` with the designed twin from the accessibility kit: the frame-scrub tween is never created, the arrival poster and stacked stages replace the flight, and every reveal is instant. Transform and opacity only, never animate layout (`width`, `height`, `top`, `margin`) (web-standards Motion 1). One-shot observers carry `once: true` so the trigger is spent after the first reveal and does not re-run. Hold 60fps and stay under the motion budget: no compositor-thrashing properties, no idle animation burning frames on the pinned canvas.
 
-This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`, the binding verdict) then scores, with `crew-animation-gsap`, `crew-animation-scroll-reveal`, and `crew-animation-css` as the authoring references it holds the motion to. Author the layer here, then the gate has motion to review, and the loop closes.
+This injected layer is exactly what the design review gate's Motion dimension (`crew-design-quality`, the binding verdict) then scores, with `crew-animation` (gsap spec), `crew-animation` (scroll-reveal spec), and `crew-animation` (css spec) as the authoring references it holds the motion to. Author the layer here, then the gate has motion to review, and the loop closes.
 
 ## Design review gate
 
@@ -207,21 +207,21 @@ Before ship, the built site MUST pass the Design Standards review. This gate is 
 
 - **`crew-design-quality`** is the BINDING verdict. It runs the nine-dimension sweep (including the Motion dimension, the Interactive-states dimension, and the accessibility dimension briefed above) and returns Pass, Revise, or Fail. Pass condition: a Pass verdict, or a Revise with every ranked fix applied and re-reviewed. A Fail, or an unaddressed Revise, blocks the ship.
 - **`crew-design-engineering`** reviews the built `index.html` at the pixel and animation level (the Emil Kowalski Before/After/Why table): easing choices, micro-interaction timing, focus and active states, transition hygiene, origin-aware popovers. It is the detail-level complement to `crew-design-quality`: apply every fix in its table that touches the Animation injection layer or an interactive state, then re-check. It advises with exact CSS; `crew-design-quality` binds.
-- **`crew-design-composition`** checks that the layout resolves to a clear focal point and a legible eye path through the journey and the arrival: the stage type sits where the eye lands after each camera move, the descent does not bury the headline, and the arrival panel and any expanded listing compose cleanly. Pass condition: a clear focal point and a legible eye path through each stage and the arrival, no competing focal point. A composition Fail blocks the ship.
-- **`crew-design-patterns`** checks pattern currency: the scroll-scrub descent, the stage-overlay swaps, and the arrival reveal are current and not a dated cliche, and no slop pattern (a generic centered hero with three cards, an AI-purple glow) crept into the arrival panel or the listing. Pass condition: no dated or slop pattern flagged. A pattern Fail blocks the ship.
+- **`crew-design-reference` (composition lens)** checks that the layout resolves to a clear focal point and a legible eye path through the journey and the arrival: the stage type sits where the eye lands after each camera move, the descent does not bury the headline, and the arrival panel and any expanded listing compose cleanly. Pass condition: a clear focal point and a legible eye path through each stage and the arrival, no competing focal point. A composition Fail blocks the ship.
+- **`crew-design-reference` (patterns lens)** checks pattern currency: the scroll-scrub descent, the stage-overlay swaps, and the arrival reveal are current and not a dated cliche, and no slop pattern (a generic centered hero with three cards, an AI-purple glow) crept into the arrival panel or the listing. Pass condition: no dated or slop pattern flagged. A pattern Fail blocks the ship.
 
 **From pack 13, design-styles (a register-conditional style lens, not a hard-gated style):** select ONE lens by the brand register, not a fixed style. Do not gate every brand on one style:
 
-- **`crew-design-soft`** when the register is warm and premium.
-- **`crew-design-minimalist`** when the register is clean and composed.
-- **`crew-design-brutalist`** when the register is raw and bold.
+- **`crew-design-styles` (soft lens)** when the register is warm and premium.
+- **`crew-design-styles` (minimalist lens)** when the register is clean and composed.
+- **`crew-design-styles` (brutalist lens)** when the register is raw and bold.
 
 Pass condition: the built site holds to the selected style lens for its register. The lens is conditional on the brand, so only the matching one applies; do not gate against all three.
 
 **From pack 14, animation (AUTHORING cross-references, not verdict reviewers):**
 
-- **`crew-animation-gsap`**, **`crew-animation-locomotive`**, and **`crew-animation-scroll-reveal`** are authoring references for the scroll-scrub and the entrance motion. They are spec-writers that emit STATUS, not Pass or Fail, so they are NOT verdict reviewers. They hold the descent's motion discipline to the same bar (the scrub drives the camera frame-for-frame, the stage and arrival reveals mark a moment and not a flourish, the reduced-motion path is real, no decorative motion remains). The check is that motion serves the journey and never decorates. The BINDING motion verdict is `crew-design-quality`'s Motion dimension, not these three.
-- **`crew-animation-view-transitions`** is named only as the explicitly declined option for the arrival hand-off, the way locomotive is for smooth scroll: the continuous-flow arrival is a scroll hand-off inside one document, not a navigation, so the View Transitions API has no role here and fights the held-frame arrival. Do not reach for it on the listing reveal.
+- **`crew-animation` (gsap spec)**, **`crew-animation` (locomotive spec)**, and **`crew-animation` (scroll-reveal spec)** are authoring references for the scroll-scrub and the entrance motion. They are spec-writers that emit STATUS, not Pass or Fail, so they are NOT verdict reviewers. They hold the descent's motion discipline to the same bar (the scrub drives the camera frame-for-frame, the stage and arrival reveals mark a moment and not a flourish, the reduced-motion path is real, no decorative motion remains). The check is that motion serves the journey and never decorates. The BINDING motion verdict is `crew-design-quality`'s Motion dimension, not these three.
+- **`crew-animation` (view-transitions spec)** is named only as the explicitly declined option for the arrival hand-off, the way locomotive is for smooth scroll: the continuous-flow arrival is a scroll hand-off inside one document, not a navigation, so the View Transitions API has no role here and fights the held-frame arrival. Do not reach for it on the listing reveal.
 
 Fix all Criticals and Majors from every binding check, re-review, and only then proceed to deploy. A gate Fail blocks the ship (Loop 2, Quality Failure: stop, fix, re-run). In Governed mode nothing is waived.
 
@@ -430,7 +430,7 @@ Copy rules: no em dashes anywhere (commas, periods, parentheses). Quiet-luxury t
 
 **Step 8: Review gate.**
 
-Run the Design review gate (see that section): `crew-design-quality` (binding) plus `crew-design-engineering`, `crew-design-composition`, and `crew-design-patterns` on the built file plus the live local URL before deploy, each invoked with the CREW CONSULT preamble and briefed with the journey intent, the brand carrier, the no-em-dash rule, and the accessibility and reduced-motion pass conditions. Fix all Criticals and Majors, re-review (Loop 2), and only then deploy.
+Run the Design review gate (see that section): `crew-design-quality` (binding) plus `crew-design-engineering`, `crew-design-reference` (composition lens), and `crew-design-reference` (patterns lens) on the built file plus the live local URL before deploy, each invoked with the CREW CONSULT preamble and briefed with the journey intent, the brand carrier, the no-em-dash rule, and the accessibility and reduced-motion pass conditions. Fix all Criticals and Majors, re-review (Loop 2), and only then deploy.
 
 **Step 9: Deploy.**
 
@@ -522,7 +522,7 @@ House style:
 - **Crew Web Standards** (`shared/web-standards.md`) is the craft law for this build: Build class C, Mode 2 locally, Mode 3 on deploy. The Verification section below adopts its Section 10 Gate roster by reference, and individual rules are cited by key throughout this skill (Type 1, Motion 10, Mobile 3 to 7, Head 5, Gate 5 to 7).
 - Before the build ships or a live URL goes to a client, run `crew-core-quality-checker`. Pairs with the Crew Method standard "Verify before claiming done".
 - Hand the built file plus the live local URL to `crew-design-quality` (the binding gate) and `crew-design-engineering` (the pixel-and-easing review) in Step 8. Fix all Criticals and Majors before deploy.
-- Take the `:root` brand block from `crew-design-language` (the token authority for an extracted brand) or `crew-web-website-architect` (full-site architecture analysis) if either ran earlier, so the descent carries the same brand as the rest of the site.
+- Take the `:root` brand block from `crew-design-reference` (language lens) (the token authority for an extracted brand) or `crew-web-website-architect` (full-site architecture analysis) if either ran earlier, so the descent carries the same brand as the rest of the site.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.
 
 ## Plan mode

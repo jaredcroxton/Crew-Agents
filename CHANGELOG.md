@@ -2,6 +2,34 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.19.0 (2026-07-31)
+
+### Changed
+- The fuel packs consolidate: 23 spec skills roll into 3 front doors. Pack 14
+  Animation is now ONE skill, crew-animation, carrying all 12 engine specs
+  (GSAP, Motion, Locomotive, Anime, Barba, Lottie, Rive, Spring, View
+  Transitions, scroll reveal, components, CSS) as bundled reference files
+  read on demand. Pack 13 Design Styles is ONE skill, crew-design-styles,
+  carrying the 5 lenses (brutalist, minimalist, soft, redesign, blueprint).
+  Pack 12 folds its 6 reference skills into crew-design-reference (the
+  library, patterns, composition, language, authority, kit); the three
+  verdict gates (crew-design-quality, crew-design-engineering,
+  crew-design-documents) stay standalone. Every spec survived whole: laws,
+  worked examples, all 20 palettes and 161 hexes of the kit, verified
+  mechanically during conversion. The skill picker drops from 108 entries to
+  88 while the catalogue keeps all 108 capabilities; the QA count guard now
+  asserts capabilities (folders plus bundled specs minus containers), and
+  all 562 consult references across the build skills were swept to the new
+  names. Buyers see a picker that reads like a business team instead of an
+  engineering wiki; nothing about the design gates changed.
+- Onboarding now builds the workspace folder: crew-core-brand-context ends
+  by settling a work root once (a Crew folder on the Desktop works well),
+  creating the brand's folder inside it, and writing a CLAUDE.md pin that
+  checks the filing cabinet at the start of every session there, so opening
+  the brand's folder in the sidebar always lines up the right drawer.
+  Never-overwrite and announce-what-was-done guardrails apply; the brand
+  switch names the target's folder after every switch.
+
 ## 1.18.0 (2026-07-27)
 
 ### Fixed

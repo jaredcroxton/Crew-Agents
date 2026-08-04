@@ -24,7 +24,7 @@ EXPECT:
 - A mobile cut present as its own film: portrait backdrops at the 1280px cap, hero upper third, type lower third, scroll-velocity parallax, DOF off, particles cut, 100svh scenes, safe-area insets, Lenis off on touch.
 - The render is verified per the web-standards Verification Gate: served over HTTP, Scenes 1/3/5 screenshot at 1280px and 375px, console read (zero errors), all assets 200, FPS median >= 50 on the heaviest scene, reduced-motion twin forced and screenshot, weight and head audited, keyboard walk, contrast math.
 - The build report begins with the exact line `CINEMATIC WEBSITE OUTPUT`.
-- The Design review gate is run per the Gate roster in `crew-design-quality` (binding), with `crew-design-composition`, `crew-design-patterns`, `crew-design-engineering` (advisory), and the register-conditional pack-13 style lens (here `crew-design-soft`, warm premium luxury register), Criticals and Majors fixed, a fail blocking the ship.
+- The Design review gate is run per the Gate roster in `crew-design-quality` (binding), with `crew-design-reference` (composition lens), `crew-design-reference` (patterns lens), `crew-design-engineering` (advisory), and the register-conditional pack-13 style lens (here `crew-design-styles` (soft lens), warm premium luxury register), Criticals and Majors fixed, a fail blocking the ship.
 - A real reduced-motion path is confirmed in code: scrubbed camera moves disabled, scenes snapped to designed states, copy and CTA read from the DOM, runtime change listener present.
 - No em dashes anywhere.
 - The handoff is written to `~/.claude/crew-state/projects/<project>/crew-web-cinematic-build-handoff.md` with the frame (title, Date, STATUS).

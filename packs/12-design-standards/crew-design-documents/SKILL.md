@@ -39,7 +39,7 @@ If the content source is missing, or the rendered file path is missing in CHECK 
 
 All three modes run silent by default. The agent suppresses progress, confirmation, and status lines, except the three-line run receipt (context recovered, verdict if a gate ran, handoff written to its path), which always prints after the deliverable. Only the deliverable, the receipt, and genuine blockers (Missing Input, Quality Failure, Escalation) reach the user. To see full commentary, say "verbose" at any time.
 
-Do not run this skill for a rendered screen or a live interface (that is `crew-design-quality`), for pixel and motion polish of UI code (that is `crew-design-engineering`), for whether the content itself answers the brief (that is `crew-core-quality-checker`), or to extract brand tokens from an existing site (that is `crew-design-language`). This skill judges the file, not the argument inside it.
+Do not run this skill for a rendered screen or a live interface (that is `crew-design-quality`), for pixel and motion polish of UI code (that is `crew-design-engineering`), for whether the content itself answers the brief (that is `crew-core-quality-checker`), or to extract brand tokens from an existing site (that is `crew-design-reference` (language lens)). This skill judges the file, not the argument inside it.
 
 ## How the document designer thinks
 
@@ -97,7 +97,7 @@ The rules that make the scale hold:
 - Body line-height lives between 1.4 and 1.6. Headings tighten as they grow; a 26pt display at 1.5 is a gap, not a heading.
 - Hierarchy comes from weight and size, never underline. Underlines belong to links, and links do not exist on paper.
 - One spacing scale (for example 4, 8, 12, 20, 32pt) governs every gap. Space above a heading exceeds space below it, so headings bind to the content they introduce.
-- Colour comes from the brand tokens: the Visual identity line of `~/.claude/crew-state/brand-context.md`, or the project's kit from `crew-design-language` when one exists. One accent, used sparingly (a heading rule, a table header fill, a callout border). Body text stays near-black on white; accent-coloured body text is a tell.
+- Colour comes from the brand tokens: the Visual identity line of `~/.claude/crew-state/brand-context.md`, or the project's kit from `crew-design-reference` (language lens) when one exists. One accent, used sparingly (a heading rule, a table header fill, a callout border). Body text stays near-black on white; accent-coloured body text is a tell.
 - Generous white space is a feature of designed documents, not waste. A dense page with no rest reads as machine output.
 
 Tables carry most of the risk, so their geometry is explicit:
@@ -301,7 +301,7 @@ Typical calls that warrant a brief:
 
 - Any skill handing a file to a human treats this skill as its delivery gate. The document producers across the docs, training, hr, and finance packs, and `crew-web-learning-experience`, consult it before handover via the standard CREW CONSULT preamble, the same consult mechanics as every pack-12 leg (see Step 0).
 - Pair with `crew-design-quality`: it owns rendered screens, this owns delivered files. A styled HTML document read in a browser and also printed faces both gates: quality first on the design, documents on the delivery mechanics.
-- Take brand tokens from `crew-design-language` when a token kit exists; otherwise the Visual identity line of `~/.claude/crew-state/brand-context.md` is the source of truth.
+- Take brand tokens from `crew-design-reference` (language lens) when a token kit exists; otherwise the Visual identity line of `~/.claude/crew-state/brand-context.md` is the source of truth.
 - Content correctness stays with `crew-core-quality-checker`: it judges whether the document answers the brief, this skill judges whether the file is fit to hand over. Run both before a client sees anything. Pairs with the Crew Method standard "Review before shipping".
 - Hand a Fix before handover verdict back to the producing skill with the full fix list, and re-check after the re-render; the loop exits on a clean pass.
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`.

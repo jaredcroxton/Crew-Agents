@@ -15,7 +15,7 @@ Before the work starts, know which way in this run is. There are three.
 
 - **Starting fresh.** No prior context for this skill. Run Step 0 (Context Recovery) to load the brand, then confirm the pre-work below.
 - **Continuing via this skill's own record.** Run `crew-core-context-restore` (or name the project) and read this skill's record at `~/.claude/crew-state/projects/<project>/crew-web-booking-site-builder-handoff.md`; state what you recovered and carry the open items forward rather than starting cold.
-- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Service]. [Area]. Voice: [tone]."), and work in the terms that business uses. When the brand lives on an existing live site rather than in the file, consult `crew-design-language` to extract its tokens into a fill-in kit, or `crew-web-website-architect` for the full report; either becomes the `:root` token source.
+- **An existing brand via brand-context.md.** The business is already onboarded. Read `~/.claude/crew-state/brand-context.md`, confirm the business out loud ("Working with [brand]. [Service]. [Area]. Voice: [tone]."), and work in the terms that business uses. When the brand lives on an existing live site rather than in the file, consult `crew-design-reference` (language lens) to extract its tokens into a fill-in kit, or `crew-web-website-architect` for the full report; either becomes the `:root` token source.
 
 Then confirm the pre-work in one short message, one line each, and wait. Never invent an answer the business did not give.
 
@@ -123,7 +123,7 @@ The build is done when the motion layer is in the file. The budget is one reveal
 - **Micro-interactions.** Hover, press, and focus on the CTAs, the cards, the nav and footer links, the toggle. CSS transitions on transform and opacity. Hover lifts behind `@media (hover: hover) and (pointer: fine)`; touch gets `:active` press states (web-standards Mobile 8). The focus ring is the `--focus-ring` token on `:focus-visible`, never a raw UA outline.
 - **Reduced motion (web-standards Motion 10).** `prefers-reduced-motion: reduce` makes reveals instant (the observer is skipped, content visible immediately) and disables smooth scroll. There is no scrub or parallax in this budget to disable.
 
-Stack rule, absolute. The library is none: CSS keyframes and transitions, the Web Animations API, and `IntersectionObserver`, vanilla JS only. Forbidden: GSAP, ScrollTrigger, Motion, Anime.js, Lottie, Locomotive, jQuery, any animation or CSS or JS framework. `crew-animation-scroll-reveal` and `crew-animation-css` bound the reveal and transition work as authoring references; `crew-design-engineering` (pack 12) reviews the micro-interaction layer.
+Stack rule, absolute. The library is none: CSS keyframes and transitions, the Web Animations API, and `IntersectionObserver`, vanilla JS only. Forbidden: GSAP, ScrollTrigger, Motion, Anime.js, Lottie, Locomotive, jQuery, any animation or CSS or JS framework. `crew-animation` (scroll-reveal spec) and `crew-animation` (css spec) bound the reveal and transition work as authoring references; `crew-design-engineering` (pack 12) reviews the micro-interaction layer.
 
 ## Performance
 
@@ -135,9 +135,9 @@ Stack rule, absolute. The library is none: CSS keyframes and transitions, the We
 
 Invoke every leg with the consult preamble: `CREW CONSULT from crew-web-booking-site-builder: brand gate passed, brand-context at ~/.claude/crew-state/brand-context.md` (per the Crew Method, Sub-skill consult), so a consulted leg never re-runs onboarding or re-prompts mid-gate. Every reviewer judges the BUILT site as it renders and behaves at real viewport sizes.
 
-- From pack 12 (design-standards), the binding verdict: `crew-design-quality` runs its nine dimensions over the rendered site and returns Pass, Revise, or Fail with the AI tells named. A Fail, or a Revise the build does not address, blocks ship. Alongside it, `crew-design-composition` checks each section resolves to one focal point and a clear reading order, and `crew-design-patterns` checks no section leans on a dated or slop pattern (the AI-purple gradient, the fake-testimonial row, the centered-hero-three-cards cliche). `crew-design-engineering` returns a Before, After, Why table on the CTAs, cards, and menu (easing, `:active` states, focus rings, transition scope) that the build applies before the binding verdict.
-- From pack 13 (design-styles), one register-conditional lens where a true one exists: `crew-design-soft` for soft and warm (common for salons, clinics), `crew-design-minimalist` for clean and minimal, `crew-design-brutalist` for raw and bold. For trustworthy and established, run `crew-design-quality`'s Materiality dimension with an explicit register brief instead. Run only the matching lens.
-- From pack 14 (animation), `crew-animation-scroll-reveal` and `crew-animation-css` are authoring cross-references, not verdict reviewers; the binding motion verdict is the Motion dimension inside `crew-design-quality`.
+- From pack 12 (design-standards), the binding verdict: `crew-design-quality` runs its nine dimensions over the rendered site and returns Pass, Revise, or Fail with the AI tells named. A Fail, or a Revise the build does not address, blocks ship. Alongside it, `crew-design-reference` (composition lens) checks each section resolves to one focal point and a clear reading order, and `crew-design-reference` (patterns lens) checks no section leans on a dated or slop pattern (the AI-purple gradient, the fake-testimonial row, the centered-hero-three-cards cliche). `crew-design-engineering` returns a Before, After, Why table on the CTAs, cards, and menu (easing, `:active` states, focus rings, transition scope) that the build applies before the binding verdict.
+- From pack 13 (design-styles), one register-conditional lens where a true one exists: `crew-design-styles` (soft lens) for soft and warm (common for salons, clinics), `crew-design-styles` (minimalist lens) for clean and minimal, `crew-design-styles` (brutalist lens) for raw and bold. For trustworthy and established, run `crew-design-quality`'s Materiality dimension with an explicit register brief instead. Run only the matching lens.
+- From pack 14 (animation), `crew-animation` (scroll-reveal spec) and `crew-animation` (css spec) are authoring cross-references, not verdict reviewers; the binding motion verdict is the Motion dimension inside `crew-design-quality`.
 - Additionally, when the site's job is converting visitors (which is always, for this skill), run `crew-marketing-landing-page-review` as a pre-launch conversion leg: it scores conversion readiness and rewrites the weakest CTA against the real page.
 
 A gate Fail on any leg blocks ship. Fix, then re-run the failing leg until every leg passes (Loop 2). In Governed mode nothing is waived.
@@ -159,7 +159,7 @@ A single `index.html` deploys anywhere. Verify a 200 before calling it live.
 
 1. **Run Discovery (ALWAYS first, before any code).** Settle the way in, then confirm the five pre-work items in one short message: the one action and the booking path, the trade and trust signals, the services and pricing posture, the service area and hours, the contact and content plus brand. Confirm a one-line summary back. If a required answer is missing, ask once listing only the gaps and pause (Loop 1). Never invent a phone, a price, a review, a rating, a licence, or a service area. If the copy turns on a price, a guarantee, a superlative, or a licence claim the business has not supplied, do not draft one: mark it "Escalated: [what is needed, who decides]" and continue (Loop 3).
 
-2. **Brand discovery and the `:root` token block.** Resolve the brand from the business's hex and fonts, `brand-context.md`, a `crew-design-language` or `crew-web-website-architect` kit, or the chosen register. Build the oklch `:root` block (colour with the `color-mix` ramp, the type scale, tracking and leading tokens, spacing, radius, the shadow ramp, easing, the focus ring) and the two theme sets. Label the source in a CSS comment. Never hardcode a brand colour that did not come from the business, the brand context, or the named register.
+2. **Brand discovery and the `:root` token block.** Resolve the brand from the business's hex and fonts, `brand-context.md`, a `crew-design-reference` (language lens) or `crew-web-website-architect` kit, or the chosen register. Build the oklch `:root` block (colour with the `color-mix` ramp, the type scale, tracking and leading tokens, spacing, radius, the shadow ramp, easing, the focus ring) and the two theme sets. Label the source in a CSS comment. Never hardcode a brand colour that did not come from the business, the brand context, or the named register.
 
 3. **Plan the sections and the booking path.** Output a numbered plan: the sections in conversion order (hero, trust strip, services, booking, area and hours, reviews, contact), the pricing posture per service, which trust signals are real (and which blocks are therefore deleted), the booking path (named scheduler embed or tel/mailto fallback), and the delivery format. Confirm with the business. On approval, proceed. (Fast mode skips the confirmation when the brief is complete.)
 
@@ -199,10 +199,10 @@ Performance: [single file, byte count against the 500KB budget, metric-tuned fon
 Delivery: [HTML / PDF / Both, print stylesheet present if PDF or Both]
 
 web-standards Gate: [10/10, or the failures and named residuals, e.g. "9/10, og:image deferred to deploy"]
-Design review gate: [crew-design-quality (binding) + crew-design-composition + crew-design-patterns +
+Design review gate: [crew-design-quality (binding) + crew-design-reference (composition lens) + crew-design-reference (patterns lens) +
    the register-conditional pack-13 lens or the Materiality register brief +
    crew-marketing-landing-page-review (conversion leg) +
-   crew-design-engineering / crew-animation-scroll-reveal / crew-animation-css as authoring refs, verdicts, Criticals and Majors fixed]
+   crew-design-engineering / crew-animation (scroll-reveal spec) / crew-animation (css spec) as authoring refs, verdicts, Criticals and Majors fixed]
 
 Open / handed off: [a scheduler to wire? reviews owed? a licence or price to confirm? og:image deferred? what the reviewer needs: the built file and the live local URL]
 ```
@@ -230,7 +230,7 @@ Performance: one self-contained file, 46KB raw (12KB gzipped, labelled), metric-
 Delivery: HTML plus the print stylesheet (Both); the booking fallback works offline, a scheduler embed can be wired when supplied.
 
 web-standards Gate: 10/10 (four screenshots, console clean, reduced-motion twin screenshotted, contrast computed in both themes)
-Design review gate: crew-design-quality pass (Revise then fixed), crew-design-composition pass, crew-design-patterns pass (no fake-review row, no AI-gradient), Materiality ran with the trustworthy-and-established brief (pass), crew-marketing-landing-page-review pass (weakest CTA rewritten), crew-design-engineering Before/After/Why applied to the CTAs and action bar.
+Design review gate: crew-design-quality pass (Revise then fixed), crew-design-reference (composition lens) pass, crew-design-reference (patterns lens) pass (no fake-review row, no AI-gradient), Materiality ran with the trustworthy-and-established brief (pass), crew-marketing-landing-page-review pass (weakest CTA rewritten), crew-design-engineering Before/After/Why applied to the CTAs and action bar.
 
 Open / handed off: a scheduler embed to wire when the business picks one, real reviews owed, the address to confirm before the JSON-LD goes live, og:image deferred to deploy. Reviewer has the built file and the live local URL.
 ```
@@ -274,8 +274,8 @@ House style:
 
 - **Crew Web Standards** (`shared/web-standards.md`) is the craft law for this build. Cite rules by key (web-standards Type 6, Motion 5, Gate 2); its Section 10 roster, THE VERIFICATION GATE, is adopted by reference in Verification below and never weakened locally.
 - **`crew-web-page-builder`** is the sibling for a clean multi-page credibility site with no booking focus; route there when the ask is "a professional website" rather than "customers need to book me". Share the `:root` brand block in either direction so one brand carries across both.
-- Take the `:root` brand block from `crew-web-page-builder`, `crew-web-slide-deck-builder`, or `crew-web-website-architect` if any ran earlier. When the business's brand lives on an existing live site, `crew-design-language` (pack 12) extracts the tokens into a fill-in kit that becomes the `:root` source.
-- Run the Design review gate before the site ships: hand the built file plus the live local URL to `crew-design-quality` (binding) plus the gate roster (`crew-design-composition`, `crew-design-patterns`, the register-conditional pack-13 lens or the Materiality register brief, with `crew-design-engineering`, `crew-animation-scroll-reveal`, and `crew-animation-css` as authoring references). Include `crew-marketing-landing-page-review` as the conversion leg. Fix all Criticals and Majors before deploy.
+- Take the `:root` brand block from `crew-web-page-builder`, `crew-web-slide-deck-builder`, or `crew-web-website-architect` if any ran earlier. When the business's brand lives on an existing live site, `crew-design-reference` (language lens) (pack 12) extracts the tokens into a fill-in kit that becomes the `:root` source.
+- Run the Design review gate before the site ships: hand the built file plus the live local URL to `crew-design-quality` (binding) plus the gate roster (`crew-design-reference` (composition lens), `crew-design-reference` (patterns lens), the register-conditional pack-13 lens or the Materiality register brief, with `crew-design-engineering`, `crew-animation` (scroll-reveal spec), and `crew-animation` (css spec) as authoring references). Include `crew-marketing-landing-page-review` as the conversion leg. Fix all Criticals and Majors before deploy.
 - After delivery, offer `crew-marketing-seo-page-builder` as an optional handoff for on-page SEO beyond the shipped canonical and LocalBusiness block, and `crew-web-slide-deck-builder` for a matching deck in the same brand.
 - Before the site goes to a client or a live URL is shared, run `crew-core-quality-checker` (pack 01 core). Its output is advisory, not a hard gate, but it flags broken links, console errors, dead `tel:` or `mailto:` targets, and unverified claims to fix before handing a URL over. Pairs with the Crew Method standard "Verify before claiming done".
 - For a full session save beyond the per-skill handoff, hand off to `crew-core-context-save`. The site itself references no skill at runtime; it is a standalone HTML file.
@@ -318,7 +318,7 @@ Build-specific items, added to the Gate roster (additions never replace or weake
 [ ] Stagger delays clear on transitionend; hover lifts behind the hover-capability query; :active press states on buttons and cards
 [ ] Metric-tuned font fallbacks present so the display=swap causes no visible reflow
 [ ] Print stylesheet present and correct (if PDF or Both): light theme forced, motion off, header, action bar, and toggle hidden
-[ ] Design review gate run: crew-design-quality (binding), crew-design-composition, crew-design-patterns, the register-conditional pack-13 lens or the Materiality register brief, crew-marketing-landing-page-review (conversion leg), with crew-design-engineering, crew-animation-scroll-reveal, and crew-animation-css as authoring refs; Criticals and Majors fixed
+[ ] Design review gate run: crew-design-quality (binding), crew-design-reference (composition lens), crew-design-reference (patterns lens), the register-conditional pack-13 lens or the Materiality register brief, crew-marketing-landing-page-review (conversion leg), with crew-design-engineering, crew-animation (scroll-reveal spec), and crew-animation (css spec) as authoring refs; Criticals and Majors fixed
 [ ] No em dashes or en dashes anywhere (text, CSS comments, JavaScript strings)
 [ ] The record was written into the active project (~/.claude/crew-state/projects/<project>/crew-web-booking-site-builder-handoff.md)
 ```
