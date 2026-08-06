@@ -81,6 +81,7 @@ Final clips drift bright. A closing chapter prompted to "fade toward darkness" c
 - Canvas plus pre-extracted JPEGs, never `<video currentTime>` scrubbing (seek stutter).
 - ImageBitmap sliding window: `drawImage(HTMLImageElement)` forces a synchronous JPEG decode on first paint (and again after cache eviction), and that decode spike IS the frame-by-frame jank. `createImageBitmap` decodes off-thread; keep a window of decoded bitmaps around the playhead (about 18 ahead, evict and close beyond about 28) so every draw is a pure GPU blit.
 - Lerp the frame index (`current += (target - current) * 0.14`) for butter. Cap DPR at about 1.5.
+- **Lerp the playhead, but SNAP when the gap exceeds about 12% of the film** (fast flicks): a lerp-only playhead sweeps every intermediate frame and the decode storm freezes the page. Snap to 8 frames short of the target, lerp the rest (see engine.md, snap-on-big-gap).
 - Lenis smooth scroll; a concurrency-capped image pump; a `nearestFrame()` fallback so a missing frame never blanks the canvas.
 - Measure jank with rAF deltas (p95 and max), never average fps. Target max under 50ms. Production evidence: 301 frames at 1280w with the DPR cap measured avg 16.7ms, p95 27.3ms, max 30ms over 873 rAF frames; the first cold run showed one 276ms spike (cold decode) and warm runs were clean. Run the jank test twice before believing a spike.
 

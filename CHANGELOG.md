@@ -2,6 +2,32 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.19.1 (2026-08-06)
+
+### Fixed
+- crew-web-scrollytelling scrub engine: snap-on-big-gap is now a MANDATORY
+  law before the lerped playhead. A lerp-only playhead breaks under a fast
+  flick: the target jumps hundreds of frames, the lerp sweeps through every
+  intermediate frame, each swept frame floods createImageBitmap with
+  soon-stale decode requests and misses the cache on draw (a synchronous
+  JPEG decode on the main thread, every tick). The result is a main-thread
+  starvation storm; on weaker devices the tab locks up. The fix teleports
+  the playhead to 8 frames short of the target whenever the gap exceeds 36
+  frames and lerps the rest, so the film always keeps up and the sweep never
+  happens. Proven in the field on a live production build and verified on 18
+  deployed scroll-film sites (settle gap 0 on every abuse round, max rAF
+  delta 86ms).
+- The ensureBitmaps example is replaced with a decode-budget queue: at most
+  6 decodes in flight, nearest-to-playhead first, stale requests dropped at
+  dequeue time. The dev contract gains a NaN boot guard (a zero-height pane
+  at boot yields 0/0 and freezes the playhead forever) and a resize-noise
+  guard (iOS URL-bar collapse fires 1px resize storms that flicker the
+  canvas).
+- Two fast-scroll stress harnesses ship in scripts/: stress.js
+  (contract-based, prints STRESS PASS or FAIL) and stress2.js
+  (engine-agnostic, clean-top versus after-abuse screenshots compared by
+  SSIM). The verify step now requires a STRESS PASS before ship.
+
 ## 1.19.0 (2026-07-31)
 
 ### Changed

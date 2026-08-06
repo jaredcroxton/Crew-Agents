@@ -21,25 +21,48 @@ const p = Math.max(0, Math.min(1, -r.top / (r.height - innerHeight)));
 currentFrame += (target - currentFrame) * 0.14;   // target = p * (FRAME_COUNT - 1)
 ```
 
-**The anti-jank core, the ImageBitmap sliding window.** `drawImage(HTMLImageElement)` forces a synchronous JPEG decode on the main thread at first paint and again after browser cache eviction; those decode spikes are the "frame-by-frame glitchy" feel. Decode off-thread around the playhead so every draw is a pure GPU blit:
+**MANDATORY: snap-on-big-gap.** A lerp-only playhead breaks under a fast flick: the target jumps hundreds of frames and the lerp SWEEPS through every intermediate frame. Each swept frame recenters the bitmap window (a flood of soon-stale decode requests) and misses the cache on draw (a synchronous JPEG decode on the main thread, every tick). That is a main-thread starvation storm; on weaker devices the tab locks up entirely. Insert immediately BEFORE the lerp line, adapting the variable names to the build:
+
+```js
+{ const __gap = target - currentFrame; if (Math.abs(__gap) > 36) currentFrame = target - Math.sign(__gap) * 8; }
+currentFrame += (target - currentFrame) * 0.14;   // existing lerp line, unchanged
+```
+
+If the visitor outruns the lerp, the playhead teleports to 8 frames short of the target and lerps the last few, so the film always keeps up and the sweep never happens. For short hero widgets (about 48 frames) use thresholds 10 and 3 instead of 36 and 8. The `__gap` token doubles as the idempotency marker: a file containing `__gap` is already patched. The lerp is not the problem; the sweep is.
+
+**The anti-jank core, the ImageBitmap sliding window with a decode budget.** `drawImage(HTMLImageElement)` forces a synchronous JPEG decode on the main thread at first paint and again after browser cache eviction; those decode spikes are the "frame-by-frame glitchy" feel. Decode off-thread around the playhead so every draw is a pure GPU blit, but never with an unbounded per-tick fan-out. At most 6 decodes in flight, nearest-to-playhead first, stale requests dropped at dequeue time:
 
 ```js
 const bitmaps = new Map(), decoding = new Set();
-const B_AHEAD = 18, B_KEEP = 28; let bmpCenter = -999;
-function ensureBitmaps(center){
-  if (Math.abs(center - bmpCenter) < 3) return;
-  bmpCenter = center;
-  const lo = Math.max(0, center - B_AHEAD), hi = Math.min(FRAME_COUNT - 1, center + B_AHEAD);
-  for (let i = lo; i <= hi; i++){
+const B_AHEAD = 18, B_KEEP = 28, MAX_DECODE = 6;
+let bmpCenter = -999, inflightDecodes = 0;
+let wantQ = [];
+function pumpDecode(){
+  while (inflightDecodes < MAX_DECODE && wantQ.length){
+    const i = wantQ.shift();
     if (bitmaps.has(i) || decoding.has(i) || !images[i]) continue;
-    decoding.add(i);
-    createImageBitmap(images[i]).then(b => {
-      decoding.delete(i);
+    if (Math.abs(i - bmpCenter) > B_AHEAD) continue;          // stale by dequeue time
+    decoding.add(i); inflightDecodes++;
+    createImageBitmap(images[i]).then(b=>{
       if (Math.abs(i - bmpCenter) > B_KEEP){ b.close(); return; }
       bitmaps.set(i, b);
       if (i === displayed) drawFrame(i, true);      // repaint if the shown frame upgraded
-    }).catch(() => decoding.delete(i));
+    }).catch(()=>{}).finally(()=>{
+      decoding.delete(i); inflightDecodes--; pumpDecode();
+    });
   }
+}
+function ensureBitmaps(center){
+  if (Math.abs(center - bmpCenter) < 3 && bitmaps.size) return;
+  bmpCenter = center;
+  const lo = Math.max(0, center - B_AHEAD), hi = Math.min(FRAME_COUNT-1, center + B_AHEAD);
+  wantQ = [];
+  for (let d = 0; d <= B_AHEAD; d++){                          // nearest-first
+    const a = center + d, b = center - d;
+    if (a <= hi && !bitmaps.has(a) && !decoding.has(a) && images[a]) wantQ.push(a);
+    if (d && b >= lo && !bitmaps.has(b) && !decoding.has(b) && images[b]) wantQ.push(b);
+  }
+  pumpDecode();
   for (const k of Array.from(bitmaps.keys()))
     if (k < center - B_KEEP || k > center + B_KEEP){ bitmaps.get(k).close(); bitmaps.delete(k); }
 }
@@ -100,6 +123,22 @@ window.__ready = true;
 `?jump=<y>` must land pre-scrolled with all scroll-driven state force-settled (for pure-code builds: `ScrollTrigger.update()` then set each scrubbed animation's `totalProgress` explicitly). `__ready` gates the screenshot harness. Hide any cursor-follower until the first real `mousemove` or it photobombs captures at (0,0).
 
 Jank meter for the console: track per-frame rAF deltas, log `max` every 2s. Judge p95 and max, never average fps; a 60fps average hides 80ms decode spikes perfectly.
+
+**Boot and resize hardening (implement in every Lane B build):**
+
+```js
+// readScroll: a zero-height pane at boot yields 0/0 = NaN, which freezes the
+// playhead forever (NaN contaminates every later lerp). Guard the denominator:
+const den = r.height - innerHeight;
+progress = den > 10 ? Math.max(0, Math.min(1, -r.top / den)) : 0;
+
+// tick: self-heal if NaN ever slips in anyway:
+if (!Number.isFinite(currentFrame)) currentFrame = Number.isFinite(target) ? target : 0;
+
+// size(): iOS URL-bar collapse fires resize storms with ~1px deltas; a real
+// resize clears and reallocates the canvas (visible flicker). Ignore noise:
+if (Math.abs(innerWidth - W) < 2 && Math.abs(innerHeight - H) < 2) return;
+```
 
 ---
 
