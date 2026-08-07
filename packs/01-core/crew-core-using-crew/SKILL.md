@@ -1,6 +1,6 @@
 ---
 name: crew-core-using-crew
-description: The Crew dispatcher, entry point, and your guide to the Crew. Before answering a business task, check whether an installed Crew skill fits and route to it, and explain the packs, the skills, and how context flows. Invoke at the start of a session, when a request could match a sales, marketing, ops, HR, finance, support, docs, or training skill, or when someone asks which Crew skill to use.
+description: The Crew dispatcher and entry point. Whenever the user says "use the crew", "crew this", "ask the crew", "get the crew on it", or mentions the Crew at all, invoke THIS skill first. It checks which installed Crew skill fits the task and routes to it, or explains the packs. Also invoke when a request could match any sales, marketing, ops, HR, finance, support, docs, training, or web skill.
 ---
 
 # Crew: Using the Crew

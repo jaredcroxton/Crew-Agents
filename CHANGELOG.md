@@ -2,6 +2,16 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.20.1 (2026-08-06)
+
+### Fixed
+- "Use the crew" now routes reliably. The dispatcher's description (the
+  only part of a skill the model sees before invoking it) never contained
+  the literal phrases people actually say, so bare requests like "use the
+  crew" or "crew this" only sometimes reached the dispatcher.
+  crew-core-using-crew's description now anchors those exact phrases and
+  instructs the model to invoke it first whenever the Crew is named.
+
 ## 1.20.0 (2026-08-06)
 
 ### Changed
