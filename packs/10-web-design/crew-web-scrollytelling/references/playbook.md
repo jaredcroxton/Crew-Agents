@@ -8,7 +8,9 @@ The film is the source of truth; the website is a player. Design the camera arc 
 
 ## 2. Chaining law (flawless joins)
 
-Each clip's start image is the ffmpeg-extracted literal last frame of the previous clip. Not a lookalike keyframe, the actual pixels:
+**FIRST, check whether the whole film fits in ONE generation.** If the engine's maximum duration covers the film you pitched, generate it as a single clip and skip chaining entirely: a single generation has no junctions, so there is nothing to gate, nothing to repair, and no seam can exist. Seedance 2.0 standard accepts durations up to 15s (361 frames at 24fps, a perfectly respectable scrub payload); the KIE v1-lite route tops out at 10s (241 frames), enough for a short film or an embed placement. Measured receipt: after four failed chaining attempts on one brief, a single 15-second take (start pinned to the opening keyframe, end pinned to the final keyframe, the WHOLE journey written as one continuous move) produced the first genuinely continuous film of the session, first time, approved on sight, and cost less than the seamed attempts it replaced. Write the prompt as one unbroken sentence-chain through every chapter ("begins on X, falls past Y, continues down to Z, lands in W") and say "one single unbroken shot, no cuts, no edits, continuous camera move throughout" explicitly. **Chaining is the compromise, not the default**: reach for it only when the journey genuinely cannot fit the duration cap.
+
+When you do chain: each clip's start image is the ffmpeg-extracted literal last frame of the previous clip. Not a lookalike keyframe, the actual pixels:
 
 ```bash
 ffmpeg -sseof -0.05 -i clipN.mp4 -update 1 -q:v 1 clipN-last.png

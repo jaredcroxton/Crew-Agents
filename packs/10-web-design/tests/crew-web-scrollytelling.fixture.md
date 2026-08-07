@@ -49,3 +49,16 @@ EXPECT:
 - Skill pauses and states the build resumes at assembly when the clips land.
 - No "SCROLL FILM BUILD" artifact is emitted.
 - Handoff file written FIRST (STATUS: BLOCKED, the missing engine named as the blocker), recording that prompts were handed over and what resumes on return.
+
+## Case D: embed mode
+INPUT:
+"We already have our site live, I do not want it redesigned. Can you add one of those cinematic
+scroll films to it? The repo is in ./site. KIE key is ready, ceiling 300 credits."
+EXPECT:
+- The mode question resolves to Embed Mode: the skill states it is creating the film and embedding it, NOT designing a website, and that the existing design system rules.
+- It reads the site first (palette, type, spacing, brand assets) before proposing anything, and proposes reusing the site's own imagery as keyframe seeds.
+- Exactly three placements offered with one recommendation: scroll-scrub hero, autoplay loop background (5 to 8s, ends pinned identical, muted, poster still), or its own full-bleed section.
+- Credits quoted against the 300 ceiling and a yes obtained before any generation; single-generation checked before chaining (a 10 to 15s take has no junctions).
+- The embed touches only the placement: new markup, the scrub or loop runtime with the snap-on-big-gap guard, a poster fallback, a reduced-motion path. No restyling of the rest of the site; mobile gets the poster or a lighter loop, never a 25s scrub.
+- The receipt lists exactly which files were touched and how to revert; a scroll-scrub hero gets the fast-scroll stress test before handover.
+- Handoff written with the placement chosen, credits spent, and files touched.

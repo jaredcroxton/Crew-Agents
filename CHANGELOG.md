@@ -2,6 +2,33 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.19.2 (2026-08-06)
+
+### Added
+- crew-web-scrollytelling learns Embed Mode. The interview now opens with
+  "do you already have a website you want this in, or are we building the
+  page from scratch?" With an existing site the skill stops designing: it
+  reads the site's real palette, type, spacing, and assets, offers exactly
+  three placements (a scroll-scrub hero, an autoplay loop background with
+  both ends pinned identical, or a full-bleed cinematic section), reuses
+  the site's own imagery as keyframe seeds, embeds only what the placement
+  needs (including the snap-on-big-gap guard, an embedded scrub inherits
+  the fast-flick bug too), and hands back a diff-sized change with a
+  revert list. Never restyles the rest of the site; mobile gets the poster
+  or a lighter loop. New fixture case D covers it.
+- Single-take-first law in the playbook: before chaining, check whether
+  the whole film fits one generation. A single take has no junctions, so
+  there is nothing to gate and no seam can exist. Backed by a measured
+  receipt (one 15s single take succeeded first try after four seamed
+  attempts failed, and cost less). Chaining is the compromise, not the
+  default.
+- references/finishing.md, the craft file the conversion had dropped:
+  trim the head of the film (and update FRAME_COUNT), white-not-cream
+  chrome with scrims over footage, why pages go flat below the film,
+  real brand logos fetched never hand-drawn, mobile as its own 9:16 film
+  with bitmap cleanup on breakpoint swap, and verifying without fooling
+  yourself. Wired into the build and verify steps.
+
 ## 1.19.1 (2026-08-06)
 
 ### Fixed
