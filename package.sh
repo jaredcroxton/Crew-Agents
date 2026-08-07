@@ -36,7 +36,7 @@ if [ "$SKIP_QA" != 1 ]; then
 fi
 
 mkdir -p dist
-ZIPCOMMON=(install.sh uninstall.sh LICENSE CREDITS.md README.md CHANGELOG.md VERSION shared/crew-method.md shared/SKILL-TEMPLATE.md shared/INSTALL.md)
+ZIPCOMMON=(install.sh uninstall.sh LICENSE CREDITS.md README.md CHANGELOG.md VERSION shared/crew-method.md shared/SKILL-TEMPLATE.md shared/INSTALL.md shared/web-standards.md)
 
 zip_pack() {
   local packdir="$1" id zipname
@@ -44,6 +44,14 @@ zip_pack() {
   zipname="dist/crew-$id-v$VERSION.zip"
   rm -f "$zipname" "dist/crew-$id.zip"
   zip -rq "$zipname" "${ZIPCOMMON[@]}" "$packdir" -x '*/.DS_Store' '*/crew-state/*'
+  # the Showcase zip bundles the two reviewer skills so its design review
+  # gate works without the Design Standards pack (identical copies, no-clobber)
+  if [ "$id" = "16-showcase" ]; then
+    zip -rq "$zipname" \
+      packs/12-design-standards/crew-design-quality \
+      packs/12-design-standards/crew-design-engineering \
+      -x '*/.DS_Store'
+  fi
   local n; n="$(find "$packdir" -maxdepth 1 -type d -name 'crew-*' | wc -l | tr -d ' ')"
   printf "  %-36s %s skills  %s\n" "$(basename "$zipname")" "$n" "$(du -h "$zipname" | cut -f1)"
 }
@@ -60,8 +68,9 @@ fi
 if [ -z "$PACK_FILTER" ]; then
   rm -f dist/crew-full-bundle.zip "dist/crew-full-bundle-v$VERSION.zip"
   # exclude the git store (ships every historical version), generated trees,
-  # local state, and local databases
-  zip -rq "dist/crew-full-bundle-v$VERSION.zip" . -x 'dist/*' '.git/*' 'plugins/*' '.claude/*' '.claude-plugin/*' '.tmp/*' 'tasks.db' '*.db' '.DS_Store' '*/.DS_Store' '*/crew-state/*'
+  # local state, local databases, and the Showcase pack (a deliberate add-on:
+  # it is only distributed via its own zip, never inside the bundle)
+  zip -rq "dist/crew-full-bundle-v$VERSION.zip" . -x 'dist/*' '.git/*' 'plugins/*' '.claude/*' '.claude-plugin/*' '.tmp/*' 'tasks.db' '*.db' '.DS_Store' '*/.DS_Store' '*/crew-state/*' 'packs/16-showcase/*'
   printf "  %-36s %s\n" "crew-full-bundle-v$VERSION.zip" "$(du -h "dist/crew-full-bundle-v$VERSION.zip" | cut -f1)"
 fi
 echo "done -> dist/ (v$VERSION)"

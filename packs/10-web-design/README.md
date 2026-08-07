@@ -14,18 +14,16 @@ These skills build production-ready web output (decks, sites, dashboards, cinema
 | `crew-web-cinematic-build` | Builds an epic scroll-driven site with floating 3D objects in themed environments, scenes that morph on scroll, fog, bloom, oversized editorial type; the 3D world is built in-browser from nine still images, no footage needed | One self-contained cinematic scroll `.html` |
 | `crew-web-fly-through-builder` | Builds a scroll-scrub site where scrolling scrubs one continuous camera journey forward and back under stage typography, ending at an arrival that expands into a listing, product, or story | One scroll-scrub site (canvas frame-sequence) |
 | `crew-web-scrollytelling` | Builds a scroll-film site where the whole page is one continuous cinematic shot that plays as the visitor scrolls, beats of copy riding on the film, resolving into standard content sections; pure-code motion by default, chained generated footage as the opt-in signature lane | One self-contained scroll-film `.html` |
-| `crew-web-immersive-narrative` | Builds a multi-stage gated story site: themed stages reveal on scroll, frame-scrubbed video advances frame-for-frame, a two-state gate paces the story, an arrival hero resolves each stage | One self-contained gated-story `.html` |
 | `crew-web-product-film` | Builds an Apple-grade cinematic product film site (scroll-scrubbed video opening act plus a kinetic content act) for one physical product, seeded from the brand's own real imagery via the KIE pipeline | One self-contained product-film site plus generated frames |
 | `crew-web-real-estate-immersive` | Builds a scroll-scrubbed cinematic property tour from a REAL listing: the listing's tour footage plays forward and back under serif chapter type, one chapter per room, plus photo gallery, floorplan, and agent CTAs | One self-contained listing tour site (real footage only) |
-| `crew-web-spotlight-hero` | Builds a dark full-screen hero where the cursor drags a soft glowing circle that reveals a second transformed image through a radial-gradient mask; two images, a before and an after, share one composition | One React + Vite + Tailwind hero with a nano-banana image pair |
-| `crew-web-webcam-website` | Builds a webcam hand-tracking site where an AI subject follows the open palm and closing the fist scrubs a generated transformation video frame by frame, reversibly; kiosk or embedded | One self-contained hand-tracking `.html` via the nano-banana + Veo3 + green-screen pipeline |
-| `crew-web-learning-experience` | Activates a finished training programme into a presented learning journey: calm editorial steps on a block spine, plain openers, presenter-paced with a phone remote, editable in place | One self-contained learning-journey `.html` |
 | `crew-web-lead-dashboard-builder` | Turns a scrape target into a branded one-page lead dashboard: fit-scores every lead 0 to 100, finds the decision-maker via LinkedIn with backups, drafts a cold email and a LinkedIn DM per lead, verify-before-send | One dashboard.html plus scrape/leads JSON and outreach drafts |
 | `crew-web-website-architect` | Scrapes a live competitor or inspiration site and reverse-engineers type, colour, spacing, layout, surface, and motion into a reusable system; an analysis skill, it studies a site, it does not build one | One design-architecture report plus a fill-in token kit for `crew-web-page-builder` |
 | `crew-web-stitch` | Generates an agent-friendly `DESIGN.md` taste contract for Google Stitch screen generation, encoding premium anti-generic standards, then verifies Stitch's rendered screens against the contract | One `DESIGN.md` taste contract plus a verification pass |
 | `crew-web-app-builder` | The Express automation build protocol: scaffolds and builds any automation, scraper, webhook, cron job, or API integration as deterministic, self-healing Python tooling through the five-phase (Blueprint, Link, Architect, Stylize, Trigger) A.N.T. three-layer architecture | A scaffolded project (memory files, architecture SOPs, tested tools) and a build report |
 
 ## Routing the cinematic cluster
+
+Four cinematic flagships (`crew-web-webcam-website`, `crew-web-immersive-narrative`, `crew-web-learning-experience`, `crew-web-spotlight-hero`) live in Pack 16, Showcase: a separate add-on zip that is not part of the standard install. Routing lines below that name them assume the Showcase pack is installed.
 
 Several skills sit close together. Route in one read:
 
@@ -35,11 +33,11 @@ Several skills sit close together. Route in one read:
 - **3D world and atmosphere on scroll** (objects, fog, bloom, built from stills, no footage): `crew-web-cinematic-build`.
 - **One continuous camera journey scrubbed by the scrollbar**: `crew-web-fly-through-builder`.
 - **The page IS the film, several beats on one unbroken shot, ending in content sections**: `crew-web-scrollytelling`.
-- **A long-form story world with gated multi-stage reveals**: `crew-web-immersive-narrative`.
+- **A long-form story world with gated multi-stage reveals**: `crew-web-immersive-narrative` (Showcase pack).
 - **An Apple-style page for one physical product**: `crew-web-product-film`.
-- **A single-effect hero**: `crew-web-spotlight-hero` (cursor reveal) or `crew-web-webcam-website` (hand-tracking gesture scrub).
+- **A single-effect hero**: `crew-web-spotlight-hero` (cursor reveal) or `crew-web-webcam-website` (hand-tracking gesture scrub), both in the Showcase pack.
 
-The dividing line inside the scroll-film skills is the camera: `cinematic-build` builds a 3D world from stills, `fly-through-builder` scrubs one ungated camera path, `immersive-narrative` gates a multi-stage story, and `product-film` and `real-estate-immersive` scrub footage for a product or a real listing.
+The dividing line inside the scroll-film skills is the camera: `cinematic-build` builds a 3D world from stills, `fly-through-builder` scrubs one ungated camera path, `immersive-narrative` (Showcase pack) gates a multi-stage story, and `product-film` and `real-estate-immersive` scrub footage for a product or a real listing.
 
 ## Craft law
 

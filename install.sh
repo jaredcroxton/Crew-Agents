@@ -7,7 +7,8 @@
 #   ./install.sh                      install all packs into ./.claude/skills
 #   ./install.sh --pack sales         install the sales pack (core is always included)
 #   ./install.sh --pack sales --pack hr
-#   ./install.sh --all                install every pack
+#   ./install.sh --all                install every pack (except 16-showcase; add --showcase)
+#   ./install.sh --showcase           include the Showcase pack (also: --pack showcase)
 #   ./install.sh --global             install into ~/.claude/skills
 #   ./install.sh --target DIR         install into DIR
 #   ./install.sh --force              overwrite skills that already exist
@@ -28,12 +29,14 @@ FORCE=0
 DRY=0
 PRUNE=0
 DOCTOR=0
+SHOWCASE=0
 PICKED=()
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --pack) PICKED+=("$2"); shift 2 ;;
     --all) ALL=1; shift ;;
+    --showcase) SHOWCASE=1; shift ;;
     --global) GLOBAL=1; shift ;;
     --target) TARGET="$2"; shift 2 ;;
     --force) FORCE=1; shift ;;
@@ -123,9 +126,15 @@ add_pack() { # by id
   echo "warning: pack '$1' not found, skipping" >&2
 }
 if [ "$ALL" = 1 ] || [ "${#PICKED[@]}" = 0 ]; then
-  for d in "$PACKS_DIR"/*/; do PACKDIRS+=("${d%/}"); done
+  # the Showcase pack is a deliberate add-on: excluded from --all unless --showcase
+  for d in "$PACKS_DIR"/*/; do
+    id="$(basename "${d%/}")"; id="${id#*-}"
+    [ "$id" = "showcase" ] && [ "$SHOWCASE" != 1 ] && continue
+    PACKDIRS+=("${d%/}")
+  done
 else
   add_pack core   # core is the handoff floor, always included
+  [ "$SHOWCASE" = 1 ] && add_pack showcase
   for p in "${PICKED[@]}"; do [ "$p" = core ] || add_pack "$p"; done
 fi
 

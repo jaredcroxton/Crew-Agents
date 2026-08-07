@@ -4,9 +4,9 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.19.2-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.19.0">
+  <img src="https://img.shields.io/badge/CREW-v1.20.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.20.0">
   <img src="https://img.shields.io/badge/SKILLS-108-333333?style=for-the-badge&labelColor=lime&color=333333" alt="108 Skills">
-  <img src="https://img.shields.io/badge/PACKS-15-333333?style=for-the-badge&labelColor=lime&color=333333" alt="15 Packs">
+  <img src="https://img.shields.io/badge/PACKS-16-333333?style=for-the-badge&labelColor=lime&color=333333" alt="16 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
   <img src="https://img.shields.io/badge/LICENSE-MIT-333333?style=for-the-badge&labelColor=lime&color=333333" alt="License MIT">
 </p>
@@ -19,7 +19,7 @@
 
 # CREW: World-Class AI Agent Skills
 
-> **The only agent skill pack with a built-in brand context system.** 108 gold-standard skills. 15 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
+> **The only agent skill pack with a built-in brand context system.** 108 gold-standard skills. 16 packs. Every business function covered. Onboard your business once, and every skill knows your brand, your voice, and your audience.
 
 ---
 
@@ -91,7 +91,7 @@ Every skill follows the same disciplined path:
                                ▼
                     ┌──────────────────────────┐
                     │   SKILL INVOKED           │
-                    │   108 skills, 15 packs    │
+                    │   108 skills, 16 packs    │
                     └──────────┬───────────────┘
                                │
                                ▼
@@ -174,7 +174,7 @@ Embedded into build skills. Never invoked directly.
 
         ↓
 
-ENGINE (Pack 10 : Web Design, 18 skills)
+ENGINE (Pack 10 : Web Design, 14 skills / Pack 16 : Showcase, 4 flagships)
 The output. Slide decks, cinematic sites, dashboards, scroll journeys.
 The only skills a business invokes. One call, one output.
 ```
@@ -200,14 +200,15 @@ The only skills a business invokes. One call, one output.
 | 07 | Support | 6 | Ticket triage, replies, FAQ, escalation |
 | 08 | Docs | 8 | SOPs, policies, training guides, handovers |
 | 09 | Training | 8 | Needs analysis, modules, facilitation, onboarding |
-| 10 | Web Design | 18 | Slide decks, cinematic sites, scroll journeys |
+| 10 | Web Design | 14 | Slide decks, cinematic sites, scroll journeys |
 | 11 | Infrastructure | 1 | The AI phone receptionist build |
 | 12 | Design Standards | 9 | Quality, composition, patterns, language |
 | 13 | Design Styles | 5 | Brutalist, minimalist, soft, redesign |
 | 14 | Animation | 12 | GSAP, Motion, Lottie, Rive, Spring, CSS |
 | 15 | Second Brain | 1 | The living map of everything your agents know |
+| 16 | Showcase | 4 | The cinematic flagships, a separate add-on zip |
 
-Packs 12 to 14 install as consolidated agents: the animation engines, the style lenses, and the design reference each ship as ONE skill carrying their specs as bundled reference files. 108 capabilities, 88 installed agents, a picker that reads like a business team.
+Packs 12 to 14 install as consolidated agents: the animation engines, the style lenses, and the design reference each ship as ONE skill carrying their specs as bundled reference files. Pack 16, Showcase, is a deliberate add-on: the four heaviest, most spectacular builds (the learning journey, the hand-tracking site, the immersive narrative, the spotlight hero) ship as their own zip and are excluded from the standard install, so the everyday picker stays lean. 108 capabilities, 84 agents in the standard install plus 4 in Showcase, a picker that reads like a business team.
 
 ---
 
@@ -247,7 +248,7 @@ HyperFrames is third-party, redistributed verbatim under its Apache-2.0 licence 
 
 ## FAQ
 
-**Do I need all 15 packs?** No. Install what you need. A sales team might only want packs 02 (Sales) and 07 (Support). A design agency might only want 10 (Web Design), 12 (Standards), 13 (Styles), and 14 (Animation).
+**Do I need all 16 packs?** No. Install what you need. A sales team might only want packs 02 (Sales) and 07 (Support). A design agency might only want 10 (Web Design), 12 (Standards), 13 (Styles), and 14 (Animation).
 
 **Can I use this with my existing Claude Code setup?** Yes. CREW skills are standard SKILL.md files. They sit alongside your existing skills.
 

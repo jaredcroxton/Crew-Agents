@@ -2,6 +2,26 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.20.0 (2026-08-06)
+
+### Changed
+- Pack 16, Showcase. The four cinematic flagships (crew-web-learning-experience,
+  crew-web-webcam-website, crew-web-immersive-narrative, crew-web-spotlight-hero)
+  move out of Web Design into their own add-on pack. They are the heaviest
+  bodies in the catalogue (each carries its complete engine inline, up to
+  124KB), so the standard install now excludes them: install.sh --all skips
+  pack 16 unless --showcase (or --pack showcase) is passed, and the full
+  bundle zip no longer contains them. They ship as their own zip,
+  crew-16-showcase, built by package.sh, which also bundles the two reviewer
+  skills (crew-design-quality, crew-design-engineering) so the design review
+  gate works standalone. Everyday installs get 84 lean agents; the flagships
+  are handed out deliberately. The catalogue keeps all 108 capabilities
+  across 16 packs; prune never removes an installed Showcase skill because
+  the source folders remain in packs/.
+- Per-pack zips now include shared/web-standards.md (previously the
+  installer's copy step silently skipped it in zip installs because the file
+  was not in the archive; every web skill cites it).
+
 ## 1.19.2 (2026-08-06)
 
 ### Added
