@@ -37,7 +37,7 @@ FAIL=0
 note() { printf '  FAIL  %s\n' "$1"; FAIL=$((FAIL+1)); }
 ok()   { printf '  ok    %s\n' "$1"; }
 
-BAN='Brock|Bob|Lara|Neo|gstack|gbrain|PerformOS|Hermes|NemoClaw'
+BAN='Brock|Bob|Lara|Neo|gstack|gbrain|PerformOS|Hermes|NemoClaw|LearnOS'
 
 echo "== em-dash check (all .md except none; em dashes banned everywhere) =="
 # perl, not grep -P: BSD/macOS grep has no -P, which made the old check a silent

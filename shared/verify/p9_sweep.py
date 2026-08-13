@@ -32,7 +32,7 @@ def step0_block(skill):
         f'{skill}-lessons.md` if it exists, and apply every lesson in it as a standing rule for this run. '
         'Then settle the project (Loop 4): if the request does not already answer it, ask once: '
         '"Is this a new project, or are we continuing an existing one?" For a NEW project, take a short '
-        'name from the request or ask for one ("websites", "learnos", a client name all work), create '
+        'name from the request or ask for one ("websites", "spring-campaign", a client name all work), create '
         '`~/.claude/crew-state/projects/<project>/`, write the name to `~/.claude/crew-state/active-project`, '
         'and start from zero: the brand context and the lessons file are the whole context, read nothing else. '
         'For CONTINUING, the user runs `crew-core-context-restore` first (or names the project): read the '

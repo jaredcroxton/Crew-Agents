@@ -2,6 +2,39 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.21.0 (2026-08-06)
+
+### Added
+- The play library ships in the product. crew-core-using-crew now bundles
+  references/plays.md: 47 proven plays across 11 business categories
+  (getting started, sales, marketing, money, people, operations,
+  customers, documents, training, websites and decks, quality) plus 12
+  chain plays (learning design end to end, quote to cash, campaign
+  launch, new hire day zero to day 90, research to deliverable, knowledge
+  capture, the monthly money hour, support intelligence loop, content
+  engine, website launch, client delivery start to finish, performance
+  turnaround). Each play card carries when to use it, the exact prompt,
+  what comes back, the next move, a tip, and an intents line of plain
+  words for matching. The dispatcher serves a card whole when asked
+  "what play do I run" or when a request matches an intents line, offers
+  to run the prompt, and prefers a chain play over an improvised
+  multi-skill sequence. Chain steps use full skill names; steps that
+  need the Showcase add-on are marked, and the dispatcher offers the
+  chain up to that step when Showcase is absent. The library is read on
+  demand, never preloaded. New Sales play included: turn a lead list
+  into a ranked call sheet (crew-web-lead-dashboard-builder), filed
+  under Sales because it is a call sheet that happens to render as a
+  page.
+
+### Fixed
+- White-label leak, found by the adversarial review of this release: the
+  example project name "learnos" (a real product of the catalogue's
+  author) sat in the Step 0 boilerplate of 85 skills, the restore skill's
+  examples, the method file, and the README tree diagram. Replaced with
+  the neutral "spring-campaign" everywhere, and LearnOS added to the QA
+  ban list so it can never ship again.
+
+
 ## 1.20.1 (2026-08-06)
 
 ### Fixed

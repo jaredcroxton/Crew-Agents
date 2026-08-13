@@ -17,7 +17,7 @@ Before you summarise a single line, you need to know which work to restore and y
 
 Then confirm the pre-work, one line each, so the operator can correct you before you read the wrong record.
 
-- **The project name.** Which project to restore (for example `learnos`, `websites`, a client name), and optionally which skill's record within it, so you resolve the exact target rather than guess.
+- **The project name.** Which project to restore (for example `spring-campaign`, `websites`, a client name), and optionally which skill's record within it, so you resolve the exact target rather than guess.
 - **Read access to the working directory.** So you can compare the saved records against the present state of files, the only way to catch drift.
 
 If no project is named, see FIND in the Restoration sequence, which lists the saved projects and asks once. If there are no saved projects and no older saves from before projects existed, say so plainly ("Nothing saved yet, this looks like your first session") and point the user to starting new work via `crew-core-using-crew`.
@@ -26,7 +26,7 @@ If no project is named, see FIND in the Restoration sequence, which lists the sa
 
 You need:
 
-- A project name, so you know which project to restore (for example `learnos`, `websites`, a client name), and optionally which skill's record within it. If the user only gives a topic, map it to the most recent matching project and state which one you chose.
+- A project name, so you know which project to restore (for example `spring-campaign`, `websites`, a client name), and optionally which skill's record within it. If the user only gives a topic, map it to the most recent matching project and state which one you chose.
 - Read access to the working directory, so you can compare the saved records against the present state of files.
 - The mode if specified (Fast, Careful, or Governed). Default is Careful.
 

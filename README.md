@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/CREW-v1.20.1-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.20.1">
+  <img src="https://img.shields.io/badge/CREW-v1.21.0-333333?style=for-the-badge&labelColor=000000&color=333333" alt="CREW v1.21.0">
   <img src="https://img.shields.io/badge/SKILLS-108-333333?style=for-the-badge&labelColor=lime&color=333333" alt="108 Skills">
   <img src="https://img.shields.io/badge/PACKS-16-333333?style=for-the-badge&labelColor=lime&color=333333" alt="16 Packs">
   <img src="https://img.shields.io/badge/QA-PASS-333333?style=for-the-badge&labelColor=lime&color=333333" alt="QA PASS">
@@ -66,6 +66,8 @@ claw skills import ./packs/               # OpenClaw
 **First run:** Run any skill. It asks 11 questions about your business (or run `crew-core-brand-context` directly). After that, every skill knows who you are. Worked example brand files live under `examples/brand-context/`.
 
 **Every run after that:** new work just needs a project name ("call it websites") and goes. Continuing something? Say "where were we" (`crew-core-context-restore`), pick the project, carry on exactly where it stopped.
+
+**Not sure what to run?** Ask "what play do I run for [job]". The dispatcher ships the play library: 47 proven plays plus 12 chain plays, each with the exact prompt, what you get back, and the next move.
 
 **Runs best on:** a Sonnet-class model or better. Smaller models hold the skill discipline less reliably; the status vocabulary, the run receipt, and the onboarding gate degrade first.
 
@@ -148,7 +150,7 @@ Every piece of work lives in a named project. Ten websites from one skill are te
 ~/.claude/crew-state/
 ├── brand-context.md        # who you are (onboard once)
 ├── projects/
-│   ├── learnos/            # every skill's records for this project
+│   ├── spring-campaign/    # every skill's records for this project
 │   ├── websites/
 │   └── client-acme/
 ├── lessons/                # per-skill "never again" notes, read at every start
