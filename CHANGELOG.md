@@ -2,6 +2,17 @@
 
 All notable changes to the Crew skill packs.
 
+## 1.21.1 (2026-08-06)
+
+### Fixed
+- The 1.21.0 changelog entry spelled out the very name it had just added
+  to the ban list, so the shipped tree failed its own QA ban scan (the
+  changelog is shipped text and is not exempt; only CREDITS, README, the
+  licence, and the checker itself are). The entry now describes the leak
+  without naming it. Lesson for the release ritual: any edit to a shipped
+  file after the QA run means the QA run is stale, so re-run before the
+  commit.
+
 ## 1.21.0 (2026-08-06)
 
 ### Added
@@ -27,12 +38,12 @@ All notable changes to the Crew skill packs.
   page.
 
 ### Fixed
-- White-label leak, found by the adversarial review of this release: the
-  example project name "learnos" (a real product of the catalogue's
-  author) sat in the Step 0 boilerplate of 85 skills, the restore skill's
+- White-label leak, found by the adversarial review of this release: an
+  example project name that is a real product of the catalogue's author
+  sat in the Step 0 boilerplate of 85 skills, the restore skill's
   examples, the method file, and the README tree diagram. Replaced with
-  the neutral "spring-campaign" everywhere, and LearnOS added to the QA
-  ban list so it can never ship again.
+  the neutral "spring-campaign" everywhere, and the leaked name added to
+  the QA ban list so it can never ship again.
 
 
 ## 1.20.1 (2026-08-06)
