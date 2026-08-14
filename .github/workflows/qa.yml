@@ -25,8 +25,31 @@ jobs:
       - name: Installer puts the catalogue down (temp target)
         shell: bash
         run: |
+          # Counts are derived from packs/ so adding or retiring a skill never
+          # leaves a stale number here. The default install deliberately omits
+          # the Showcase pack; --showcase adds it.
+          WANT_DEFAULT="$(find packs -mindepth 2 -maxdepth 2 -type d -name 'crew-*' -not -path 'packs/16-showcase/*' | wc -l | tr -d ' ')"
+          WANT_ALL="$(find packs -mindepth 2 -maxdepth 2 -type d -name 'crew-*' | wc -l | tr -d ' ')"
+
           T="$(mktemp -d)"
           bash install.sh --all --target "$T" | tail -3
-          N="$(find "$T" -maxdepth 1 -type d -name 'crew-*' | wc -l)"
-          test "$N" -ge 90 || { echo "expected 90+ skills, got $N"; exit 1; }
+          N="$(find "$T" -maxdepth 1 -type d -name 'crew-*' | wc -l | tr -d ' ')"
+          test "$N" = "$WANT_DEFAULT" || { echo "default install: expected $WANT_DEFAULT skills, got $N"; exit 1; }
           test -f "$T/crew-method.md" || { echo "crew-method.md missing from install"; exit 1; }
+
+          # The Showcase promise: its skills must be absent by default.
+          for s in $(find packs/16-showcase -mindepth 1 -maxdepth 1 -type d -name 'crew-*' -exec basename {} \;); do
+            test ! -d "$T/$s" || { echo "Showcase skill $s leaked into the default install"; exit 1; }
+          done
+
+      - name: Showcase pack installs on request
+        shell: bash
+        run: |
+          WANT_ALL="$(find packs -mindepth 2 -maxdepth 2 -type d -name 'crew-*' | wc -l | tr -d ' ')"
+          S="$(mktemp -d)"
+          bash install.sh --all --showcase --target "$S" | tail -2
+          N="$(find "$S" -maxdepth 1 -type d -name 'crew-*' | wc -l | tr -d ' ')"
+          test "$N" = "$WANT_ALL" || { echo "--showcase install: expected $WANT_ALL skills, got $N"; exit 1; }
+          for s in $(find packs/16-showcase -mindepth 1 -maxdepth 1 -type d -name 'crew-*' -exec basename {} \;); do
+            test -d "$S/$s" || { echo "Showcase skill $s missing after --showcase"; exit 1; }
+          done
